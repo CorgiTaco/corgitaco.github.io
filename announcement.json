@@ -1,5 +1,13 @@
 {
-    "title": "Help",
-    "description": "Yoink",
-    "date": "Some date"
-  }
+    "title": {
+        "text": "Help my homeless best friend get back on his feet.",
+        "bold": true
+    },
+    "description": {
+        "text": "Hi, I'm Corgi Taco, developer of mods like \"Oh The Biomes You'll Go\". and my best friend became homeless on August 7, 2024. I\u2019ve started a GoFundMe to help him so if you're interested click \"Learn More\" below to learn more and see latest updates."
+    },
+    "action_button_text": {
+        "text": "Learn More"
+    },
+    "time": 1724046680
+}
