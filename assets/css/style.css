@@ -28,8 +28,8 @@ body {
 }
 
 .page-title {
-    padding-right: 23%;
     padding-left: 2%;
+    width: 30%;
 }
 
 .navbar {
@@ -50,7 +50,7 @@ body {
 .nav-link {
     display: flex;
     list-style: none;
-    font-size: large;
+    font-size: 1.5rem;
     justify-content: space-evenly;
     position: relative;
     align-items: center;
@@ -62,6 +62,10 @@ a {
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s ease;
+}
+
+h1 {
+    font-size: 3rem;
 }
 
 a:hover {
