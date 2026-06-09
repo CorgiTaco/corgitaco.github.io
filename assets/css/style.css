@@ -51,7 +51,6 @@ a {
 }
 
 h1 {
-    font-size: 3rem;
     margin: 0; /* Add this line to remove default spacing */
     padding-left: var(--main-padding); /* Optional: gives it breathing room on the left */
 }
@@ -68,7 +67,7 @@ a:hover {
 }
 
 .page-title {
-    font-size: 3rem;
+    font-size: clamp(1.5rem, 4vw + 1rem, 3rem);
     padding-left: 2%;
     padding-right: 2%;
     white-space: nowrap; /* Prevents the title text from wrapping */
