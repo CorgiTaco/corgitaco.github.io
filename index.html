@@ -16,7 +16,10 @@
     <!--
       - custom css link
     -->
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script src="./assets/js/script.js"></script>
@@ -33,22 +36,30 @@
 <body id="vanta-bg">
 
 
-
-<div id="main" >
+<div id="main">
     <script src="./assets/js/pagechange.js"></script>
 
-    <h1 class="page-title" >Home</h1>
+    <div class="header">
 
-    <div class="navbar">
-        <a class="nav-link" href="./">Home</a>
-        <a class="nav-link" href="./projects">Projects</a>
-        <a class="nav-link" href="./resume">Resume</a>
-        <a class="nav-link" href="./blog">Blog</a>
-        <a class="nav-link" href="./about">About</a>
-        <a class="nav-link" href="./commission">Commission</a>
-        <a class="nav-link" href="./donate">Donate</a>
-        <a class="nav-link" href="./contact">Contact</a>
+        <h1 class="page-title">Home</h1>
+
+        <nav role='navigation'>
+            <ul id='nav-main'>
+                <li><a class="nav-link" href="./">Home</a></li>
+                <li><a class="nav-link" href="./projects">Projects</a></li>
+                <li><a class="nav-link" href="./resume">Resume</a></li>
+                <li><a class="nav-link" href="">Blog</a></li>
+                <li><a class="nav-link" href="./about">About</a></li>
+                <li><a class="nav-link" href="./commission">Commission</a></li>
+                <li><a class="nav-link" href="./donate">Donate</a></li>
+                <li class="more hidden" data-width="80">
+                    <a href="#">☰</a>
+                    <ul></ul>
+                </li>
+            </ul>
+        </nav>
     </div>
+
 </div>
 
 </body>
