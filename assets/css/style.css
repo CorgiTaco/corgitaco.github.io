@@ -17,7 +17,7 @@ body {
     display: flex;
 
 
-    min-width: 50%;
+    max-width: 50px;
     min-height: 80dvh;
 
     background-color: rgb(20 20 20 / 80%);
@@ -70,7 +70,7 @@ a:hover {
 .page-title {
     font-size: 3rem;
     padding-left: 2%;
-    flex-grow: 3; /* Forces the title to expand and take up remaining space */
+    padding-right: 2%;
     white-space: nowrap; /* Prevents the title text from wrapping */
 }
 

@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
         $nav.addClass('measuring');
 
         // Reserve space for the "More" button (using its inline data-width fallback if hidden)
-        var morewidth = $more.outerWidth(true) || $more.data('width') || 80;
+        const morewidth = $more.outerWidth(true) || $more.data('width') || 80;
         // REPLACE IT WITH THESE 3 LINES:
-        var headerWidth = $('.header').innerWidth();
-        var titleWidth = $('.page-title').outerWidth(true);
-        var availablespace = headerWidth - titleWidth - morewidth - 30; // 30px safety buffer prevents overlap
-        var navwidth = 0;
+        const headerWidth = $('.header').innerWidth();
+        const titleWidth = $('.page-title').outerWidth(true);
+        const availablespace = headerWidth - titleWidth - morewidth - 30; // 30px safety buffer prevents overlap
+        let navwidth = 0;
         $nav.children('li:not(.more)').each(function() {
             navwidth += $(this).outerWidth(true);
         });
