@@ -1,0 +1,69 @@
+* {
+    color: #ffffff !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+    position: fixed;
+    display: flex;
+
+
+    min-width: 50%;
+    min-height: 80dvh;
+
+    background-color: rgb(20 20 20 / 80%);
+    border: 2px solid #46a258;
+}
+
+#vanta-bg {
+    z-index: -1;
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    height: 100dvh;           /* Takes up the full viewport height */
+}
+
+.page-title {
+    padding-right: 23%;
+    padding-left: 2%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 5dvh;
+    width: 70%;
+
+
+    border: 2px solid #46a258;
+    border-top-width: 0;
+    border-right-width: 0;
+
+    background-color: rgb(20 20 20 / 100%);
+}
+
+.nav-link {
+    display: flex;
+    list-style: none;
+    font-size: large;
+    justify-content: space-evenly;
+    position: relative;
+    align-items: center;
+}
+
+
+a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #46a258;
+}
