@@ -88,102 +88,72 @@ a:hover {
 }
 
 
+
+
 nav {
-    display: flex;
-    align-items: center;
-    height: 5dvh;
-
-    flex: 1; /* ADD THIS: Tells nav to fill the remaining header space gracefully */
-    min-width: 0; /* ADD THIS: Stops the <li> children from forcing the nav to overlap the title */
-
-    border: 2px solid #46a258;
-    border-top-width: 0;
-    border-right-width: 0;
-    background-color: rgb(20 20 20 / 100%);
-
+    width: 100%;
+    margin-bottom: 20px;
     > ul {
-        flex: 1; /* 1. Stretches the UL to perfectly fill the nav's flex container */
-        display: flex; /* 2. Turns the UL into a flex row for the list items */
-        align-items: center;
-        height: 100%;
-        white-space: nowrap; /* 3. Prevents wrapping so your JS calculates overflow correctly */
-
         list-style-type: none;
         margin: 0;
         padding: 0;
+        font-size: 0;
+        text-align: right;
         background: transparent;
-
         > li {
             &.more > a .fa {
                 color: yellow;
             }
-
             &.hidden {
                 display: none;
             }
-
-            /* 4. Prevents items from shrinking so JS reads their true width */
-            flex-shrink: 0;
-            flex-grow: 1; /* <-- ADD THIS: Stretches items to fill available space evenly */
+            display: inline-block;
             position: relative;
-            height: 100%;
-
             > a {
-                border-right: 1px solid green;
+                border-left: 2px solid var(--main-color);
+                border-bottom: 2px solid var(--main-color);
             }
-
             a {
-                /* 5. Flexbox on the link keeps the icon and text perfectly centered inside the 5dvh */
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                height: 100%;
-
                 font-size: 1rem;
+                display: block;
+                background: transparent;
                 color: #FFF;
+                text-align: center;
                 text-decoration: none;
-                padding: 0 20px;
-
+                padding: 10px 20px;
                 .fa {
                     font-size: 20px;
-                    margin-bottom: 4px;
+                    display: block;
+                    margin-bottom: 10px;
                 }
-
                 + ul {
                     display: none;
                     position: absolute;
                     top: 100%;
                     right: 0;
                     margin-right: 0;
-
                     li {
                         margin-top: 1px;
-                        height: auto; /* Overrides the 100% height from the parent LI */
-
                         a {
-                            flex-direction: row; /* Puts icon and text side-by-side in dropdown */
-                            justify-content: flex-start;
-                            padding: 10px 16px;
-
+                            padding-left: 16px;
+                            text-align: left;
+                            white-space: nowrap;
                             .fa {
+                                display: inline-block;
                                 margin-right: 10px;
                                 margin-bottom: 0;
                             }
                         }
-
                         a:hover {
                             background: var(--main-color);
                         }
                     }
                 }
             }
-
             &:hover {
                 > a {
-                    background:  var(--main-color);
+                    background: var(--main-color);
                 }
-
                 ul {
                     display: block;
                 }

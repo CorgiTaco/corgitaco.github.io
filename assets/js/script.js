@@ -17,55 +17,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function calcWidth() {
-        var $nav = $('#nav-main');
-        var $more = $nav.find('.more');
-
-        // 1. Temporarily disable flex-grow so we can measure the *true* minimum widths
-        $nav.addClass('measuring');
-
-        // Reserve space for the "More" button (using its inline data-width fallback if hidden)
-        const morewidth = $more.outerWidth(true) || $more.data('width') || 80;
-        // REPLACE IT WITH THESE 3 LINES:
-        const headerWidth = $('.header').innerWidth();
-        const titleWidth = $('.page-title').outerWidth(true);
-        const availablespace = headerWidth - titleWidth - morewidth - 30; // 30px safety buffer prevents overlap
-        let navwidth = 0;
-        $nav.children('li:not(.more)').each(function() {
-            navwidth += $(this).outerWidth(true);
+        var navwidth = 0;
+        var morewidth = $('#nav-main .more').outerWidth(true);
+        $('#nav-main > li:not(.more)').each(function() {
+            navwidth += $(this).outerWidth( true );
         });
+        var availablespace = $('nav').outerWidth(true) - morewidth;
 
-        // 2. Move overflowing items to the dropdown
-        while (navwidth > availablespace && $nav.children('li:not(.more)').length > 0) {
-            var lastItem = $nav.children('li:not(.more)').last();
-            lastItem.attr('data-width', lastItem.outerWidth(true)); // Store intrinsic width
-            lastItem.prependTo($more.find('ul'));
-
-            // Recalculate navwidth by subtracting the removed item
-            navwidth -= lastItem.data('width');
-        }
-
-        // 3. Bring items back if there is enough available space
-        while ($more.find('li').length > 0) {
-            var firstMoreElement = $more.find('li').first();
+        if (navwidth > availablespace) {
+            var lastItem = $('#nav-main > li:not(.more)').last();
+            lastItem.attr('data-width', lastItem.outerWidth(true));
+            lastItem.prependTo($('#nav-main .more ul'));
+            calcWidth();
+        } else {
+            var firstMoreElement = $('#nav-main li.more li').first();
             if (navwidth + firstMoreElement.data('width') < availablespace) {
-                firstMoreElement.insertBefore($more);
-                navwidth += firstMoreElement.data('width');
-            } else {
-                break; // Stop loop if the next item doesn't fit
+                firstMoreElement.insertBefore($('#nav-main .more'));
             }
         }
 
-        // 4. Toggle the "More" button visibility
         if ($('.more li').length > 0) {
-            $('.more').css('display', 'block'); // Block aligns better with flex items
+            $('.more').css('display','inline-block');
         } else {
-            $('.more').css('display', 'none');
+            $('.more').css('display','none');
         }
-
-        // 5. Re-enable flex-grow so the visible items dynamically stretch to fill all empty space
-        $nav.removeClass('measuring');
     }
-
     $(window).on('resize load',function(){
         calcWidth();
     });
