@@ -17,12 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function calcWidth() {
+        // Add measuring class to disable flex-grow during measurement
+        $('#nav-main').addClass('measuring');
+
         var navwidth = 0;
         var morewidth = $('#nav-main .more').outerWidth(true);
         $('#nav-main > li:not(.more)').each(function() {
-            navwidth += $(this).outerWidth( true );
+            navwidth += $(this).outerWidth(true);
         });
         var availablespace = $('nav').outerWidth(true) - morewidth;
+
+        $('#nav-main').removeClass('measuring');
 
         if (navwidth > availablespace) {
             var lastItem = $('#nav-main > li:not(.more)').last();
@@ -42,7 +47,51 @@ document.addEventListener("DOMContentLoaded", () => {
             $('.more').css('display','none');
         }
     }
-    $(window).on('resize load',function(){
+    $(window).on('resize load', function() {
         calcWidth();
+    });
+
+    // ── Mobile nav ──
+    // Build nav links from the desktop nav
+    var links = [];
+    $('#nav-main > li:not(.more)').each(function() {
+        var $a = $(this).find('> a');
+        links.push({ href: $a.attr('href'), text: $a.text().trim() });
+    });
+
+    // Determine current page label
+    var path = window.location.pathname.replace(/\/$/, '');
+    var segments = path.split('/');
+    var lastSegment = segments[segments.length - 1]
+        .replace(/\.html$/i, '')  // strip .html extension
+        .replace(/\.htm$/i, '');  // strip .htm extension
+    var pageLabel = (!lastSegment || lastSegment.toLowerCase() === 'index')
+        ? 'Home'
+        : lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
+
+    // Build the mobile nav HTML
+    var listItems = links.map(function(l) {
+        var isActive = (l.text.toLowerCase() === pageLabel.toLowerCase()) ? ' class="active"' : '';
+        return '<a href="' + l.href + '"' + isActive + '>' + l.text + '</a>';
+    }).join('');
+
+    var mobileNav = $('<div id="mobile-nav">' +
+        '<div id="mobile-nav-list">' + listItems + '</div>' +
+        '<div id="mobile-nav-trigger">' +
+        '<span>' + pageLabel + '</span>' +
+        '<i class="nav-arrow">&#9660;</i>' +
+        '</div>' +
+        '</div>');
+
+    $('body').append(mobileNav);
+
+    // Toggle open/close
+    $('#mobile-nav-trigger').on('click', function() {
+        $('#mobile-nav').toggleClass('open');
+    });
+
+    // Close when a link is tapped
+    $('#mobile-nav-list a').on('click', function() {
+        $('#mobile-nav').removeClass('open');
     });
 });

@@ -98,9 +98,21 @@ nav {
         margin: 0;
         padding: 0;
         font-size: 0;
-        text-align: right;
+        display: flex;
+        width: 100%;
         background: transparent;
         > li {
+            flex: 1;
+            &.more {
+                flex: 0 0 auto;
+                > a {
+                    height: 100%;
+                    box-sizing: border-box;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
             &.more > a .fa {
                 color: yellow;
             }
@@ -166,4 +178,83 @@ nav {
 /* Temporarily disables stretching while JS calculates widths */
 #nav-main.measuring > li {
     flex-grow: 0 !important;
+}
+
+/* ── Mobile nav ── */
+@media (max-width: 700px) {
+
+    /* Hide the desktop nav entirely */
+    .header nav {
+        display: none;
+    }
+
+    /* Bottom bar */
+    #mobile-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        box-sizing: border-box;
+    }
+
+    /* The trigger button */
+    #mobile-nav-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 14px 20px;
+        box-sizing: border-box;
+        background: rgb(20 20 20 / 95%);
+        border-top: 2px solid var(--main-color);
+        cursor: pointer;
+        font-size: 1rem;
+        user-select: none;
+    }
+
+    #mobile-nav-trigger .nav-arrow {
+        display: inline-block;
+        transition: transform 0.25s ease;
+        font-style: normal;
+        font-size: 0.85rem;
+    }
+
+    /* Rotate arrow when open */
+    #mobile-nav.open #mobile-nav-trigger .nav-arrow {
+        transform: rotate(180deg);
+    }
+
+    /* The dropdown list — slides up from bottom */
+    #mobile-nav-list {
+        display: none;
+        flex-direction: column;
+        background: rgb(20 20 20 / 97%);
+        border-top: 2px solid var(--main-color);
+        border-left: 2px solid var(--main-color);
+        border-right: 2px solid var(--main-color);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #mobile-nav.open #mobile-nav-list {
+        display: flex;
+    }
+
+    #mobile-nav-list a {
+        display: block;
+        padding: 14px 20px;
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(70, 162, 88, 0.3);
+        text-align: center;
+    }
+
+    #mobile-nav-list a:last-child {
+        border-bottom: none;
+    }
+
+    #mobile-nav-list a:hover,
+    #mobile-nav-list a.active {
+        background: var(--main-color);
+    }
 }
