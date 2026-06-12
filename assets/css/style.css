@@ -186,6 +186,16 @@ nav {
 /* ── Mobile nav ── */
 @media (max-width: 600px) {
 
+    #main {
+        min-width: 90%;
+        max-width: 90%;
+        min-height: auto;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(5% + 56px); /* leave room for mobile nav bar */
+    }
+
     /* Hide the desktop nav entirely */
     .header nav {
         display: none;
