@@ -1,4 +1,134 @@
 /* ══════════════════════════════════════════════
+   Filter bar
+══════════════════════════════════════════════ */
+
+#projects-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 0 0;
+    position: relative;
+}
+
+#projects-title-bar h1 {
+    padding: 8px var(--main-padding);
+}
+
+#filter-bar {
+    position: relative;
+}
+
+#filter-toggle {
+    font-size: 0.9rem;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+#filter-toggle #filter-chevron {
+    transition: transform 0.2s ease;
+    font-size: 0.75rem;
+}
+
+#filter-dropdown {
+    display: none;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: 100;
+    background: rgb(20 20 20 / 97%);
+    border: 1px solid var(--main-color);
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+#filter-dropdown.open {
+    display: flex;
+}
+
+#filter-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-section-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 16px;
+    min-width: 160px;
+}
+
+.filter-section-wrap:first-child {
+    padding-left: 0;
+}
+
+.filter-section-wrap + .filter-section-wrap {
+    border-left: 1px solid rgba(70, 162, 88, 0.3);
+}
+
+.filter-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    grid-template-rows: repeat(10, auto);
+    grid-auto-flow: column;
+    gap: 6px;
+}
+
+.filter-section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.5;
+    padding: 0 8px 2px;
+}
+
+.filter-select-all-tag {
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+    font-weight: 500;
+}
+
+.filter-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+    user-select: none;
+}
+
+.filter-tag:hover {
+    background: rgba(70, 162, 88, 0.15);
+}
+
+.filter-tag input[type=checkbox] {
+    accent-color: var(--main-color);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#filter-actions {
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid rgba(70, 162, 88, 0.3);
+    padding-top: 10px;
+}
+
+
+/* ══════════════════════════════════════════════
    Projects grid
 ══════════════════════════════════════════════ */
 
