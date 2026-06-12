@@ -1,0 +1,212 @@
+/* ══════════════════════════════════════════════
+   Projects grid
+══════════════════════════════════════════════ */
+
+#projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    width: calc(100% - 32px);
+    max-width: none;
+}
+
+@media (max-width: 900px) {
+    #projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+    #projects-grid { grid-template-columns: 1fr; }
+}
+
+.proj-card {
+    background: rgb(255 255 255 / 5%);
+    border: 1px solid rgba(70, 162, 88, 0.35);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    outline: none;
+}
+
+.proj-card:hover,
+.proj-card:focus {
+    border-color: var(--main-color);
+    transform: translateY(-3px);
+}
+
+.proj-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #111;
+    position: relative;
+}
+
+.proj-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.yt-thumb .yt-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.35);
+    transition: background 0.2s;
+}
+
+.proj-card:hover .yt-play {
+    background: rgba(0,0,0,0.15);
+}
+
+.yt-play .fa {
+    font-size: 3rem;
+    opacity: 0.9;
+}
+
+.proj-label {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ══════════════════════════════════════════════
+   Modal overlay
+══════════════════════════════════════════════ */
+
+#modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#modal-overlay.active {
+    display: flex;
+}
+
+.modal-inner {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(20 20 20 / 97%);
+    border: 2px solid var(--main-color);
+    border-radius: 8px;
+    padding: 0 0 16px 0;
+    max-width: 1000px;
+    width: 90vw;
+    max-height: 90dvh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    gap: 8px;
+}
+
+.modal-inner.active {
+    display: flex;
+}
+
+.modal-banner {
+    width: calc(100% - 32px);
+    max-height: none;
+    object-fit: contain;
+    border-radius: 6px;
+    aspect-ratio: 16 / 9;
+    margin: 12px 16px 0 16px;
+    display: block;
+}
+
+.modal-title {
+    font-size: 1.4rem;
+    margin: 0;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.modal-desc {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0;
+    opacity: 0.85;
+    padding: 0 24px;
+}
+
+/* YouTube embed */
+.modal-video-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 400px;
+}
+
+.modal-video-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* Mod platform links */
+.modal-links {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: stretch;
+    width: calc(100% - 48px);
+    box-sizing: border-box;
+}
+
+.mod-link,
+.modal-ext-link {
+    flex: 1;
+    justify-content: center;
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 1rem;
+}
+
+.mod-link img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+/* Shared button style */
+.btn-theme {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    background: transparent;
+    border: 2px solid var(--main-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+
+.btn-theme:hover {
+    background: var(--main-color);
+}
+
+.modal-back {
+    width: calc(100% - 48px);
+    justify-content: center;
+    margin: 4px 24px 0 24px;
+    align-self: stretch;
+}

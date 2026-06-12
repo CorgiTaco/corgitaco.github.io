@@ -13,23 +13,33 @@ body {
 }
 
 #main {
-    position: fixed;
+    position: relative;
     display: flex;
+    flex-direction: column;
 
-
-    max-width: 50px;
+    min-width: 50%;
+    max-width: 600px;       /* was 100vw — lock to a reasonable width */
+    width: 50%;             /* responsive but bounded */
+    box-sizing: border-box;
     min-height: 80dvh;
+    max-height: 80dvh;
+    overflow-y: auto;
 
     background-color: rgb(20 20 20 / 80%);
     border: 2px solid var(--main-color);
+
+    margin: 0 auto;
 }
 
 #vanta-bg {
-    z-index: -1;
+    z-index: -1;          /* keep background effect */
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    height: 100dvh; /* Takes up the full viewport height */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 
@@ -74,17 +84,19 @@ a:hover {
 }
 
 #main {
-    position: fixed;
+    position: relative;   /* was: fixed */
     display: flex;
     flex-direction: column;
 
     min-width: 50%;
-    max-width: 100vw; /* ADD THIS: Creates a hard boundary at the edge of the screen */
-    box-sizing: border-box; /* ADD THIS: Ensures borders don't push it wider than 100vw */
+    max-width: 100vw;
+    box-sizing: border-box;
     min-height: 80dvh;
 
     background-color: rgb(20 20 20 / 80%);
     border: 2px solid var(--main-color);
+
+    margin: 0 auto;       /* center it horizontally */
 }
 
 
@@ -271,3 +283,4 @@ nav {
         background: var(--main-color);
     }
 }
+
