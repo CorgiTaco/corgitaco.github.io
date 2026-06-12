@@ -56,7 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
     var links = [];
     $('#nav-main > li:not(.more)').each(function() {
         var $a = $(this).find('> a');
-        links.push({ href: $a.attr('href'), text: $a.text().trim() });
+        var iconClass = $a.find('i').attr('class') || '';
+        var text = $a.clone().children('i').remove().end().text().trim();
+        links.push({ href: $a.attr('href'), text: text, iconClass: iconClass });
     });
 
     // Determine current page label
@@ -72,7 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Build the mobile nav HTML
     var listItems = links.map(function(l) {
         var isActive = (l.text.toLowerCase() === pageLabel.toLowerCase()) ? ' class="active"' : '';
-        return '<a href="' + l.href + '"' + isActive + '>' + l.text + '</a>';
+        var icon = l.iconClass ? '<i class="' + l.iconClass + '"></i> ' : '';
+        return '<a href="' + l.href + '"' + isActive + '>' + icon + l.text + '</a>';
     }).join('');
 
     var mobileNav = $('<div id="mobile-nav">' +
