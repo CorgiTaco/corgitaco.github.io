@@ -210,3 +210,44 @@
     margin: 4px 24px 0 24px;
     align-self: stretch;
 }
+
+/* ── Mobile modal fixes ── */
+@media (max-width: 600px) {
+    #modal-overlay {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: 10px;
+    }
+
+    .modal-inner {
+        width: 100%;
+        max-height: calc(100dvh - 40px);
+        overflow-y: auto;
+    }
+
+    .modal-video-wrap {
+        min-height: unset;  /* remove fixed min-height on mobile */
+    }
+
+    .modal-links {
+        flex-wrap: wrap;
+        width: calc(100% - 24px);
+    }
+
+    .mod-link,
+    .modal-ext-link {
+        flex: 1 1 40%;      /* allow wrapping to 2 per row if needed */
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
+
+    .modal-back {
+        width: calc(100% - 24px);
+        margin: 4px 12px 0 12px;
+    }
+
+    .modal-banner {
+        width: calc(100% - 16px);
+        margin: 8px 8px 0 8px;
+    }
+}

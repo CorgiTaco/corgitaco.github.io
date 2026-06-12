@@ -182,15 +182,16 @@ nav {
 
     #main {
         position: fixed;
-        min-width: 90%;
-        max-width: 90%;
-        width: 90%;
-        min-height: auto;
-        max-height: calc(100dvh - 80px); /* full height minus mobile nav bar */
-        overflow-y: auto;
+        left: 5%;
+        right: 5%;
         top: 5%;
-        left: 50%;
-        transform: translateX(-50%);
+        width: 90%;
+        min-width: unset;
+        max-width: unset;
+        min-height: auto;
+        max-height: calc(100dvh - 80px);
+        overflow-y: auto;
+        transform: none;
         margin: 0;
     }
 
