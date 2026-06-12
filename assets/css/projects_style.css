@@ -77,11 +77,12 @@
 }
 
 .proj-label {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 10px 12px;
+    font-size: 0.95rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 500;
 }
 
 /* ══════════════════════════════════════════════
