@@ -10,7 +10,7 @@
 body {
     margin: 0;
     padding: 0;
-    overflow-y: scroll;
+    overflow: hidden;
 }
 
 #vanta-bg {
@@ -183,7 +183,6 @@ nav {
 @media (max-width: 600px) {
 
     #vanta-bg {
-        padding: 0;
         align-items: flex-start;
         justify-content: center;
     }
@@ -192,7 +191,7 @@ nav {
         position: fixed;
         left: 5%;
         right: 5%;
-        top: 5%;
+        top: 20px;
         width: 90%;
         min-width: unset;
         max-width: unset;
