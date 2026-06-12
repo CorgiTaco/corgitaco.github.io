@@ -222,8 +222,7 @@
 @media (max-width: 600px) {
     #modal-overlay {
         padding: 10px;
-        align-items: flex-start;
-        padding-top: 10px;
+        align-items: center;
     }
 
     .modal-inner {
