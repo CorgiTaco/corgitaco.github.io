@@ -227,7 +227,9 @@
         if (document.getElementById('projects-grid')) return;
 
         main.insertAdjacentHTML('beforeend', `
-            <div id="projects-grid"></div>
+            <div id="projects-scroll">
+                <div id="projects-grid"></div>
+            </div>
             <div id="modal-overlay">
                 <div id="projects-modals"></div>
             </div>

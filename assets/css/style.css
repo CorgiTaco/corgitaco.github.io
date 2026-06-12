@@ -10,16 +10,16 @@
 body {
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
 }
 
 #vanta-bg {
     z-index: -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     min-height: 100dvh;
     padding: 20px;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .nav-link {
@@ -54,6 +54,14 @@ a:hover {
     width: 100%;
 }
 
+#sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgb(20 20 20 / 95%);
+    flex-shrink: 0;
+}
+
 .page-title {
     font-size: clamp(1.5rem, 4vw + 1rem, 3rem);
     padding-left: 2%;
@@ -70,14 +78,14 @@ a:hover {
     max-width: 900px;
     width: 90%;
     box-sizing: border-box;
-    min-height: 80dvh;
-    max-height: 80dvh;
-    overflow-y: auto;
+    height: calc(100dvh - 40px);
 
     background-color: rgb(20 20 20 / 80%);
     border: 2px solid var(--main-color);
 
     margin: 0 auto;
+    align-self: center;
+    overflow-y: hidden;
 }
 
 nav {
