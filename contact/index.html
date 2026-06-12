@@ -17,6 +17,8 @@
       - custom css link
     -->
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
@@ -33,20 +35,31 @@
 <body id="vanta-bg">
 
 
-<div id="main" >
+<div id="main">
+    <script src="../assets/js/pagechange.js"></script>
 
-    <h1 class="page-title" >Contact Me</h1>
+    <div class="header">
 
-    <div class="navbar">
-        <a class="nav-link" href="./">Home</a>
-        <a class="nav-link" href="./projects">Projects</a>
-        <a class="nav-link" href="./resume">Resume</a>
-        <a class="nav-link" href="./blog">Blog</a>
-        <a class="nav-link" href="./about">About</a>
-        <a class="nav-link" href="./commission">Commission</a>
-        <a class="nav-link" href="./donate">Donate</a>
-        <a class="nav-link" href="">Contact</a>
+
+        <nav role='navigation'>
+            <ul id='nav-main'>
+                <li><a class="nav-link" id="meow" href="../"><i class="fa fa-home"></i>Home</a></li>
+                <li><a class="nav-link" href="../projects"><i class="fa fa-code"></i>Projects</a></li>
+                <li><a class="nav-link" href="../resume"><i class="fa fa-file-text"></i>Resume</a></li>
+                <li><a class="nav-link" href="../blog"><i class="fa fa-pencil"></i>Blog</a></li>
+                <li><a class="nav-link" href="../about"><i class="fa fa-user"></i>About</a></li>
+                <li><a class="nav-link" href="../commission"><i class="fa fa-paint-brush"></i>Commission</a></li>
+                <li><a class="nav-link" href="../donate"><i class="fa fa-heart"></i>Donate</a></li>
+                <li class="more hidden" data-width="80">
+                    <a href="#">☰</a>
+                    <ul></ul>
+                </li>
+            </ul>
+        </nav>
     </div>
+
+    <h1>Contact</h1>
+
 </div>
 
 </body>
