@@ -445,6 +445,14 @@
     object-fit: contain;
 }
 
+/* Match the GitHub icon to the size of the images */
+.modal-inner .mod-link .fa,
+.modal-inner .modal-ext-link .fa {
+    font-size: 26px;
+    width: 26px;
+    text-align: center;
+}
+
 .modal-inner .modal-back {
     width: calc(100% - 48px);
     justify-content: center;
