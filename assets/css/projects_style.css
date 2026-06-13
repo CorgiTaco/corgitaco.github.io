@@ -783,3 +783,29 @@
         font-size: 1.2rem;
     }
 }
+
+/* ══════════════════════════════════════════════
+   Viewed State Overlay
+══════════════════════════════════════════════ */
+
+.viewed-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 12, 12, 0.65); /* Gray/dark overlay */
+    z-index: 5;
+    pointer-events: none; /* Allows hover effects to still pass through to the card */
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.proj-card[data-viewed="true"] .viewed-overlay {
+    display: flex;
+}
+
+.viewed-overlay .fa-eye {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.85);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}

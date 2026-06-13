@@ -1,5 +1,59 @@
 (function () {
 
+    // ── Storage & Tracking Helpers ───────────────────────────────────────────
+
+    const VIEWED_KEY = 'projects-viewed-history';
+    let viewedProjects = [];
+
+    function loadViewedHistory() {
+        try { viewedProjects = JSON.parse(localStorage.getItem(VIEWED_KEY)) || []; }
+        catch { viewedProjects = []; }
+    }
+
+    function markAsViewed(id) {
+        if (!viewedProjects.includes(id)) {
+            viewedProjects.push(id);
+            localStorage.setItem(VIEWED_KEY, JSON.stringify(viewedProjects));
+
+            // Visually mark all instances of this card in the DOM
+            document.querySelectorAll(`.proj-card[data-id="${id}"]`).forEach(card => {
+                card.dataset.viewed = 'true';
+            });
+        }
+    }
+
+    function clearViewedHistory() {
+        viewedProjects = [];
+        localStorage.removeItem(VIEWED_KEY);
+
+        // Remove visual markers
+        document.querySelectorAll('.proj-card[data-viewed="true"]').forEach(card => {
+            card.dataset.viewed = 'false';
+        });
+
+        // Re-trigger active filters to un-hide everything
+        const globalDropdown = document.getElementById('filter-dropdown');
+        if (globalDropdown) {
+            // Uncheck global hide viewed if it was checked
+            const globalHideBtn = document.getElementById('hide-viewed-global');
+            if(globalHideBtn) globalHideBtn.checked = false;
+        }
+
+        document.querySelectorAll('.cat-row').forEach(row => {
+            const rowDropdown = row.querySelector('.carousel-filter-dropdown');
+            if (rowDropdown) {
+                const rowHideBtn = rowDropdown.querySelector('.carousel-hide-viewed');
+                if(rowHideBtn) rowHideBtn.checked = false;
+                applyCarouselFilter(row, rowDropdown);
+            }
+        });
+
+        const globalFilterToggle = document.getElementById('hide-viewed-global');
+        if(globalFilterToggle) {
+            globalFilterToggle.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     function slugify(str) {
@@ -25,12 +79,9 @@
     function updateUrlParams(updates) {
         const url = new URL(window.location);
         Object.entries(updates).forEach(([key, value]) => {
-            if (value === null) {
-                // Remove parameter if explicitly passed null (e.g., default states)
+            if (value === null || value === false) {
                 url.searchParams.delete(key);
             } else if (Array.isArray(value)) {
-                // If the array is empty, the user explicitly unchecked everything.
-                // We use 'none' to distinguish an empty selection from a missing param (which means 'Select All')
                 if (value.length === 0) url.searchParams.set(key, 'none');
                 else url.searchParams.set(key, value.join(','));
             } else {
@@ -41,18 +92,15 @@
         history.replaceState(null, '', url.toString());
     }
 
-    // Keeps the URL clean based on the active view
     function cleanUrlForView(view) {
         const url = new URL(window.location);
         const keysToDelete = [];
 
         for (const key of url.searchParams.keys()) {
             if (view === 'grid') {
-                // Wipe out carousel-specific params
-                if (key.startsWith('sort-') || key.startsWith('tags-')) keysToDelete.push(key);
+                if (key.startsWith('sort-') || key.startsWith('tags-') || key.startsWith('hideViewed-')) keysToDelete.push(key);
             } else if (view === 'carousel') {
-                // Wipe out global grid params
-                if (key === 'cats' || key === 'tags' || key === 'sort') keysToDelete.push(key);
+                if (key === 'cats' || key === 'tags' || key === 'sort' || key === 'hideViewed') keysToDelete.push(key);
             }
         }
 
@@ -86,7 +134,9 @@
         const tagSlugs = tags.map(t => slugify(t)).join(' ');
         const safeName = (name || '').replace(/"/g, '&quot;');
         const safeDate = date || '1970-01-01';
-        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}" data-date="${safeDate}" data-name="${safeName}"`;
+        const isViewed = viewedProjects.includes(id) ? 'true' : 'false';
+
+        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}" data-date="${safeDate}" data-name="${safeName}" data-viewed="${isViewed}"`;
     }
 
     function buildYoutubeCard(cfg, id, category, tags) {
@@ -98,6 +148,7 @@
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
+                <div class="viewed-overlay"><i class="fa fa-eye"></i></div>
                 <div class="yt-play">
                     <svg class="yt-play-icon" viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
                         <path class="yt-play-bg" d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 11.4 0 24 0 24s0 12.6 1.5 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 36.6 68 24 68 24s0-12.6-1.5-16.3z"/>
@@ -115,6 +166,7 @@
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
+                <div class="viewed-overlay"><i class="fa fa-eye"></i></div>
             </div>
             <div class="proj-label"><i class="fa fa-puzzle-piece"></i> ${cfg.name}</div>
         </div>`;
@@ -126,6 +178,7 @@
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
+                <div class="viewed-overlay"><i class="fa fa-eye"></i></div>
             </div>
             <div class="proj-label"><i class="fa fa-folder-open"></i> ${cfg.name}</div>
         </div>`;
@@ -243,6 +296,17 @@
             </div>`;
         }
 
+        const statusSection = `
+            <div class="filter-section-wrap" id="filter-wrap-status">
+                <div class="filter-section-label">Status</div>
+                <div class="filter-section" data-section="status">
+                    <label class="filter-tag">
+                        <input type="checkbox" id="hide-viewed-global" value="hide-viewed">
+                        <span>Hide Viewed</span>
+                    </label>
+                </div>
+            </div>`;
+
         const filterHtml = `
         <div id="filter-bar">
             <button id="filter-toggle" class="btn-theme">
@@ -251,6 +315,7 @@
             <div id="filter-dropdown">
                 ${catSection}
                 ${tagSection}
+                ${statusSection}
             </div>
         </div>`;
 
@@ -297,21 +362,31 @@
                     <span>${t}</span>
                 </label>`).join('');
 
-            const rowDropdown = tags.length ? `
+            const rowStatusSection = `
+                <div class="filter-section-wrap" style="padding-left:0; border-top: 1px solid rgba(70, 162, 88, 0.3); margin-top: 6px; padding-top: 6px;">
+                    <label class="filter-tag">
+                        <input type="checkbox" class="carousel-hide-viewed" value="hide-viewed">
+                        <span>Hide Viewed</span>
+                    </label>
+                </div>`;
+
+            const rowDropdown = `
                 <div class="carousel-filter-bar">
                     <button class="btn-theme carousel-filter-toggle">
                         <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down carousel-filter-chevron"></i>
                     </button>
                     <div class="carousel-filter-dropdown">
+                        ${tags.length ? `
                         <div class="filter-section-wrap" style="padding-left:0">
                             <label class="filter-tag filter-select-all-tag">
                                 <input type="checkbox" class="carousel-select-all" checked>
                                 <span>Select all</span>
                             </label>
                             <div class="filter-section">${tagChecks}</div>
-                        </div>
+                        </div>` : ''}
+                        ${rowStatusSection}
                     </div>
-                </div>` : '';
+                </div>`;
 
             // Per row sort dropdown
             const rowSort = `
@@ -357,14 +432,12 @@
 
     // ── Wire Actions (Filter / Sort / Carousel Filters / Arrows) ─────────────
 
-    // Closes all dropdowns to prevent overlapping menus
     function closeAllDropdowns(exceptMenu = null) {
         document.querySelectorAll('#filter-dropdown.open, #sort-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open').forEach(menu => {
             if (menu === exceptMenu) return;
 
             menu.classList.remove('open');
 
-            // Reset respective chevrons
             if (menu.id === 'filter-dropdown') {
                 const chev = document.getElementById('filter-chevron');
                 if (chev) chev.style.transform = '';
@@ -440,6 +513,7 @@
             const dropdown  = filterBar.querySelector('.carousel-filter-dropdown');
             const chevron   = filterBar.querySelector('.carousel-filter-chevron');
             const selectAll = filterBar.querySelector('.carousel-select-all');
+            const hideViewedCb = filterBar.querySelector('.carousel-hide-viewed');
 
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
@@ -451,34 +525,46 @@
             dropdown.addEventListener('click', e => e.stopPropagation());
 
             function syncUrlAndFilter() {
-                const checked = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
-                const all = checked.length === dropdown.querySelectorAll('.carousel-tag-cb').length;
+                let allChecked = true;
+                let checkedTags = [];
+                if (selectAll) {
+                    checkedTags = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
+                    allChecked = checkedTags.length === dropdown.querySelectorAll('.carousel-tag-cb').length;
+                }
+
+                const isHidingViewed = hideViewedCb ? hideViewedCb.checked : false;
 
                 updateUrlParams({
-                    [`tags-${catSlug}`]: all ? null : checked
+                    [`tags-${catSlug}`]: allChecked ? null : checkedTags,
+                    [`hideViewed-${catSlug}`]: isHidingViewed ? 'true' : null
                 });
 
                 applyCarouselFilter(row, dropdown);
             }
 
-            selectAll.addEventListener('change', () => {
-                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
-                    cb.checked = selectAll.checked;
-                });
-                syncUrlAndFilter();
-            });
-
-            dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
-                cb.addEventListener('change', () => {
-                    const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
-                    selectAll.checked = all;
+            if (selectAll) {
+                selectAll.addEventListener('change', () => {
+                    dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                        cb.checked = selectAll.checked;
+                    });
                     syncUrlAndFilter();
                 });
-            });
 
-            // Init from URL Parameters
+                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
+                        selectAll.checked = all;
+                        syncUrlAndFilter();
+                    });
+                });
+            }
+
+            if (hideViewedCb) {
+                hideViewedCb.addEventListener('change', syncUrlAndFilter);
+            }
+
             const tagParam = params.get(`tags-${catSlug}`);
-            if (tagParam) {
+            if (tagParam && selectAll) {
                 const activeTags = tagParam !== 'none' ? new Set(tagParam.split(',')) : new Set();
 
                 dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
@@ -487,24 +573,37 @@
 
                 const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
                 selectAll.checked = all;
-                applyCarouselFilter(row, dropdown);
             }
+
+            const hideParam = params.get(`hideViewed-${catSlug}`);
+            if (hideParam === 'true' && hideViewedCb) {
+                hideViewedCb.checked = true;
+            }
+
+            applyCarouselFilter(row, dropdown);
         });
     }
 
     function applyCarouselFilter(row, dropdown) {
-        const checked = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
-        const selectAllChecked = dropdown.querySelector('.carousel-select-all').checked;
+        const checkedTags = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
+        const selectAllChecked = dropdown.querySelector('.carousel-select-all') ? dropdown.querySelector('.carousel-select-all').checked : true;
+        const hideViewed = dropdown.querySelector('.carousel-hide-viewed') ? dropdown.querySelector('.carousel-hide-viewed').checked : false;
 
         row.querySelectorAll('.proj-card').forEach(card => {
             const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+            const isViewed = card.dataset.viewed === 'true';
+
+            if (hideViewed && isViewed) {
+                card.style.display = 'none';
+                return;
+            }
 
             if (selectAllChecked) {
                 card.style.display = '';
             } else if (cardTags.length === 0) {
                 card.style.display = 'none';
             } else {
-                card.style.display = cardTags.some(t => checked.includes(t)) ? '' : 'none';
+                card.style.display = cardTags.some(t => checkedTags.includes(t)) ? '' : 'none';
             }
         });
 
@@ -536,13 +635,11 @@
 
             dropdown.addEventListener('change', e => {
                 if (e.target.type === 'radio') {
-                    // Update URL params
                     updateUrlParams({ [`sort-${catSlug}`]: e.target.value === 'date-desc' ? null : e.target.value });
                     applyLocalSort(track, e.target.value);
                 }
             });
 
-            // Init from URL Parameters
             const sortVal = params.get(`sort-${catSlug}`);
             if (sortVal) {
                 const radio = dropdown.querySelector(`input[name="sort-${catSlug}"][value="${sortVal}"]`);
@@ -589,6 +686,7 @@
         const toggle   = document.getElementById('filter-toggle');
         const dropdown = document.getElementById('filter-dropdown');
         const chevron  = document.getElementById('filter-chevron');
+        const hideViewedCb = document.getElementById('hide-viewed-global');
 
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -631,11 +729,14 @@
         function applyFilter() {
             const activeCats = new Set(checkedCats());
             const activeTags = new Set(checkedTags());
+            const hideViewed = hideViewedCb ? hideViewedCb.checked : false;
 
             document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
                 const cardCat  = card.dataset.category || '';
                 const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+                const isViewed = card.dataset.viewed === 'true';
 
+                if (hideViewed && isViewed) { card.style.display = 'none'; return; }
                 if (!activeCats.has(cardCat)) { card.style.display = 'none'; return; }
                 if (cardTags.length === 0)    { card.style.display = '';     return; }
 
@@ -649,13 +750,13 @@
                 card.style.display = (!anyTagsEnabledForCat || relevantTagsChecked) ? '' : 'none';
             });
 
-            // Push to URL, removing params if everything is checked
             const totalCats = dropdown.querySelectorAll('.cat-checkbox').length;
             const validTags = [...dropdown.querySelectorAll('.tag-checkbox')].filter(cb => !cb.disabled).length;
 
             updateUrlParams({
                 cats: checkedCats().length === totalCats ? null : checkedCats(),
-                tags: checkedTags().length === validTags ? null : checkedTags()
+                tags: checkedTags().length === validTags ? null : checkedTags(),
+                hideViewed: hideViewed ? 'true' : null
             });
         }
 
@@ -663,8 +764,9 @@
             const params = new URLSearchParams(window.location.search);
             const catParam = params.get('cats');
             const tagParam = params.get('tags');
+            const hideParam = params.get('hideViewed');
 
-            if (!catParam && !tagParam) return;
+            if (!catParam && !tagParam && !hideParam) return;
 
             const activeCats = (catParam && catParam !== 'none') ? new Set(catParam.split(',')) : new Set();
             const activeTags = (tagParam && tagParam !== 'none') ? new Set(tagParam.split(',')) : new Set();
@@ -675,6 +777,9 @@
             dropdown.querySelectorAll('.tag-checkbox').forEach(cb => {
                 cb.checked = tagParam ? activeTags.has(cb.value) : true;
             });
+            if (hideViewedCb) {
+                hideViewedCb.checked = (hideParam === 'true');
+            }
 
             ['category', 'tags'].forEach(sec => {
                 const section = dropdown.querySelector(`.filter-section[data-section="${sec}"]`);
@@ -685,18 +790,7 @@
             });
 
             syncTagVisibility();
-
-            const activeCatsFinal = new Set(checkedCats());
-            const activeTagsFinal = new Set(checkedTags());
-
-            document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
-                const cardCat  = card.dataset.category || '';
-                const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
-
-                if (!activeCatsFinal.has(cardCat)) { card.style.display = 'none'; return; }
-                if (cardTags.length === 0)         { card.style.display = '';     return; }
-                card.style.display = cardTags.some(t => activeTagsFinal.has(t)) ? '' : 'none';
-            });
+            applyFilter();
         }
 
         dropdown.addEventListener('change', (e) => {
@@ -709,7 +803,7 @@
                     if (secName === 'tags' && item.closest('.filter-tag').classList.contains('tag-disabled')) return;
                     item.checked = cb.checked;
                 });
-            } else {
+            } else if (cb.id !== 'hide-viewed-global') {
                 const section = cb.closest('.filter-section');
                 if (section) {
                     const visibleCbs = [...section.querySelectorAll('input[type=checkbox]')]
@@ -728,7 +822,6 @@
             applyFilter();
         });
 
-        // Initialize state on load
         loadFromParams();
     }
 
@@ -756,7 +849,6 @@
             }
         });
 
-        // Load initial sort from params
         const params = new URLSearchParams(window.location.search);
         const sortVal = params.get('sort');
         if (sortVal) {
@@ -821,7 +913,6 @@
             ? viewParam
             : (localStorage.getItem(LAYOUT_KEY) || 'carousel');
 
-        // Enforce clean URL on initialization
         cleanUrlForView(view);
         setLayout(view);
         return view;
@@ -847,7 +938,6 @@
             if (btnGrid)     btnGrid.classList.remove('active');
             if (btnCarousel) btnCarousel.classList.add('active');
 
-            // Redraw arrows when becoming visible
             document.querySelectorAll('.cat-carousel').forEach(track => {
                 if (track._updateArrows) track._updateArrows();
             });
@@ -866,6 +956,8 @@
     // ── Main init ────────────────────────────────────────────────────────────
 
     function init(projects) {
+        loadViewedHistory();
+
         projects.sort((a, b) => {
             const da = (a.config && a.config.date) ? new Date(a.config.date) : new Date(0);
             const db = (b.config && b.config.date) ? new Date(b.config.date) : new Date(0);
@@ -894,7 +986,6 @@
         const scroll = document.getElementById('projects-scroll');
 
         scroll.insertAdjacentHTML('beforebegin', buildActionBars(presentCats, tagsByCategory));
-
         scroll.insertAdjacentHTML('afterend', buildCarouselLayout(projects, presentCats, tagsByCategory));
 
         const titleBar = document.getElementById('projects-title-bar');
@@ -911,6 +1002,15 @@
         const actionsGroup = document.createElement('div');
         actionsGroup.id = 'title-actions-group';
 
+        const clearBtn = document.createElement('button');
+        clearBtn.id = 'clear-viewed-btn';
+        clearBtn.className = 'btn-theme';
+        clearBtn.title = 'Clear History';
+        // 👉 New dual icon applied here:
+        clearBtn.innerHTML = '<i class="fa fa-eye"></i> <i class="fa fa-trash"></i>';
+        clearBtn.addEventListener('click', clearViewedHistory);
+
+        actionsGroup.appendChild(clearBtn);
         if (sortBar) actionsGroup.appendChild(sortBar);
         if (filterBar) actionsGroup.appendChild(filterBar);
 
@@ -954,7 +1054,6 @@
 
         // ── Global Document Click Listener (Closes Dropdowns)
         document.addEventListener('click', (e) => {
-            // If clicking outside any action bar area, close all dropdowns
             if (!e.target.closest('#filter-bar, #sort-bar, .carousel-filter-bar, .carousel-sort-bar')) {
                 closeAllDropdowns();
             }
@@ -963,12 +1062,16 @@
         const main = document.getElementById('main');
         main.addEventListener('click', (e) => {
             const card = e.target.closest('.proj-card');
-            if (card) openModal(card.dataset.id);
+            if (card) {
+                openModal(card.dataset.id);
+            }
         });
         main.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 const card = e.target.closest('.proj-card');
-                if (card) openModal(card.dataset.id);
+                if (card) {
+                    openModal(card.dataset.id);
+                }
             }
         });
 
@@ -989,6 +1092,22 @@
     }
 
     function openModal(id) {
+        markAsViewed(id);
+
+        const view = getLayout();
+        if (view === 'grid') {
+            const globalToggle = document.getElementById('hide-viewed-global');
+            if(globalToggle && globalToggle.checked) globalToggle.dispatchEvent(new Event('change', { bubbles: true }));
+        } else {
+            document.querySelectorAll('.cat-row').forEach(row => {
+                const dropdown = row.querySelector('.carousel-filter-dropdown');
+                if (dropdown) {
+                    const rowHideCb = dropdown.querySelector('.carousel-hide-viewed');
+                    if(rowHideCb && rowHideCb.checked) rowHideCb.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        }
+
         const overlay  = document.getElementById('modal-overlay');
         const allInner = document.querySelectorAll('.modal-inner');
         allInner.forEach(el => el.classList.remove('active'));
@@ -1004,7 +1123,6 @@
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        // Append hash to existing search params
         history.pushState(null, '', location.pathname + location.search + '#project-' + id);
     }
 
@@ -1016,7 +1134,6 @@
         overlay.querySelectorAll('iframe[data-src]').forEach(iframe => { iframe.src = ''; });
 
         if (location.hash.startsWith('#project-')) {
-            // Keep the search params when stripping the hash
             history.pushState(null, '', location.pathname + location.search);
         }
     }
