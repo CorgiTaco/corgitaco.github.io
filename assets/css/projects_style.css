@@ -289,7 +289,7 @@
     inset: 0;
     background: rgba(12, 12, 12, 0.65);
     z-index: 5;
-    pointer-events: none;
+    pointer-events: none; /* The container ignores clicks */
     padding: 10px;
     justify-content: flex-end;
     align-items: flex-start;
@@ -303,13 +303,20 @@
     font-size: 1.2rem;
     color: rgba(255, 255, 255, 0.85);
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+    pointer-events: auto; /* Forces the eyeball to accept hover & clicks */
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+}
+
+.viewed-overlay .fa-eye:hover {
+    color: #ff5f57 !important; /* Overrides the global color rules */
+    transform: scale(1.1);
 }
 
 /* ══════════════════════════════════════════════
    Buttons & Links
 ══════════════════════════════════════════════ */
 
-/* Move general button theme BEFORE the modal overrides so it doesn't break sizes */
 .btn-theme {
     display: inline-flex;
     align-items: center;
@@ -398,10 +405,10 @@
 }
 
 .modal-video-wrap {
-    width: calc(100% - 48px); /* Matches the inset of the Back button */
-    margin-top: 24px;         /* Adds padding to the top */
+    width: calc(100% - 48px);
+    margin-top: 24px;
     aspect-ratio: 16 / 9;
-    border-radius: 6px;       /* Slightly rounder corners to match your theme */
+    border-radius: 6px;
     overflow: hidden;
     min-height: 400px;
 }
@@ -537,6 +544,8 @@
 
     .modal-video-wrap {
         min-height: unset;
+        width: calc(100% - 24px);
+        margin-top: 12px;
     }
 
     .modal-links {

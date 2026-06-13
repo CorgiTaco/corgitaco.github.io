@@ -13,26 +13,36 @@
     function markAsViewed(id) {
         if (!viewedProjects.includes(id)) {
             viewedProjects.push(id);
-            // Save directly to localStorage (bypasses GitHub Pages cookie restrictions)
             localStorage.setItem(VIEWED_KEY, JSON.stringify(viewedProjects));
 
-            // Visually mark all instances of this card in the DOM
             document.querySelectorAll(`.proj-card[data-id="${id}"]`).forEach(card => {
                 card.dataset.viewed = 'true';
             });
         }
     }
 
+    // NEW: Function to remove a specific item from viewed storage
+    function unmarkAsViewed(id) {
+        const index = viewedProjects.indexOf(id);
+        if (index > -1) {
+            viewedProjects.splice(index, 1);
+            localStorage.setItem(VIEWED_KEY, JSON.stringify(viewedProjects));
+
+            // Visually un-mark all instances of this card
+            document.querySelectorAll(`.proj-card[data-id="${id}"]`).forEach(card => {
+                card.dataset.viewed = 'false';
+            });
+        }
+    }
+
     function clearViewedHistory() {
         viewedProjects = [];
-        localStorage.removeItem(VIEWED_KEY); // Wipe localStorage
+        localStorage.removeItem(VIEWED_KEY);
 
-        // Remove visual markers
         document.querySelectorAll('.proj-card[data-viewed="true"]').forEach(card => {
             card.dataset.viewed = 'false';
         });
 
-        // Re-trigger active filters to un-hide everything
         const globalDropdown = document.getElementById('filter-dropdown');
         if (globalDropdown) {
             const globalHideBtn = document.getElementById('hide-viewed-global');
@@ -148,7 +158,7 @@
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
-                <div class="viewed-overlay"><i class="fa fa-eye"></i></div>
+                <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
                 <div class="yt-play">
                     <svg class="yt-play-icon" viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
                         <path class="yt-play-bg" d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 11.4 0 24 0 24s0 12.6 1.5 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 36.6 68 24 68 24s0-12.6-1.5-16.3z"/>
@@ -166,7 +176,7 @@
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
-                <div class="viewed-overlay"><i class="fa fa-eye"></i></div>
+                <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
             </div>
             <div class="proj-label"><i class="fa fa-puzzle-piece"></i> ${cfg.name}</div>
         </div>`;
@@ -178,7 +188,7 @@
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
-                <div class="viewed-overlay"><i class="fa fa-eye"></i></div>
+                <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
             </div>
             <div class="proj-label"><i class="fa fa-folder-open"></i> ${cfg.name}</div>
         </div>`;
@@ -355,7 +365,6 @@
             const catSlug = slugify(cat);
             const tags    = tagsByCategory[cat] || [];
 
-            // Per row filter dropdown
             const tagChecks = tags.map(t => `
                 <label class="filter-tag">
                     <input type="checkbox" class="carousel-tag-cb" value="${slugify(t)}" checked>
@@ -388,7 +397,6 @@
                     </div>
                 </div>`;
 
-            // Per row sort dropdown
             const rowSort = `
                 <div class="carousel-sort-bar">
                     <button class="btn-theme carousel-sort-toggle">
@@ -430,7 +438,7 @@
         return `<div id="carousel-layout">${rows}</div>`;
     }
 
-    // ── Wire Actions (Filter / Sort / Carousel Filters / Arrows) ─────────────
+    // ── Wire Actions ─────────────────────────────────────────────────────────
 
     function closeAllDropdowns(exceptMenu = null) {
         document.querySelectorAll('#filter-dropdown.open, #sort-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open').forEach(menu => {
@@ -1006,7 +1014,6 @@
         clearBtn.id = 'clear-viewed-btn';
         clearBtn.className = 'btn-theme';
         clearBtn.title = 'Clear History';
-        // 👉 Dual icon applied here:
         clearBtn.innerHTML = '<i class="fa fa-eye"></i> <i class="fa fa-trash"></i>';
         clearBtn.addEventListener('click', clearViewedHistory);
 
@@ -1052,7 +1059,7 @@
         // ── Apply saved layout
         applyLayout(getLayout());
 
-        // ── Global Document Click Listener (Closes Dropdowns)
+        // ── Global Document Click Listener
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#filter-bar, #sort-bar, .carousel-filter-bar, .carousel-sort-bar')) {
                 closeAllDropdowns();
@@ -1060,12 +1067,26 @@
         });
 
         const main = document.getElementById('main');
+
+        // ── UPDATED: Intercept eyeball clicks before opening the modal
         main.addEventListener('click', (e) => {
+            const eyeIcon = e.target.closest('.viewed-overlay .fa-eye');
             const card = e.target.closest('.proj-card');
+
+            // If the user clicked the eyeball icon...
+            if (eyeIcon && card) {
+                e.preventDefault();
+                e.stopPropagation();
+                unmarkAsViewed(card.dataset.id);
+                return; // Stop right here, don't open the modal!
+            }
+
+            // Otherwise, normal card click
             if (card) {
                 openModal(card.dataset.id);
             }
         });
+
         main.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 const card = e.target.closest('.proj-card');
@@ -1092,7 +1113,7 @@
     }
 
     function openModal(id) {
-        markAsViewed(id); // Trigger localStorage save
+        markAsViewed(id);
 
         const view = getLayout();
         if (view === 'grid') {
