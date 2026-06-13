@@ -84,6 +84,23 @@ function handleRoute(url) {
             const parser = new DOMParser();
             const virtualDoc = parser.parseFromString(htmlData, 'text/html');
 
+            // --- NEW: Sync Document Title ---
+            if (virtualDoc.title) {
+                document.title = virtualDoc.title;
+            }
+
+            // --- NEW: Sync Stylesheets ---
+            Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
+                const href = newLink.getAttribute('href');
+                // If the current document doesn't already have this stylesheet, add it
+                if (!document.querySelector(`head link[href="${href}"]`)) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = href;
+                    document.head.appendChild(link);
+                }
+            });
+
             const newMainContent = virtualDoc.getElementById("main");
             const currentMainElement = document.getElementById("main");
 
