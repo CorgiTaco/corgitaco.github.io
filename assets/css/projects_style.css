@@ -1,4 +1,18 @@
 /* ══════════════════════════════════════════════
+   Global terminal font
+══════════════════════════════════════════════ */
+
+#main, #main * {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#main .fa,
+#main [class^="fa-"],
+#main [class*=" fa-"] {
+    font-family: 'FontAwesome' !important;
+}
+
+/* ══════════════════════════════════════════════
    Filter bar
 ══════════════════════════════════════════════ */
 
@@ -19,7 +33,8 @@
 }
 
 #filter-toggle {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-family: 'Courier New', Courier, monospace !important;
     gap: 8px;
     white-space: nowrap;
 }
@@ -35,14 +50,15 @@
     align-items: flex-start;
     gap: 0;
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 1px);
     right: 0;
     z-index: 100;
-    background: rgb(20 20 20 / 97%);
+    background: rgb(12 12 12 / 98%);
     border: 1px solid var(--main-color);
-    border-radius: 6px;
+    border-radius: 0;
     padding: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.7);
+    font-family: 'Courier New', Courier, monospace;
 }
 
 #filter-dropdown.open {
@@ -357,18 +373,21 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 9px 20px;
-    background: transparent;
-    border: 2px solid var(--main-color);
-    border-radius: 4px;
-    font-size: 0.9rem;
+    padding: 6px 14px;
+    background: rgb(15 15 15 / 90%);
+    border: 1px solid rgba(70, 162, 88, 0.45);
+    border-radius: 0;
+    font-size: 0.85rem;
+    font-family: 'Courier New', Courier, monospace;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.15s, border-color 0.15s;
     text-decoration: none;
+    letter-spacing: 0.02em;
 }
 
 .btn-theme:hover {
-    background: var(--main-color);
+    background: rgba(70, 162, 88, 0.15);
+    border-color: var(--main-color);
 }
 
 .modal-back {
@@ -494,35 +513,38 @@
 
 #layout-pill {
     display: flex;
-    border: 2px solid var(--main-color);
-    border-radius: 4px;
+    border: 1px solid rgba(70, 162, 88, 0.45);
+    border-radius: 0;
     overflow: hidden;
     flex-shrink: 0;
+    background: rgb(15 15 15 / 90%);
 }
 
 .layout-pill-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 7px 12px;
+    padding: 6px 12px;
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.15s;
+    font-size: 0.9rem;
+    transition: background 0.15s, border-color 0.15s;
     line-height: 1;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .layout-pill-btn + .layout-pill-btn {
-    border-left: 1px solid rgba(70, 162, 88, 0.4);
+    border-left: 1px solid rgba(70, 162, 88, 0.3);
 }
 
 .layout-pill-btn:hover {
-    background: rgba(70, 162, 88, 0.2);
+    background: rgba(70, 162, 88, 0.15);
 }
 
 .layout-pill-btn.active {
-    background: var(--main-color);
+    background: rgba(70, 162, 88, 0.25);
+    color: var(--main-color);
     font-weight: 700;
 }
 
@@ -590,15 +612,16 @@
     display: none;
     flex-direction: column;
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 1px);
     right: 0;
     z-index: 100;
-    background: rgb(20 20 20 / 97%);
+    background: rgb(12 12 12 / 98%);
     border: 1px solid var(--main-color);
-    border-radius: 6px;
+    border-radius: 0;
     padding: 10px 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.7);
     min-width: 160px;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .carousel-filter-dropdown.open {
