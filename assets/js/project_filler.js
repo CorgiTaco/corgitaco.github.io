@@ -169,7 +169,7 @@
         return `
         <div id="filter-bar">
             <button id="filter-toggle" class="btn-theme">
-                <i class="fa fa-filter"></i> Filter <i class="fa fa-chevron-down" id="filter-chevron"></i>
+                <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down" id="filter-chevron"></i>
             </button>
             <div id="filter-dropdown">
                 ${makeSection('Type', typeTagList)}

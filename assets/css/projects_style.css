@@ -348,60 +348,48 @@
     align-self: stretch;
 }
 
-/* ── Mobile filter dropdown ── */
+/* ── Mobile filter: icon-only button in title bar ── */
 @media (max-width: 600px) {
-    /* Title bar becomes a column so the filter toggle sits flush below the title */
+    /* Keep title bar as a single row; ensure dropdown can overflow out of it */
     #projects-title-bar {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 12px 0 0;
+        overflow: visible;
+    }
+
+    /* filter-bar stays relative so the absolute dropdown anchors to it */
+    #filter-bar {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    /* Icon-only pill — hide the text label and chevron */
+    #filter-toggle {
+        padding: 8px 10px;
         gap: 0;
     }
 
-    #projects-title-bar h1 {
-        padding: 10px var(--main-padding);
+    #filter-toggle .fa-filter {
+        font-size: 1rem;
     }
 
-    /* Filter bar fills the width and sits inside sticky-header so it covers the grid */
-    #filter-bar {
-        position: static;
-        width: 100%;
+    /* Hide "Filter" text and chevron on mobile */
+    #filter-toggle span,
+    #filter-toggle #filter-chevron {
+        display: none;
     }
 
-    /* Toggle spans full width, flat edges so it tiles flush with the title bar */
-    #filter-toggle {
-        width: 100%;
-        justify-content: center;
-        border-left: none;
-        border-right: none;
-        border-bottom: none;
-        border-radius: 0;
-        background: var(--main-color);
-        padding: 10px 16px;
-        box-sizing: border-box;
-    }
-
-    #filter-toggle:hover {
-        background: var(--main-color);
-        filter: brightness(1.15);
-    }
-
-    /* Dropdown flows in-document below the toggle, no gap or rogue border */
+    /* Dropdown stays absolute but stacks sections vertically and is
+       wide enough to be usable without going off the left edge */
     #filter-dropdown {
-        position: static;
-        top: unset;
-        right: unset;
         flex-direction: column;
-        width: 100%;
-        border: none;
-        border-top: 1px solid rgba(70, 162, 88, 0.4);
-        border-radius: 0;
-        box-shadow: none;
-        box-sizing: border-box;
-        padding: 8px 12px 12px;
-        /* Sit above the scroll area so open dropdown covers the grid cleanly */
-        z-index: 50;
-        background: rgb(20 20 20 / 97%);
+        right: 0;
+        left: auto;
+        width: 220px;
+        max-height: 70dvh;
+        overflow-y: auto;
     }
 
     .filter-section-wrap {
@@ -413,13 +401,12 @@
     .filter-section-wrap + .filter-section-wrap {
         border-left: none;
         border-top: 1px solid rgba(70, 162, 88, 0.25);
-        padding-top: 10px;
+        padding-top: 8px;
     }
 
-    /* Two-column tag grid — readable without being too tall */
     .filter-section {
         grid-auto-flow: row;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         grid-template-rows: unset;
     }
 }
