@@ -348,6 +348,58 @@
     align-self: stretch;
 }
 
+/* ── Mobile filter dropdown ── */
+@media (max-width: 600px) {
+    #projects-title-bar {
+        flex-wrap: wrap;
+    }
+
+    /* Escape absolute positioning so the dropdown pushes content down */
+    #filter-bar {
+        position: static;
+        width: 100%;
+        order: 1; /* sits below the title row */
+    }
+
+    #filter-toggle {
+        width: 100%;
+        justify-content: center;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+    }
+
+    #filter-dropdown {
+        /* Override the absolute position so it flows in the document */
+        position: static;
+        top: unset;
+        right: unset;
+        /* Stack sections vertically */
+        flex-direction: column;
+        width: 100%;
+        border-radius: 0 0 6px 6px;
+        box-shadow: none;
+        box-sizing: border-box;
+    }
+
+    .filter-section-wrap {
+        padding: 8px 0;
+        min-width: unset;
+        width: 100%;
+    }
+
+    .filter-section-wrap + .filter-section-wrap {
+        border-left: none;
+        border-top: 1px solid rgba(70, 162, 88, 0.3);
+    }
+
+    /* Let the tag grid flow naturally in a single column */
+    .filter-section {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: unset;
+    }
+}
+
 /* ── Mobile modal fixes ── */
 @media (max-width: 600px) {
     #modal-overlay {
