@@ -21,9 +21,7 @@
     }
 
     // ── Category / tag resolution ─────────────────────────────────────────────
-    //
-    // Category is derived directly from proj.type: underscores become spaces,
-    // each word is title-cased. e.g. "minecraft_mod" → "Minecraft Mod"
+
     function typeToCategory(type) {
         if (!type) return 'Other';
         return type
@@ -42,10 +40,12 @@
 
     // ── Card builders ────────────────────────────────────────────────────────
 
-    function cardAttrs(id, category, tags) {
+    function cardAttrs(id, category, tags, date, name) {
         const catSlug  = slugify(category);
         const tagSlugs = tags.map(t => slugify(t)).join(' ');
-        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}"`;
+        const safeName = (name || '').replace(/"/g, '&quot;');
+        const safeDate = date || '1970-01-01'; // Fallback date for items without one
+        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}" data-date="${safeDate}" data-name="${safeName}"`;
     }
 
     function buildYoutubeCard(cfg, id, category, tags) {
@@ -54,7 +54,7 @@
         const fit   = cfg.thumb_fit || 'cover';
         const label = cfg.name || 'Video';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${label}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
                 <div class="yt-play">
@@ -71,7 +71,7 @@
     function buildModCard(cfg, id, category, tags) {
         const fit = cfg.thumb_fit || 'cover';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
             </div>
@@ -82,7 +82,7 @@
     function buildProjectCard(cfg, id, category, tags) {
         const fit = cfg.thumb_fit || 'cover';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
             </div>
@@ -147,9 +147,9 @@
         return '';
     }
 
-    // ── Grid layout filter bar ───────────────────────────────────────────────
+    // ── Action Bars (Filter & Sort) ──────────────────────────────────────────
 
-    function buildFilterBar(categories, tagsByCategory) {
+    function buildActionBars(categories, tagsByCategory) {
         const catChecks = categories.map(cat => `
             <label class="filter-tag">
                 <input type="checkbox" class="cat-checkbox" value="${slugify(cat)}" checked>
@@ -202,7 +202,7 @@
             </div>`;
         }
 
-        return `
+        const filterHtml = `
         <div id="filter-bar">
             <button id="filter-toggle" class="btn-theme">
                 <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down" id="filter-chevron"></i>
@@ -212,6 +212,22 @@
                 ${tagSection}
             </div>
         </div>`;
+
+        const sortHtml = `
+        <div id="sort-bar">
+            <button id="sort-toggle" class="btn-theme">
+                <i class="fa fa-sort"></i><span> Sort </span><i class="fa fa-chevron-down" id="sort-chevron"></i>
+            </button>
+            <div id="sort-dropdown">
+                <label class="filter-tag"><input type="radio" name="sort-by" value="date-desc" checked><span>Date (Newest)</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="date-asc"><span>Date (Oldest)</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="name-asc"><span>Name (A-Z)</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="name-desc"><span>Name (Z-A)</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="tags-asc"><span>Tags (A-Z)</span></label>
+            </div>
+        </div>`;
+
+        return filterHtml + sortHtml;
     }
 
     // ── Carousel layout builder ──────────────────────────────────────────────
@@ -220,7 +236,6 @@
         const catSlugMap = {};
         presentCats.forEach(cat => { catSlugMap[slugify(cat)] = cat; });
 
-        // Group projects by category, preserving sort order
         const byCategory = {};
         presentCats.forEach(cat => { byCategory[cat] = []; });
         projects.forEach((proj, i) => {
@@ -234,7 +249,7 @@
             const catSlug = slugify(cat);
             const tags    = tagsByCategory[cat] || [];
 
-            // Per-row filter dropdown (only if this category has tags)
+            // Per row filter dropdown
             const tagChecks = tags.map(t => `
                 <label class="filter-tag">
                     <input type="checkbox" class="carousel-tag-cb" value="${slugify(t)}" checked>
@@ -257,7 +272,21 @@
                     </div>
                 </div>` : '';
 
-            // Cards for this category
+            // Per row sort dropdown
+            const rowSort = `
+                <div class="carousel-sort-bar">
+                    <button class="btn-theme carousel-sort-toggle">
+                        <i class="fa fa-sort"></i><span> Sort </span><i class="fa fa-chevron-down carousel-sort-chevron"></i>
+                    </button>
+                    <div class="carousel-sort-dropdown">
+                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="date-desc" checked><span>Date (Newest)</span></label>
+                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="date-asc"><span>Date (Oldest)</span></label>
+                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="name-asc"><span>Name (A-Z)</span></label>
+                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="name-desc"><span>Name (Z-A)</span></label>
+                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="tags-asc"><span>Tags (A-Z)</span></label>
+                    </div>
+                </div>`;
+
             const cards = byCategory[cat].map(({ proj, i }) => {
                 const id       = projectId(proj, i);
                 const category = getCategory(proj);
@@ -269,7 +298,10 @@
             <div class="cat-row" data-cat="${catSlug}">
                 <div class="cat-row-header">
                     <h2 class="cat-row-title">${cat}</h2>
-                    ${rowDropdown}
+                    <div class="cat-row-actions">
+                        ${rowSort}
+                        ${rowDropdown}
+                    </div>
                 </div>
                 <div class="cat-carousel">${cards}</div>
             </div>`;
@@ -278,7 +310,7 @@
         return `<div id="carousel-layout">${rows}</div>`;
     }
 
-    // ── Wire carousel tag filters ────────────────────────────────────────────
+    // ── Wire Actions (Filter / Sort / Carousel Filters) ──────────────────────
 
     function wireCarouselFilters() {
         document.querySelectorAll('.cat-row').forEach(row => {
@@ -290,14 +322,12 @@
             const chevron   = filterBar.querySelector('.carousel-filter-chevron');
             const selectAll = filterBar.querySelector('.carousel-select-all');
 
-            // Open / close
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
             });
 
-            // Close when clicking outside
             document.addEventListener('click', e => {
                 if (!filterBar.contains(e.target)) {
                     dropdown.classList.remove('open');
@@ -307,7 +337,6 @@
 
             dropdown.addEventListener('click', e => e.stopPropagation());
 
-            // Select-all toggle
             selectAll.addEventListener('change', () => {
                 dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
                     cb.checked = selectAll.checked;
@@ -315,7 +344,6 @@
                 applyCarouselFilter(row, dropdown);
             });
 
-            // Individual tag checkboxes
             dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
                 cb.addEventListener('change', () => {
                     const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
@@ -331,13 +359,69 @@
 
         row.querySelectorAll('.proj-card').forEach(card => {
             const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
-            // No tags on card → always show; otherwise must match a checked tag
             if (cardTags.length === 0) { card.style.display = ''; return; }
             card.style.display = cardTags.some(t => checked.includes(t)) ? '' : 'none';
         });
     }
 
-    // ── Grid layout filter wiring ────────────────────────────────────────────
+    function wireCarouselSort() {
+        document.querySelectorAll('.cat-row').forEach(row => {
+            const sortBar = row.querySelector('.carousel-sort-bar');
+            if (!sortBar) return;
+
+            const toggleBtn = sortBar.querySelector('.carousel-sort-toggle');
+            const dropdown  = sortBar.querySelector('.carousel-sort-dropdown');
+            const chevron   = sortBar.querySelector('.carousel-sort-chevron');
+            const track     = row.querySelector('.cat-carousel');
+
+            toggleBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const open = dropdown.classList.toggle('open');
+                chevron.style.transform = open ? 'rotate(180deg)' : '';
+            });
+
+            document.addEventListener('click', e => {
+                if (!sortBar.contains(e.target)) {
+                    dropdown.classList.remove('open');
+                    chevron.style.transform = '';
+                }
+            });
+
+            dropdown.addEventListener('click', e => e.stopPropagation());
+
+            dropdown.addEventListener('change', e => {
+                if (e.target.type === 'radio') {
+                    applyLocalSort(track, e.target.value);
+                }
+            });
+        });
+    }
+
+    function applyLocalSort(track, sortVal) {
+        const safeDate = (d) => {
+            const time = new Date(d).getTime();
+            return isNaN(time) ? 0 : time;
+        };
+
+        const sortFn = (a, b) => {
+            if (sortVal === 'date-desc') {
+                return safeDate(b.dataset.date) - safeDate(a.dataset.date);
+            } else if (sortVal === 'date-asc') {
+                return safeDate(a.dataset.date) - safeDate(b.dataset.date);
+            } else if (sortVal === 'name-asc') {
+                return a.dataset.name.localeCompare(b.dataset.name);
+            } else if (sortVal === 'name-desc') {
+                return b.dataset.name.localeCompare(a.dataset.name);
+            } else if (sortVal === 'tags-asc') {
+                const tagCmp = a.dataset.tags.localeCompare(b.dataset.tags);
+                return tagCmp !== 0 ? tagCmp : a.dataset.name.localeCompare(b.dataset.name);
+            }
+            return 0;
+        };
+
+        const cards = Array.from(track.querySelectorAll('.proj-card'));
+        cards.sort(sortFn).forEach(card => track.appendChild(card));
+    }
 
     function wireFilter() {
         const bar = document.getElementById('filter-bar');
@@ -497,6 +581,77 @@
         });
     }
 
+    function wireSort() {
+        const bar = document.getElementById('sort-bar');
+        if (!bar) return;
+
+        const toggle   = document.getElementById('sort-toggle');
+        const dropdown = document.getElementById('sort-dropdown');
+        const chevron  = document.getElementById('sort-chevron');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const open = dropdown.classList.toggle('open');
+            chevron.style.transform = open ? 'rotate(180deg)' : '';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!bar.contains(e.target) && !toggle.contains(e.target)) {
+                dropdown.classList.remove('open');
+                chevron.style.transform = '';
+            }
+        });
+
+        dropdown.addEventListener('click', (e) => e.stopPropagation());
+
+        dropdown.addEventListener('change', (e) => {
+            if (e.target.name === 'sort-by') {
+                applySort(e.target.value);
+            }
+        });
+    }
+
+    function applySort(sortVal) {
+        const safeDate = (d) => {
+            const time = new Date(d).getTime();
+            return isNaN(time) ? 0 : time;
+        };
+
+        const sortFn = (a, b) => {
+            if (sortVal === 'date-desc') {
+                return safeDate(b.dataset.date) - safeDate(a.dataset.date);
+            } else if (sortVal === 'date-asc') {
+                return safeDate(a.dataset.date) - safeDate(b.dataset.date);
+            } else if (sortVal === 'name-asc') {
+                return a.dataset.name.localeCompare(b.dataset.name);
+            } else if (sortVal === 'name-desc') {
+                return b.dataset.name.localeCompare(a.dataset.name);
+            } else if (sortVal === 'tags-asc') {
+                const tagCmp = a.dataset.tags.localeCompare(b.dataset.tags);
+                return tagCmp !== 0 ? tagCmp : a.dataset.name.localeCompare(b.dataset.name);
+            }
+            return 0;
+        };
+
+        const grid = document.getElementById('projects-grid');
+        if (grid) {
+            const cards = Array.from(grid.querySelectorAll('.proj-card'));
+            cards.sort(sortFn).forEach(card => grid.appendChild(card));
+        }
+
+        document.querySelectorAll('.cat-row').forEach(row => {
+            const track = row.querySelector('.cat-carousel');
+            if(track) {
+                const cards = Array.from(track.querySelectorAll('.proj-card'));
+                cards.sort(sortFn).forEach(card => track.appendChild(card));
+            }
+
+            // Sync the local sort radio button state to match global sort
+            const localRadio = row.querySelector(`.carousel-sort-dropdown input[value="${sortVal}"]`);
+            if (localRadio) localRadio.checked = true;
+        });
+    }
+
     // ── Layout toggle ────────────────────────────────────────────────────────
 
     const LAYOUT_KEY = 'projects-layout';
@@ -520,15 +675,19 @@
         if (layout === 'carousel') {
             if (grid)     grid.style.display     = 'none';
             if (carousel) carousel.style.display = '';
+
             if (filterBar)   filterBar.style.display   = 'none';
             if (filterToggle) filterToggle.style.display = 'none';
+
             if (btnGrid)     btnGrid.classList.remove('active');
             if (btnCarousel) btnCarousel.classList.add('active');
         } else {
             if (grid)     grid.style.display     = '';
             if (carousel) carousel.style.display = 'none';
+
             if (filterBar)   filterBar.style.display   = '';
             if (filterToggle) filterToggle.style.display = '';
+
             if (btnGrid)     btnGrid.classList.add('active');
             if (btnCarousel) btnCarousel.classList.remove('active');
         }
@@ -543,7 +702,6 @@
             return db - da;
         });
 
-        // Collect categories in first-seen order (projects are already date-sorted)
         const presentCats = [];
         const _seenCats   = new Set();
         projects.forEach(proj => {
@@ -563,19 +721,15 @@
             tagsByCategory[cat] = [...tagsByCategory[cat]].sort((a, b) => a.localeCompare(b));
         });
 
-        // ── Inject grid layout
         const scroll = document.getElementById('projects-scroll');
-        scroll.insertAdjacentHTML('beforebegin', buildFilterBar(presentCats, tagsByCategory));
 
-        // ── Inject carousel layout (hidden initially or per preference)
-        scroll.insertAdjacentHTML(
-            'afterend',
-            buildCarouselLayout(projects, presentCats, tagsByCategory)
-        );
+        scroll.insertAdjacentHTML('beforebegin', buildActionBars(presentCats, tagsByCategory));
 
-        // ── Add layout toggle + filter toggle to title bar
+        scroll.insertAdjacentHTML('afterend', buildCarouselLayout(projects, presentCats, tagsByCategory));
+
         const titleBar = document.getElementById('projects-title-bar');
         const filterToggle = document.getElementById('filter-toggle');
+        const sortToggle = document.getElementById('sort-toggle');
 
         const layoutPill = document.createElement('div');
         layoutPill.id = 'layout-pill';
@@ -584,9 +738,10 @@
             <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-list"></i></button>
         `;
 
-        // Wrap filter toggle + pill together on the right
         const btnGroup = document.createElement('div');
         btnGroup.id = 'title-btn-group';
+
+        if (sortToggle) btnGroup.appendChild(sortToggle);
         if (filterToggle) btnGroup.appendChild(filterToggle);
         btnGroup.appendChild(layoutPill);
         if (titleBar) titleBar.appendChild(btnGroup);
@@ -614,12 +769,13 @@
 
         // ── Wire everything
         wireFilter();
+        wireSort();
         wireCarouselFilters();
+        wireCarouselSort();
 
         // ── Apply saved layout
         applyLayout(getLayout());
 
-        // ── Event wiring for cards (works in both layouts via delegation on #main)
         const main = document.getElementById('main');
         main.addEventListener('click', (e) => {
             const card = e.target.closest('.proj-card');

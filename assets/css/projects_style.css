@@ -13,7 +13,7 @@
 }
 
 /* ══════════════════════════════════════════════
-   Filter bar
+   Filter & Sort bars
 ══════════════════════════════════════════════ */
 
 #projects-title-bar {
@@ -28,27 +28,24 @@
     padding: 8px var(--main-padding);
 }
 
-#filter-bar {
+#filter-bar, #sort-bar {
     position: relative;
 }
 
-#filter-toggle {
+#filter-toggle, #sort-toggle {
     font-size: 0.85rem;
     font-family: 'Courier New', Courier, monospace !important;
     gap: 8px;
     white-space: nowrap;
 }
 
-#filter-toggle #filter-chevron {
+#filter-toggle #filter-chevron, #sort-toggle #sort-chevron {
     transition: transform 0.2s ease;
     font-size: 0.75rem;
 }
 
-#filter-dropdown {
+#filter-dropdown, #sort-dropdown {
     display: none;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 0;
     position: absolute;
     top: calc(100% + 1px);
     right: 0;
@@ -61,7 +58,20 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
-#filter-dropdown.open {
+#filter-dropdown {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+}
+
+#sort-dropdown {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 170px;
+}
+
+#filter-dropdown.open, #sort-dropdown.open {
     display: flex;
 }
 
@@ -138,7 +148,7 @@
     cursor: not-allowed;
 }
 
-.filter-tag input[type=checkbox] {
+.filter-tag input[type=checkbox], .filter-tag input[type=radio] {
     accent-color: var(--main-color);
     width: 15px;
     height: 15px;
@@ -152,7 +162,6 @@
     border-top: 1px solid rgba(70, 162, 88, 0.3);
     padding-top: 10px;
 }
-
 
 /* ══════════════════════════════════════════════
    Projects grid
@@ -327,7 +336,6 @@
     padding: 0 24px;
 }
 
-/* YouTube embed */
 .modal-video-wrap {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -343,7 +351,6 @@
     display: block;
 }
 
-/* Mod platform links */
 .modal-links {
     display: flex;
     flex-wrap: nowrap;
@@ -368,7 +375,6 @@
     object-fit: contain;
 }
 
-/* Shared button style */
 .btn-theme {
     display: inline-flex;
     align-items: center;
@@ -397,9 +403,8 @@
     align-self: stretch;
 }
 
-/* ── Mobile filter: icon-only button in title bar ── */
+/* ── Mobile UI fixes ── */
 @media (max-width: 600px) {
-    /* Keep title bar as a single row; ensure dropdown can overflow out of it */
     #projects-title-bar {
         flex-direction: row;
         align-items: center;
@@ -408,30 +413,25 @@
         overflow: visible;
     }
 
-    /* filter-bar stays relative so the absolute dropdown anchors to it */
-    #filter-bar {
+    #filter-bar, #sort-bar {
         position: relative;
         flex-shrink: 0;
     }
 
-    /* Icon-only pill — hide the text label and chevron */
-    #filter-toggle {
+    #filter-toggle, #sort-toggle {
         padding: 8px 10px;
         gap: 0;
     }
 
-    #filter-toggle .fa-filter {
+    #filter-toggle .fa-filter, #sort-toggle .fa-sort {
         font-size: 1rem;
     }
 
-    /* Hide "Filter" text and chevron on mobile */
-    #filter-toggle span,
-    #filter-toggle #filter-chevron {
+    #filter-toggle span, #filter-toggle #filter-chevron,
+    #sort-toggle span, #sort-toggle #sort-chevron {
         display: none;
     }
 
-    /* Dropdown stays absolute but stacks sections vertically and is
-       wide enough to be usable without going off the left edge */
     #filter-dropdown {
         flex-direction: column;
         right: 0;
@@ -439,6 +439,11 @@
         width: 220px;
         max-height: 70dvh;
         overflow-y: auto;
+    }
+
+    #sort-dropdown {
+        width: 180px;
+        right: 0;
     }
 
     .filter-section-wrap {
@@ -458,10 +463,7 @@
         grid-template-columns: 1fr;
         grid-template-rows: unset;
     }
-}
 
-/* ── Mobile modal fixes ── */
-@media (max-width: 600px) {
     #modal-overlay {
         padding: 10px;
         align-items: center;
@@ -474,7 +476,7 @@
     }
 
     .modal-video-wrap {
-        min-height: unset;  /* remove fixed min-height on mobile */
+        min-height: unset;
     }
 
     .modal-links {
@@ -484,7 +486,7 @@
 
     .mod-link,
     .modal-ext-link {
-        flex: 1 1 40%;      /* allow wrapping to 2 per row if needed */
+        flex: 1 1 40%;
         padding: 12px 10px;
         font-size: 0.9rem;
     }
@@ -499,6 +501,7 @@
         margin: 8px 8px 0 8px;
     }
 }
+
 /* ══════════════════════════════════════════════
    Layout toggle button
 ══════════════════════════════════════════════ */
@@ -561,7 +564,6 @@
     gap: 0;
 }
 
-/* One row per category */
 .cat-row {
     padding: 16px 16px 20px;
     border-bottom: 1px solid rgba(70, 162, 88, 0.18);
@@ -571,7 +573,6 @@
     border-bottom: none;
 }
 
-/* Row header: title left, pill bar right (wraps on narrow screens) */
 .cat-row-header {
     display: flex;
     align-items: center;
@@ -590,25 +591,30 @@
     white-space: nowrap;
 }
 
-/* Per-row carousel filter dropdown */
-.carousel-filter-bar {
+.cat-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.carousel-filter-bar, .carousel-sort-bar {
     position: relative;
     flex-shrink: 0;
 }
 
-.carousel-filter-toggle {
+.carousel-filter-toggle, .carousel-sort-toggle {
     font-size: 0.9rem;
     gap: 8px;
     padding: 6px 12px;
     white-space: nowrap;
 }
 
-.carousel-filter-chevron {
+.carousel-filter-chevron, .carousel-sort-chevron {
     transition: transform 0.2s ease;
     font-size: 0.75rem;
 }
 
-.carousel-filter-dropdown {
+.carousel-filter-dropdown, .carousel-sort-dropdown {
     display: none;
     flex-direction: column;
     position: absolute;
@@ -624,11 +630,15 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
-.carousel-filter-dropdown.open {
+.carousel-sort-dropdown {
+    min-width: 170px;
+    gap: 6px;
+}
+
+.carousel-filter-dropdown.open, .carousel-sort-dropdown.open {
     display: flex;
 }
 
-/* Horizontal scroll track */
 .cat-carousel {
     display: flex;
     flex-direction: row;
@@ -663,11 +673,9 @@
     background-clip: padding-box;
 }
 
-/* Fixed-width cards in the carousel */
 .cat-carousel .proj-card {
     flex: 0 0 380px;
     width: 380px;
-    /* Override the translateY hover so it doesn't get clipped */
     transition: border-color 0.2s, box-shadow 0.15s;
 }
 
@@ -678,8 +686,6 @@
 }
 
 @media (max-width: 900px) and (min-width: 601px) {
-    /* Match 2-col grid: (900 - 32 - 16) / 2 ≈ 426px, but container is narrower;
-       use a proportional calc so cards feel the same relative size */
     .cat-carousel .proj-card {
         flex: 0 0 calc(50% - 22px);
         width: calc(50% - 22px);
@@ -694,5 +700,9 @@
 
     .cat-row {
         padding: 12px 12px 16px;
+    }
+
+    .cat-row-actions {
+        flex-wrap: wrap;
     }
 }
