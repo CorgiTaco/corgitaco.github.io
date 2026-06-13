@@ -271,8 +271,8 @@
       "description": "Library mod that handles Minecraft's extremely inconsistent day time.",
       "photo": "https://media.forgecdn.net/avatars/thumbnails/1704/827/256/256/639083079650559524.png",
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/timecore-calendar",
-      "modrinth": "",
-      "github": "",
+      "modrinth": "https://modrinth.com/mod/timecore-calendar",
+      "github": "https://github.com/CorgiTaco-MC/TimeCore",
       "date": "2026-03-05",
       "thumb_fit": "contain"
     }
