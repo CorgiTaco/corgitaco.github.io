@@ -266,8 +266,8 @@ nav {
 
     #main {
         position: fixed;
-        left: 5%;
-        right: 5%;
+        left: 1%;
+        right: 1%;
         top: 20px;
         width: 90%;
         min-width: unset;
