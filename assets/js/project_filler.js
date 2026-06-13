@@ -20,6 +20,47 @@
         return 'project-' + index;
     }
 
+    // ── URL Parameter Manager ────────────────────────────────────────────────
+
+    function updateUrlParams(updates) {
+        const url = new URL(window.location);
+        Object.entries(updates).forEach(([key, value]) => {
+            if (value === null) {
+                // Remove parameter if explicitly passed null (e.g., default states)
+                url.searchParams.delete(key);
+            } else if (Array.isArray(value)) {
+                // If the array is empty, the user explicitly unchecked everything.
+                // We use 'none' to distinguish an empty selection from a missing param (which means 'Select All')
+                if (value.length === 0) url.searchParams.set(key, 'none');
+                else url.searchParams.set(key, value.join(','));
+            } else {
+                url.searchParams.set(key, value);
+            }
+        });
+
+        history.replaceState(null, '', url.toString());
+    }
+
+    // Keeps the URL clean based on the active view
+    function cleanUrlForView(view) {
+        const url = new URL(window.location);
+        const keysToDelete = [];
+
+        for (const key of url.searchParams.keys()) {
+            if (view === 'grid') {
+                // Wipe out carousel-specific params
+                if (key.startsWith('sort-') || key.startsWith('tags-')) keysToDelete.push(key);
+            } else if (view === 'carousel') {
+                // Wipe out global grid params
+                if (key === 'cats' || key === 'tags' || key === 'sort') keysToDelete.push(key);
+            }
+        }
+
+        keysToDelete.forEach(k => url.searchParams.delete(k));
+        url.searchParams.set('view', view);
+        history.replaceState(null, '', url.toString());
+    }
+
     // ── Category / tag resolution ─────────────────────────────────────────────
 
     function typeToCategory(type) {
@@ -316,7 +357,7 @@
 
     // ── Wire Actions (Filter / Sort / Carousel Filters / Arrows) ─────────────
 
-    // NEW UTILITY: Closes all dropdowns to prevent overlapping menus
+    // Closes all dropdowns to prevent overlapping menus
     function closeAllDropdowns(exceptMenu = null) {
         document.querySelectorAll('#filter-dropdown.open, #sort-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open').forEach(menu => {
             if (menu === exceptMenu) return;
@@ -341,7 +382,6 @@
     }
 
     function wireCarouselArrows() {
-        // Custom animation function to force smooth scrolling in all browsers
         function smoothScroll(element, distance, duration) {
             const start = element.scrollLeft;
             let startTime = null;
@@ -349,18 +389,11 @@
             function animation(currentTime) {
                 if (startTime === null) startTime = currentTime;
                 const timeElapsed = currentTime - startTime;
-
-                // Calculate progress (0 to 1)
                 const progress = Math.min(timeElapsed / duration, 1);
-
-                // Ease-out cubic formula for a natural deceleration
                 const ease = 1 - Math.pow(1 - progress, 3);
-
                 element.scrollLeft = start + (distance * ease);
 
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(animation);
-                }
+                if (timeElapsed < duration) requestAnimationFrame(animation);
             }
             requestAnimationFrame(animation);
         }
@@ -396,7 +429,10 @@
     }
 
     function wireCarouselFilters() {
+        const params = new URLSearchParams(window.location.search);
+
         document.querySelectorAll('.cat-row').forEach(row => {
+            const catSlug = row.dataset.cat;
             const filterBar = row.querySelector('.carousel-filter-bar');
             if (!filterBar) return;
 
@@ -407,27 +443,52 @@
 
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                closeAllDropdowns(dropdown); // Close others before toggling
+                closeAllDropdowns(dropdown);
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
             });
 
             dropdown.addEventListener('click', e => e.stopPropagation());
 
+            function syncUrlAndFilter() {
+                const checked = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
+                const all = checked.length === dropdown.querySelectorAll('.carousel-tag-cb').length;
+
+                updateUrlParams({
+                    [`tags-${catSlug}`]: all ? null : checked
+                });
+
+                applyCarouselFilter(row, dropdown);
+            }
+
             selectAll.addEventListener('change', () => {
                 dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
                     cb.checked = selectAll.checked;
                 });
-                applyCarouselFilter(row, dropdown);
+                syncUrlAndFilter();
             });
 
             dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
                 cb.addEventListener('change', () => {
                     const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
                     selectAll.checked = all;
-                    applyCarouselFilter(row, dropdown);
+                    syncUrlAndFilter();
                 });
             });
+
+            // Init from URL Parameters
+            const tagParam = params.get(`tags-${catSlug}`);
+            if (tagParam) {
+                const activeTags = tagParam !== 'none' ? new Set(tagParam.split(',')) : new Set();
+
+                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                    cb.checked = activeTags.has(cb.value);
+                });
+
+                const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
+                selectAll.checked = all;
+                applyCarouselFilter(row, dropdown);
+            }
         });
     }
 
@@ -452,7 +513,10 @@
     }
 
     function wireCarouselSort() {
+        const params = new URLSearchParams(window.location.search);
+
         document.querySelectorAll('.cat-row').forEach(row => {
+            const catSlug = row.dataset.cat;
             const sortBar = row.querySelector('.carousel-sort-bar');
             if (!sortBar) return;
 
@@ -463,7 +527,7 @@
 
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                closeAllDropdowns(dropdown); // Close others before toggling
+                closeAllDropdowns(dropdown);
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
             });
@@ -472,9 +536,21 @@
 
             dropdown.addEventListener('change', e => {
                 if (e.target.type === 'radio') {
+                    // Update URL params
+                    updateUrlParams({ [`sort-${catSlug}`]: e.target.value === 'date-desc' ? null : e.target.value });
                     applyLocalSort(track, e.target.value);
                 }
             });
+
+            // Init from URL Parameters
+            const sortVal = params.get(`sort-${catSlug}`);
+            if (sortVal) {
+                const radio = dropdown.querySelector(`input[name="sort-${catSlug}"][value="${sortVal}"]`);
+                if (radio) {
+                    radio.checked = true;
+                    applyLocalSort(track, sortVal);
+                }
+            }
         });
     }
 
@@ -516,7 +592,7 @@
 
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            closeAllDropdowns(dropdown); // Close others before toggling
+            closeAllDropdowns(dropdown);
             const open = dropdown.classList.toggle('open');
             chevron.style.transform = open ? 'rotate(180deg)' : '';
         });
@@ -573,33 +649,31 @@
                 card.style.display = (!anyTagsEnabledForCat || relevantTagsChecked) ? '' : 'none';
             });
 
-            pushFilterHash();
+            // Push to URL, removing params if everything is checked
+            const totalCats = dropdown.querySelectorAll('.cat-checkbox').length;
+            const validTags = [...dropdown.querySelectorAll('.tag-checkbox')].filter(cb => !cb.disabled).length;
+
+            updateUrlParams({
+                cats: checkedCats().length === totalCats ? null : checkedCats(),
+                tags: checkedTags().length === validTags ? null : checkedTags()
+            });
         }
 
-        function pushFilterHash() {
-            if (location.hash.startsWith('#project-')) return;
-            const cats  = checkedCats();
-            const tags  = checkedTags();
-            const parts = [];
-            if (cats.length) parts.push('cats=' + cats.join(','));
-            if (tags.length) parts.push('tags=' + tags.join(','));
-            history.replaceState(null, '', parts.length ? '#' + parts.join('&') : '#');
-        }
+        function loadFromParams() {
+            const params = new URLSearchParams(window.location.search);
+            const catParam = params.get('cats');
+            const tagParam = params.get('tags');
 
-        function loadFromHash() {
-            const hash     = location.hash;
-            const catMatch = hash.match(/cats=([^&]*)/);
-            const tagMatch = hash.match(/tags=([^&]*)/);
-            if (!catMatch && !tagMatch) return;
+            if (!catParam && !tagParam) return;
 
-            const activeCats = catMatch && catMatch[1] ? new Set(catMatch[1].split(',')) : new Set();
-            const activeTags = tagMatch && tagMatch[1] ? new Set(tagMatch[1].split(',')) : new Set();
+            const activeCats = (catParam && catParam !== 'none') ? new Set(catParam.split(',')) : new Set();
+            const activeTags = (tagParam && tagParam !== 'none') ? new Set(tagParam.split(',')) : new Set();
 
             dropdown.querySelectorAll('.cat-checkbox').forEach(cb => {
-                cb.checked = activeCats.size === 0 || activeCats.has(cb.value);
+                cb.checked = catParam ? activeCats.has(cb.value) : true;
             });
             dropdown.querySelectorAll('.tag-checkbox').forEach(cb => {
-                cb.checked = activeTags.size === 0 || activeTags.has(cb.value);
+                cb.checked = tagParam ? activeTags.has(cb.value) : true;
             });
 
             ['category', 'tags'].forEach(sec => {
@@ -611,13 +685,16 @@
             });
 
             syncTagVisibility();
+
             const activeCatsFinal = new Set(checkedCats());
             const activeTagsFinal = new Set(checkedTags());
+
             document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
                 const cardCat  = card.dataset.category || '';
                 const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+
                 if (!activeCatsFinal.has(cardCat)) { card.style.display = 'none'; return; }
-                if (cardTags.length === 0)          { card.style.display = '';     return; }
+                if (cardTags.length === 0)         { card.style.display = '';     return; }
                 card.style.display = cardTags.some(t => activeTagsFinal.has(t)) ? '' : 'none';
             });
         }
@@ -651,11 +728,8 @@
             applyFilter();
         });
 
-        loadFromHash();
-
-        window.addEventListener('hashchange', () => {
-            if (!location.hash.startsWith('#project-')) loadFromHash();
-        });
+        // Initialize state on load
+        loadFromParams();
     }
 
     function wireSort() {
@@ -677,9 +751,21 @@
 
         dropdown.addEventListener('change', (e) => {
             if (e.target.name === 'sort-by') {
+                updateUrlParams({ sort: e.target.value === 'date-desc' ? null : e.target.value });
                 applySort(e.target.value);
             }
         });
+
+        // Load initial sort from params
+        const params = new URLSearchParams(window.location.search);
+        const sortVal = params.get('sort');
+        if (sortVal) {
+            const radio = dropdown.querySelector(`input[name="sort-by"][value="${sortVal}"]`);
+            if (radio) {
+                radio.checked = true;
+                applySort(sortVal);
+            }
+        }
     }
 
     function applySort(sortVal) {
@@ -728,7 +814,17 @@
     const LAYOUT_KEY = 'projects-layout';
 
     function getLayout() {
-        try { return localStorage.getItem(LAYOUT_KEY) || 'carousel'; } catch { return 'carousel'; }
+        const params = new URLSearchParams(window.location.search);
+        const viewParam = params.get('view');
+
+        const view = (viewParam === 'grid' || viewParam === 'carousel')
+            ? viewParam
+            : (localStorage.getItem(LAYOUT_KEY) || 'carousel');
+
+        // Enforce clean URL on initialization
+        cleanUrlForView(view);
+        setLayout(view);
+        return view;
     }
 
     function setLayout(v) {
@@ -827,7 +923,9 @@
             const btn = e.target.closest('.layout-pill-btn');
             if (!btn) return;
             const next = btn.id === 'layout-btn-carousel' ? 'carousel' : 'grid';
+
             setLayout(next);
+            cleanUrlForView(next);
             applyLayout(next);
         });
 
@@ -905,7 +1003,9 @@
         target.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-        history.pushState(null, '', '#project-' + id);
+
+        // Append hash to existing search params
+        history.pushState(null, '', location.pathname + location.search + '#project-' + id);
     }
 
     function closeModal() {
@@ -914,8 +1014,10 @@
         document.querySelectorAll('.modal-inner').forEach(el => el.classList.remove('active'));
         document.body.style.overflow = '';
         overlay.querySelectorAll('iframe[data-src]').forEach(iframe => { iframe.src = ''; });
+
         if (location.hash.startsWith('#project-')) {
-            history.pushState(null, '', location.pathname);
+            // Keep the search params when stripping the hash
+            history.pushState(null, '', location.pathname + location.search);
         }
     }
 
