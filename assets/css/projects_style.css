@@ -639,6 +639,52 @@
     display: flex;
 }
 
+/* ── Carousel Arrows & Wrapping ── */
+.cat-carousel-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 0;
+    bottom: 28px; /* Sits exactly above the scrollbar track */
+    width: 45px;
+    color: rgba(255, 255, 255, 0.7);
+    border: none;
+    font-size: 1.6rem;
+    z-index: 10;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.25s ease, color 0.15s;
+    display: flex;
+    align-items: center;
+    pointer-events: none; /* Ignore clicks when invisible */
+}
+
+.carousel-arrow.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.carousel-arrow:hover {
+    color: var(--main-color);
+}
+
+.carousel-arrow.left {
+    left: 0;
+    background: linear-gradient(to right, rgba(12,12,12,0.95) 30%, rgba(12,12,12,0));
+    justify-content: flex-start;
+    padding-left: 8px;
+}
+
+.carousel-arrow.right {
+    right: 0;
+    background: linear-gradient(to left, rgba(12,12,12,0.95) 30%, rgba(12,12,12,0));
+    justify-content: flex-end;
+    padding-right: 8px;
+}
+
 .cat-carousel {
     display: flex;
     flex-direction: row;
@@ -648,6 +694,7 @@
     padding-bottom: 28px;
     scrollbar-width: auto;
     scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.15);
+    scroll-behavior: smooth; /* Add this line to force the sliding motion */
 }
 
 .cat-carousel::-webkit-scrollbar {
@@ -704,5 +751,11 @@
 
     .cat-row-actions {
         flex-wrap: wrap;
+    }
+
+    /* Make arrows slightly smaller on mobile to preserve screen real estate */
+    .carousel-arrow {
+        width: 35px;
+        font-size: 1.2rem;
     }
 }

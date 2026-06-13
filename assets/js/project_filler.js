@@ -44,7 +44,7 @@
         const catSlug  = slugify(category);
         const tagSlugs = tags.map(t => slugify(t)).join(' ');
         const safeName = (name || '').replace(/"/g, '&quot;');
-        const safeDate = date || '1970-01-01'; // Fallback date for items without one
+        const safeDate = date || '1970-01-01';
         return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}" data-date="${safeDate}" data-name="${safeName}"`;
     }
 
@@ -303,15 +303,79 @@
                         ${rowDropdown}
                     </div>
                 </div>
-                <div class="cat-carousel">${cards}</div>
+                <div class="cat-carousel-wrap">
+                    <button class="carousel-arrow left"><i class="fa fa-chevron-left"></i></button>
+                    <div class="cat-carousel">${cards}</div>
+                    <button class="carousel-arrow right"><i class="fa fa-chevron-right"></i></button>
+                </div>
             </div>`;
         }).join('');
 
         return `<div id="carousel-layout">${rows}</div>`;
     }
 
-    // ── Wire Actions (Filter / Sort / Carousel Filters) ──────────────────────
+    // ── Wire Actions (Filter / Sort / Carousel Filters / Arrows) ─────────────
 
+    function wireCarouselArrows() {
+        // Custom animation function to force smooth scrolling in all browsers
+        function smoothScroll(element, distance, duration) {
+            const start = element.scrollLeft;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+
+                // Calculate progress (0 to 1)
+                const progress = Math.min(timeElapsed / duration, 1);
+
+                // Ease-out cubic formula for a natural deceleration
+                const ease = 1 - Math.pow(1 - progress, 3);
+
+                element.scrollLeft = start + (distance * ease);
+
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animation);
+                }
+            }
+            requestAnimationFrame(animation);
+        }
+
+        document.querySelectorAll('.cat-carousel-wrap').forEach(wrap => {
+            const track = wrap.querySelector('.cat-carousel');
+            const leftBtn = wrap.querySelector('.carousel-arrow.left');
+            const rightBtn = wrap.querySelector('.carousel-arrow.right');
+
+            function updateArrows() {
+                if (!track) return;
+                // Buffer of a few pixels to account for fractional rendering widths
+                const canScrollLeft = track.scrollLeft > 2;
+                const canScrollRight = track.scrollLeft < (track.scrollWidth - track.clientWidth - 2);
+
+                leftBtn.classList.toggle('visible', canScrollLeft);
+                rightBtn.classList.toggle('visible', canScrollRight);
+            }
+
+            track.addEventListener('scroll', updateArrows);
+            window.addEventListener('resize', updateArrows);
+
+            leftBtn.addEventListener('click', () => {
+                // Scroll left by 75% of container width over 450 milliseconds
+                smoothScroll(track, -track.clientWidth * 0.75, 450);
+            });
+
+            rightBtn.addEventListener('click', () => {
+                // Scroll right by 75% of container width over 450 milliseconds
+                smoothScroll(track, track.clientWidth * 0.75, 450);
+            });
+
+            // Expose the update function on the element for sorting/filtering redraws
+            track._updateArrows = updateArrows;
+
+            // Check visibility immediately (with slight delay for paint)
+            setTimeout(updateArrows, 100);
+        });
+    }
     function wireCarouselFilters() {
         document.querySelectorAll('.cat-row').forEach(row => {
             const filterBar = row.querySelector('.carousel-filter-bar');
@@ -356,12 +420,24 @@
 
     function applyCarouselFilter(row, dropdown) {
         const checked = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
+        const selectAllChecked = dropdown.querySelector('.carousel-select-all').checked;
 
         row.querySelectorAll('.proj-card').forEach(card => {
             const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
-            if (cardTags.length === 0) { card.style.display = ''; return; }
-            card.style.display = cardTags.some(t => checked.includes(t)) ? '' : 'none';
+
+            if (selectAllChecked) {
+                card.style.display = '';
+            } else if (cardTags.length === 0) {
+                // If filters are active (not Select All), hide items that have zero tags
+                card.style.display = 'none';
+            } else {
+                card.style.display = cardTags.some(t => checked.includes(t)) ? '' : 'none';
+            }
         });
+
+        // Update the arrow visibility because flex elements disappeared/reappeared
+        const track = row.querySelector('.cat-carousel');
+        if (track && track._updateArrows) track._updateArrows();
     }
 
     function wireCarouselSort() {
@@ -421,6 +497,8 @@
 
         const cards = Array.from(track.querySelectorAll('.proj-card'));
         cards.sort(sortFn).forEach(card => track.appendChild(card));
+
+        if (track._updateArrows) track._updateArrows();
     }
 
     function wireFilter() {
@@ -644,9 +722,9 @@
             if(track) {
                 const cards = Array.from(track.querySelectorAll('.proj-card'));
                 cards.sort(sortFn).forEach(card => track.appendChild(card));
+                if (track._updateArrows) track._updateArrows();
             }
 
-            // Sync the local sort radio button state to match global sort
             const localRadio = row.querySelector(`.carousel-sort-dropdown input[value="${sortVal}"]`);
             if (localRadio) localRadio.checked = true;
         });
@@ -681,6 +759,12 @@
 
             if (btnGrid)     btnGrid.classList.remove('active');
             if (btnCarousel) btnCarousel.classList.add('active');
+
+            // Redraw arrows when becoming visible
+            document.querySelectorAll('.cat-carousel').forEach(track => {
+                if (track._updateArrows) track._updateArrows();
+            });
+
         } else {
             if (grid)     grid.style.display     = '';
             if (carousel) carousel.style.display = 'none';
@@ -772,6 +856,7 @@
         wireSort();
         wireCarouselFilters();
         wireCarouselSort();
+        wireCarouselArrows();
 
         // ── Apply saved layout
         applyLayout(getLayout());
