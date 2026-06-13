@@ -20,52 +20,44 @@
         return 'project-' + index;
     }
 
-    // ── Tag resolution ────────────────────────────────────────────────────────
+    // ── Category / tag resolution ─────────────────────────────────────────────
     //
-    // Each project automatically gets a tag based on its type:
-    //   youtube       → "YouTube"
-    //   minecraft_mod → "Minecraft Mod"
+    // Each project gets a category derived from its type:
+    //   youtube       → "YouTube Video"
+    //   minecraft_mod → "Mod"
     //   project       → "Project"
     //
-    // You can add any extra tags to a project in projects.json like so:
-    //   {
-    //     "type": "youtube",
-    //     "config": {
-    //       "name": "My Video",
-    //       "tags": ["Minecraft", "Gameplay", "Checkpoint", "World Generation"]
-    //       ...
-    //     }
-    //   }
-    //
-    // Any tag string is valid. Tags are deduplicated automatically.
-    const TYPE_TAG = {
-        youtube:      'YouTube Video',
-        minecraft_mod:'Mod',
-        project:      'Project',
+    // Extra tags come from config.tags[] and are stored separately from the
+    // category so filtering logic can treat them independently.
+    const TYPE_CATEGORY = {
+        youtube:       'YouTube Video',
+        minecraft_mod: 'Mod',
+        project:       'Project',
     };
 
-    function getTags(proj) {
-        const tags = new Set();
-        if (TYPE_TAG[proj.type]) tags.add(TYPE_TAG[proj.type]);
-        if (Array.isArray(proj.config.tags)) {
-            proj.config.tags.forEach(t => tags.add(t));
-        }
-        return [...tags];
+    function getCategory(proj) {
+        return TYPE_CATEGORY[proj.type] || 'Other';
+    }
+
+    function getCustomTags(proj) {
+        return Array.isArray(proj.config.tags) ? [...proj.config.tags] : [];
     }
 
     // ── Card builders ────────────────────────────────────────────────────────
 
-    function tagAttrs(tags) {
-        return `data-tags="${tags.map(t => slugify(t)).join(' ')}"`;
+    function cardAttrs(id, category, tags) {
+        const catSlug  = slugify(category);
+        const tagSlugs = tags.map(t => slugify(t)).join(' ');
+        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}"`;
     }
 
-    function buildYoutubeCard(cfg, id, tags) {
-        const vid = youtubeId(cfg.url);
+    function buildYoutubeCard(cfg, id, category, tags) {
+        const vid   = youtubeId(cfg.url);
         const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
-        const fit = cfg.thumb_fit || 'cover';
+        const fit   = cfg.thumb_fit || 'cover';
         const label = cfg.name || 'Video';
         return `
-        <div class="proj-card" data-id="${id}" ${tagAttrs(tags)} tabindex="0" role="button" aria-label="Open ${label}">
+        <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
                 <div class="yt-play"><i class="fa fa-play-circle"></i></div>
@@ -74,10 +66,10 @@
         </div>`;
     }
 
-    function buildModCard(cfg, id, tags) {
+    function buildModCard(cfg, id, category, tags) {
         const fit = cfg.thumb_fit || 'cover';
         return `
-        <div class="proj-card" data-id="${id}" ${tagAttrs(tags)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
+        <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
             </div>
@@ -85,10 +77,10 @@
         </div>`;
     }
 
-    function buildProjectCard(cfg, id, tags) {
+    function buildProjectCard(cfg, id, category, tags) {
         const fit = cfg.thumb_fit || 'cover';
         return `
-        <div class="proj-card" data-id="${id}" ${tagAttrs(tags)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
+        <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
             </div>
@@ -99,7 +91,7 @@
     // ── Modal builders ───────────────────────────────────────────────────────
 
     function buildYoutubeModal(cfg, id) {
-        const vid = youtubeId(cfg.url);
+        const vid      = youtubeId(cfg.url);
         const embedUrl = `https://www.youtube.com/embed/${vid}?autoplay=1`;
         return `
             <div class="modal-inner" id="modal-${id}">
@@ -142,29 +134,61 @@
 
     // ── Filter bar ───────────────────────────────────────────────────────────
 
-    function buildFilterBar(allTags, typeTags) {
-        const makeSection = (label, tags) => {
-            const id = slugify(label);
-            const checks = tags.map(tag => `
-                <label class="filter-tag">
-                    <input type="checkbox" value="${slugify(tag)}" checked>
-                    <span>${tag}</span>
-                </label>`).join('');
-            return `
-            <div class="filter-section-wrap">
-                <div class="filter-section-label">${label}</div>
+    function buildFilterBar(categories, tagsByCategory) {
+        // Category section
+        const catChecks = categories.map(cat => `
+            <label class="filter-tag">
+                <input type="checkbox" class="cat-checkbox" value="${slugify(cat)}" checked>
+                <span>${cat}</span>
+            </label>`).join('');
+
+        const catSection = `
+            <div class="filter-section-wrap" id="filter-wrap-category">
+                <div class="filter-section-label">Category</div>
                 <label class="filter-tag filter-select-all-tag">
-                    <input type="checkbox" class="section-select-all" data-section="${id}" checked>
+                    <input type="checkbox" class="section-select-all" data-section="category" checked>
                     <span>Select all</span>
                 </label>
-                <div class="filter-section" data-section="${id}">${checks}</div>
+                <div class="filter-section" data-section="category">${catChecks}</div>
             </div>`;
-        };
 
-        const typeTagList   = allTags.filter(t => typeTags.has(t));
-        const customTagList = allTags.filter(t => !typeTags.has(t));
+        // Tag section — every tag across all categories, each labelled with which
+        // categories it belongs to so we can show/hide them dynamically
+        const allTagsFlat = [];
+        const tagCatMap   = {}; // tagSlug → Set of catSlugs
+        categories.forEach(cat => {
+            const catSlug = slugify(cat);
+            (tagsByCategory[cat] || []).forEach(tag => {
+                const tagSlug = slugify(tag);
+                if (!tagCatMap[tagSlug]) {
+                    tagCatMap[tagSlug] = new Set();
+                    allTagsFlat.push({ tag, tagSlug });
+                }
+                tagCatMap[tagSlug].add(catSlug);
+            });
+        });
 
-        const customSection = customTagList.length ? makeSection('Tags', customTagList) : '';
+        let tagSection = '';
+        if (allTagsFlat.length) {
+            const tagChecks = allTagsFlat.map(({ tag, tagSlug }) => {
+                const cats = [...tagCatMap[tagSlug]].join(' ');
+                return `
+                <label class="filter-tag" data-tag-cats="${cats}">
+                    <input type="checkbox" class="tag-checkbox" value="${tagSlug}" checked>
+                    <span>${tag}</span>
+                </label>`;
+            }).join('');
+
+            tagSection = `
+            <div class="filter-section-wrap" id="filter-wrap-tags">
+                <div class="filter-section-label">Tags</div>
+                <label class="filter-tag filter-select-all-tag" id="tag-select-all-row">
+                    <input type="checkbox" class="section-select-all" data-section="tags" checked>
+                    <span>Select all</span>
+                </label>
+                <div class="filter-section" data-section="tags">${tagChecks}</div>
+            </div>`;
+        }
 
         return `
         <div id="filter-bar">
@@ -172,8 +196,8 @@
                 <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down" id="filter-chevron"></i>
             </button>
             <div id="filter-dropdown">
-                ${makeSection('Type', typeTagList)}
-                ${customSection}
+                ${catSection}
+                ${tagSection}
             </div>
         </div>`;
     }
@@ -201,62 +225,150 @@
 
         dropdown.addEventListener('click', (e) => e.stopPropagation());
 
-        function getCheckedValues() {
-            return [...dropdown.querySelectorAll('.filter-section input[type=checkbox]:checked')]
+        // Returns slugs of checked categories
+        function checkedCats() {
+            return [...dropdown.querySelectorAll('.cat-checkbox:checked')].map(cb => cb.value);
+        }
+
+        // Returns slugs of checked tags (only among enabled ones)
+        function checkedTags() {
+            return [...dropdown.querySelectorAll('.tag-checkbox:checked')]
+                .filter(cb => !cb.closest('.filter-tag').classList.contains('tag-disabled'))
                 .map(cb => cb.value);
         }
 
-        function applyFilter() {
-            const checked = getCheckedValues();
-            document.querySelectorAll('.proj-card').forEach(card => {
-                const cardTags = (card.dataset.tags || '').split(' ');
-                const visible = checked.length > 0 && cardTags.some(t => checked.includes(t));
-                card.style.display = visible ? '' : 'none';
+        // Gray out + disable tag rows whose categories are all unchecked.
+        // Also re-sync the tag "Select all" checkbox.
+        function syncTagVisibility() {
+            const activeCats = new Set(checkedCats());
+            const tagSection = dropdown.querySelector('.filter-section[data-section="tags"]');
+            if (!tagSection) return;
+
+            tagSection.querySelectorAll('.filter-tag').forEach(row => {
+                const rowCats = (row.dataset.tagCats || '').split(' ').filter(Boolean);
+                const active  = rowCats.some(c => activeCats.has(c));
+                row.classList.toggle('tag-disabled', !active);
+                row.querySelector('.tag-checkbox').disabled = !active;
             });
-            pushFilterHash(checked);
+
+            // Sync select-all for tags (only count enabled rows)
+            const enabledCbs = [...tagSection.querySelectorAll('.tag-checkbox')]
+                .filter(cb => !cb.disabled);
+            const allChecked = enabledCbs.length > 0 && enabledCbs.every(cb => cb.checked);
+            const sa = dropdown.querySelector('.section-select-all[data-section="tags"]');
+            if (sa) sa.checked = allChecked;
         }
 
-        function pushFilterHash(checked) {
-            // Don't clobber a #project- hash
+        function applyFilter() {
+            const activeCats  = new Set(checkedCats());
+            const activeTags  = new Set(checkedTags());
+
+            document.querySelectorAll('.proj-card').forEach(card => {
+                const cardCat  = card.dataset.category || '';
+                const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+
+                // Must match an active category
+                if (!activeCats.has(cardCat)) {
+                    card.style.display = 'none';
+                    return;
+                }
+
+                // If the card has no tags, category match alone is enough
+                if (cardTags.length === 0) {
+                    card.style.display = '';
+                    return;
+                }
+
+                // If no tags are checked at all (for this category), show it
+                // If some tags are checked, at least one must match
+                const relevantTagsChecked = cardTags.some(t => activeTags.has(t));
+                const anyTagsVisibleForCat = [...dropdown.querySelectorAll('.filter-tag[data-tag-cats]')]
+                    .some(row => {
+                        const rowCats = (row.dataset.tagCats || '').split(' ');
+                        return rowCats.includes(cardCat) && !row.classList.contains('tag-disabled');
+                    });
+
+                card.style.display = (!anyTagsVisibleForCat || relevantTagsChecked) ? '' : 'none';
+            });
+
+            pushFilterHash();
+        }
+
+        function pushFilterHash() {
             if (location.hash.startsWith('#project-')) return;
-            const hash = checked.length ? '#filters=' + checked.join(',') : '#filters=';
-            history.replaceState(null, '', hash);
+            const cats = checkedCats();
+            const tags = checkedTags();
+            const parts = [];
+            if (cats.length) parts.push('cats=' + cats.join(','));
+            if (tags.length) parts.push('tags=' + tags.join(','));
+            history.replaceState(null, '', parts.length ? '#' + parts.join('&') : '#');
         }
 
         function loadFromHash() {
-            const match = location.hash.match(/^#filters=(.*)$/);
-            if (!match) return;
-            const active = match[1] ? match[1].split(',') : [];
-            dropdown.querySelectorAll('.filter-section input[type=checkbox]').forEach(cb => {
-                cb.checked = active.includes(cb.value);
+            const hash = location.hash;
+            const catMatch = hash.match(/cats=([^&]*)/);
+            const tagMatch = hash.match(/tags=([^&]*)/);
+
+            if (!catMatch && !tagMatch) return; // no filter hash present — leave defaults
+
+            const activeCats = catMatch && catMatch[1] ? new Set(catMatch[1].split(',')) : new Set();
+            const activeTags = tagMatch && tagMatch[1] ? new Set(tagMatch[1].split(',')) : new Set();
+
+            dropdown.querySelectorAll('.cat-checkbox').forEach(cb => {
+                cb.checked = activeCats.size === 0 || activeCats.has(cb.value);
             });
-            // Sync select-all checkboxes
-            dropdown.querySelectorAll('.filter-section').forEach(section => {
+            dropdown.querySelectorAll('.tag-checkbox').forEach(cb => {
+                cb.checked = activeTags.size === 0 || activeTags.has(cb.value);
+            });
+
+            // Sync select-all rows
+            ['category', 'tags'].forEach(sec => {
+                const section = dropdown.querySelector(`.filter-section[data-section="${sec}"]`);
+                if (!section) return;
                 const all = [...section.querySelectorAll('input[type=checkbox]')].every(i => i.checked);
-                const sa  = dropdown.querySelector(`.section-select-all[data-section="${section.dataset.section}"]`);
+                const sa  = dropdown.querySelector(`.section-select-all[data-section="${sec}"]`);
                 if (sa) sa.checked = all;
             });
-            // Apply without pushing hash again
-            const checked = getCheckedValues();
+
+            syncTagVisibility();
+            const activeCatsFinal  = new Set(checkedCats());
+            const activeTagsFinal  = new Set(checkedTags());
             document.querySelectorAll('.proj-card').forEach(card => {
-                const cardTags = (card.dataset.tags || '').split(' ');
-                card.style.display = checked.length > 0 && cardTags.some(t => checked.includes(t)) ? '' : 'none';
+                const cardCat  = card.dataset.category || '';
+                const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+                if (!activeCatsFinal.has(cardCat)) { card.style.display = 'none'; return; }
+                if (cardTags.length === 0)          { card.style.display = '';     return; }
+                card.style.display = cardTags.some(t => activeTagsFinal.has(t)) ? '' : 'none';
             });
         }
 
         dropdown.addEventListener('change', (e) => {
             const cb = e.target;
+
             if (cb.classList.contains('section-select-all')) {
-                const section = dropdown.querySelector(`.filter-section[data-section="${cb.dataset.section}"]`);
-                section.querySelectorAll('input[type=checkbox]').forEach(item => item.checked = cb.checked);
+                const secName = cb.dataset.section;
+                const section = dropdown.querySelector(`.filter-section[data-section="${secName}"]`);
+                // For tags section, only toggle visible rows
+                section.querySelectorAll('input[type=checkbox]').forEach(item => {
+                    if (secName === 'tags' && item.closest('.filter-tag').classList.contains('tag-disabled')) return;
+                    item.checked = cb.checked;
+                });
             } else {
                 const section = cb.closest('.filter-section');
                 if (section) {
-                    const allChecked = [...section.querySelectorAll('input[type=checkbox]')].every(i => i.checked);
-                    const selectAll  = dropdown.querySelector(`.section-select-all[data-section="${section.dataset.section}"]`);
-                    if (selectAll) selectAll.checked = allChecked;
+                    const visibleCbs = [...section.querySelectorAll('input[type=checkbox]')]
+                        .filter(i => !i.closest('.filter-tag').classList.contains('tag-disabled'));
+                    const allChecked = visibleCbs.every(i => i.checked);
+                    const sa = dropdown.querySelector(`.section-select-all[data-section="${section.dataset.section}"]`);
+                    if (sa) sa.checked = allChecked;
                 }
             }
+
+            // If a category changed, update which tag rows are visible
+            if (cb.classList.contains('cat-checkbox') || (cb.classList.contains('section-select-all') && cb.dataset.section === 'category')) {
+                syncTagVisibility();
+            }
+
             applyFilter();
         });
 
@@ -279,21 +391,28 @@
             return db - da;
         });
 
-        // Collect all unique tags — type tags first, then custom tags alphabetically
-        const typeTags = new Set(Object.values(TYPE_TAG));
-        const customTags = new Set();
-        projects.forEach(proj => getTags(proj).forEach(t => {
-            if (typeTags.has(t)) return;
-            customTags.add(t);
-        }));
-        const allTags = [
-            ...Object.values(TYPE_TAG).filter(t => projects.some(p => getTags(p).includes(t))),
-            ...[...customTags].sort((a, b) => a.localeCompare(b)),
-        ];
+        // Collect categories (in TYPE_CATEGORY order, only those present)
+        const categoryOrder = Object.values(TYPE_CATEGORY);
+        const presentCats   = categoryOrder.filter(cat =>
+            projects.some(p => getCategory(p) === cat)
+        );
+
+        // Map category → sorted list of custom tags that appear in that category
+        const tagsByCategory = {};
+        presentCats.forEach(cat => { tagsByCategory[cat] = new Set(); });
+        projects.forEach(proj => {
+            const cat = getCategory(proj);
+            getCustomTags(proj).forEach(t => {
+                if (tagsByCategory[cat]) tagsByCategory[cat].add(t);
+            });
+        });
+        presentCats.forEach(cat => {
+            tagsByCategory[cat] = [...tagsByCategory[cat]].sort((a, b) => a.localeCompare(b));
+        });
 
         // Inject filter bar before the scroll area
         const scroll = document.getElementById('projects-scroll');
-        scroll.insertAdjacentHTML('beforebegin', buildFilterBar(allTags, typeTags));
+        scroll.insertAdjacentHTML('beforebegin', buildFilterBar(presentCats, tagsByCategory));
 
         // Move the toggle button up into the title bar
         const titleBar = document.getElementById('projects-title-bar');
@@ -301,24 +420,24 @@
         if (titleBar && toggle) titleBar.appendChild(toggle);
 
         // Build grid
-        const grid = document.getElementById('projects-grid');
+        const grid   = document.getElementById('projects-grid');
         if (!grid) return;
-
         const modals = document.getElementById('projects-modals');
 
         projects.forEach((proj, i) => {
-            const id   = projectId(proj, i);
-            const tags = getTags(proj);
+            const id       = projectId(proj, i);
+            const category = getCategory(proj);
+            const tags     = getCustomTags(proj);
             let card = '', modal = '';
 
             if (proj.type === 'youtube') {
-                card  = buildYoutubeCard(proj.config, id, tags);
+                card  = buildYoutubeCard(proj.config, id, category, tags);
                 modal = buildYoutubeModal(proj.config, id);
             } else if (proj.type === 'minecraft_mod') {
-                card  = buildModCard(proj.config, id, tags);
+                card  = buildModCard(proj.config, id, category, tags);
                 modal = buildModModal(proj.config, id);
             } else if (proj.type === 'project') {
-                card  = buildProjectCard(proj.config, id, tags);
+                card  = buildProjectCard(proj.config, id, category, tags);
                 modal = buildProjectModal(proj.config, id);
             }
 
@@ -388,10 +507,8 @@
         });
 
         if (location.hash.startsWith('#project-')) {
-            // Restore filter hash if any filters are active
-            const checked = [...document.querySelectorAll('#filter-dropdown .filter-section input[type=checkbox]:checked')]
-                .map(cb => cb.value);
-            history.pushState(null, '', checked.length ? '#filters=' + checked.join(',') : location.pathname);
+            // Restore filter hash
+            history.pushState(null, '', location.pathname);
         }
     }
 

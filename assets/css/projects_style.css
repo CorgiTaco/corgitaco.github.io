@@ -112,6 +112,16 @@
     background: rgba(70, 162, 88, 0.15);
 }
 
+.filter-tag.tag-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.filter-tag.tag-disabled input[type=checkbox] {
+    cursor: not-allowed;
+}
+
 .filter-tag input[type=checkbox] {
     accent-color: var(--main-color);
     width: 15px;
