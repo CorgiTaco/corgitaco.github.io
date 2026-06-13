@@ -37,30 +37,40 @@
 <div id="main">
     <script src="../assets/js/pagechange.js"></script>
 
-    <div class="header">
+    <div id="sticky-header">
+        <div id="titlebar">
+            <div id="win-controls">
+                <span class="win-btn win-close" title="Close"></span>
+                <span class="win-btn win-minimize" title="Minimize"></span>
+                <span class="win-btn win-maximize" title="Maximize"></span>
+            </div>
+            <span id="win-title"></span>
+            <script>document.getElementById("win-title").textContent = location.host + location.pathname.replace(/\/$/,"") + " — zsh";</script>
+        </div>
+        <div class="header">
+            <nav role='navigation'>
+                <ul id='nav-main'>
+                    <li><a class="nav-link" id="meow" href="../"><i class="fa fa-home"></i>Home</a></li>
+                    <li><a class="nav-link" href="../projects"><i class="fa fa-code"></i>Projects</a></li>
+                    <li><a class="nav-link" href="../resume"><i class="fa fa-file-text"></i>Resume</a></li>
+                    <li id="nav-tab-active"><a class="nav-link" href="../blog"><i class="fa fa-pencil"></i>Blog</a></li>
+                    <li><a class="nav-link" href="../about"><i class="fa fa-user"></i>About</a></li>
+                    <li><a class="nav-link" href="../commission"><i class="fa fa-paint-brush"></i>Commission</a></li>
+                    <li><a class="nav-link" href="../donate"><i class="fa fa-heart"></i>Donate</a></li>
+                    <li class="more hidden" data-width="80">
+                        <a href="#">☰</a>
+                        <ul></ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
 
-
-        <nav role='navigation'>
-            <ul id='nav-main'>
-                <li><a class="nav-link" id="meow" href="../"><i class="fa fa-home"></i>Home</a></li>
-                <li><a class="nav-link" href="../projects"><i class="fa fa-code"></i>Projects</a></li>
-                <li><a class="nav-link" href="../resume"><i class="fa fa-file-text"></i>Resume</a></li>
-                <li><a class="nav-link" href="../blog"><i class="fa fa-pencil"></i>Blog</a></li>
-                <li><a class="nav-link" href="../about"><i class="fa fa-user"></i>About</a></li>
-                <li id="nav-tab-active"><a class="nav-link" href="../commission"><i class="fa fa-paint-brush"></i>Commission</a></li>
-                <li><a class="nav-link" href="../donate"><i class="fa fa-heart"></i>Donate</a></li>
-                <li class="more hidden" data-width="80">
-                    <a href="#">☰</a>
-                    <ul></ul>
-                </li>
-            </ul>
-        </nav>
+        <div id="projects-title-bar">
+            <h1>Commissions</h1>
+        </div>
     </div>
 
-    <h1>Commissions</h1>
-
     <p>Work in progress...</p>
-
 
 </div>
 
