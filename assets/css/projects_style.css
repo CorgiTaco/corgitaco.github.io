@@ -91,7 +91,7 @@
 
 .filter-select-all-tag {
     border-bottom: 1px solid rgba(70, 162, 88, 0.2);
-    padding-bottom: 8px;
+    padding-bottom: 28px;
     margin-bottom: 2px;
     font-weight: 500;
 }
@@ -203,17 +203,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.35);
+    background: rgba(0,0,0,0.2);
     transition: background 0.2s;
 }
 
 .proj-card:hover .yt-play {
-    background: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.05);
 }
 
-.yt-play .fa {
-    font-size: 3rem;
+.yt-play-icon {
+    width: 68px;
+    height: 48px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+    transition: transform 0.15s;
+}
+
+.yt-play-bg {
+    fill: #ff0000;
     opacity: 0.9;
+    transition: opacity 0.15s;
+}
+
+.yt-play-arrow {
+    fill: #ffffff;
+}
+
+.proj-card:hover .yt-play-bg {
+    opacity: 1;
+}
+
+.proj-card:hover .yt-play-icon {
+    transform: scale(1.08);
 }
 
 .proj-label {
@@ -458,5 +478,198 @@
     .modal-banner {
         width: calc(100% - 16px);
         margin: 8px 8px 0 8px;
+    }
+}
+/* ══════════════════════════════════════════════
+   Layout toggle button
+══════════════════════════════════════════════ */
+
+#title-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-right: 0;
+}
+
+#layout-pill {
+    display: flex;
+    border: 2px solid var(--main-color);
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.layout-pill-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.15s;
+    line-height: 1;
+}
+
+.layout-pill-btn + .layout-pill-btn {
+    border-left: 1px solid rgba(70, 162, 88, 0.4);
+}
+
+.layout-pill-btn:hover {
+    background: rgba(70, 162, 88, 0.2);
+}
+
+.layout-pill-btn.active {
+    background: var(--main-color);
+    font-weight: 700;
+}
+
+/* ══════════════════════════════════════════════
+   Carousel layout
+══════════════════════════════════════════════ */
+
+#carousel-layout {
+    overflow-y: auto;
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* One row per category */
+.cat-row {
+    padding: 16px 16px 20px;
+    border-bottom: 1px solid rgba(70, 162, 88, 0.18);
+}
+
+.cat-row:last-child {
+    border-bottom: none;
+}
+
+/* Row header: title left, pill bar right (wraps on narrow screens) */
+.cat-row-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.cat-row-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+/* Per-row carousel filter dropdown */
+.carousel-filter-bar {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.carousel-filter-toggle {
+    font-size: 0.9rem;
+    gap: 8px;
+    padding: 6px 12px;
+    white-space: nowrap;
+}
+
+.carousel-filter-chevron {
+    transition: transform 0.2s ease;
+    font-size: 0.75rem;
+}
+
+.carousel-filter-dropdown {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: 100;
+    background: rgb(20 20 20 / 97%);
+    border: 1px solid var(--main-color);
+    border-radius: 6px;
+    padding: 10px 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    min-width: 160px;
+}
+
+.carousel-filter-dropdown.open {
+    display: flex;
+}
+
+/* Horizontal scroll track */
+.cat-carousel {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 28px;
+    scrollbar-width: auto;
+    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.15);
+}
+
+.cat-carousel::-webkit-scrollbar {
+    height: 28px;
+}
+
+.cat-carousel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+}
+
+.cat-carousel::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 14px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    min-width: 40px;
+}
+
+.cat-carousel::-webkit-scrollbar-thumb:hover {
+    background: #5abf6e;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Fixed-width cards in the carousel */
+.cat-carousel .proj-card {
+    flex: 0 0 380px;
+    width: 380px;
+    /* Override the translateY hover so it doesn't get clipped */
+    transition: border-color 0.2s, box-shadow 0.15s;
+}
+
+.cat-carousel .proj-card:hover,
+.cat-carousel .proj-card:focus {
+    transform: none;
+    box-shadow: 0 0 0 2px var(--main-color);
+}
+
+@media (max-width: 900px) and (min-width: 601px) {
+    /* Match 2-col grid: (900 - 32 - 16) / 2 ≈ 426px, but container is narrower;
+       use a proportional calc so cards feel the same relative size */
+    .cat-carousel .proj-card {
+        flex: 0 0 calc(50% - 22px);
+        width: calc(50% - 22px);
+    }
+}
+
+@media (max-width: 600px) {
+    .cat-carousel .proj-card {
+        flex: 0 0 300px;
+        width: 300px;
+    }
+
+    .cat-row {
+        padding: 12px 12px 16px;
     }
 }

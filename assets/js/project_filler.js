@@ -22,21 +22,18 @@
 
     // ── Category / tag resolution ─────────────────────────────────────────────
     //
-    // Each project gets a category derived from its type:
-    //   youtube       → "YouTube Video"
-    //   minecraft_mod → "Mod"
-    //   project       → "Project"
-    //
-    // Extra tags come from config.tags[] and are stored separately from the
-    // category so filtering logic can treat them independently.
-    const TYPE_CATEGORY = {
-        youtube:       'YouTube Video',
-        minecraft_mod: 'Mod',
-        project:       'Project',
-    };
+    // Category is derived directly from proj.type: underscores become spaces,
+    // each word is title-cased. e.g. "minecraft_mod" → "Minecraft Mod"
+    function typeToCategory(type) {
+        if (!type) return 'Other';
+        return type
+            .split('_')
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
+    }
 
     function getCategory(proj) {
-        return TYPE_CATEGORY[proj.type] || 'Other';
+        return typeToCategory(proj.type);
     }
 
     function getCustomTags(proj) {
@@ -60,7 +57,12 @@
         <div class="proj-card" ${cardAttrs(id, category, tags)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
-                <div class="yt-play"><i class="fa fa-play-circle"></i></div>
+                <div class="yt-play">
+                    <svg class="yt-play-icon" viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+                        <path class="yt-play-bg" d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 11.4 0 24 0 24s0 12.6 1.5 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 36.6 68 24 68 24s0-12.6-1.5-16.3z"/>
+                        <path class="yt-play-arrow" d="M27 34l18-10-18-10v20z"/>
+                    </svg>
+                </div>
             </div>
             <div class="proj-label"><i class="fa fa-youtube-play"></i> ${label}</div>
         </div>`;
@@ -88,6 +90,13 @@
         </div>`;
     }
 
+    function buildCard(proj, id, category, tags) {
+        if (proj.type === 'youtube')       return buildYoutubeCard(proj.config, id, category, tags);
+        if (proj.type === 'minecraft_mod') return buildModCard(proj.config, id, category, tags);
+        if (proj.type === 'project')       return buildProjectCard(proj.config, id, category, tags);
+        return '';
+    }
+
     // ── Modal builders ───────────────────────────────────────────────────────
 
     function buildYoutubeModal(cfg, id) {
@@ -110,7 +119,6 @@
             cfg.modrinth   ? `<a href="${cfg.modrinth}"   target="_blank" rel="noopener" class="btn-theme mod-link"><img src="https://modrinth.com/favicon.ico"   alt=""> Modrinth</a>` : '',
             cfg.github     ? `<a href="${cfg.github}"     target="_blank" rel="noopener" class="btn-theme mod-link"><i class="fa fa-github"></i> GitHub</a>` : '',
         ].filter(Boolean).join('');
-
         return `
         <div class="modal-inner" id="modal-${id}">
             <img class="modal-banner" src="${cfg.photo}" alt="${cfg.name}">
@@ -132,10 +140,16 @@
             </div>`;
     }
 
-    // ── Filter bar ───────────────────────────────────────────────────────────
+    function buildModal(proj, id) {
+        if (proj.type === 'youtube')       return buildYoutubeModal(proj.config, id);
+        if (proj.type === 'minecraft_mod') return buildModModal(proj.config, id);
+        if (proj.type === 'project')       return buildProjectModal(proj.config, id);
+        return '';
+    }
+
+    // ── Grid layout filter bar ───────────────────────────────────────────────
 
     function buildFilterBar(categories, tagsByCategory) {
-        // Category section
         const catChecks = categories.map(cat => `
             <label class="filter-tag">
                 <input type="checkbox" class="cat-checkbox" value="${slugify(cat)}" checked>
@@ -152,10 +166,8 @@
                 <div class="filter-section" data-section="category">${catChecks}</div>
             </div>`;
 
-        // Tag section — every tag across all categories, each labelled with which
-        // categories it belongs to so we can show/hide them dynamically
         const allTagsFlat = [];
-        const tagCatMap   = {}; // tagSlug → Set of catSlugs
+        const tagCatMap   = {};
         categories.forEach(cat => {
             const catSlug = slugify(cat);
             (tagsByCategory[cat] || []).forEach(tag => {
@@ -202,6 +214,131 @@
         </div>`;
     }
 
+    // ── Carousel layout builder ──────────────────────────────────────────────
+
+    function buildCarouselLayout(projects, presentCats, tagsByCategory) {
+        const catSlugMap = {};
+        presentCats.forEach(cat => { catSlugMap[slugify(cat)] = cat; });
+
+        // Group projects by category, preserving sort order
+        const byCategory = {};
+        presentCats.forEach(cat => { byCategory[cat] = []; });
+        projects.forEach((proj, i) => {
+            const cat = getCategory(proj);
+            if (byCategory[cat]) {
+                byCategory[cat].push({ proj, i });
+            }
+        });
+
+        const rows = presentCats.map(cat => {
+            const catSlug = slugify(cat);
+            const tags    = tagsByCategory[cat] || [];
+
+            // Per-row filter dropdown (only if this category has tags)
+            const tagChecks = tags.map(t => `
+                <label class="filter-tag">
+                    <input type="checkbox" class="carousel-tag-cb" value="${slugify(t)}" checked>
+                    <span>${t}</span>
+                </label>`).join('');
+
+            const rowDropdown = tags.length ? `
+                <div class="carousel-filter-bar">
+                    <button class="btn-theme carousel-filter-toggle">
+                        <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down carousel-filter-chevron"></i>
+                    </button>
+                    <div class="carousel-filter-dropdown">
+                        <div class="filter-section-wrap" style="padding-left:0">
+                            <label class="filter-tag filter-select-all-tag">
+                                <input type="checkbox" class="carousel-select-all" checked>
+                                <span>Select all</span>
+                            </label>
+                            <div class="filter-section">${tagChecks}</div>
+                        </div>
+                    </div>
+                </div>` : '';
+
+            // Cards for this category
+            const cards = byCategory[cat].map(({ proj, i }) => {
+                const id       = projectId(proj, i);
+                const category = getCategory(proj);
+                const tags     = getCustomTags(proj);
+                return buildCard(proj, id, category, tags);
+            }).join('');
+
+            return `
+            <div class="cat-row" data-cat="${catSlug}">
+                <div class="cat-row-header">
+                    <h2 class="cat-row-title">${cat}</h2>
+                    ${rowDropdown}
+                </div>
+                <div class="cat-carousel">${cards}</div>
+            </div>`;
+        }).join('');
+
+        return `<div id="carousel-layout">${rows}</div>`;
+    }
+
+    // ── Wire carousel tag filters ────────────────────────────────────────────
+
+    function wireCarouselFilters() {
+        document.querySelectorAll('.cat-row').forEach(row => {
+            const filterBar = row.querySelector('.carousel-filter-bar');
+            if (!filterBar) return;
+
+            const toggleBtn = filterBar.querySelector('.carousel-filter-toggle');
+            const dropdown  = filterBar.querySelector('.carousel-filter-dropdown');
+            const chevron   = filterBar.querySelector('.carousel-filter-chevron');
+            const selectAll = filterBar.querySelector('.carousel-select-all');
+
+            // Open / close
+            toggleBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                const open = dropdown.classList.toggle('open');
+                chevron.style.transform = open ? 'rotate(180deg)' : '';
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', e => {
+                if (!filterBar.contains(e.target)) {
+                    dropdown.classList.remove('open');
+                    chevron.style.transform = '';
+                }
+            });
+
+            dropdown.addEventListener('click', e => e.stopPropagation());
+
+            // Select-all toggle
+            selectAll.addEventListener('change', () => {
+                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                    cb.checked = selectAll.checked;
+                });
+                applyCarouselFilter(row, dropdown);
+            });
+
+            // Individual tag checkboxes
+            dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
+                    selectAll.checked = all;
+                    applyCarouselFilter(row, dropdown);
+                });
+            });
+        });
+    }
+
+    function applyCarouselFilter(row, dropdown) {
+        const checked = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
+
+        row.querySelectorAll('.proj-card').forEach(card => {
+            const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+            // No tags on card → always show; otherwise must match a checked tag
+            if (cardTags.length === 0) { card.style.display = ''; return; }
+            card.style.display = cardTags.some(t => checked.includes(t)) ? '' : 'none';
+        });
+    }
+
+    // ── Grid layout filter wiring ────────────────────────────────────────────
+
     function wireFilter() {
         const bar = document.getElementById('filter-bar');
         if (!bar) return;
@@ -225,20 +362,16 @@
 
         dropdown.addEventListener('click', (e) => e.stopPropagation());
 
-        // Returns slugs of checked categories
         function checkedCats() {
             return [...dropdown.querySelectorAll('.cat-checkbox:checked')].map(cb => cb.value);
         }
 
-        // Returns slugs of checked tags (only among enabled ones)
         function checkedTags() {
             return [...dropdown.querySelectorAll('.tag-checkbox:checked')]
                 .filter(cb => !cb.closest('.filter-tag').classList.contains('tag-disabled'))
                 .map(cb => cb.value);
         }
 
-        // Gray out + disable tag rows whose categories are all unchecked.
-        // Also re-sync the tag "Select all" checkbox.
         function syncTagVisibility() {
             const activeCats = new Set(checkedCats());
             const tagSection = dropdown.querySelector('.filter-section[data-section="tags"]');
@@ -251,7 +384,6 @@
                 row.querySelector('.tag-checkbox').disabled = !active;
             });
 
-            // Sync select-all for tags (only count enabled rows)
             const enabledCbs = [...tagSection.querySelectorAll('.tag-checkbox')]
                 .filter(cb => !cb.disabled);
             const allChecked = enabledCbs.length > 0 && enabledCbs.every(cb => cb.checked);
@@ -260,35 +392,24 @@
         }
 
         function applyFilter() {
-            const activeCats  = new Set(checkedCats());
-            const activeTags  = new Set(checkedTags());
+            const activeCats = new Set(checkedCats());
+            const activeTags = new Set(checkedTags());
 
-            document.querySelectorAll('.proj-card').forEach(card => {
+            document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
                 const cardCat  = card.dataset.category || '';
                 const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
 
-                // Must match an active category
-                if (!activeCats.has(cardCat)) {
-                    card.style.display = 'none';
-                    return;
-                }
+                if (!activeCats.has(cardCat)) { card.style.display = 'none'; return; }
+                if (cardTags.length === 0)    { card.style.display = '';     return; }
 
-                // If the card has no tags, category match alone is enough
-                if (cardTags.length === 0) {
-                    card.style.display = '';
-                    return;
-                }
-
-                // If no tags are checked at all (for this category), show it
-                // If some tags are checked, at least one must match
                 const relevantTagsChecked = cardTags.some(t => activeTags.has(t));
-                const anyTagsVisibleForCat = [...dropdown.querySelectorAll('.filter-tag[data-tag-cats]')]
+                const anyTagsEnabledForCat = [...dropdown.querySelectorAll('.filter-tag[data-tag-cats]')]
                     .some(row => {
                         const rowCats = (row.dataset.tagCats || '').split(' ');
                         return rowCats.includes(cardCat) && !row.classList.contains('tag-disabled');
                     });
 
-                card.style.display = (!anyTagsVisibleForCat || relevantTagsChecked) ? '' : 'none';
+                card.style.display = (!anyTagsEnabledForCat || relevantTagsChecked) ? '' : 'none';
             });
 
             pushFilterHash();
@@ -296,8 +417,8 @@
 
         function pushFilterHash() {
             if (location.hash.startsWith('#project-')) return;
-            const cats = checkedCats();
-            const tags = checkedTags();
+            const cats  = checkedCats();
+            const tags  = checkedTags();
             const parts = [];
             if (cats.length) parts.push('cats=' + cats.join(','));
             if (tags.length) parts.push('tags=' + tags.join(','));
@@ -305,11 +426,10 @@
         }
 
         function loadFromHash() {
-            const hash = location.hash;
+            const hash     = location.hash;
             const catMatch = hash.match(/cats=([^&]*)/);
             const tagMatch = hash.match(/tags=([^&]*)/);
-
-            if (!catMatch && !tagMatch) return; // no filter hash present — leave defaults
+            if (!catMatch && !tagMatch) return;
 
             const activeCats = catMatch && catMatch[1] ? new Set(catMatch[1].split(',')) : new Set();
             const activeTags = tagMatch && tagMatch[1] ? new Set(tagMatch[1].split(',')) : new Set();
@@ -321,7 +441,6 @@
                 cb.checked = activeTags.size === 0 || activeTags.has(cb.value);
             });
 
-            // Sync select-all rows
             ['category', 'tags'].forEach(sec => {
                 const section = dropdown.querySelector(`.filter-section[data-section="${sec}"]`);
                 if (!section) return;
@@ -331,9 +450,9 @@
             });
 
             syncTagVisibility();
-            const activeCatsFinal  = new Set(checkedCats());
-            const activeTagsFinal  = new Set(checkedTags());
-            document.querySelectorAll('.proj-card').forEach(card => {
+            const activeCatsFinal = new Set(checkedCats());
+            const activeTagsFinal = new Set(checkedTags());
+            document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
                 const cardCat  = card.dataset.category || '';
                 const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
                 if (!activeCatsFinal.has(cardCat)) { card.style.display = 'none'; return; }
@@ -348,7 +467,6 @@
             if (cb.classList.contains('section-select-all')) {
                 const secName = cb.dataset.section;
                 const section = dropdown.querySelector(`.filter-section[data-section="${secName}"]`);
-                // For tags section, only toggle visible rows
                 section.querySelectorAll('input[type=checkbox]').forEach(item => {
                     if (secName === 'tags' && item.closest('.filter-tag').classList.contains('tag-disabled')) return;
                     item.checked = cb.checked;
@@ -364,40 +482,75 @@
                 }
             }
 
-            // If a category changed, update which tag rows are visible
-            if (cb.classList.contains('cat-checkbox') || (cb.classList.contains('section-select-all') && cb.dataset.section === 'category')) {
+            if (cb.classList.contains('cat-checkbox') ||
+                (cb.classList.contains('section-select-all') && cb.dataset.section === 'category')) {
                 syncTagVisibility();
             }
 
             applyFilter();
         });
 
-        // Load filters from URL on init, then apply
         loadFromHash();
 
-        // Re-apply filters when hash changes (e.g. back/forward navigation)
         window.addEventListener('hashchange', () => {
             if (!location.hash.startsWith('#project-')) loadFromHash();
         });
     }
 
+    // ── Layout toggle ────────────────────────────────────────────────────────
+
+    const LAYOUT_KEY = 'projects-layout';
+
+    function getLayout() {
+        try { return localStorage.getItem(LAYOUT_KEY) || 'carousel'; } catch { return 'carousel'; }
+    }
+
+    function setLayout(v) {
+        try { localStorage.setItem(LAYOUT_KEY, v); } catch {}
+    }
+
+    function applyLayout(layout) {
+        const grid     = document.getElementById('projects-scroll');
+        const carousel = document.getElementById('carousel-layout');
+        const filterBar   = document.getElementById('filter-bar');
+        const filterToggle = document.getElementById('filter-toggle');
+        const btnGrid      = document.getElementById('layout-btn-grid');
+        const btnCarousel  = document.getElementById('layout-btn-carousel');
+
+        if (layout === 'carousel') {
+            if (grid)     grid.style.display     = 'none';
+            if (carousel) carousel.style.display = '';
+            if (filterBar)   filterBar.style.display   = 'none';
+            if (filterToggle) filterToggle.style.display = 'none';
+            if (btnGrid)     btnGrid.classList.remove('active');
+            if (btnCarousel) btnCarousel.classList.add('active');
+        } else {
+            if (grid)     grid.style.display     = '';
+            if (carousel) carousel.style.display = 'none';
+            if (filterBar)   filterBar.style.display   = '';
+            if (filterToggle) filterToggle.style.display = '';
+            if (btnGrid)     btnGrid.classList.add('active');
+            if (btnCarousel) btnCarousel.classList.remove('active');
+        }
+    }
+
     // ── Main init ────────────────────────────────────────────────────────────
 
     function init(projects) {
-        // Sort by date descending (most recent first)
         projects.sort((a, b) => {
             const da = (a.config && a.config.date) ? new Date(a.config.date) : new Date(0);
             const db = (b.config && b.config.date) ? new Date(b.config.date) : new Date(0);
             return db - da;
         });
 
-        // Collect categories (in TYPE_CATEGORY order, only those present)
-        const categoryOrder = Object.values(TYPE_CATEGORY);
-        const presentCats   = categoryOrder.filter(cat =>
-            projects.some(p => getCategory(p) === cat)
-        );
+        // Collect categories in first-seen order (projects are already date-sorted)
+        const presentCats = [];
+        const _seenCats   = new Set();
+        projects.forEach(proj => {
+            const cat = getCategory(proj);
+            if (!_seenCats.has(cat)) { _seenCats.add(cat); presentCats.push(cat); }
+        });
 
-        // Map category → sorted list of custom tags that appear in that category
         const tagsByCategory = {};
         presentCats.forEach(cat => { tagsByCategory[cat] = new Set(); });
         projects.forEach(proj => {
@@ -410,58 +563,76 @@
             tagsByCategory[cat] = [...tagsByCategory[cat]].sort((a, b) => a.localeCompare(b));
         });
 
-        // Inject filter bar before the scroll area
+        // ── Inject grid layout
         const scroll = document.getElementById('projects-scroll');
         scroll.insertAdjacentHTML('beforebegin', buildFilterBar(presentCats, tagsByCategory));
 
-        // Move the toggle button up into the title bar
-        const titleBar = document.getElementById('projects-title-bar');
-        const toggle   = document.getElementById('filter-toggle');
-        if (titleBar && toggle) titleBar.appendChild(toggle);
+        // ── Inject carousel layout (hidden initially or per preference)
+        scroll.insertAdjacentHTML(
+            'afterend',
+            buildCarouselLayout(projects, presentCats, tagsByCategory)
+        );
 
-        // Build grid
+        // ── Add layout toggle + filter toggle to title bar
+        const titleBar = document.getElementById('projects-title-bar');
+        const filterToggle = document.getElementById('filter-toggle');
+
+        const layoutPill = document.createElement('div');
+        layoutPill.id = 'layout-pill';
+        layoutPill.innerHTML = `
+            <button id="layout-btn-grid"     class="layout-pill-btn" title="Grid layout"><i class="fa fa-th"></i></button>
+            <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-list"></i></button>
+        `;
+
+        // Wrap filter toggle + pill together on the right
+        const btnGroup = document.createElement('div');
+        btnGroup.id = 'title-btn-group';
+        if (filterToggle) btnGroup.appendChild(filterToggle);
+        btnGroup.appendChild(layoutPill);
+        if (titleBar) titleBar.appendChild(btnGroup);
+
+        layoutPill.addEventListener('click', (e) => {
+            const btn = e.target.closest('.layout-pill-btn');
+            if (!btn) return;
+            const next = btn.id === 'layout-btn-carousel' ? 'carousel' : 'grid';
+            setLayout(next);
+            applyLayout(next);
+        });
+
+        // ── Build grid cards
         const grid   = document.getElementById('projects-grid');
-        if (!grid) return;
         const modals = document.getElementById('projects-modals');
+        if (!grid) return;
 
         projects.forEach((proj, i) => {
             const id       = projectId(proj, i);
             const category = getCategory(proj);
             const tags     = getCustomTags(proj);
-            let card = '', modal = '';
-
-            if (proj.type === 'youtube') {
-                card  = buildYoutubeCard(proj.config, id, category, tags);
-                modal = buildYoutubeModal(proj.config, id);
-            } else if (proj.type === 'minecraft_mod') {
-                card  = buildModCard(proj.config, id, category, tags);
-                modal = buildModModal(proj.config, id);
-            } else if (proj.type === 'project') {
-                card  = buildProjectCard(proj.config, id, category, tags);
-                modal = buildProjectModal(proj.config, id);
-            }
-
-            grid.insertAdjacentHTML('beforeend', card);
-            modals.insertAdjacentHTML('beforeend', modal);
+            grid.insertAdjacentHTML('beforeend', buildCard(proj, id, category, tags));
+            modals.insertAdjacentHTML('beforeend', buildModal(proj, id));
         });
 
+        // ── Wire everything
         wireFilter();
+        wireCarouselFilters();
 
-        // ── Event wiring ──────────────────────────────────────────────────
+        // ── Apply saved layout
+        applyLayout(getLayout());
 
-        grid.addEventListener('click', (e) => {
+        // ── Event wiring for cards (works in both layouts via delegation on #main)
+        const main = document.getElementById('main');
+        main.addEventListener('click', (e) => {
             const card = e.target.closest('.proj-card');
-            if (!card) return;
-            openModal(card.dataset.id);
+            if (card) openModal(card.dataset.id);
         });
-        grid.addEventListener('keydown', (e) => {
+        main.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 const card = e.target.closest('.proj-card');
                 if (card) openModal(card.dataset.id);
             }
         });
 
-        modals.addEventListener('click', (e) => {
+        document.getElementById('projects-modals').addEventListener('click', (e) => {
             if (e.target.closest('.modal-back')) closeModal();
         });
 
@@ -492,7 +663,6 @@
         target.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-
         history.pushState(null, '', '#project-' + id);
     }
 
@@ -501,13 +671,8 @@
         overlay.classList.remove('active');
         document.querySelectorAll('.modal-inner').forEach(el => el.classList.remove('active'));
         document.body.style.overflow = '';
-
-        overlay.querySelectorAll('iframe[data-src]').forEach(iframe => {
-            iframe.src = '';
-        });
-
+        overlay.querySelectorAll('iframe[data-src]').forEach(iframe => { iframe.src = ''; });
         if (location.hash.startsWith('#project-')) {
-            // Restore filter hash
             history.pushState(null, '', location.pathname);
         }
     }
@@ -515,8 +680,7 @@
     function handleHash() {
         const hash = location.hash;
         if (hash.startsWith('#project-')) {
-            const id = hash.replace('#project-', '');
-            openModal(id);
+            openModal(hash.replace('#project-', ''));
         }
     }
 
@@ -524,9 +688,7 @@
 
     function bootstrap() {
         const main = document.getElementById('main');
-        if (!main) return;
-
-        if (document.getElementById('projects-grid')) return;
+        if (!main || document.getElementById('projects-grid')) return;
 
         main.insertAdjacentHTML('beforeend', `
             <div id="projects-scroll">
