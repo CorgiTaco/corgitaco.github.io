@@ -13,6 +13,7 @@
     function markAsViewed(id) {
         if (!viewedProjects.includes(id)) {
             viewedProjects.push(id);
+            // Save directly to localStorage (bypasses GitHub Pages cookie restrictions)
             localStorage.setItem(VIEWED_KEY, JSON.stringify(viewedProjects));
 
             // Visually mark all instances of this card in the DOM
@@ -24,7 +25,7 @@
 
     function clearViewedHistory() {
         viewedProjects = [];
-        localStorage.removeItem(VIEWED_KEY);
+        localStorage.removeItem(VIEWED_KEY); // Wipe localStorage
 
         // Remove visual markers
         document.querySelectorAll('.proj-card[data-viewed="true"]').forEach(card => {
@@ -34,7 +35,6 @@
         // Re-trigger active filters to un-hide everything
         const globalDropdown = document.getElementById('filter-dropdown');
         if (globalDropdown) {
-            // Uncheck global hide viewed if it was checked
             const globalHideBtn = document.getElementById('hide-viewed-global');
             if(globalHideBtn) globalHideBtn.checked = false;
         }
@@ -1006,7 +1006,7 @@
         clearBtn.id = 'clear-viewed-btn';
         clearBtn.className = 'btn-theme';
         clearBtn.title = 'Clear History';
-        // 👉 New dual icon applied here:
+        // 👉 Dual icon applied here:
         clearBtn.innerHTML = '<i class="fa fa-eye"></i> <i class="fa fa-trash"></i>';
         clearBtn.addEventListener('click', clearViewedHistory);
 
@@ -1092,7 +1092,7 @@
     }
 
     function openModal(id) {
-        markAsViewed(id);
+        markAsViewed(id); // Trigger localStorage save
 
         const view = getLayout();
         if (view === 'grid') {
