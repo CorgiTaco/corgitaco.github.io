@@ -19,13 +19,21 @@
 #projects-title-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 0 16px 0 0;
     position: relative;
+    gap: 12px;
 }
 
 #projects-title-bar h1 {
+    margin-right: auto;
     padding: 8px var(--main-padding);
+}
+
+#title-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 #filter-bar, #sort-bar {
@@ -405,37 +413,37 @@
 
 /* ── Mobile UI fixes ── */
 @media (max-width: 600px) {
+    /* Global Title Bar */
     #projects-title-bar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 12px 0 0;
+        flex-wrap: wrap;
+        padding: 8px 12px 12px 12px;
+        gap: 12px;
         overflow: visible;
     }
 
-    #filter-bar, #sort-bar {
-        position: relative;
-        flex-shrink: 0;
+    #projects-title-bar h1 {
+        order: 1;
+        margin-right: auto;
+        padding: 0;
     }
 
-    #filter-toggle, #sort-toggle {
-        padding: 8px 10px;
-        gap: 0;
+    #layout-pill {
+        order: 2;
     }
 
-    #filter-toggle .fa-filter, #sort-toggle .fa-sort {
-        font-size: 1rem;
+    #title-actions-group {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
     }
 
-    #filter-toggle span, #filter-toggle #filter-chevron,
-    #sort-toggle span, #sort-toggle #sort-chevron {
-        display: none;
+    #filter-dropdown, #sort-dropdown {
+        right: auto;
+        left: 0; /* Anchor left since buttons moved to the left side */
     }
 
     #filter-dropdown {
         flex-direction: column;
-        right: 0;
-        left: auto;
         width: 220px;
         max-height: 70dvh;
         overflow-y: auto;
@@ -443,7 +451,6 @@
 
     #sort-dropdown {
         width: 180px;
-        right: 0;
     }
 
     .filter-section-wrap {
@@ -464,6 +471,23 @@
         grid-template-rows: unset;
     }
 
+    /* Carousel Per-Category Bar */
+    .cat-row-title {
+        width: 100%; /* Force actions to the next line */
+        margin-bottom: 4px;
+    }
+
+    .cat-row-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .carousel-filter-dropdown, .carousel-sort-dropdown {
+        right: auto;
+        left: 0; /* Anchor left */
+    }
+
+    /* Modals */
     #modal-overlay {
         padding: 10px;
         align-items: center;
