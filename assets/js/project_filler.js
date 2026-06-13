@@ -316,6 +316,30 @@
 
     // ── Wire Actions (Filter / Sort / Carousel Filters / Arrows) ─────────────
 
+    // NEW UTILITY: Closes all dropdowns to prevent overlapping menus
+    function closeAllDropdowns(exceptMenu = null) {
+        document.querySelectorAll('#filter-dropdown.open, #sort-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open').forEach(menu => {
+            if (menu === exceptMenu) return;
+
+            menu.classList.remove('open');
+
+            // Reset respective chevrons
+            if (menu.id === 'filter-dropdown') {
+                const chev = document.getElementById('filter-chevron');
+                if (chev) chev.style.transform = '';
+            } else if (menu.id === 'sort-dropdown') {
+                const chev = document.getElementById('sort-chevron');
+                if (chev) chev.style.transform = '';
+            } else if (menu.classList.contains('carousel-filter-dropdown')) {
+                const chev = menu.closest('.carousel-filter-bar').querySelector('.carousel-filter-chevron');
+                if (chev) chev.style.transform = '';
+            } else if (menu.classList.contains('carousel-sort-dropdown')) {
+                const chev = menu.closest('.carousel-sort-bar').querySelector('.carousel-sort-chevron');
+                if (chev) chev.style.transform = '';
+            }
+        });
+    }
+
     function wireCarouselArrows() {
         // Custom animation function to force smooth scrolling in all browsers
         function smoothScroll(element, distance, duration) {
@@ -348,7 +372,6 @@
 
             function updateArrows() {
                 if (!track) return;
-                // Buffer of a few pixels to account for fractional rendering widths
                 const canScrollLeft = track.scrollLeft > 2;
                 const canScrollRight = track.scrollLeft < (track.scrollWidth - track.clientWidth - 2);
 
@@ -360,22 +383,18 @@
             window.addEventListener('resize', updateArrows);
 
             leftBtn.addEventListener('click', () => {
-                // Scroll left by 75% of container width over 450 milliseconds
                 smoothScroll(track, -track.clientWidth * 0.75, 450);
             });
 
             rightBtn.addEventListener('click', () => {
-                // Scroll right by 75% of container width over 450 milliseconds
                 smoothScroll(track, track.clientWidth * 0.75, 450);
             });
 
-            // Expose the update function on the element for sorting/filtering redraws
             track._updateArrows = updateArrows;
-
-            // Check visibility immediately (with slight delay for paint)
             setTimeout(updateArrows, 100);
         });
     }
+
     function wireCarouselFilters() {
         document.querySelectorAll('.cat-row').forEach(row => {
             const filterBar = row.querySelector('.carousel-filter-bar');
@@ -388,15 +407,9 @@
 
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
+                closeAllDropdowns(dropdown); // Close others before toggling
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
-            });
-
-            document.addEventListener('click', e => {
-                if (!filterBar.contains(e.target)) {
-                    dropdown.classList.remove('open');
-                    chevron.style.transform = '';
-                }
             });
 
             dropdown.addEventListener('click', e => e.stopPropagation());
@@ -428,14 +441,12 @@
             if (selectAllChecked) {
                 card.style.display = '';
             } else if (cardTags.length === 0) {
-                // If filters are active (not Select All), hide items that have zero tags
                 card.style.display = 'none';
             } else {
                 card.style.display = cardTags.some(t => checked.includes(t)) ? '' : 'none';
             }
         });
 
-        // Update the arrow visibility because flex elements disappeared/reappeared
         const track = row.querySelector('.cat-carousel');
         if (track && track._updateArrows) track._updateArrows();
     }
@@ -452,15 +463,9 @@
 
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
+                closeAllDropdowns(dropdown); // Close others before toggling
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
-            });
-
-            document.addEventListener('click', e => {
-                if (!sortBar.contains(e.target)) {
-                    dropdown.classList.remove('open');
-                    chevron.style.transform = '';
-                }
             });
 
             dropdown.addEventListener('click', e => e.stopPropagation());
@@ -511,15 +516,9 @@
 
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
+            closeAllDropdowns(dropdown); // Close others before toggling
             const open = dropdown.classList.toggle('open');
             chevron.style.transform = open ? 'rotate(180deg)' : '';
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!bar.contains(e.target) && !toggle.contains(e.target)) {
-                dropdown.classList.remove('open');
-                chevron.style.transform = '';
-            }
         });
 
         dropdown.addEventListener('click', (e) => e.stopPropagation());
@@ -669,15 +668,9 @@
 
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
+            closeAllDropdowns(dropdown); // Close others before toggling
             const open = dropdown.classList.toggle('open');
             chevron.style.transform = open ? 'rotate(180deg)' : '';
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!bar.contains(e.target) && !toggle.contains(e.target)) {
-                dropdown.classList.remove('open');
-                chevron.style.transform = '';
-            }
         });
 
         dropdown.addEventListener('click', (e) => e.stopPropagation());
@@ -861,120 +854,13 @@
         // ── Apply saved layout
         applyLayout(getLayout());
 
-        const main = document.getElementById('main');
-        main.addEventListener('click', (e) => {
-            const card = e.target.closest('.proj-card');
-            if (card) openModal(card.dataset.id);
-        });
-        main.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                const card = e.target.closest('.proj-card');
-                if (card) openModal(card.dataset.id);
+        // ── Global Document Click Listener (Closes Dropdowns)
+        document.addEventListener('click', (e) => {
+            // If clicking outside any action bar area, close all dropdowns
+            if (!e.target.closest('#filter-bar, #sort-bar, .carousel-filter-bar, .carousel-sort-bar')) {
+                closeAllDropdowns();
             }
         });
-
-        document.getElementById('projects-modals').addEventListener('click', (e) => {
-            if (e.target.closest('.modal-back')) closeModal();
-        });
-
-        document.getElementById('modal-overlay').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('modal-overlay')) closeModal();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        window.addEventListener('hashchange', handleHash);
-        handleHash();
-    }
-
-    // ── Main init ────────────────────────────────────────────────────────────
-
-    function init(projects) {
-        projects.sort((a, b) => {
-            const da = (a.config && a.config.date) ? new Date(a.config.date) : new Date(0);
-            const db = (b.config && b.config.date) ? new Date(b.config.date) : new Date(0);
-            return db - da;
-        });
-
-        const presentCats = [];
-        const _seenCats   = new Set();
-        projects.forEach(proj => {
-            const cat = getCategory(proj);
-            if (!_seenCats.has(cat)) { _seenCats.add(cat); presentCats.push(cat); }
-        });
-
-        const tagsByCategory = {};
-        presentCats.forEach(cat => { tagsByCategory[cat] = new Set(); });
-        projects.forEach(proj => {
-            const cat = getCategory(proj);
-            getCustomTags(proj).forEach(t => {
-                if (tagsByCategory[cat]) tagsByCategory[cat].add(t);
-            });
-        });
-        presentCats.forEach(cat => {
-            tagsByCategory[cat] = [...tagsByCategory[cat]].sort((a, b) => a.localeCompare(b));
-        });
-
-        const scroll = document.getElementById('projects-scroll');
-
-        scroll.insertAdjacentHTML('beforebegin', buildActionBars(presentCats, tagsByCategory));
-
-        scroll.insertAdjacentHTML('afterend', buildCarouselLayout(projects, presentCats, tagsByCategory));
-
-        const titleBar = document.getElementById('projects-title-bar');
-        const filterBar = document.getElementById('filter-bar');
-        const sortBar = document.getElementById('sort-bar');
-
-        const layoutPill = document.createElement('div');
-        layoutPill.id = 'layout-pill';
-        layoutPill.innerHTML = `
-            <button id="layout-btn-grid"     class="layout-pill-btn" title="Grid layout"><i class="fa fa-th"></i></button>
-            <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-list"></i></button>
-        `;
-
-        const actionsGroup = document.createElement('div');
-        actionsGroup.id = 'title-actions-group';
-
-        if (sortBar) actionsGroup.appendChild(sortBar);
-        if (filterBar) actionsGroup.appendChild(filterBar);
-
-        if (titleBar) {
-            titleBar.appendChild(actionsGroup);
-            titleBar.appendChild(layoutPill);
-        }
-
-        layoutPill.addEventListener('click', (e) => {
-            const btn = e.target.closest('.layout-pill-btn');
-            if (!btn) return;
-            const next = btn.id === 'layout-btn-carousel' ? 'carousel' : 'grid';
-            setLayout(next);
-            applyLayout(next);
-        });
-
-        // ── Build grid cards
-        const grid   = document.getElementById('projects-grid');
-        const modals = document.getElementById('projects-modals');
-        if (!grid) return;
-
-        projects.forEach((proj, i) => {
-            const id       = projectId(proj, i);
-            const category = getCategory(proj);
-            const tags     = getCustomTags(proj);
-            grid.insertAdjacentHTML('beforeend', buildCard(proj, id, category, tags));
-            modals.insertAdjacentHTML('beforeend', buildModal(proj, id));
-        });
-
-        // ── Wire everything
-        wireFilter();
-        wireSort();
-        wireCarouselFilters();
-        wireCarouselSort();
-        wireCarouselArrows();
-
-        // ── Apply saved layout
-        applyLayout(getLayout());
 
         const main = document.getElementById('main');
         main.addEventListener('click', (e) => {
