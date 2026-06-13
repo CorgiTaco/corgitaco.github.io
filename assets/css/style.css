@@ -265,18 +265,11 @@ nav {
     }
 
     #main {
-        position: fixed;
-        left: 1%;
-        right: 1%;
-        top: 20px;
-        width: 98%;
-        min-width: unset;
-        max-width: unset;
-        min-height: auto;
-        max-height: calc(100dvh - 80px);
-        overflow-y: auto;
-        transform: none;
-        margin: 0;
+        width: 98% !important;
+        left: 1% !important;
+        right: auto !important; /* Clears conflicts with left: 1% */
+        box-sizing: border-box !important; /* Keeps padding inside the 98% bounds */
+        margin: 0 !important;
     }
 
     /* Hide the desktop nav entirely */
