@@ -112,6 +112,7 @@ a:hover {
 
     background-color: rgb(20 20 20 / 80%);
     border: 2px solid var(--main-color);
+    border-radius: 16px;
 
     margin: 0 auto;
     align-self: center;
