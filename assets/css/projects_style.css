@@ -339,8 +339,23 @@
 }
 
 /* ══════════════════════════════════════════════
-   Modal overlay
+   Modal overlay & animation
 ══════════════════════════════════════════════ */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 
 #modal-overlay {
     display: none;
@@ -352,6 +367,8 @@
     justify-content: center;
     padding: 20px;
     box-sizing: border-box;
+    /* Animation triggers */
+    animation: fadeIn 0.2s ease forwards;
 }
 
 #modal-overlay.active {
@@ -372,6 +389,8 @@
     overflow-y: auto;
     box-sizing: border-box;
     gap: 8px;
+    /* Animation trigger */
+    animation: scaleIn 0.25s ease forwards;
 }
 
 .modal-inner.active {
