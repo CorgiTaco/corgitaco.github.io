@@ -471,3 +471,58 @@ nav {
     border: 2px solid transparent;
     background-clip: padding-box;
 }
+
+/* ══════════════════════════════════════════════
+   Driver.js Overrides (Matches Site Theme)
+══════════════════════════════════════════════ */
+
+:root {
+    --driver-color: #46a258; /* Matches your --main-color */
+    --driver-font-family: 'Courier New', Courier, monospace;
+}
+
+/* Modal styling */
+.driver-popover {
+    background: rgb(20 20 20 / 97%) !important;
+    border: 2px solid var(--main-color) !important;
+    border-radius: 16px !important;
+    color: #ffffff !important;
+    font-family: var(--driver-font-family) !important;
+}
+
+/* Text and Titles */
+.driver-popover .driver-popover-title {
+    color: var(--main-color) !important;
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+}
+
+.driver-popover .driver-popover-description {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 0.95rem !important;
+}
+
+/* Navigation Buttons */
+.driver-popover .driver-popover-footer button {
+    background: rgb(15 15 15 / 90%) !important;
+    border: 1px solid var(--main-color) !important;
+    color: #fff !important;
+    font-family: var(--driver-font-family) !important;
+    border-radius: 0 !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+}
+
+.driver-popover .driver-popover-footer button:hover {
+    background: rgba(70, 162, 88, 0.15) !important;
+}
+
+/* Progress bar color */
+.driver-progress {
+    color: var(--main-color) !important;
+}
+
+/* Arrow pointer */
+.driver-popover .driver-arrow {
+    border-top-color: rgb(20 20 20) !important;
+}
