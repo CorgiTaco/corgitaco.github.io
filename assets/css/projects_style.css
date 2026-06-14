@@ -13,7 +13,7 @@
 }
 
 /* ══════════════════════════════════════════════
-   Filter & Sort bars
+   Filter & Sort bars  (shared by grid + carousel)
 ══════════════════════════════════════════════ */
 
 #projects-title-bar {
@@ -172,32 +172,8 @@
 }
 
 /* ══════════════════════════════════════════════
-   Projects grid
+   Shared project card  (used by both layouts)
 ══════════════════════════════════════════════ */
-
-#projects-scroll {
-    overflow-y: auto;
-    flex: 1 1 0;
-    min-height: 0;
-}
-
-#projects-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    padding: 16px;
-    box-sizing: border-box;
-    width: 100%;
-    max-width: none;
-}
-
-@media (max-width: 900px) {
-    #projects-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 500px) {
-    #projects-grid { grid-template-columns: 1fr; }
-}
 
 .proj-card {
     background: rgb(255 255 255 / 5%);
@@ -280,7 +256,7 @@
 }
 
 /* ══════════════════════════════════════════════
-   Viewed State Overlay
+   Viewed-state overlay  (shared)
 ══════════════════════════════════════════════ */
 
 .viewed-overlay {
@@ -289,7 +265,7 @@
     inset: 0;
     background: rgba(12, 12, 12, 0.65);
     z-index: 5;
-    pointer-events: none; /* The container ignores clicks */
+    pointer-events: none;
     padding: 10px;
     justify-content: flex-end;
     align-items: flex-start;
@@ -303,18 +279,18 @@
     font-size: 1.2rem;
     color: rgba(255, 255, 255, 0.85);
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-    pointer-events: auto; /* Forces the eyeball to accept hover & clicks */
+    pointer-events: auto;
     cursor: pointer;
     transition: color 0.15s, transform 0.15s;
 }
 
 .viewed-overlay .fa-eye:hover {
-    color: #ff5f57 !important; /* Overrides the global color rules */
+    color: #ff5f57 !important;
     transform: scale(1.1);
 }
 
 /* ══════════════════════════════════════════════
-   Buttons & Links
+   Shared button
 ══════════════════════════════════════════════ */
 
 .btn-theme {
@@ -339,269 +315,7 @@
 }
 
 /* ══════════════════════════════════════════════
-   Modal overlay & animation
-══════════════════════════════════════════════ */
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@keyframes scaleIn {
-    from { transform: scale(0.95); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-#modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.82);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    /* Animation triggers */
-    animation: fadeIn 0.2s ease forwards;
-}
-
-#modal-overlay.active {
-    display: flex;
-}
-
-.modal-inner {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    background: rgb(20 20 20 / 97%);
-    border: 2px solid var(--main-color);
-    border-radius: 8px;
-    padding: 0 0 16px 0;
-    max-width: 1000px;
-    width: 90vw;
-    max-height: 90dvh;
-    overflow-y: auto;
-    box-sizing: border-box;
-    gap: 8px;
-    /* Animation trigger */
-    animation: scaleIn 0.25s ease forwards;
-}
-
-.modal-inner.active {
-    display: flex;
-}
-
-.modal-banner {
-    width: 50%;
-    max-height: none;
-    object-fit: contain;
-    border-radius: 6px;
-    aspect-ratio: 16 / 9;
-    margin: 12px auto 0 auto;
-    display: block;
-}
-
-.modal-title {
-    font-size: 2rem;
-    margin: 0;
-    text-align: center;
-    padding: 0 24px;
-}
-
-.modal-desc {
-    font-size: 1.5rem;
-    line-height: 1.4;
-    text-align: center;
-    margin: 0;
-    opacity: 0.85;
-    padding: 0 24px;
-}
-
-.modal-video-wrap {
-    width: calc(100% - 48px);
-    margin-top: 24px;
-    aspect-ratio: 16 / 9;
-    border-radius: 6px;
-    overflow: hidden;
-    min-height: 400px;
-}
-
-.modal-video-wrap iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
-}
-
-.modal-links {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-    justify-content: stretch;
-    width: calc(100% - 48px);
-    box-sizing: border-box;
-}
-
-/* Bulletproof modal button overrides */
-.modal-inner .mod-link,
-.modal-inner .modal-ext-link {
-    flex: 1;
-    justify-content: center;
-    text-decoration: none;
-    padding: 16px 20px;
-    font-size: 1.3rem;
-}
-
-.modal-inner .mod-link img {
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-}
-
-/* Match the GitHub icon to the size of the images */
-.modal-inner .mod-link .fa,
-.modal-inner .modal-ext-link .fa {
-    font-size: 26px;
-    width: 26px;
-    text-align: center;
-}
-
-.modal-inner .modal-back {
-    width: calc(100% - 48px);
-    justify-content: center;
-    margin: 4px 24px 0 24px;
-    align-self: stretch;
-    padding: 16px 20px;
-    font-size: 1.3rem;
-}
-
-/* ── Mobile UI fixes ── */
-@media (max-width: 600px) {
-    /* Global Title Bar */
-    #projects-title-bar {
-        flex-wrap: wrap;
-        padding: 8px 12px 12px 12px;
-        gap: 12px;
-        overflow: visible;
-    }
-
-    #projects-title-bar h1 {
-        order: 1;
-        margin-right: auto;
-        padding: 0;
-    }
-
-    #layout-pill {
-        order: 2;
-    }
-
-    #title-actions-group {
-        order: 3;
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-    #filter-dropdown, #sort-dropdown {
-        right: auto;
-        left: 0; /* Anchor left since buttons moved to the left side */
-    }
-
-    #filter-dropdown {
-        flex-direction: column;
-        width: 220px;
-        max-height: 70dvh;
-        overflow-y: auto;
-    }
-
-    #sort-dropdown {
-        width: 180px;
-    }
-
-    .filter-section-wrap {
-        padding: 6px 0;
-        min-width: unset;
-        width: 100%;
-    }
-
-    .filter-section-wrap + .filter-section-wrap {
-        border-left: none;
-        border-top: 1px solid rgba(70, 162, 88, 0.25);
-        padding-top: 8px;
-    }
-
-    .filter-section {
-        grid-auto-flow: row;
-        grid-template-columns: 1fr;
-        grid-template-rows: unset;
-    }
-
-    /* Carousel Per-Category Bar */
-    .cat-row-title {
-        width: 100%; /* Force actions to the next line */
-        margin-bottom: 4px;
-    }
-
-    .cat-row-actions {
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-    .carousel-filter-dropdown, .carousel-sort-dropdown {
-        right: auto;
-        left: 0; /* Anchor left */
-    }
-
-    /* Modals */
-    #modal-overlay {
-        padding: 10px;
-        align-items: center;
-    }
-
-    .modal-inner {
-        width: 100%;
-        max-height: calc(100dvh - 40px);
-        overflow-y: auto;
-    }
-
-    .modal-video-wrap {
-        min-height: unset;
-        width: calc(100% - 24px);
-        margin-top: 12px;
-    }
-
-    .modal-links {
-        flex-wrap: wrap;
-        width: calc(100% - 24px);
-    }
-
-    .modal-inner .mod-link,
-    .modal-inner .modal-ext-link {
-        flex: 1 1 40%;
-        padding: 12px 10px;
-        font-size: 1.1rem;
-    }
-
-    .modal-inner .modal-back {
-        width: calc(100% - 24px);
-        margin: 4px 12px 0 12px;
-        font-size: 1.1rem;
-        padding: 12px 10px;
-    }
-
-    .modal-banner {
-        width: 80%;
-        margin: 8px auto 0 auto;
-    }
-}
-
-/* ══════════════════════════════════════════════
-   Layout toggle button
+   Layout toggle pill  (grid <-> carousel switcher)
 ══════════════════════════════════════════════ */
 
 #title-btn-group {
@@ -650,69 +364,196 @@
 }
 
 /* ══════════════════════════════════════════════
-   Carousel layout
+   Mobile overrides  (shared elements only)
 ══════════════════════════════════════════════ */
 
-#carousel-layout {
-    overflow-y: auto;
-    flex: 1 1 0;
-    min-height: 0;
+@media (max-width: 600px) {
+    #projects-title-bar {
+        flex-wrap: wrap;
+        padding: 8px 12px 12px 12px;
+        gap: 12px;
+        overflow: visible;
+    }
+
+    #projects-title-bar h1 {
+        order: 1;
+        margin-right: auto;
+        padding: 0;
+    }
+
+    #layout-pill {
+        order: 2;
+    }
+
+    #title-actions-group {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    #filter-dropdown, #sort-dropdown {
+        right: auto;
+        left: 0;
+    }
+
+    #filter-dropdown {
+        flex-direction: column;
+        width: 220px;
+        max-height: 70dvh;
+        overflow-y: auto;
+    }
+
+    #sort-dropdown {
+        width: 180px;
+    }
+
+    .filter-section-wrap {
+        padding: 6px 0;
+        min-width: unset;
+        width: 100%;
+    }
+
+    .filter-section-wrap + .filter-section-wrap {
+        border-left: none;
+        border-top: 1px solid rgba(70, 162, 88, 0.25);
+        padding-top: 8px;
+    }
+
+    .filter-section {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+        grid-template-rows: unset;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   Touch devices — disable sticky hover states
+══════════════════════════════════════════════ */
+
+@media (hover: none) {
+    .proj-card:hover,
+    .proj-card:focus {
+        border-color: rgba(70, 162, 88, 0.35);
+        transform: none;
+    }
+
+    .cat-carousel .proj-card:hover,
+    .cat-carousel .proj-card:focus {
+        box-shadow: none;
+    }
+
+    .btn-theme:hover {
+        background: rgb(15 15 15 / 90%);
+        border-color: rgba(70, 162, 88, 0.45);
+    }
+
+    .layout-pill-btn:hover {
+        background: transparent;
+    }
+
+    .filter-tag:hover {
+        background: transparent;
+    }
+
+    .carousel-arrow:hover {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .viewed-overlay .fa-eye:hover {
+        color: rgba(255, 255, 255, 0.85) !important;
+        transform: none;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   Themed vertical scrollbar  (all #main children)
+══════════════════════════════════════════════ */
+
+#main,
+#main * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
+}
+
+#main ::-webkit-scrollbar {
+    width: 8px;
+}
+
+#main ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+#main ::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    min-height: 32px;
+}
+
+#main ::-webkit-scrollbar-thumb:hover {
+    background: #5abf6e;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* ══════════════════════════════════════════════
+   Favorites — card star overlay
+   Shows on hover (desktop) or always when favorited
+══════════════════════════════════════════════ */
+
+.fav-overlay {
+    display: none;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* Always show the star when the card is favorited */
+.proj-card[data-favorited="true"] .fav-overlay {
     display: flex;
-    flex-direction: column;
-    gap: 0;
 }
 
-.cat-row {
-    padding: 16px 16px 20px;
-    border-bottom: 1px solid rgba(70, 162, 88, 0.18);
+/* On hover-capable devices: also show the star when hovering */
+@media (hover: hover) {
+    .proj-card:hover .fav-overlay {
+        display: flex;
+    }
 }
 
-.cat-row:last-child {
-    border-bottom: none;
+.fav-star {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9));
+    pointer-events: auto;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+    /* Unfavorited state: outlined/dim */
+    color: rgba(255, 255, 255, 0.55) !important;
 }
 
-.cat-row-header {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 12px;
+.proj-card[data-favorited="true"] .fav-star {
+    color: #f5c518 !important; /* gold when active */
 }
 
-.cat-row-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    opacity: 0.7;
-    white-space: nowrap;
+.fav-star:hover {
+    transform: scale(1.2);
+    color: #f5c518 !important;
 }
 
-.cat-row-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+/* ══════════════════════════════════════════════
+   Row-order bar  (carousel row reorder control)
+   Shares most styles with #sort-bar via .btn-theme
+   but needs its own positioning rules
+══════════════════════════════════════════════ */
 
-.carousel-filter-bar, .carousel-sort-bar {
+#row-order-bar {
     position: relative;
-    flex-shrink: 0;
 }
 
-.carousel-filter-toggle, .carousel-sort-toggle {
-    font-size: 0.9rem;
-    gap: 8px;
-    padding: 6px 12px;
-    white-space: nowrap;
-}
-
-.carousel-filter-chevron, .carousel-sort-chevron {
-    transition: transform 0.2s ease;
-    font-size: 0.75rem;
-}
-
-.carousel-filter-dropdown, .carousel-sort-dropdown {
+#row-order-dropdown {
     display: none;
     flex-direction: column;
     position: absolute;
@@ -721,139 +562,51 @@
     z-index: 100;
     background: rgb(12 12 12 / 98%);
     border: 1px solid var(--main-color);
-    border-radius: 0;
-    padding: 10px 12px;
+    padding: 12px;
     box-shadow: 0 6px 24px rgba(0,0,0,0.7);
-    min-width: 160px;
     font-family: 'Courier New', Courier, monospace;
-}
-
-.carousel-sort-dropdown {
     min-width: 170px;
-    gap: 6px;
+    gap: 4px;
 }
 
-.carousel-filter-dropdown.open, .carousel-sort-dropdown.open {
+#row-order-dropdown.open {
     display: flex;
 }
 
-/* ── Carousel Arrows & Wrapping ── */
-.cat-carousel-wrap {
-    position: relative;
-    width: 100%;
+/* ── Sort section labels (divider + header text) ── */
+
+.sort-section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.5;
+    padding: 4px 8px 2px;
+    display: block;
 }
 
-.carousel-arrow {
-    position: absolute;
-    top: 0;
-    bottom: 28px; /* Sits exactly above the scrollbar track */
-    width: 45px;
-    color: rgba(255, 255, 255, 0.7);
-    border: none;
-    font-size: 1.6rem;
-    z-index: 10;
-    opacity: 0;
-    cursor: pointer;
-    transition: opacity 0.25s ease, color 0.15s;
-    display: flex;
-    align-items: center;
-    pointer-events: none; /* Ignore clicks when invisible */
+/* Grid sort divider row */
+.filter-tag.sort-divider {
+    border-top: 1px solid rgba(70, 162, 88, 0.25);
+    margin-top: 4px;
+    padding-top: 6px;
+    cursor: default;
+    pointer-events: none;
 }
 
-.carousel-arrow.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.carousel-arrow:hover {
-    color: var(--main-color);
-}
-
-.carousel-arrow.left {
-    left: 0;
-    background: linear-gradient(to right, rgba(12,12,12,0.95) 30%, rgba(12,12,12,0));
-    justify-content: flex-start;
-    padding-left: 8px;
-}
-
-.carousel-arrow.right {
-    right: 0;
-    background: linear-gradient(to left, rgba(12,12,12,0.95) 30%, rgba(12,12,12,0));
-    justify-content: flex-end;
-    padding-right: 8px;
-}
-
-.cat-carousel {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    overflow-x: auto;
-    overflow-y: visible;
-    padding-bottom: 28px;
-    scrollbar-width: auto;
-    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.15);
-    scroll-behavior: smooth;
-}
-
-.cat-carousel::-webkit-scrollbar {
-    height: 28px;
-}
-
-.cat-carousel::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 14px;
-}
-
-.cat-carousel::-webkit-scrollbar-thumb {
-    background: var(--main-color);
-    border-radius: 14px;
-    border: 4px solid transparent;
-    background-clip: padding-box;
-    min-width: 40px;
-}
-
-.cat-carousel::-webkit-scrollbar-thumb:hover {
-    background: #5abf6e;
-    border: 4px solid transparent;
-    background-clip: padding-box;
-}
-
-.cat-carousel .proj-card {
-    flex: 0 0 380px;
-    width: 380px;
-    transition: border-color 0.2s, box-shadow 0.15s;
-}
-
-.cat-carousel .proj-card:hover,
-.cat-carousel .proj-card:focus {
-    transform: none;
-    box-shadow: 0 0 0 2px var(--main-color);
-}
-
-@media (max-width: 900px) and (min-width: 601px) {
-    .cat-carousel .proj-card {
-        flex: 0 0 calc(50% - 22px);
-        width: calc(50% - 22px);
-    }
-}
-
+/* Mobile: row-order bar */
 @media (max-width: 600px) {
-    .cat-carousel .proj-card {
-        flex: 0 0 300px;
-        width: 300px;
+    #row-order-dropdown {
+        right: auto;
+        left: 0;
+        width: 190px;
     }
+}
 
-    .cat-row {
-        padding: 12px 12px 16px;
-    }
-
-    .cat-row-actions {
-        flex-wrap: wrap;
-    }
-
-    /* Make arrows slightly smaller on mobile to preserve screen real estate */
-    .carousel-arrow {
-        width: 35px;
-        font-size: 1.2rem;
+/* Touch: disable hover on row-order toggle */
+@media (hover: none) {
+    #row-order-bar .btn-theme:hover {
+        background: rgb(15 15 15 / 90%);
+        border-color: rgba(70, 162, 88, 0.45);
     }
 }

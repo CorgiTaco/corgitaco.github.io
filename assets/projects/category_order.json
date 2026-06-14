@@ -1,0 +1,9 @@
+{
+  "_comment": "Controls the display order of categories in both carousel and grid layouts.",
+  "_comment2": "Categories not listed here appear at the end in their natural order.",
+  "order": [
+    "Minecraft Mod",
+    "Youtube",
+    "Project"
+  ]
+}

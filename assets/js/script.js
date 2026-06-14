@@ -71,6 +71,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ? 'Home'
         : lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
 
+    // Find the icon for the current page
+    var currentIconClass = '';
+    links.forEach(function(l) {
+        if (l.text.toLowerCase() === pageLabel.toLowerCase()) {
+            currentIconClass = l.iconClass;
+        }
+    });
+    var currentIcon = currentIconClass ? '<i class="' + currentIconClass + '"></i> ' : '';
+
     // Build the mobile nav HTML
     var listItems = links.map(function(l) {
         var isActive = (l.text.toLowerCase() === pageLabel.toLowerCase()) ? ' class="active"' : '';
@@ -81,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var mobileNav = $('<div id="mobile-nav">' +
         '<div id="mobile-nav-list">' + listItems + '</div>' +
         '<div id="mobile-nav-trigger">' +
-        '<span>' + pageLabel + '</span>' +
+        '<span>' + currentIcon + pageLabel + '</span>' +
         '<i class="nav-arrow">&#9660;</i>' +
         '</div>' +
         '</div>');

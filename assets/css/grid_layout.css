@@ -1,0 +1,29 @@
+/* ══════════════════════════════════════════════
+   Grid layout
+   Depends on: projects_style.css (shared cards,
+   buttons, filter/sort bars)
+══════════════════════════════════════════════ */
+
+#projects-scroll {
+    overflow-y: auto;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+#projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+}
+
+@media (max-width: 900px) {
+    #projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+    #projects-grid { grid-template-columns: 1fr; }
+}

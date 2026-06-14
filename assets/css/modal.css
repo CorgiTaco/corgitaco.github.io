@@ -1,0 +1,351 @@
+/* ══════════════════════════════════════════════
+   Modal
+   Depends on: projects_style.css (btn-theme,
+   terminal font, main-color variable)
+══════════════════════════════════════════════ */
+
+/* ── Animations ── */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+
+/* ── Backdrop ── */
+
+#modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: fadeIn 0.2s ease forwards;
+}
+
+#modal-overlay.active {
+    display: flex;
+}
+
+/* ── Modal window ── */
+
+.modal-inner {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(20 20 20 / 97%);
+    border: 2px solid var(--main-color);
+    border-radius: 16px;
+    padding: 0 0 16px 0;
+    max-width: 1000px;
+    width: 90vw;
+    max-height: 90dvh;
+    box-sizing: border-box;
+    gap: 8px;
+    animation: scaleIn 0.25s ease forwards;
+    /* Titlebar stays pinned; only body content scrolls */
+    overflow: hidden;
+}
+
+.modal-inner.active {
+    display: flex;
+    overflow-y: auto;
+}
+
+/* ── Terminal titlebar ── */
+
+.modal-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: rgb(28 28 28 / 98%);
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+    padding: 7px 12px;
+    min-height: 36px;
+    box-sizing: border-box;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.modal-win-controls {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.modal-win-btn {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    opacity: 0.85;
+    cursor: default;
+}
+
+.modal-win-close    { background: #ff5f57; }
+.modal-win-minimize { background: #febc2e; }
+.modal-win-maximize { background: #28c840; }
+
+.modal-win-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.03em;
+    padding: 0 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── Content ── */
+
+.modal-banner {
+    width: 50%;
+    max-height: none;
+    object-fit: contain;
+    border-radius: 6px;
+    aspect-ratio: 16 / 9;
+    margin: 12px auto 0 auto;
+    display: block;
+}
+
+.modal-title {
+    font-size: 2rem;
+    margin: 0;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.modal-desc {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0;
+    opacity: 0.85;
+    padding: 0 24px;
+}
+
+.modal-video-wrap {
+    width: calc(100% - 48px);
+    margin-top: 24px;
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    min-height: 400px;
+}
+
+.modal-video-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* ── Action buttons ── */
+
+.modal-links {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: stretch;
+    width: calc(100% - 48px);
+    box-sizing: border-box;
+}
+
+.modal-inner .mod-link,
+.modal-inner .modal-ext-link {
+    flex: 1;
+    justify-content: center;
+    text-decoration: none;
+    padding: 16px 20px;
+    font-size: 1.3rem;
+}
+
+.modal-inner .mod-link img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+.modal-inner .mod-link .fa,
+.modal-inner .modal-ext-link .fa {
+    font-size: 26px;
+    width: 26px;
+    text-align: center;
+}
+
+.modal-inner .modal-back {
+    width: calc(100% - 48px);
+    justify-content: center;
+    margin: 4px 24px 0 24px;
+    align-self: stretch;
+    padding: 16px 20px;
+    font-size: 1.3rem;
+}
+
+/* ── Themed scrollbar ── */
+
+.modal-inner {
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
+}
+
+.modal-inner::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-inner::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+.modal-inner::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    min-height: 32px;
+}
+
+.modal-inner::-webkit-scrollbar-thumb:hover {
+    background: #5abf6e;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 600px) {
+    #modal-overlay {
+        padding: 10px;
+        padding-bottom: calc(56px + 10px); /* clear fixed mobile nav bar */
+        align-items: center;
+    }
+
+    .modal-inner {
+        width: 100%;
+        max-height: calc(100dvh - 56px - 20px);
+        overflow-y: auto;
+    }
+
+    .modal-title {
+        font-size: 1.3rem;
+        padding: 0 16px;
+    }
+
+    .modal-desc {
+        font-size: 1rem;
+        padding: 0 16px;
+    }
+
+    .modal-win-title {
+        font-size: 0.65rem;
+        padding: 0 60px;
+    }
+
+    .modal-video-wrap {
+        min-height: unset;
+        width: calc(100% - 24px);
+        margin-top: 12px;
+    }
+
+    .modal-links {
+        flex-wrap: wrap;
+        width: calc(100% - 24px);
+    }
+
+    .modal-inner .mod-link,
+    .modal-inner .modal-ext-link {
+        flex: 1 1 40%;
+        padding: 10px 8px;
+        font-size: 0.9rem;
+    }
+
+    .modal-inner .modal-back {
+        width: calc(100% - 24px);
+        margin: 4px 12px 0 12px;
+        font-size: 0.9rem;
+        padding: 10px 8px;
+    }
+
+    .modal-banner {
+        width: 80%;
+        margin: 8px auto 0 auto;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   Modal — favorites star button (top-right of titlebar)
+   & red close button active cursor
+══════════════════════════════════════════════ */
+
+.modal-fav-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-color: rgba(70, 162, 88, 0.3);
+    background: transparent;
+    line-height: 1;
+}
+
+.modal-fav-btn .fa {
+    color: rgba(255, 255, 255, 0.4) !important;
+    transition: color 0.15s;
+}
+
+.modal-fav-btn:hover .fa,
+.modal-fav-btn.active .fa {
+    color: #f5c518 !important;
+}
+
+.modal-fav-btn.active {
+    border-color: rgba(245, 197, 24, 0.5);
+    background: rgba(245, 197, 24, 0.08);
+}
+
+.modal-fav-btn:hover {
+    border-color: rgba(245, 197, 24, 0.5);
+    background: rgba(245, 197, 24, 0.08);
+}
+
+/* Make red close dot clearly clickable */
+.modal-win-close {
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.modal-win-close:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+/* Favorites carousel row header star icon */
+#cat-row-favorites .cat-row-title .fa-star {
+    color: #f5c518 !important;
+    margin-right: 6px;
+}

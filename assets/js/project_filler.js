@@ -64,6 +64,124 @@
         }
     }
 
+
+    // ── Favorites Storage & Tracking ──────────────────────────────────────
+
+    const FAVORITES_KEY = 'projects-favorites';
+    let favoriteProjects = [];
+
+    // Loaded from category_order.json
+    let categoryOrder = [];
+
+    function loadFavorites() {
+        try { favoriteProjects = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []; }
+        catch { favoriteProjects = []; }
+    }
+
+    function isFavorited(id) {
+        return favoriteProjects.includes(id);
+    }
+
+    function toggleFavorite(id) {
+        const idx = favoriteProjects.indexOf(id);
+        if (idx === -1) {
+            favoriteProjects.push(id);
+        } else {
+            favoriteProjects.splice(idx, 1);
+        }
+        try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoriteProjects)); } catch {}
+
+        // Sync all card star overlays
+        document.querySelectorAll(`.proj-card[data-id="${id}"]`).forEach(card => {
+            card.dataset.favorited = isFavorited(id) ? 'true' : 'false';
+        });
+
+        // Sync open modal star button if visible
+        const modalStar = document.querySelector(`#modal-${id} .modal-fav-btn`);
+        if (modalStar) syncModalStar(modalStar, id);
+
+        // Refresh favorites carousel row
+        refreshFavoritesRow();
+
+        // Re-sort grid if in grid mode so favorites bubble to top
+        const gridScroll = document.getElementById('projects-scroll');
+        if (gridScroll && gridScroll.style.display !== 'none') {
+            sortGridFavoritesFirst();
+        }
+    }
+
+    function syncModalStar(btn, id) {
+        const faved = isFavorited(id);
+        btn.classList.toggle('active', faved);
+        btn.title = faved ? 'Remove from favorites' : 'Add to favorites';
+    }
+
+    function refreshFavoritesRow() {
+        const carouselLayout = document.getElementById('carousel-layout');
+        if (!carouselLayout) return;
+
+        let favRow = document.getElementById('cat-row-favorites');
+
+        if (favoriteProjects.length === 0) {
+            if (favRow) favRow.remove();
+            return;
+        }
+
+        // Build card HTML for all favorited projects (in favorites order)
+        const allCards = Array.from(document.querySelectorAll('.proj-card[data-id]'));
+        const idToCard = {};
+        allCards.forEach(c => { idToCard[c.dataset.id] = c; });
+
+        const cardClones = favoriteProjects
+            .map(id => idToCard[id])
+            .filter(Boolean)
+            .map(card => {
+                const clone = card.cloneNode(true);
+                // Keep fav overlay visible on clone
+                clone.dataset.favorited = 'true';
+                return clone.outerHTML;
+            })
+            .join('');
+
+        if (!favRow) {
+            // Create the row and prepend it
+            const rowHtml = `
+            <div class="cat-row" id="cat-row-favorites" data-cat="favorites">
+                <div class="cat-row-header">
+                    <h2 class="cat-row-title"><i class="fa fa-star"></i> Favorites</h2>
+                </div>
+                <div class="cat-carousel-wrap">
+                    <button class="carousel-arrow left"><i class="fa fa-chevron-left"></i></button>
+                    <div class="cat-carousel" id="favorites-carousel">${cardClones}</div>
+                    <button class="carousel-arrow right"><i class="fa fa-chevron-right"></i></button>
+                </div>
+            </div>`;
+            carouselLayout.insertAdjacentHTML('afterbegin', rowHtml);
+            favRow = document.getElementById('cat-row-favorites');
+            // Wire arrows for the new row
+            wireSingleCarouselArrows(favRow);
+        } else {
+            const track = favRow.querySelector('.cat-carousel');
+            track.innerHTML = cardClones;
+            const wrap = favRow.querySelector('.cat-carousel-wrap');
+            const leftBtn = wrap.querySelector('.carousel-arrow.left');
+            const rightBtn = wrap.querySelector('.carousel-arrow.right');
+            updateCarouselArrows(track, leftBtn, rightBtn);
+        }
+    }
+
+    function sortGridFavoritesFirst() {
+        const grid = document.getElementById('projects-grid');
+        if (!grid) return;
+        const cards = Array.from(grid.querySelectorAll('.proj-card'));
+        cards.sort((a, b) => {
+            const aFav = a.dataset.favorited === 'true' ? 0 : 1;
+            const bFav = b.dataset.favorited === 'true' ? 0 : 1;
+            return aFav - bFav;
+        });
+        cards.forEach(card => grid.appendChild(card));
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     function slugify(str) {
@@ -146,7 +264,8 @@
         const safeDate = date || '1970-01-01';
         const isViewed = viewedProjects.includes(id) ? 'true' : 'false';
 
-        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}" data-date="${safeDate}" data-name="${safeName}" data-viewed="${isViewed}"`;
+        const isFav = favoriteProjects.includes(id) ? 'true' : 'false';
+        return `data-id="${id}" data-category="${catSlug}" data-tags="${tagSlugs}" data-date="${safeDate}" data-name="${safeName}" data-viewed="${isViewed}" data-favorited="${isFav}"`;
     }
 
     function buildYoutubeCard(cfg, id, category, tags) {
@@ -159,6 +278,7 @@
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
+                <div class="fav-overlay"><i class="fa fa-star fav-star" title="Favorite"></i></div>
                 <div class="yt-play">
                     <svg class="yt-play-icon" viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
                         <path class="yt-play-bg" d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.8 0 34 0 34 0S12.2 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 11.4 0 24 0 24s0 12.6 1.5 16.3a8.5 8.5 0 0 0 6 6C12.2 48 34 48 34 48s21.8 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 36.6 68 24 68 24s0-12.6-1.5-16.3z"/>
@@ -177,6 +297,7 @@
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
+                <div class="fav-overlay"><i class="fa fa-star fav-star" title="Favorite"></i></div>
             </div>
             <div class="proj-label"><i class="fa fa-puzzle-piece"></i> ${cfg.name}</div>
         </div>`;
@@ -189,6 +310,7 @@
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
+                <div class="fav-overlay"><i class="fa fa-star fav-star" title="Favorite"></i></div>
             </div>
             <div class="proj-label"><i class="fa fa-folder-open"></i> ${cfg.name}</div>
         </div>`;
@@ -206,8 +328,18 @@
     function buildYoutubeModal(cfg, id) {
         const vid      = youtubeId(cfg.url);
         const embedUrl = `https://www.youtube.com/embed/${vid}?autoplay=1`;
+        const title    = cfg.name || 'Video';
         return `
             <div class="modal-inner" id="modal-${id}">
+                <div class="modal-titlebar">
+                    <div class="modal-win-controls">
+                        <span class="modal-win-btn modal-win-close"></span>
+                        <span class="modal-win-btn modal-win-minimize"></span>
+                        <span class="modal-win-btn modal-win-maximize"></span>
+                    </div>
+                    <span class="modal-win-title">${title} — zsh</span>
+                    <button class="modal-fav-btn btn-theme" title="Add to favorites"><i class="fa fa-star"></i></button>
+                </div>
                 <div class="modal-video-wrap">
                     <iframe data-src="${embedUrl}" src="" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -225,6 +357,15 @@
         ].filter(Boolean).join('');
         return `
         <div class="modal-inner" id="modal-${id}">
+            <div class="modal-titlebar">
+                <div class="modal-win-controls">
+                    <span class="modal-win-btn modal-win-close"></span>
+                    <span class="modal-win-btn modal-win-minimize"></span>
+                    <span class="modal-win-btn modal-win-maximize"></span>
+                </div>
+                <span class="modal-win-title">${cfg.name} — zsh</span>
+                <button class="modal-fav-btn btn-theme" title="Add to favorites"><i class="fa fa-star"></i></button>
+            </div>
             <img class="modal-banner" src="${cfg.photo}" alt="${cfg.name}">
             <h2 class="modal-title">${cfg.name}</h2>
             <p class="modal-desc">${cfg.description}</p>
@@ -236,6 +377,15 @@
     function buildProjectModal(cfg, id) {
         return `
             <div class="modal-inner" id="modal-${id}">
+                <div class="modal-titlebar">
+                    <div class="modal-win-controls">
+                        <span class="modal-win-btn modal-win-close"></span>
+                        <span class="modal-win-btn modal-win-minimize"></span>
+                        <span class="modal-win-btn modal-win-maximize"></span>
+                    </div>
+                    <span class="modal-win-title">${cfg.name} — zsh</span>
+                    <button class="modal-fav-btn btn-theme" title="Add to favorites"><i class="fa fa-star"></i></button>
+                </div>
                 <img class="modal-banner" src="${cfg.photo}" alt="${cfg.name}">
                 <h2 class="modal-title">${cfg.name}</h2>
                 <p class="modal-desc">${cfg.description}</p>
@@ -340,10 +490,27 @@
                 <label class="filter-tag"><input type="radio" name="sort-by" value="name-asc"><span>Name (A-Z)</span></label>
                 <label class="filter-tag"><input type="radio" name="sort-by" value="name-desc"><span>Name (Z-A)</span></label>
                 <label class="filter-tag"><input type="radio" name="sort-by" value="tags-asc"><span>Tags (A-Z)</span></label>
+                <label class="filter-tag sort-divider"><span class="sort-section-label">Category Order</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="cat-custom"><span>Custom Order</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="cat-asc"><span>Category (A-Z)</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="cat-desc"><span>Category (Z-A)</span></label>
             </div>
         </div>`;
 
-        return filterHtml + sortHtml;
+        const rowOrderHtml = `
+        <div id="row-order-bar">
+            <button id="row-order-toggle" class="btn-theme">
+                <i class="fa fa-th-list"></i><span> Rows </span><i class="fa fa-chevron-down" id="row-order-chevron"></i>
+            </button>
+            <div id="row-order-dropdown">
+                <div class="sort-section-label">Category Row Order</div>
+                <label class="filter-tag"><input type="radio" name="row-order" value="cat-custom" checked><span>Custom Order</span></label>
+                <label class="filter-tag"><input type="radio" name="row-order" value="cat-asc"><span>Category (A-Z)</span></label>
+                <label class="filter-tag"><input type="radio" name="row-order" value="cat-desc"><span>Category (Z-A)</span></label>
+            </div>
+        </div>`;
+
+        return filterHtml + sortHtml + rowOrderHtml;
     }
 
     // ── Carousel layout builder ──────────────────────────────────────────────
@@ -441,7 +608,7 @@
     // ── Wire Actions ─────────────────────────────────────────────────────────
 
     function closeAllDropdowns(exceptMenu = null) {
-        document.querySelectorAll('#filter-dropdown.open, #sort-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open').forEach(menu => {
+        document.querySelectorAll('#filter-dropdown.open, #sort-dropdown.open, #row-order-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open').forEach(menu => {
             if (menu === exceptMenu) return;
 
             menu.classList.remove('open');
@@ -452,6 +619,9 @@
             } else if (menu.id === 'sort-dropdown') {
                 const chev = document.getElementById('sort-chevron');
                 if (chev) chev.style.transform = '';
+            } else if (menu.id === 'row-order-dropdown') {
+                const chev = document.getElementById('row-order-chevron');
+                if (chev) chev.style.transform = '';
             } else if (menu.classList.contains('carousel-filter-dropdown')) {
                 const chev = menu.closest('.carousel-filter-bar').querySelector('.carousel-filter-chevron');
                 if (chev) chev.style.transform = '';
@@ -460,6 +630,45 @@
                 if (chev) chev.style.transform = '';
             }
         });
+    }
+
+
+    function updateCarouselArrows(track, leftBtn, rightBtn) {
+        if (!track || !leftBtn || !rightBtn) return;
+        const canScrollLeft  = track.scrollLeft > 2;
+        const canScrollRight = track.scrollLeft < (track.scrollWidth - track.clientWidth - 2);
+        leftBtn.classList.toggle('visible', canScrollLeft);
+        rightBtn.classList.toggle('visible', canScrollRight);
+    }
+
+    function wireSingleCarouselArrows(rowEl) {
+        function smoothScroll(element, distance, duration) {
+            const start = element.scrollLeft;
+            let startTime = null;
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                element.scrollLeft = start + (distance * ease);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            requestAnimationFrame(animation);
+        }
+
+        const wrap     = rowEl.querySelector('.cat-carousel-wrap');
+        const track    = wrap.querySelector('.cat-carousel');
+        const leftBtn  = wrap.querySelector('.carousel-arrow.left');
+        const rightBtn = wrap.querySelector('.carousel-arrow.right');
+
+        function doUpdate() { updateCarouselArrows(track, leftBtn, rightBtn); }
+
+        track.addEventListener('scroll', doUpdate);
+        window.addEventListener('resize', doUpdate);
+        leftBtn.addEventListener('click',  () => smoothScroll(track, -track.clientWidth * 0.75, 450));
+        rightBtn.addEventListener('click', () => smoothScroll(track,  track.clientWidth * 0.75, 450));
+        track._updateArrows = doUpdate;
+        setTimeout(doUpdate, 100);
     }
 
     function wireCarouselArrows() {
@@ -660,30 +869,9 @@
     }
 
     function applyLocalSort(track, sortVal) {
-        const safeDate = (d) => {
-            const time = new Date(d).getTime();
-            return isNaN(time) ? 0 : time;
-        };
-
-        const sortFn = (a, b) => {
-            if (sortVal === 'date-desc') {
-                return safeDate(b.dataset.date) - safeDate(a.dataset.date);
-            } else if (sortVal === 'date-asc') {
-                return safeDate(a.dataset.date) - safeDate(b.dataset.date);
-            } else if (sortVal === 'name-asc') {
-                return a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'name-desc') {
-                return b.dataset.name.localeCompare(a.dataset.name);
-            } else if (sortVal === 'tags-asc') {
-                const tagCmp = a.dataset.tags.localeCompare(b.dataset.tags);
-                return tagCmp !== 0 ? tagCmp : a.dataset.name.localeCompare(b.dataset.name);
-            }
-            return 0;
-        };
-
+        const sortFn = makeSortFn(sortVal);
         const cards = Array.from(track.querySelectorAll('.proj-card'));
         cards.sort(sortFn).forEach(card => track.appendChild(card));
-
         if (track._updateArrows) track._updateArrows();
     }
 
@@ -857,6 +1045,37 @@
             }
         });
 
+        // ── Wire the row-order bar (carousel row reordering)
+        const rowOrderBar   = document.getElementById('row-order-bar');
+        const rowOrderToggle = document.getElementById('row-order-toggle');
+        const rowOrderDd     = document.getElementById('row-order-dropdown');
+        const rowOrderChev   = document.getElementById('row-order-chevron');
+
+        if (rowOrderToggle && rowOrderDd) {
+            rowOrderToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeAllDropdowns(rowOrderDd);
+                const open = rowOrderDd.classList.toggle('open');
+                if (rowOrderChev) rowOrderChev.style.transform = open ? 'rotate(180deg)' : '';
+            });
+
+            rowOrderDd.addEventListener('click', (e) => e.stopPropagation());
+
+            rowOrderDd.addEventListener('change', (e) => {
+                if (e.target.name === 'row-order') {
+                    updateUrlParams({ rowOrder: e.target.value === 'cat-custom' ? null : e.target.value });
+                    applyCarouselRowOrder(e.target.value);
+                }
+            });
+
+            // Restore from URL
+            const rowOrderParam = new URLSearchParams(window.location.search).get('rowOrder');
+            if (rowOrderParam) {
+                const r = rowOrderDd.querySelector(`input[value="${rowOrderParam}"]`);
+                if (r) { r.checked = true; applyCarouselRowOrder(rowOrderParam); }
+            }
+        }
+
         const params = new URLSearchParams(window.location.search);
         const sortVal = params.get('sort');
         if (sortVal) {
@@ -868,13 +1087,18 @@
         }
     }
 
-    function applySort(sortVal) {
+    // Returns the custom-order index for a category name (unlisted = large number)
+    function catOrderIndex(catName) {
+        const idx = categoryOrder.findIndex(c => c.toLowerCase() === (catName || '').toLowerCase());
+        return idx === -1 ? 9999 : idx;
+    }
+
+    function makeSortFn(sortVal) {
         const safeDate = (d) => {
             const time = new Date(d).getTime();
             return isNaN(time) ? 0 : time;
         };
-
-        const sortFn = (a, b) => {
+        return (a, b) => {
             if (sortVal === 'date-desc') {
                 return safeDate(b.dataset.date) - safeDate(a.dataset.date);
             } else if (sortVal === 'date-asc') {
@@ -886,19 +1110,56 @@
             } else if (sortVal === 'tags-asc') {
                 const tagCmp = a.dataset.tags.localeCompare(b.dataset.tags);
                 return tagCmp !== 0 ? tagCmp : a.dataset.name.localeCompare(b.dataset.name);
+            } else if (sortVal === 'cat-asc') {
+                const catCmp = (a.dataset.category || '').localeCompare(b.dataset.category || '');
+                return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
+            } else if (sortVal === 'cat-desc') {
+                const catCmp = (b.dataset.category || '').localeCompare(a.dataset.category || '');
+                return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
+            } else if (sortVal === 'cat-custom') {
+                const aCat = (a.dataset.category || '').replace(/-/g, ' ');
+                const bCat = (b.dataset.category || '').replace(/-/g, ' ');
+                const catCmp = catOrderIndex(aCat) - catOrderIndex(bCat);
+                return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
             }
             return 0;
         };
+    }
+
+    function applyCarouselRowOrder(orderVal) {
+        const carouselLayout = document.getElementById('carousel-layout');
+        if (!carouselLayout) return;
+
+        // Collect all non-favorites rows
+        const rows = Array.from(carouselLayout.querySelectorAll('.cat-row:not(#cat-row-favorites)'));
+
+        rows.sort((a, b) => {
+            const aName = a.querySelector('.cat-row-title') ? a.querySelector('.cat-row-title').textContent.trim() : '';
+            const bName = b.querySelector('.cat-row-title') ? b.querySelector('.cat-row-title').textContent.trim() : '';
+            if (orderVal === 'cat-asc')    return aName.localeCompare(bName);
+            if (orderVal === 'cat-desc')   return bName.localeCompare(aName);
+            if (orderVal === 'cat-custom') return catOrderIndex(aName) - catOrderIndex(bName);
+            return 0;
+        });
+
+        // Re-append in sorted order (favorites row stays first, pinned)
+        rows.forEach(row => carouselLayout.appendChild(row));
+    }
+
+    function applySort(sortVal) {
+        const sortFn = makeSortFn(sortVal);
 
         const grid = document.getElementById('projects-grid');
         if (grid) {
             const cards = Array.from(grid.querySelectorAll('.proj-card'));
             cards.sort(sortFn).forEach(card => grid.appendChild(card));
+            // After category sort, always re-apply favorites-first within each bucket
+            if (sortVal.startsWith('cat-')) sortGridFavoritesFirst();
         }
 
         document.querySelectorAll('.cat-row').forEach(row => {
             const track = row.querySelector('.cat-carousel');
-            if(track) {
+            if (track) {
                 const cards = Array.from(track.querySelectorAll('.proj-card'));
                 cards.sort(sortFn).forEach(card => track.appendChild(card));
                 if (track._updateArrows) track._updateArrows();
@@ -965,6 +1226,7 @@
 
     function init(projects) {
         loadViewedHistory();
+        loadFavorites();
 
         projects.sort((a, b) => {
             const da = (a.config && a.config.date) ? new Date(a.config.date) : new Date(0);
@@ -977,6 +1239,13 @@
         projects.forEach(proj => {
             const cat = getCategory(proj);
             if (!_seenCats.has(cat)) { _seenCats.add(cat); presentCats.push(cat); }
+        });
+
+        // Sort presentCats by custom order initially
+        presentCats.sort((a, b) => {
+            const ai = categoryOrder.findIndex(c => c.toLowerCase() === a.toLowerCase());
+            const bi = categoryOrder.findIndex(c => c.toLowerCase() === b.toLowerCase());
+            return (ai === -1 ? 9999 : ai) - (bi === -1 ? 9999 : bi);
         });
 
         const tagsByCategory = {};
@@ -1019,6 +1288,8 @@
 
         actionsGroup.appendChild(clearBtn);
         if (sortBar) actionsGroup.appendChild(sortBar);
+        const rowOrderBar = document.getElementById('row-order-bar');
+        if (rowOrderBar) actionsGroup.appendChild(rowOrderBar);
         if (filterBar) actionsGroup.appendChild(filterBar);
 
         if (titleBar) {
@@ -1049,6 +1320,12 @@
             modals.insertAdjacentHTML('beforeend', buildModal(proj, id));
         });
 
+        // ── Sort favorites to top in grid
+        sortGridFavoritesFirst();
+
+        // ── Show favorites carousel row if any exist
+        refreshFavoritesRow();
+
         // ── Wire everything
         wireFilter();
         wireSort();
@@ -1061,27 +1338,33 @@
 
         // ── Global Document Click Listener
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('#filter-bar, #sort-bar, .carousel-filter-bar, .carousel-sort-bar')) {
+            if (!e.target.closest('#filter-bar, #sort-bar, #row-order-bar, .carousel-filter-bar, .carousel-sort-bar')) {
                 closeAllDropdowns();
             }
         });
 
         const main = document.getElementById('main');
 
-        // ── UPDATED: Intercept eyeball clicks before opening the modal
+        // Intercept overlay icon clicks before opening the modal
         main.addEventListener('click', (e) => {
-            const eyeIcon = e.target.closest('.viewed-overlay .fa-eye');
-            const card = e.target.closest('.proj-card');
+            const eyeIcon  = e.target.closest('.viewed-overlay .fa-eye');
+            const starIcon = e.target.closest('.fav-overlay .fav-star');
+            const card     = e.target.closest('.proj-card');
 
-            // If the user clicked the eyeball icon...
             if (eyeIcon && card) {
                 e.preventDefault();
                 e.stopPropagation();
                 unmarkAsViewed(card.dataset.id);
-                return; // Stop right here, don't open the modal!
+                return;
             }
 
-            // Otherwise, normal card click
+            if (starIcon && card) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(card.dataset.id);
+                return;
+            }
+
             if (card) {
                 openModal(card.dataset.id);
             }
@@ -1140,6 +1423,26 @@
             iframe.src = iframe.dataset.src;
         });
 
+        // Sync the favorites star in this modal
+        const favBtn = target.querySelector('.modal-fav-btn');
+        if (favBtn) {
+            syncModalStar(favBtn, id);
+            favBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleFavorite(id);
+            };
+        }
+
+        // Wire the red close button in this modal
+        const closeBtn = target.querySelector('.modal-win-close');
+        if (closeBtn) {
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                closeModal();
+            };
+        }
+
         target.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -1181,10 +1484,18 @@
             </div>
         `);
 
-        fetch('../assets/projects/projects.json')
-            .then(r => r.json())
-            .then(init)
-            .catch(err => console.error('Could not load projects.json:', err));
+        // Fetch both data files in parallel; category order is optional
+        Promise.all([
+            fetch('../assets/projects/projects.json').then(r => r.json()),
+            fetch('../assets/projects/category_order.json')
+                .then(r => r.json())
+                .catch(() => ({ order: [] }))
+        ])
+            .then(([projects, orderData]) => {
+                categoryOrder = Array.isArray(orderData.order) ? orderData.order : [];
+                init(projects);
+            })
+            .catch(err => console.error('Could not load project data:', err));
     }
 
     if (document.readyState === 'loading') {

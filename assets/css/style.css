@@ -75,6 +75,13 @@ a:hover {
     pointer-events: none;
     user-select: none;
     letter-spacing: 0.03em;
+    /* Fix 3: Prevent overlap with win-controls on the left */
+    padding: 0 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .header {
@@ -270,6 +277,8 @@ nav {
         right: auto !important; /* Clears conflicts with left: 1% */
         box-sizing: border-box !important; /* Keeps padding inside the 98% bounds */
         margin: 0 !important;
+        /* Fix 1: Shrink height so the box doesn't extend behind the fixed mobile nav bar */
+        height: calc(100dvh - 40px - 56px) !important;
     }
 
     /* Hide the desktop nav entirely */
@@ -413,4 +422,56 @@ nav {
 #nav-tab-active > a .fa {
     opacity: 1 !important;
     color: var(--main-color) !important;
+}
+/* ── Fix 4: Disable hover styles on touch-only devices ── */
+@media (hover: none) {
+    a:hover {
+        color: inherit;
+    }
+
+    #nav-main > li:hover > a {
+        background: rgb(15 15 15 / 90%) !important;
+        color: rgba(255,255,255,0.55) !important;
+        border-color: rgba(70, 162, 88, 0.3) !important;
+        border-bottom-color: var(--main-color) !important;
+    }
+
+    #mobile-nav-list a:hover {
+        background: transparent !important;
+        color: rgba(255,255,255,0.7) !important;
+    }
+
+    #mobile-nav-list a:hover .fa {
+        opacity: 0.7 !important;
+    }
+}
+
+/* ── Themed vertical scrollbar ── */
+#main,
+#main * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
+}
+
+#main ::-webkit-scrollbar {
+    width: 8px;
+}
+
+#main ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+#main ::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    min-height: 32px;
+}
+
+#main ::-webkit-scrollbar-thumb:hover {
+    background: #5abf6e;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
