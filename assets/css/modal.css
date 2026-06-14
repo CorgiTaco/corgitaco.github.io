@@ -56,13 +56,15 @@
     box-sizing: border-box;
     gap: 8px;
     animation: scaleIn 0.25s ease forwards;
-    /* Titlebar stays pinned; only body content scrolls */
     overflow: hidden;
+    /* FIX: Break the flexbox min-width chain */
+    min-width: 0;
 }
 
 .modal-inner.active {
     display: flex;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* ── Terminal titlebar ── */
@@ -79,6 +81,8 @@
     box-sizing: border-box;
     width: 100%;
     flex-shrink: 0;
+    /* FIX: Break the flexbox min-width chain */
+    min-width: 0;
 }
 
 .modal-win-controls {
@@ -118,6 +122,8 @@
     white-space: nowrap;
     max-width: 100%;
     box-sizing: border-box;
+    min-width: 0;
+    display: block;
 }
 
 /* ── Content ── */
@@ -137,6 +143,7 @@
     margin: 0;
     text-align: center;
     padding: 0 24px;
+    overflow-wrap: break-word;
 }
 
 .modal-desc {
@@ -154,7 +161,6 @@
     aspect-ratio: 16 / 9;
     border-radius: 6px;
     overflow: hidden;
-    min-height: 400px;
 }
 
 .modal-video-wrap iframe {
@@ -247,6 +253,8 @@
 
     .modal-inner {
         width: 100%;
+        /* FIX: Bulletproof width clamp taking the overlay 10px padding into account */
+        max-width: calc(100vw - 20px);
         max-height: calc(100dvh - 56px - 20px);
         overflow-y: auto;
     }
@@ -267,7 +275,6 @@
     }
 
     .modal-video-wrap {
-        min-height: unset;
         width: calc(100% - 24px);
         margin-top: 12px;
     }
