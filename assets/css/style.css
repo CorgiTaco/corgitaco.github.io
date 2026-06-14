@@ -75,7 +75,6 @@ a:hover {
     pointer-events: none;
     user-select: none;
     letter-spacing: 0.03em;
-    /* Fix 3: Prevent overlap with win-controls on the left */
     padding: 0 80px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -133,7 +132,8 @@ nav {
     > ul {
         list-style-type: none;
         margin: 0;
-        padding: 0 0 0 8px;
+        /* Symmetrical padding for the whole tab strip */
+        padding: 0 8px;
         font-size: 0;
         display: flex;
         width: 100%;
@@ -145,15 +145,6 @@ nav {
         gap: 4px;
         > li {
             flex: 0 0 auto;
-            &.more {
-                flex: 0 0 auto;
-                margin-left: auto;
-                margin-right: 4px;
-                > a {
-                    border-radius: 6px 6px 0 0;
-                    border-bottom: 2px solid var(--main-color);
-                }
-            }
             &.more > a .fa {
                 color: var(--main-color);
             }
@@ -184,6 +175,10 @@ nav {
                 gap: 6px;
                 white-space: nowrap;
                 transition: color 0.15s, background 0.15s;
+
+                min-height: 40px;
+                box-sizing: border-box;
+
                 .fa {
                     font-size: 0.9rem;
                     display: inline-block;
@@ -212,6 +207,7 @@ nav {
                             color: rgba(255,255,255,0.7);
                             flex-direction: row;
                             gap: 8px;
+                            min-height: unset; /* Remove min-height override for dropdown links */
                             .fa {
                                 display: inline-block;
                             }
@@ -274,10 +270,9 @@ nav {
     #main {
         width: 98% !important;
         left: 1% !important;
-        right: auto !important; /* Clears conflicts with left: 1% */
-        box-sizing: border-box !important; /* Keeps padding inside the 98% bounds */
+        right: auto !important;
+        box-sizing: border-box !important;
         margin: 0 !important;
-        /* Fix 1: Shrink height so the box doesn't extend behind the fixed mobile nav bar */
         height: calc(100dvh - 40px - 56px) !important;
     }
 
@@ -423,7 +418,8 @@ nav {
     opacity: 1 !important;
     color: var(--main-color) !important;
 }
-/* ── Fix 4: Disable hover styles on touch-only devices ── */
+
+/* ── Disable hover styles on touch-only devices ── */
 @media (hover: none) {
     a:hover {
         color: inherit;
