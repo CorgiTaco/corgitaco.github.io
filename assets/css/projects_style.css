@@ -391,20 +391,21 @@
         justify-content: flex-start;
     }
 
-    #filter-dropdown, #sort-dropdown {
+    /* Keep sort anchored left on mobile */
+    #sort-dropdown {
         right: auto;
         left: 0;
+        width: 180px;
     }
 
+    /* Force filter to anchor right on mobile to prevent blow-out */
     #filter-dropdown {
+        left: auto;
+        right: 0;
         flex-direction: column;
         width: 220px;
         max-height: 70dvh;
         overflow-y: auto;
-    }
-
-    #sort-dropdown {
-        width: 180px;
     }
 
     .filter-section-wrap {

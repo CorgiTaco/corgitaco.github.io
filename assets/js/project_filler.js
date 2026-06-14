@@ -490,10 +490,9 @@
                 <label class="filter-tag"><input type="radio" name="sort-by" value="name-asc"><span>Name (A-Z)</span></label>
                 <label class="filter-tag"><input type="radio" name="sort-by" value="name-desc"><span>Name (Z-A)</span></label>
                 <label class="filter-tag"><input type="radio" name="sort-by" value="tags-asc"><span>Tags (A-Z)</span></label>
-                <label class="filter-tag sort-divider"><span class="sort-section-label">Category Order</span></label>
-                <label class="filter-tag"><input type="radio" name="sort-by" value="cat-custom"><span>Custom Order</span></label>
                 <label class="filter-tag"><input type="radio" name="sort-by" value="cat-asc"><span>Category (A-Z)</span></label>
                 <label class="filter-tag"><input type="radio" name="sort-by" value="cat-desc"><span>Category (Z-A)</span></label>
+                <label class="filter-tag"><input type="radio" name="sort-by" value="cat-default"><span>Category (Default)</span></label>
             </div>
         </div>`;
 
@@ -504,9 +503,9 @@
             </button>
             <div id="row-order-dropdown">
                 <div class="sort-section-label">Category Row Order</div>
-                <label class="filter-tag"><input type="radio" name="row-order" value="cat-custom" checked><span>Custom Order</span></label>
                 <label class="filter-tag"><input type="radio" name="row-order" value="cat-asc"><span>Category (A-Z)</span></label>
                 <label class="filter-tag"><input type="radio" name="row-order" value="cat-desc"><span>Category (Z-A)</span></label>
+                <label class="filter-tag"><input type="radio" name="row-order" value="cat-default" checked><span>Category (Default)</span></label>
             </div>
         </div>`;
 
@@ -1063,7 +1062,7 @@
 
             rowOrderDd.addEventListener('change', (e) => {
                 if (e.target.name === 'row-order') {
-                    updateUrlParams({ rowOrder: e.target.value === 'cat-custom' ? null : e.target.value });
+                    updateUrlParams({ rowOrder: e.target.value === 'cat-default' ? null : e.target.value });
                     applyCarouselRowOrder(e.target.value);
                 }
             });
@@ -1116,7 +1115,7 @@
             } else if (sortVal === 'cat-desc') {
                 const catCmp = (b.dataset.category || '').localeCompare(a.dataset.category || '');
                 return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'cat-custom') {
+            } else if (sortVal === 'cat-default') {
                 const aCat = (a.dataset.category || '').replace(/-/g, ' ');
                 const bCat = (b.dataset.category || '').replace(/-/g, ' ');
                 const catCmp = catOrderIndex(aCat) - catOrderIndex(bCat);
@@ -1138,7 +1137,7 @@
             const bName = b.querySelector('.cat-row-title') ? b.querySelector('.cat-row-title').textContent.trim() : '';
             if (orderVal === 'cat-asc')    return aName.localeCompare(bName);
             if (orderVal === 'cat-desc')   return bName.localeCompare(aName);
-            if (orderVal === 'cat-custom') return catOrderIndex(aName) - catOrderIndex(bName);
+            if (orderVal === 'cat-default') return catOrderIndex(aName) - catOrderIndex(bName);
             return 0;
         });
 
@@ -1192,17 +1191,19 @@
     }
 
     function applyLayout(layout) {
-        const grid     = document.getElementById('projects-scroll');
-        const carousel = document.getElementById('carousel-layout');
+        const grid        = document.getElementById('projects-scroll');
+        const carousel    = document.getElementById('carousel-layout');
         const filterBar   = document.getElementById('filter-bar');
-        const btnGrid      = document.getElementById('layout-btn-grid');
-        const btnCarousel  = document.getElementById('layout-btn-carousel');
+        const rowOrderBar = document.getElementById('row-order-bar');
+        const btnGrid     = document.getElementById('layout-btn-grid');
+        const btnCarousel = document.getElementById('layout-btn-carousel');
 
         if (layout === 'carousel') {
-            if (grid)     grid.style.display     = 'none';
-            if (carousel) carousel.style.display = '';
+            if (grid)        grid.style.display        = 'none';
+            if (carousel)    carousel.style.display    = '';
 
             if (filterBar)   filterBar.style.display   = 'none';
+            if (rowOrderBar) rowOrderBar.style.display = '';
 
             if (btnGrid)     btnGrid.classList.remove('active');
             if (btnCarousel) btnCarousel.classList.add('active');
@@ -1212,10 +1213,11 @@
             });
 
         } else {
-            if (grid)     grid.style.display     = '';
-            if (carousel) carousel.style.display = 'none';
+            if (grid)        grid.style.display        = '';
+            if (carousel)    carousel.style.display    = 'none';
 
             if (filterBar)   filterBar.style.display   = '';
+            if (rowOrderBar) rowOrderBar.style.display = 'none';
 
             if (btnGrid)     btnGrid.classList.add('active');
             if (btnCarousel) btnCarousel.classList.remove('active');
