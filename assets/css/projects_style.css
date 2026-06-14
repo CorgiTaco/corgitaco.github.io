@@ -23,17 +23,27 @@
     padding: 0 16px 0 0;
     position: relative;
     gap: 12px;
+
+    /* FIX: Allow items to wrap onto new lines */
+    flex-wrap: wrap;
 }
 
 #projects-title-bar h1 {
     margin-right: auto;
     padding: 8px var(--main-padding);
+
+    /* FIX: Forbid the title from ever shrinking or getting squeezed */
+    flex-shrink: 0;
 }
 
 #title-actions-group {
     display: flex;
     align-items: center;
     gap: 8px;
+
+    /* FIX: Allow buttons to wrap internally and stay right-aligned */
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 #filter-bar, #sort-bar {
@@ -391,21 +401,20 @@
         justify-content: flex-start;
     }
 
-    /* Keep sort anchored left on mobile */
-    #sort-dropdown {
+    #filter-dropdown, #sort-dropdown {
         right: auto;
         left: 0;
-        width: 180px;
     }
 
-    /* Force filter to anchor right on mobile to prevent blow-out */
     #filter-dropdown {
-        left: auto;
-        right: 0;
         flex-direction: column;
         width: 220px;
         max-height: 70dvh;
         overflow-y: auto;
+    }
+
+    #sort-dropdown {
+        width: 180px;
     }
 
     .filter-section-wrap {
