@@ -21,32 +21,56 @@ document.addEventListener("DOMContentLoaded", () => {
         $('#nav-main').addClass('measuring');
 
         var navwidth = 0;
-        var morewidth = $('#nav-main .more').outerWidth(true);
+        var more = $('#nav-main .more');
+
+        // Get the exact width of the burger menu (or use the fallback data-width if hidden)
+        var morewidth = more.is(':visible') ? more.outerWidth(true) : (more.data('width') || 80);
+
         $('#nav-main > li:not(.more)').each(function() {
-            navwidth += $(this).outerWidth(true);
+            // Add the physical width PLUS the 4px flexbox gap following the tab
+            navwidth += $(this).outerWidth(true) + 4;
         });
-        var availablespace = $('nav').outerWidth(true) - morewidth;
+
+        // Calculate available space:
+        // $('#nav-main').width() gets the inner content box (automatically excluding the 8px side paddings).
+        // We subtract a tiny 2px safety buffer to prevent fractional pixel wrapping.
+        var containerWidth = $('#nav-main').width() - 2;
+        var availablespace = containerWidth - morewidth;
 
         $('#nav-main').removeClass('measuring');
 
         if (navwidth > availablespace) {
             var lastItem = $('#nav-main > li:not(.more)').last();
-            lastItem.attr('data-width', lastItem.outerWidth(true));
-            lastItem.prependTo($('#nav-main .more ul'));
-            calcWidth();
+            if (lastItem.length > 0) {
+                // Store the width (including gap) so it restores accurately when expanding
+                lastItem.attr('data-width', lastItem.outerWidth(true) + 4);
+                lastItem.prependTo($('#nav-main .more ul'));
+                calcWidth(); // Recursively trigger to ensure everything fits
+            }
         } else {
             var firstMoreElement = $('#nav-main li.more li').first();
-            if (navwidth + firstMoreElement.data('width') < availablespace) {
-                firstMoreElement.insertBefore($('#nav-main .more'));
+            if (firstMoreElement.length > 0) {
+                // If popping this tab out empties the dropdown, the burger menu completely hides!
+                // This means we instantly gain `morewidth` back to use for tabs.
+                var isLastInDropdown = ($('#nav-main li.more li').length === 1);
+                var spaceNeeded = navwidth + firstMoreElement.data('width');
+                var spaceAvailable = isLastInDropdown ? containerWidth : availablespace;
+
+                if (spaceNeeded <= spaceAvailable) {
+                    firstMoreElement.insertBefore($('#nav-main .more'));
+                    calcWidth(); // Recursively trigger to restore as many as possible
+                }
             }
         }
 
+        // Toggle the visual display of the burger menu
         if ($('.more li').length > 0) {
             $('.more').css('display','inline-block');
         } else {
             $('.more').css('display','none');
         }
     }
+
     $(window).on('resize load', function() {
         calcWidth();
     });
@@ -106,4 +130,107 @@ document.addEventListener("DOMContentLoaded", () => {
     $('#mobile-nav-list a').on('click', function() {
         $('#mobile-nav').removeClass('open');
     });
+
+    // 1. Use Event Delegation on the document body
+    document.body.addEventListener("click", (e) => {
+        // e.target.closest ensures this works even if the user clicks
+        // an icon or span *inside* the <a> tag.
+        const link = e.target.closest(".nav-link");
+
+        // If a nav-link was clicked, intercept it
+        if (link) {
+            e.preventDefault();
+            const targetUrl = link.getAttribute("href");
+
+            // Update the URL
+            window.history.pushState(null, "", targetUrl);
+
+            // Fetch new content
+            handleRoute(targetUrl);
+        }
+    });
+
+    // 2. Listen for browser Back/Forward button clicks
+    window.addEventListener("popstate", () => {
+        handleRoute(window.location.pathname);
+    });
+
 });
+
+function handleRoute(url) {
+    console.log(`URL switched to: ${url}`);
+
+    // Show spinner
+    const loader = document.getElementById("page-loader");
+    if (loader) loader.classList.add("active");
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(htmlData => {
+            const parser = new DOMParser();
+            const virtualDoc = parser.parseFromString(htmlData, 'text/html');
+
+            // --- NEW: Sync Document Title ---
+            if (virtualDoc.title) {
+                document.title = virtualDoc.title;
+            }
+
+            // --- NEW: Sync Stylesheets ---
+            Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
+                const href = newLink.getAttribute('href');
+                // If the current document doesn't already have this stylesheet, add it
+                if (!document.querySelector(`head link[href="${href}"]`)) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = href;
+                    document.head.appendChild(link);
+                }
+            });
+
+            const newMainContent = virtualDoc.getElementById("main");
+            const currentMainElement = document.getElementById("main");
+
+            if (newMainContent && currentMainElement) {
+                setInnerHTML(currentMainElement, newMainContent.innerHTML);
+                // Re-append spinner to new content and hide it
+                currentMainElement.style.position = "relative";
+                const newLoader = document.createElement("div");
+                newLoader.id = "page-loader";
+                newLoader.innerHTML = '<div class="spinner"></div>';
+                currentMainElement.appendChild(newLoader);
+            } else {
+                console.error("Could not find #main element in the fetched document or current document.");
+                if (loader) loader.classList.remove("active");
+            }
+        })
+        .catch(error => {
+            console.error('Error loading the HTML file:', error);
+            const l = document.getElementById("page-loader");
+            if (l) l.classList.remove("active");
+        });
+}
+
+// Your setInnerHTML function is actually great! It perfectly handles
+// the classic issue of inline scripts not executing when using .innerHTML.
+function setInnerHTML(elm, html) {
+    elm.innerHTML = html;
+
+    Array.from(elm.querySelectorAll("script"))
+        .forEach(oldScriptEl => {
+            const newScriptEl = document.createElement("script");
+
+            Array.from(oldScriptEl.attributes).forEach(attr => {
+                newScriptEl.setAttribute(attr.name, attr.value);
+            });
+
+            const scriptText = document.createTextNode(oldScriptEl.innerHTML);
+            newScriptEl.appendChild(scriptText);
+
+            oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+        });
+}
