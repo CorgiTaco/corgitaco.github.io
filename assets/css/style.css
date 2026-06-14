@@ -526,3 +526,13 @@ nav {
 .driver-popover .driver-arrow {
     border-top-color: rgb(20 20 20) !important;
 }
+
+/* Force the star icon to be visible when the tour is active */
+body.driver-active .proj-card[data-favorited="false"] .fav-overlay {
+    display: flex !important;
+    opacity: 1 !important;
+}
+
+body.driver-active .fav-star {
+    color: rgba(255, 255, 255, 0.8) !important; /* Make it visible/dimmed instead of hidden */
+}
