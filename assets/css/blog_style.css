@@ -1,0 +1,756 @@
+/* ══════════════════════════════════════════════
+   Blog — terminal font (matches projects)
+══════════════════════════════════════════════ */
+
+#main, #main * { font-family: 'Courier New', Courier, monospace; }
+
+#main .fa,
+#main [class^="fa-"],
+#main [class*=" fa-"] { font-family: 'FontAwesome' !important; }
+
+/* ══════════════════════════════════════════════
+   Active filter label highlight
+══════════════════════════════════════════════ */
+
+.blog-filter-tag.active-filter {
+    background: rgba(70, 162, 88, 0.15);
+}
+
+/* ══════════════════════════════════════════════
+   Scroll container
+══════════════════════════════════════════════ */
+
+#blog-scroll {
+    overflow-y: auto;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+/* ══════════════════════════════════════════════
+   Grid  (3-column)
+══════════════════════════════════════════════ */
+
+#blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 750px) {
+    #blog-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+    #blog-grid { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════════════
+   List view
+══════════════════════════════════════════════ */
+
+#blog-grid.blog-list-view {
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+#blog-grid.blog-list-view .blog-card {
+    flex-direction: row;
+    height: 140px;
+}
+
+#blog-grid.blog-list-view .blog-card-thumb {
+    width: 220px;
+    min-width: 220px;
+    aspect-ratio: unset;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+#blog-grid.blog-list-view .blog-card-body {
+    padding: 14px 18px;
+    justify-content: center;
+    gap: 6px;
+}
+
+#blog-grid.blog-list-view .blog-card-title {
+    font-size: 1rem;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: unset;
+}
+
+#blog-grid.blog-list-view .blog-card-excerpt {
+    -webkit-line-clamp: 1;
+}
+
+@media (max-width: 600px) {
+    #blog-grid.blog-list-view .blog-card { height: 110px; }
+    #blog-grid.blog-list-view .blog-card-thumb { width: 130px; min-width: 130px; }
+}
+
+/* ══════════════════════════════════════════════
+   Card
+══════════════════════════════════════════════ */
+
+.blog-card {
+    background: rgb(255 255 255 / 5%);
+    border: 1px solid rgba(70, 162, 88, 0.35);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    outline: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-card:hover,
+.blog-card:focus {
+    border-color: var(--main-color);
+    transform: translateY(-3px);
+}
+
+#blog-grid.blog-list-view .blog-card:hover,
+#blog-grid.blog-list-view .blog-card:focus {
+    transform: none;
+    box-shadow: 0 0 0 1px var(--main-color);
+}
+
+.blog-card-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #111;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.blog-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.blog-card-body {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+.blog-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.blog-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    opacity: 0.55;
+    flex-wrap: wrap;
+}
+
+.blog-card-excerpt {
+    font-size: 0.8rem;
+    opacity: 0.65;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ── Viewed overlay ── */
+
+.blog-card[data-viewed="true"] .blog-card-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 12, 12, 0.55);
+    pointer-events: none;
+}
+
+.blog-viewed-dot {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.blog-card[data-viewed="true"] .blog-viewed-dot { display: flex; }
+
+.blog-viewed-dot .fa {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8) !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
+
+@media (hover: none) {
+    .blog-card:hover, .blog-card:focus {
+        border-color: rgba(70, 162, 88, 0.35);
+        transform: none;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   Tag chips
+══════════════════════════════════════════════ */
+
+.blog-tag-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    gap: 4px;
+    align-items: center;
+    max-height: 22px;
+}
+
+.blog-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    border: 1px solid rgba(70, 162, 88, 0.4);
+    background: rgba(70, 162, 88, 0.08);
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.4;
+}
+
+.blog-tag .fa { font-size: 0.6rem; color: var(--main-color) !important; }
+
+.blog-tag-btn {
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.blog-tag-btn:hover {
+    background: rgba(70, 162, 88, 0.2);
+    border-color: var(--main-color);
+    color: #fff;
+}
+
+.blog-tag-overflow {
+    border-color: rgba(255,255,255,0.15);
+    background: transparent;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.65rem;
+}
+
+/* Sidebar tags wrap freely */
+.blog-sidebar-tags .blog-tag-row {
+    flex-wrap: wrap;
+    max-height: none;
+    overflow: visible;
+}
+
+/* ══════════════════════════════════════════════
+   Empty state
+══════════════════════════════════════════════ */
+
+#blog-empty {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    gap: 12px;
+    opacity: 0.45;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+#blog-empty .fa { font-size: 2.5rem; opacity: 0.6; }
+
+/* ══════════════════════════════════════════════
+   Modal overlay
+══════════════════════════════════════════════ */
+
+#blog-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#blog-modal-overlay.active { display: flex; }
+
+@keyframes blogFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes blogScaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ══════════════════════════════════════════════
+   Modal window
+══════════════════════════════════════════════ */
+
+#blog-modal-inner {
+    display: none;
+    flex-direction: column;
+    background: rgb(20 20 20 / 97%);
+    border: 2px solid var(--main-color);
+    border-radius: 16px;
+    max-width: 1000px;
+    width: 92vw;
+    max-height: 90dvh;
+    box-sizing: border-box;
+    animation: blogScaleIn 0.25s ease forwards;
+    overflow: hidden;
+    min-width: 0;
+}
+
+#blog-modal-inner.active {
+    display: flex;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* ── Titlebar — sticky ── */
+
+#blog-modal-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgb(28 28 28 / 98%);
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+    padding: 7px 12px;
+    min-height: 36px;
+    box-sizing: border-box;
+    width: 100%;
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.blog-modal-win-controls {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.blog-modal-win-btn {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    opacity: 0.85;
+    cursor: default;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.blog-modal-win-btn:hover { opacity: 1; }
+.blog-modal-win-close    { background: #ff5f57; cursor: pointer; }
+.blog-modal-win-minimize { background: #febc2e; }
+.blog-modal-win-maximize { background: #28c840; }
+.blog-modal-win-close:hover { transform: scale(1.15); }
+
+#blog-modal-win-title {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.03em;
+    padding: 0 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── Banner ── */
+
+#blog-modal-banner {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+/* ── Two-column body ── */
+
+#blog-modal-body {
+    display: flex;
+    flex-direction: row;
+    flex: 1 0 auto;
+    min-width: 0;
+}
+
+#blog-modal-content {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 24px 28px;
+    overflow: visible;
+}
+
+#blog-modal-content h1,
+#blog-modal-content h2,
+#blog-modal-content h3,
+#blog-modal-content h4 {
+    color: var(--main-color);
+    margin: 1.2em 0 0.4em;
+}
+
+#blog-modal-content h1 { font-size: 1.6rem; margin-top: 0; }
+#blog-modal-content h2 { font-size: 1.25rem; }
+#blog-modal-content h3 { font-size: 1.05rem; }
+
+#blog-modal-content p { line-height: 1.7; margin: 0 0 1em; font-size: 0.95rem; opacity: 0.88; }
+
+#blog-modal-content ul, #blog-modal-content ol { padding-left: 1.5em; margin: 0 0 1em; }
+#blog-modal-content li { line-height: 1.7; font-size: 0.95rem; opacity: 0.88; margin-bottom: 0.25em; }
+
+#blog-modal-content a { color: var(--main-color); text-decoration: underline; }
+#blog-modal-content a:hover { color: #5abf6e; }
+
+#blog-modal-content code {
+    background: rgba(70,162,88,0.12);
+    border: 1px solid rgba(70,162,88,0.25);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 0.88em;
+}
+
+#blog-modal-content pre {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(70,162,88,0.2);
+    border-radius: 4px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 0 0 1em;
+}
+
+#blog-modal-content pre code { background: none; border: none; padding: 0; font-size: 0.85rem; }
+
+#blog-modal-content blockquote {
+    border-left: 3px solid var(--main-color);
+    margin: 0 0 1em;
+    padding: 6px 0 6px 16px;
+    opacity: 0.75;
+    font-style: italic;
+}
+
+#blog-modal-content img { max-width: 100%; border-radius: 4px; display: block; margin: 1em 0; }
+
+#blog-modal-content hr { border: none; border-top: 1px solid rgba(70,162,88,0.2); margin: 1.5em 0; }
+
+#blog-modal-content table { width: 100%; border-collapse: collapse; margin: 0 0 1em; font-size: 0.9rem; }
+#blog-modal-content th, #blog-modal-content td { border: 1px solid rgba(70,162,88,0.25); padding: 6px 10px; }
+#blog-modal-content th { background: rgba(70,162,88,0.12); color: var(--main-color); font-weight: 600; }
+
+/* ── Sidebar ── */
+
+#blog-modal-sidebar {
+    flex: 0 0 200px;
+    width: 200px;
+    border-left: 1px solid rgba(70,162,88,0.18);
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-self: flex-start;
+    position: sticky;
+    top: 36px;
+}
+
+.blog-sidebar-section { display: flex; flex-direction: column; gap: 6px; }
+
+.blog-sidebar-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--main-color);
+    opacity: 0.75;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.blog-sidebar-value { font-size: 0.82rem; opacity: 0.85; line-height: 1.4; }
+
+#blog-modal-downloads { display: flex; flex-direction: column; gap: 6px; }
+
+.blog-download-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    background: rgb(15 15 15 / 90%);
+    border: 1px solid rgba(70, 162, 88, 0.45);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.blog-download-btn:hover { background: rgba(70, 162, 88, 0.15); border-color: var(--main-color); color: #fff; }
+.blog-download-btn .fa { flex-shrink: 0; color: var(--main-color) !important; }
+
+/* ── Back button — sticky ── */
+
+#blog-modal-footer {
+    padding: 12px 28px 20px;
+    flex-shrink: 0;
+    border-top: 1px solid rgba(70,162,88,0.15);
+    position: sticky;
+    bottom: 0;
+    background: rgb(20 20 20 / 97%);
+    z-index: 10;
+}
+
+#blog-modal-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgb(15 15 15 / 90%);
+    border: 1px solid rgba(70, 162, 88, 0.45);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+#blog-modal-back:hover { background: rgba(70, 162, 88, 0.15); border-color: var(--main-color); }
+
+/* ══════════════════════════════════════════════
+   Scrollbars
+══════════════════════════════════════════════ */
+
+#blog-scroll, #blog-modal-inner {
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) rgba(255,255,255,0.08);
+}
+
+#blog-scroll::-webkit-scrollbar,
+#blog-modal-inner::-webkit-scrollbar { width: 8px; }
+
+#blog-scroll::-webkit-scrollbar-track,
+#blog-modal-inner::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); border-radius: 4px; }
+
+#blog-scroll::-webkit-scrollbar-thumb,
+#blog-modal-inner::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    min-height: 32px;
+}
+
+#blog-scroll::-webkit-scrollbar-thumb:hover,
+#blog-modal-inner::-webkit-scrollbar-thumb:hover {
+    background: #5abf6e;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* ══════════════════════════════════════════════
+   Mobile
+══════════════════════════════════════════════ */
+
+@media (max-width: 700px) {
+    #blog-modal-overlay {
+        padding: 10px;
+        padding-bottom: calc(56px + 10px);
+    }
+
+    #blog-modal-inner {
+        width: 100%;
+        max-width: calc(100vw - 20px);
+        max-height: calc(100dvh - 56px - 20px);
+    }
+
+    #blog-modal-banner { max-height: 180px; }
+
+    #blog-modal-body { flex-direction: column; }
+
+    #blog-modal-sidebar {
+        position: static;
+        flex: none;
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(70,162,88,0.18);
+        padding: 16px 20px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .blog-sidebar-section { flex: 1 1 120px; }
+    #blog-modal-downloads { flex-direction: row; flex-wrap: wrap; }
+    #blog-modal-content { padding: 16px 18px; }
+    #blog-modal-footer { padding: 10px 18px 14px; }
+    #blog-modal-win-title { font-size: 0.65rem; padding: 0 60px; }
+}
+
+/* ══════════════════════════════════════════════
+   Card overlays — viewed eye + favorite star
+   (mirrors projects proj-card overlay pattern)
+══════════════════════════════════════════════ */
+
+/* ── Full-card gray overlay when viewed ── */
+.blog-card[data-viewed="true"]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(30, 30, 30, 0.55);
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+}
+
+/* Dim the thumbnail more strongly */
+.blog-card[data-viewed="true"] .blog-card-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 12, 12, 0.4);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Viewed eye — top right, shown when viewed, above gray overlay */
+.blog-viewed-overlay {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 6;
+    pointer-events: none;
+}
+
+.blog-card[data-viewed="true"] .blog-viewed-overlay { display: flex; }
+
+.blog-eye-icon {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8) !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+    pointer-events: auto;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+}
+
+.blog-eye-icon:hover {
+    color: #ff5f57 !important;
+    transform: scale(1.1);
+}
+
+/* Fav star — top left, above gray overlay */
+.blog-fav-overlay {
+    display: none;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* Always show when favorited */
+.blog-card[data-favorited="true"] .blog-fav-overlay { display: flex; }
+
+/* Show on hover on capable devices */
+@media (hover: hover) {
+    .blog-card:hover .blog-fav-overlay { display: flex; }
+}
+
+.blog-fav-star {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.55) !important;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9));
+    pointer-events: auto;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+}
+
+.blog-card[data-favorited="true"] .blog-fav-star { color: #f5c518 !important; }
+.blog-fav-star:hover { transform: scale(1.2); color: #f5c518 !important; }
+
+/* ══════════════════════════════════════════════
+   Modal favorite star button  (top-right of titlebar)
+══════════════════════════════════════════════ */
+
+.blog-modal-fav-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-color: rgba(70, 162, 88, 0.3);
+    background: transparent;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.blog-modal-fav-btn .fa {
+    color: rgba(255,255,255,0.4) !important;
+    transition: color 0.15s;
+}
+
+.blog-modal-fav-btn:hover .fa,
+.blog-modal-fav-btn.active .fa { color: #f5c518 !important; }
+
+.blog-modal-fav-btn.active {
+    border-color: rgba(245,197,24,0.5);
+    background: rgba(245,197,24,0.08);
+}
+
+.blog-modal-fav-btn:hover {
+    border-color: rgba(245,197,24,0.5);
+    background: rgba(245,197,24,0.08);
+}
+
+/* ══════════════════════════════════════════════
+   Filter dropdown — uses project styles but
+   needs .open display toggle (not inline style)
+══════════════════════════════════════════════ */
+
+#blog-filter-dropdown {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    background: rgb(12 12 12 / 98%);
+    border: 1px solid var(--main-color);
+    padding: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.7);
+    font-family: 'Courier New', Courier, monospace;
+    max-height: 70dvh;
+    overflow-y: auto;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+}
+
+#blog-filter-dropdown.open { display: flex; }
