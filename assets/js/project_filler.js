@@ -632,6 +632,42 @@
     }
 
 
+    /**
+     * Positions a fixed-position dropdown so it never overflows the viewport.
+     * Call this right before adding the 'open' class.
+     * @param {HTMLElement} toggle   – the button that was clicked
+     * @param {HTMLElement} dropdown – the dropdown to position
+     */
+    function positionDropdown(toggle, dropdown) {
+        // Temporarily show (hidden via opacity trick) so we can measure it
+        dropdown.style.visibility = 'hidden';
+        dropdown.style.display = 'flex';
+
+        const tb  = toggle.getBoundingClientRect();
+        const vw  = window.innerWidth;
+        const vh  = window.innerHeight;
+        const dw  = dropdown.offsetWidth;
+        const dh  = dropdown.offsetHeight;
+
+        // Vertical: prefer below toggle, flip above if not enough room
+        let top = tb.bottom + 1;
+        if (top + dh > vh - 8) {
+            top = Math.max(8, tb.top - dh - 1);
+        }
+
+        // Horizontal: align to right edge of toggle, clamp within viewport
+        let left = tb.right - dw;
+        if (left < 8) left = 8;
+        if (left + dw > vw - 8) left = vw - dw - 8;
+
+        dropdown.style.top  = top  + 'px';
+        dropdown.style.left = left + 'px';
+
+        // Reset temp visibility
+        dropdown.style.display = '';
+        dropdown.style.visibility = '';
+    }
+
     function updateCarouselArrows(track, leftBtn, rightBtn) {
         if (!track || !leftBtn || !rightBtn) return;
         const canScrollLeft  = track.scrollLeft > 2;
@@ -734,6 +770,7 @@
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
                 closeAllDropdowns(dropdown);
+                positionDropdown(toggleBtn, dropdown);
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
             });
@@ -843,6 +880,7 @@
             toggleBtn.addEventListener('click', e => {
                 e.stopPropagation();
                 closeAllDropdowns(dropdown);
+                positionDropdown(toggleBtn, dropdown);
                 const open = dropdown.classList.toggle('open');
                 chevron.style.transform = open ? 'rotate(180deg)' : '';
             });
@@ -886,6 +924,7 @@
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
             closeAllDropdowns(dropdown);
+            positionDropdown(toggle, dropdown);
             const open = dropdown.classList.toggle('open');
             chevron.style.transform = open ? 'rotate(180deg)' : '';
         });
@@ -1031,6 +1070,7 @@
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
             closeAllDropdowns(dropdown); // Close others before toggling
+            positionDropdown(toggle, dropdown);
             const open = dropdown.classList.toggle('open');
             chevron.style.transform = open ? 'rotate(180deg)' : '';
         });
@@ -1054,6 +1094,7 @@
             rowOrderToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 closeAllDropdowns(rowOrderDd);
+                positionDropdown(rowOrderToggle, rowOrderDd);
                 const open = rowOrderDd.classList.toggle('open');
                 if (rowOrderChev) rowOrderChev.style.transform = open ? 'rotate(180deg)' : '';
             });
