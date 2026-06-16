@@ -639,31 +639,34 @@
      * @param {HTMLElement} dropdown – the dropdown to position
      */
     function positionDropdown(toggle, dropdown) {
-        // Temporarily show (hidden via opacity trick) so we can measure it
+        // Temporarily show so we can measure the dropdown dimensions
         dropdown.style.visibility = 'hidden';
         dropdown.style.display = 'flex';
 
-        const tb  = toggle.getBoundingClientRect();
-        const vw  = window.innerWidth;
-        const vh  = window.innerHeight;
-        const dw  = dropdown.offsetWidth;
-        const dh  = dropdown.offsetHeight;
+        const tb   = toggle.getBoundingClientRect();
+        const dw   = dropdown.offsetWidth;
+        const dh   = dropdown.offsetHeight;
 
-        // Vertical: prefer below toggle, flip above if not enough room
+        // Use #main as the clamping boundary (falls back to viewport)
+        const main = document.getElementById('main');
+        const mb   = main ? main.getBoundingClientRect() : { left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight };
+        const PAD  = 6;
+
+        // Vertical: prefer below the toggle; flip above if it would overflow #main
         let top = tb.bottom + 1;
-        if (top + dh > vh - 8) {
-            top = Math.max(8, tb.top - dh - 1);
+        if (top + dh > mb.bottom - PAD) {
+            top = Math.max(mb.top + PAD, tb.top - dh - 1);
         }
 
-        // Horizontal: align to right edge of toggle, clamp within viewport
+        // Horizontal: try to right-align with toggle, then clamp inside #main
         let left = tb.right - dw;
-        if (left < 8) left = 8;
-        if (left + dw > vw - 8) left = vw - dw - 8;
+        if (left < mb.left + PAD)       left = mb.left + PAD;
+        if (left + dw > mb.right - PAD) left = mb.right - dw - PAD;
 
         dropdown.style.top  = top  + 'px';
         dropdown.style.left = left + 'px';
 
-        // Reset temp visibility
+        // Restore
         dropdown.style.display = '';
         dropdown.style.visibility = '';
     }
