@@ -55,7 +55,7 @@ jobs:
           if git diff --quiet assets/blog/posts.txt; then
             echo "posts.txt unchanged — nothing to commit."
           else
-            git add assets/blog/posts.txt
+            git add assets/blog/internal/posts.txt
             git commit -m "chore: update blog posts.txt [skip ci]"
             git push
           fi
