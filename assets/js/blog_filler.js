@@ -639,7 +639,12 @@
 
     async function bootstrap() {
         const main = document.getElementById('main');
-        if (!main || document.getElementById('blog-grid')) return;
+
+        // Check if blog is already here OR if our sync lock exists
+        if (!main || document.getElementById('blog-grid') || document.getElementById('blog-sync-lock')) return;
+
+        // IMMEDIATELY inject a hidden lock element so any duplicate async calls see it instantly and abort
+        main.insertAdjacentHTML('beforeend', '<div id="blog-sync-lock" style="display:none;"></div>');
 
         loadViewedHistory();
         loadFavorites();
