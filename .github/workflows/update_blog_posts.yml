@@ -3,18 +3,20 @@ name: Update Blog Posts Index
 on:
   push:
     paths:
-      - 'assets/blog/**.md'   # Runs whenever a .md file in assets/blog/ is added/changed/deleted
-  workflow_dispatch:           # Also allows manual triggering from the Actions tab
+      - 'assets/blog/**.md'
+  workflow_dispatch:
 
 jobs:
   update-posts-txt:
     runs-on: ubuntu-latest
     permissions:
-      contents: write          # Needed to commit posts.txt back to the repo
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # CRITICAL: Fetches full history so `git log` works
 
       - name: Generate posts.txt from blog directory
         run: |
@@ -30,18 +32,17 @@ jobs:
             /^[0-9]+$/ { ts = $0; next }
             /\.md$/ {
               file = $0
-              # Strip directory prefix, keep only the filename
               n = split(file, parts, "/")
               name = parts[n]
-              # Only include files directly in assets/blog/ (no subdirectory)
-              if (n == 2 && !seen[name]++) print ts "\t" name
+              # assets/blog/post.md splits into 3 parts. 
+              if (n == 3 && !seen[name]++) print ts "\t" name
             }
           ' | sort -rn | awk -F'\t' '{print $2}' >> "$OUTPUT" || true
 
-          # Fallback: if git log produced nothing (e.g. fresh repo), just ls -t
+          # Fallback: if git log produced nothing
           if [ "$(grep -c '\.md' "$OUTPUT" || echo 0)" -eq 0 ]; then
-            echo "# (Sorted by filename — no git history available)" >> "$OUTPUT"
-            ls -1 "$BLOG_DIR"/*.md 2>/dev/null | xargs -I{} basename {} >> "$OUTPUT" || true
+            echo "# (Sorted by checkout time — no git history available)" >> "$OUTPUT"
+            ls -1t "$BLOG_DIR"/*.md 2>/dev/null | xargs -I{} basename {} >> "$OUTPUT" || true
           fi
 
           echo "Generated posts.txt:"
@@ -52,7 +53,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          if git diff --quiet assets/blog/posts.txt; then
+          if git diff --quiet assets/blog/internal/posts.txt; then
             echo "posts.txt unchanged — nothing to commit."
           else
             git add assets/blog/internal/posts.txt
