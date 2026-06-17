@@ -1,4 +1,18 @@
 /* ══════════════════════════════════════════════
+   Global terminal font
+══════════════════════════════════════════════ */
+
+#main, #main * {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#main .fa,
+#main [class^="fa-"],
+#main [class*=" fa-"] {
+    font-family: 'FontAwesome' !important;
+}
+
+/* ══════════════════════════════════════════════
    Filter & Sort bars  (shared by grid + carousel)
 ══════════════════════════════════════════════ */
 
