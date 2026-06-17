@@ -2,6 +2,7 @@
    Resume Page Specific Styles
 ══════════════════════════════════════════════ */
 
+/* Mobile-first: h1 and buttons each take full width, stacked */
 #projects-title-bar {
     display: flex;
     align-items: center;
@@ -14,7 +15,6 @@
     margin-bottom: 20px;
 }
 
-/* Mobile-first: h1 and buttons each take full width, stacked */
 #projects-title-bar h1 {
     padding-top: 15px;
     padding-bottom: 0;
@@ -32,19 +32,17 @@
     flex: 1;
 }
 
-/* On wider screens h1 and buttons sit side-by-side again */
+/* On wider screens h1 and buttons sit side-by-side */
 @media (min-width: 500px) {
     #projects-title-bar h1 {
         flex: 0 0 auto;
         padding-top: 15px;
         padding-bottom: 15px;
     }
-
     #projects-title-bar > div {
         flex: 0 0 auto;
         padding-bottom: 0;
     }
-
     #projects-title-bar > div .resume-download-btn {
         flex: 0 0 auto;
     }
@@ -72,12 +70,12 @@
 .resume-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.4rem;
+    gap: 10px;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #fff;
     flex-shrink: 0;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
     margin-bottom: 4px;
     border-bottom: 1px solid rgba(70, 162, 88, 0.2);
 }
@@ -85,10 +83,10 @@
 .resume-header .fa {
     color: var(--main-color);
     background: rgba(70, 162, 88, 0.15);
-    padding: 10px;
+    padding: 8px;
     border-radius: 6px;
     border: 1px solid rgba(70, 162, 88, 0.3);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 /* ── Scrollable timeline container ── */
@@ -172,11 +170,11 @@
 }
 
 .timeline-institution {
-    display: block !important;
-    font-size: 0.95rem !important;
-    color: rgba(255, 255, 255, 0.85) !important;
-    margin-bottom: 4px !important;
-    font-weight: 500 !important;
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 3px;
+    font-weight: 400;
     letter-spacing: 0.01em;
 }
 
@@ -220,26 +218,26 @@
 }
 
 .timeline-title {
-    margin: 0 0 6px 0;
-    font-size: 1.05rem;
+    margin: 0 0 3px 0;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #fff;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     transition: color 0.15s;
 }
 
 .timeline-date {
-    color: var(--main-color) !important;
-    font-size: 0.85rem !important;
-    margin-bottom: 8px !important;
-    display: block !important;
-    opacity: 0.9 !important;
+    color: var(--main-color);
+    font-size: 0.78rem;
+    margin-bottom: 6px;
+    display: block;
+    opacity: 0.85;
 }
 
 .timeline-desc {
-    color: rgba(255, 255, 255, 0.65);
-    font-size: 0.9rem;
-    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.82rem;
+    line-height: 1.55;
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -347,11 +345,11 @@
 .testimonials-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.4rem;
+    gap: 10px;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #fff;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
     margin-bottom: 4px;
     border-bottom: 1px solid rgba(70, 162, 88, 0.2);
 }
@@ -359,10 +357,10 @@
 .testimonials-header .fa {
     color: var(--main-color);
     background: rgba(70, 162, 88, 0.15);
-    padding: 10px;
+    padding: 8px;
     border-radius: 6px;
     border: 1px solid rgba(70, 162, 88, 0.3);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .testimonials-track-wrap {
@@ -774,12 +772,12 @@
 .highlights-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.4rem;
+    gap: 10px;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #fff;
     flex-shrink: 0;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
     margin-bottom: 4px;
     border-bottom: 1px solid rgba(70, 162, 88, 0.2);
 }
@@ -788,17 +786,17 @@
 .highlights-header .fa {
     color: var(--main-color);
     background: rgba(70, 162, 88, 0.15);
-    padding: 10px;
+    padding: 8px;
     border-radius: 6px;
     border: 1px solid rgba(70, 162, 88, 0.3);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .contact-job-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--main-color) !important;
-    margin: 0 0 6px 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--main-color);
+    margin: 0 0 4px 0;
     letter-spacing: 0.02em;
 }
 
@@ -812,26 +810,26 @@
 .contact-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 0.92rem;
-    color: rgba(255, 255, 255, 0.75) !important;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
     min-width: 0;
-    padding: 3px 0;
+    padding: 2px 0;
 }
 
 .contact-row .fa {
-    color: var(--main-color) !important;
-    font-size: 0.92rem;
-    width: 15px;
+    color: var(--main-color);
+    font-size: 0.85rem;
+    width: 14px;
     text-align: center;
     flex-shrink: 0;
-    opacity: 0.85;
+    opacity: 0.8;
 }
 
 .contact-row a {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    font-size: 0.92rem;
+    font-size: 0.85rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -839,7 +837,7 @@
 }
 
 .contact-row a:hover {
-    color: var(--main-color) !important;
+    color: var(--main-color);
 }
 
 .highlights-list {
@@ -855,8 +853,8 @@
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    font-size: 0.92rem;
-    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
 }
 
