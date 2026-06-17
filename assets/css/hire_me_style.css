@@ -19,8 +19,6 @@
     padding-top: 15px;
     padding-bottom: 0;
     flex: 1 0 100%;
-    font-size: var(--fs-page-title);
-    font-weight: var(--fw-title);
 }
 
 #projects-title-bar > div {
@@ -40,8 +38,6 @@
         flex: 0 0 auto;
         padding-top: 15px;
         padding-bottom: 15px;
-        font-size: var(--fs-page-title);
-        font-weight: var(--fw-title);
     }
     #projects-title-bar > div {
         flex: 0 0 auto;
@@ -592,6 +588,12 @@
 .pdf-modal {
     width: min(860px, 92vw);
     height: min(90dvh, 1100px);
+    /* Override .tm-modal: need flex column so iframe can fill remaining height */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: unset;
+    max-height: unset;
 }
 
 .pdf-modal-dl-btn {
