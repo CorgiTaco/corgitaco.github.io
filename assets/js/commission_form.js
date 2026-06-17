@@ -3,7 +3,7 @@
     let lastSubmittedData = null;
 
     // Google Apps Script URL
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxnnMA8XuZtjz8c0HxKzR9Wz9uEBILVzBS7RQt-AsUREwj6nZkHXXkNgkc9tok3PFrq/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDptrZUUksfszdFZ--buL11BLr7rkgazI27WahaCH4PQYzgSFZeQwKX0RCZdRxRHzn/exec';
 
     // ── Global reCAPTCHA Callbacks ──
     window.onCaptchaSuccess = function() {
@@ -191,6 +191,7 @@
 Date Submitted: ${lastSubmittedData.date}
 Name / Handle:  ${lastSubmittedData.name}
 Email Address:  ${lastSubmittedData.email}${discordRow}
+Discord:        ${lastSubmittedData.discord || 'N/A'}
 Request Type:   ${lastSubmittedData.commission_type}
 
 -----------------------------------------
