@@ -30,6 +30,8 @@
     margin-right: auto;
     padding: 8px var(--main-padding);
     flex-shrink: 0;
+    font-size: var(--fs-page-title);
+    font-weight: var(--fw-title);
 }
 
 #title-actions-group {

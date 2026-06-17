@@ -32,8 +32,8 @@
 }
 
 .cat-row-title {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-heading);
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -55,7 +55,7 @@
 }
 
 .carousel-filter-toggle, .carousel-sort-toggle {
-    font-size: 0.9rem;
+    font-size: var(--fs-body);
     gap: 8px;
     padding: 6px 12px;
     white-space: nowrap;
@@ -91,7 +91,7 @@
     width: 45px;
     color: rgba(255, 255, 255, 0.7);
     border: none;
-    font-size: 1.6rem;
+    font-size: var(--fs-heading);
     z-index: 10;
     opacity: 0;
     cursor: pointer;
@@ -207,6 +207,6 @@
 
     .carousel-arrow {
         width: 35px;
-        font-size: 1.2rem;
+        font-size: var(--fs-body);
     }
 }

@@ -36,7 +36,7 @@
 }
 
 .modal-title {
-    font-size: 2rem;
+    font-size: var(--fs-heading);
     margin: 0;
     text-align: center;
     padding: 0 24px;
@@ -44,7 +44,7 @@
 }
 
 .modal-desc {
-    font-size: 1.5rem;
+    font-size: var(--fs-body);
     line-height: 1.4;
     text-align: center;
     margin: 0;
@@ -82,7 +82,7 @@
 .modal-inner .modal-ext-link {
     flex: 1;
     padding: 16px 20px;
-    font-size: 1.3rem;
+    font-size: var(--fs-body);
 }
 
 .modal-inner .mod-link img {
@@ -93,8 +93,8 @@
 
 .modal-inner .mod-link .fa,
 .modal-inner .modal-ext-link .fa {
-    font-size: 26px;
-    width: 26px;
+    font-size: var(--fs-heading);
+    width: var(--fs-heading);
     text-align: center;
 }
 
@@ -103,7 +103,7 @@
     margin: 4px 24px 0 24px;
     align-self: stretch;
     padding: 16px 20px;
-    font-size: 1.3rem;
+    font-size: var(--fs-body);
 }
 
 /* ── Mobile ── */
@@ -123,17 +123,17 @@
     }
 
     .modal-title {
-        font-size: 1.3rem;
+        font-size: var(--fs-heading);
         padding: 0 16px;
     }
 
     .modal-desc {
-        font-size: 1rem;
+        font-size: var(--fs-body);
         padding: 0 16px;
     }
 
     .modal-win-title {
-        font-size: 0.65rem;
+        font-size: var(--fs-label);
         padding: 0 60px;
     }
 
@@ -151,13 +151,13 @@
     .modal-inner .modal-ext-link {
         flex: 1 1 40%;
         padding: 10px 8px;
-        font-size: 0.9rem;
+        font-size: var(--fs-body);
     }
 
     .modal-inner .modal-back {
         width: calc(100% - 24px);
         margin: 4px 12px 0 12px;
-        font-size: 0.9rem;
+        font-size: var(--fs-body);
         padding: 10px 8px;
     }
 
@@ -177,7 +177,7 @@
     top: 50%;
     transform: translateY(-50%);
     padding: 4px 8px;
-    font-size: 0.8rem;
+    font-size: var(--fs-meta);
     border-color: rgba(70, 162, 88, 0.3);
     background: transparent;
     line-height: 1;

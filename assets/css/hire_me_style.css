@@ -19,6 +19,8 @@
     padding-top: 15px;
     padding-bottom: 0;
     flex: 1 0 100%;
+    font-size: var(--fs-page-title);
+    font-weight: var(--fw-title);
 }
 
 #projects-title-bar > div {
@@ -38,6 +40,8 @@
         flex: 0 0 auto;
         padding-top: 15px;
         padding-bottom: 15px;
+        font-size: var(--fs-page-title);
+        font-weight: var(--fw-title);
     }
     #projects-title-bar > div {
         flex: 0 0 auto;

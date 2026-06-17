@@ -1,6 +1,17 @@
 :root {
     --main-color: #46a258;
     --main-padding: 15px;
+
+    /* ── Universal type scale ── */
+    --fs-page-title: 1.6rem; /* page h1 titles — Blog, Projects, Hire Me, etc. */
+    --fs-heading: 1.1rem;    /* section headers, card titles                   */
+    --fs-body:    0.9rem;    /* primary readable content                        */
+    --fs-meta:    0.78rem;   /* dates, institutions, sub-info                   */
+    --fs-label:   0.68rem;   /* uppercase labels, tags, chips                   */
+    --fw-normal:  400;
+    --fw-medium:  500;
+    --fw-heading: 600;
+    --fw-title:   700;       /* modal titles only                               */
 }
 
 * {
@@ -48,6 +59,8 @@ a {
 h1 {
     margin: 0;
     padding-left: var(--main-padding);
+    font-size: var(--fs-page-title);
+    font-weight: var(--fw-title);
 }
 
 a:hover {
@@ -84,7 +97,8 @@ a:hover {
 }
 
 .page-title {
-    font-size: clamp(1.5rem, 4vw + 1rem, 3rem);
+    font-size: var(--fs-page-title);
+    font-weight: var(--fw-title);
     padding-left: 2%;
     padding-right: 2%;
     white-space: nowrap;
