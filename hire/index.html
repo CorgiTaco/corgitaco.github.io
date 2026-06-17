@@ -112,134 +112,142 @@
 
     </div>
 
-    <div id="timeline-modal-overlay">
-        <div class="tm-modal" id="tm-modal">
-            <div class="tm-titlebar">
-                <div class="tm-win-controls">
-                    <span class="tm-win-btn tm-win-close" id="tm-close-x"></span>
-                    <span class="tm-win-btn tm-win-min"></span>
-                    <span class="tm-win-btn tm-win-max"></span>
-                </div>
-                <span class="tm-win-title" id="tm-win-title">detail — zsh</span>
-            </div>
-            <div class="tm-body" id="tm-body"></div>
-            <button class="tm-close-btn" id="tm-close-btn">
-                <i class="fa fa-arrow-left"></i> Close
-            </button>
-        </div>
-    </div>
-
-    <div id="commission-modal-overlay">
-        <div class="tm-modal" id="commission-modal">
-            <div class="tm-titlebar">
-                <div class="tm-win-controls">
-                    <span class="tm-win-btn tm-win-close" id="commission-close-x"></span>
-                    <span class="tm-win-btn tm-win-min"></span>
-                    <span class="tm-win-btn tm-win-max"></span>
-                </div>
-                <span class="tm-win-title">commission_request.exe — zsh</span>
-            </div>
-            <div class="tm-body">
-
-                <div id="commission-form-view">
-                    <h2 class="tm-title" style="margin-bottom: 15px;">Request a Commission</h2>
-                    <form id="commission-form" class="custom-form">
-                        <div class="form-group">
-                            <label for="name">Name / Handle <span class="req-star">*</span></label>
-                            <input type="text" id="name" name="name" required autocomplete="off">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email Address <span class="req-star">*</span></label>
-                            <input type="email" id="email" name="email" required autocomplete="off">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="discord">Discord Handle (Optional)</label>
-                            <input type="text" id="discord" name="discord" autocomplete="off">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="commission-type">This is... <span class="req-star">*</span></label>
-                            <select id="commission-type" name="commission_type" required>
-                                <option value="" disabled selected>Select an option</option>
-                                <option value="for a YouTube Video">for a YouTube Video</option>
-                                <option value="a mod port">a mod port</option>
-                                <option value="a new mod">a new mod</option>
-                                <option value="other">other.</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="other-type-group" style="display: none;">
-                            <label for="other-type">Please specify <span class="req-star">*</span></label>
-                            <input type="text" id="other-type" name="other_type" autocomplete="off">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Commission Details <span class="req-star">*</span></label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-
-                        <div class="g-recaptcha"
-                             data-sitekey="6Lc97SMtAAAAAGnCVlCWTlXWbg3RrBU3BAnI3PP6"
-                             data-theme="dark"
-                             data-callback="onCaptchaSuccess"
-                             data-expired-callback="onCaptchaExpired"
-                             style="margin-bottom: 15px;"></div>
-
-                        <button type="submit" id="commission-submit-btn" class="form-submit-btn" disabled>Send Request</button>
-
-                    </form>
-                    <div id="commission-status"></div>
-                </div>
-
-                <div id="commission-success-view" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 20px 0;">
-                    <i class="fa fa-check-circle" style="font-size: 5rem; color: var(--main-color); margin-bottom: 20px;"></i>
-                    <h3 style="color: #fff; margin-bottom: 12px; font-size: 1.4rem;">Commission request sent successfully!</h3>
-
-                    <p style="color: rgba(255,255,255,0.85); margin-bottom: 10px; font-size: 0.95rem; line-height: 1.5;">
-                        An email will be sent shortly to your inbox with a receipt of your commission request.
-                    </p>
-                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-bottom: 25px; line-height: 1.4;">
-                        The email will be sent from commissions@corgitaco.dev, if you have not received it within 5 minutes check your spam!
-                    </p>
-
-                    <div style="display: flex; gap: 10px; width: 100%;">
-                        <button type="button" id="commission-close-success-btn" class="form-submit-btn" style="flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8) !important;">
-                            <i class="fa fa-times"></i> Close
-                        </button>
-                        <button type="button" id="commission-download-btn" class="form-submit-btn" style="flex: 2;">
-                            <i class="fa fa-download"></i> Download Receipt
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div id="pdf-modal-overlay">
-        <div class="pdf-modal">
-            <div class="pdf-modal-titlebar">
-                <div class="tm-win-controls">
-                    <span class="tm-win-btn tm-win-close" id="pdf-close-x"></span>
-                    <span class="tm-win-btn tm-win-min"></span>
-                    <span class="tm-win-btn tm-win-max"></span>
-                </div>
-                <span class="tm-win-title">resume.pdf — zsh</span>
-                <a href="../assets/hire/resume.pdf" download class="pdf-modal-dl-btn" title="Download">
-                    <i class="fa fa-download"></i>
-                </a>
-            </div>
-            <iframe id="pdf-iframe" class="pdf-iframe" src="" title="Resume PDF"></iframe>
-        </div>
-    </div>
-
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script src="../assets/js/commission_form.js"></script>
     <script src="../assets/js/resume_filler.js"></script>
 
+</div>
+
+<!-- =====================================================
+     Modals are placed directly on <body> (outside #main)
+     so that position:fixed anchors to the viewport on all
+     mobile browsers. (#main has overflow-y:hidden which
+     creates a containing block for fixed children on some
+     mobile WebKit/Blink engines, trapping the overlays.)
+====================================================== -->
+
+<div id="timeline-modal-overlay">
+    <div class="tm-modal" id="tm-modal">
+        <div class="tm-titlebar">
+            <div class="tm-win-controls">
+                <span class="tm-win-btn tm-win-close" id="tm-close-x"></span>
+                <span class="tm-win-btn tm-win-min"></span>
+                <span class="tm-win-btn tm-win-max"></span>
+            </div>
+            <span class="tm-win-title" id="tm-win-title">detail — zsh</span>
+        </div>
+        <div class="tm-body" id="tm-body"></div>
+        <button class="tm-close-btn" id="tm-close-btn">
+            <i class="fa fa-arrow-left"></i> Close
+        </button>
+    </div>
+</div>
+
+<div id="commission-modal-overlay">
+    <div class="tm-modal" id="commission-modal">
+        <div class="tm-titlebar">
+            <div class="tm-win-controls">
+                <span class="tm-win-btn tm-win-close" id="commission-close-x"></span>
+                <span class="tm-win-btn tm-win-min"></span>
+                <span class="tm-win-btn tm-win-max"></span>
+            </div>
+            <span class="tm-win-title">commission_request.exe — zsh</span>
+        </div>
+        <div class="tm-body">
+
+            <div id="commission-form-view">
+                <h2 class="tm-title" style="margin-bottom: 15px;">Request a Commission</h2>
+                <form id="commission-form" class="custom-form">
+                    <div class="form-group">
+                        <label for="name">Name / Handle <span class="req-star">*</span></label>
+                        <input type="text" id="name" name="name" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="req-star">*</span></label>
+                        <input type="email" id="email" name="email" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discord">Discord Handle (Optional)</label>
+                        <input type="text" id="discord" name="discord" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="commission-type">This is... <span class="req-star">*</span></label>
+                        <select id="commission-type" name="commission_type" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="for a YouTube Video">for a YouTube Video</option>
+                            <option value="a mod port">a mod port</option>
+                            <option value="a new mod">a new mod</option>
+                            <option value="other">other.</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="other-type-group" style="display: none;">
+                        <label for="other-type">Please specify <span class="req-star">*</span></label>
+                        <input type="text" id="other-type" name="other_type" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Commission Details <span class="req-star">*</span></label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+
+                    <div class="g-recaptcha"
+                         data-sitekey="6Lc97SMtAAAAAGnCVlCWTlXWbg3RrBU3BAnI3PP6"
+                         data-theme="dark"
+                         data-callback="onCaptchaSuccess"
+                         data-expired-callback="onCaptchaExpired"
+                         style="margin-bottom: 15px;"></div>
+
+                    <button type="submit" id="commission-submit-btn" class="form-submit-btn" disabled>Send Request</button>
+
+                </form>
+                <div id="commission-status"></div>
+            </div>
+
+            <div id="commission-success-view" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 20px 0;">
+                <i class="fa fa-check-circle" style="font-size: 5rem; color: var(--main-color); margin-bottom: 20px;"></i>
+                <h3 style="color: #fff; margin-bottom: 12px; font-size: 1.4rem;">Commission request sent successfully!</h3>
+
+                <p style="color: rgba(255,255,255,0.85); margin-bottom: 10px; font-size: 0.95rem; line-height: 1.5;">
+                    An email will be sent shortly to your inbox with a receipt of your commission request.
+                </p>
+                <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-bottom: 25px; line-height: 1.4;">
+                    The email will be sent from commissions@corgitaco.dev, if you have not received it within 5 minutes check your spam!
+                </p>
+
+                <div style="display: flex; gap: 10px; width: 100%;">
+                    <button type="button" id="commission-close-success-btn" class="form-submit-btn" style="flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8) !important;">
+                        <i class="fa fa-times"></i> Close
+                    </button>
+                    <button type="button" id="commission-download-btn" class="form-submit-btn" style="flex: 2;">
+                        <i class="fa fa-download"></i> Download Receipt
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="pdf-modal-overlay">
+    <div class="pdf-modal">
+        <div class="pdf-modal-titlebar">
+            <div class="tm-win-controls">
+                <span class="tm-win-btn tm-win-close" id="pdf-close-x"></span>
+                <span class="tm-win-btn tm-win-min"></span>
+                <span class="tm-win-btn tm-win-max"></span>
+            </div>
+            <span class="tm-win-title">resume.pdf — zsh</span>
+            <a href="../assets/hire/resume.pdf" download class="pdf-modal-dl-btn" title="Download">
+                <i class="fa fa-download"></i>
+            </a>
+        </div>
+        <iframe id="pdf-iframe" class="pdf-iframe" src="" title="Resume PDF"></iframe>
+    </div>
 </div>
 
 </body>

@@ -6,6 +6,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
     padding-right: var(--main-padding);
     border-bottom: 1px solid rgba(70, 162, 88, 0.2);
     margin-bottom: 20px;
@@ -14,6 +16,25 @@
 #projects-title-bar h1 {
     padding-top: 15px;
     padding-bottom: 15px;
+    flex-shrink: 0;
+}
+
+#projects-title-bar > div {
+    flex-shrink: 0;
+}
+
+@media (max-width: 420px) {
+    #projects-title-bar {
+        padding-bottom: 12px;
+    }
+
+    #projects-title-bar > div {
+        width: 100%;
+    }
+
+    #projects-title-bar > div .resume-download-btn {
+        flex: 1;
+    }
 }
 
 .resume-scroll-container {
