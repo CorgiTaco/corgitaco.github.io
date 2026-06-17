@@ -1,35 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
+    <meta property="og:title" content="Corgi Taco's Resume">
+    <meta property="og:description" content="View Corgi Taco's Education and Experience.">
+    <meta property="og:url" content="https://corgitaco.dev/resume">
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hire Corgi Taco</title>
+    <title>Resume — Corgi Taco</title>
 
-    <!--
-      - favicon
-    -->
-    <link rel="shortcut icon" href="" type="image/x-icon">
-
-    <!--
-      - custom css link
-    -->
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/hire_me_style.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script src="../assets/js/script.js"></script>
-
-    <!--
-      - google font link
-    -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body id="vanta-bg">
@@ -45,8 +35,9 @@
                 <span class="win-btn win-maximize" title="Maximize"></span>
             </div>
             <span id="win-title"></span>
-            <script>document.getElementById("win-title").textContent = location.host + location.pathname.replace(/\/$/,"") + " — zsh";</script>
+            <script>document.getElementById("win-title").textContent = location.host + "/resume — zsh";</script>
         </div>
+
         <div class="header">
             <nav role='navigation'>
                 <ul id='nav-main'>
@@ -66,10 +57,96 @@
 
         <div id="projects-title-bar">
             <h1>Hire Me</h1>
+            <button class="resume-download-btn" id="open-pdf-btn">
+                <i class="fa fa-file-pdf-o"></i> View PDF
+            </button>
         </div>
     </div>
 
-    <p>Work in progress...</p>
+    <div class="resume-scroll-container">
+
+        <!-- Top info bar: contact + highlights -->
+        <div class="resume-top-bar">
+            <div class="resume-contact-card" id="resume-contact-card">
+                <!-- Populated by resume_filler.js -->
+            </div>
+            <div class="resume-highlights-card" id="resume-highlights-card">
+                <!-- Populated by resume_filler.js -->
+            </div>
+        </div>
+
+        <!-- Timeline columns: Experience first, then Education -->
+        <div class="resume-wrapper">
+
+            <div class="resume-column">
+                <div class="timeline-scroll">
+                    <div class="resume-header">
+                        <i class="fa fa-briefcase"></i> Experience
+                    </div>
+                    <div class="timeline" id="experience-timeline"></div>
+                </div>
+            </div>
+
+            <div class="resume-column">
+                <div class="timeline-scroll">
+                    <div class="resume-header">
+                        <i class="fa fa-book"></i> Education
+                    </div>
+                    <div class="timeline" id="education-timeline"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Testimonials carousel -->
+        <div class="testimonials-section">
+            <div class="testimonials-track-wrap">
+                <div class="testimonials-header">
+                    <i class="fa fa-comments"></i> Testimonials
+                </div>
+                <div class="testimonials-track" id="testimonials-track"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Timeline item detail modal -->
+    <div id="timeline-modal-overlay">
+        <div class="tm-modal" id="tm-modal">
+            <div class="tm-titlebar">
+                <div class="tm-win-controls">
+                    <span class="tm-win-btn tm-win-close" id="tm-close-x"></span>
+                    <span class="tm-win-btn tm-win-min"></span>
+                    <span class="tm-win-btn tm-win-max"></span>
+                </div>
+                <span class="tm-win-title" id="tm-win-title">detail — zsh</span>
+            </div>
+            <div class="tm-body" id="tm-body"></div>
+            <button class="tm-close-btn" id="tm-close-btn">
+                <i class="fa fa-arrow-left"></i> Close
+            </button>
+        </div>
+    </div>
+
+    <!-- PDF viewer modal -->
+    <div id="pdf-modal-overlay">
+        <div class="pdf-modal">
+            <div class="pdf-modal-titlebar">
+                <div class="tm-win-controls">
+                    <span class="tm-win-btn tm-win-close" id="pdf-close-x"></span>
+                    <span class="tm-win-btn tm-win-min"></span>
+                    <span class="tm-win-btn tm-win-max"></span>
+                </div>
+                <span class="tm-win-title">resume.pdf — zsh</span>
+                <a href="../assets/hire/resume.pdf" download class="pdf-modal-dl-btn" title="Download">
+                    <i class="fa fa-download"></i>
+                </a>
+            </div>
+            <iframe id="pdf-iframe" class="pdf-iframe" src="" title="Resume PDF"></iframe>
+        </div>
+    </div>
+
+    <script src="../assets/js/resume_filler.js"></script>
 
 </div>
 
