@@ -1,129 +1,23 @@
 /* ══════════════════════════════════════════════
    Modal
-   Depends on: projects_style.css (btn-theme,
-   terminal font, main-color variable)
+   Depends on: projects_style.css
 ══════════════════════════════════════════════ */
-
-/* ── Animations ── */
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to   { opacity: 0; }
-}
-
-@keyframes scaleIn {
-    from { transform: scale(0.95); opacity: 0; }
-    to   { transform: scale(1);    opacity: 1; }
-}
-
-/* ── Backdrop ── */
-
-#modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.82);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    animation: fadeIn 0.2s ease forwards;
-}
-
-#modal-overlay.active {
-    display: flex;
-}
 
 /* ── Modal window ── */
 
 .modal-inner {
-    display: none;
-    flex-direction: column;
     align-items: center;
-    background: rgb(20 20 20 / 97%);
-    border: 2px solid var(--main-color);
-    border-radius: 16px;
     padding: 0 0 16px 0;
     max-width: 1000px;
     width: 90vw;
     max-height: 90dvh;
-    box-sizing: border-box;
     gap: 8px;
-    animation: scaleIn 0.25s ease forwards;
-    overflow: hidden;
-    /* FIX: Break the flexbox min-width chain */
     min-width: 0;
 }
 
 .modal-inner.active {
-    display: flex;
     overflow-y: auto;
     overflow-x: hidden;
-}
-
-/* ── Terminal titlebar ── */
-
-.modal-titlebar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    background: rgb(28 28 28 / 98%);
-    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
-    padding: 7px 12px;
-    min-height: 36px;
-    box-sizing: border-box;
-    width: 100%;
-    flex-shrink: 0;
-    /* FIX: Break the flexbox min-width chain */
-    min-width: 0;
-}
-
-.modal-win-controls {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.modal-win-btn {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    display: inline-block;
-    flex-shrink: 0;
-    opacity: 0.85;
-    cursor: default;
-}
-
-.modal-win-close    { background: #ff5f57; }
-.modal-win-minimize { background: #febc2e; }
-.modal-win-maximize { background: #28c840; }
-
-.modal-win-title {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.3);
-    pointer-events: none;
-    user-select: none;
-    letter-spacing: 0.03em;
-    padding: 0 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-    box-sizing: border-box;
-    min-width: 0;
-    display: block;
 }
 
 /* ── Content ── */
@@ -184,8 +78,6 @@
 .modal-inner .mod-link,
 .modal-inner .modal-ext-link {
     flex: 1;
-    justify-content: center;
-    text-decoration: none;
     padding: 16px 20px;
     font-size: 1.3rem;
 }
@@ -205,41 +97,10 @@
 
 .modal-inner .modal-back {
     width: calc(100% - 48px);
-    justify-content: center;
     margin: 4px 24px 0 24px;
     align-self: stretch;
     padding: 16px 20px;
     font-size: 1.3rem;
-}
-
-/* ── Themed scrollbar ── */
-
-.modal-inner {
-    scrollbar-width: thin;
-    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
-}
-
-.modal-inner::-webkit-scrollbar {
-    width: 8px;
-}
-
-.modal-inner::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 4px;
-}
-
-.modal-inner::-webkit-scrollbar-thumb {
-    background: var(--main-color);
-    border-radius: 4px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    min-height: 32px;
-}
-
-.modal-inner::-webkit-scrollbar-thumb:hover {
-    background: #5abf6e;
-    border: 2px solid transparent;
-    background-clip: padding-box;
 }
 
 /* ── Mobile ── */
@@ -247,13 +108,12 @@
 @media (max-width: 600px) {
     #modal-overlay {
         padding: 10px;
-        padding-bottom: calc(56px + 10px); /* clear fixed mobile nav bar */
+        padding-bottom: calc(56px + 10px);
         align-items: center;
     }
 
     .modal-inner {
         width: 100%;
-        /* FIX: Bulletproof width clamp taking the overlay 10px padding into account */
         max-width: calc(100vw - 20px);
         max-height: calc(100dvh - 56px - 20px);
         overflow-y: auto;
@@ -305,8 +165,7 @@
 }
 
 /* ══════════════════════════════════════════════
-   Modal — favorites star button (top-right of titlebar)
-   & red close button active cursor
+   Modal — favorites star button
 ══════════════════════════════════════════════ */
 
 .modal-fav-btn {
@@ -321,16 +180,6 @@
     line-height: 1;
 }
 
-.modal-fav-btn .fa {
-    color: rgba(255, 255, 255, 0.4) !important;
-    transition: color 0.15s;
-}
-
-.modal-fav-btn:hover .fa,
-.modal-fav-btn.active .fa {
-    color: #f5c518 !important;
-}
-
 .modal-fav-btn.active {
     border-color: rgba(245, 197, 24, 0.5);
     background: rgba(245, 197, 24, 0.08);
@@ -339,16 +188,6 @@
 .modal-fav-btn:hover {
     border-color: rgba(245, 197, 24, 0.5);
     background: rgba(245, 197, 24, 0.08);
-}
-
-/* Make red close dot clearly clickable */
-.modal-win-close {
-    transition: opacity 0.15s, transform 0.15s;
-}
-
-.modal-win-close:hover {
-    opacity: 1;
-    transform: scale(1.15);
 }
 
 /* Favorites carousel row header star icon */

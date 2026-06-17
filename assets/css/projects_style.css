@@ -1,18 +1,4 @@
 /* ══════════════════════════════════════════════
-   Global terminal font
-══════════════════════════════════════════════ */
-
-#main, #main * {
-    font-family: 'Courier New', Courier, monospace;
-}
-
-#main .fa,
-#main [class^="fa-"],
-#main [class*=" fa-"] {
-    font-family: 'FontAwesome' !important;
-}
-
-/* ══════════════════════════════════════════════
    Filter & Sort bars  (shared by grid + carousel)
 ══════════════════════════════════════════════ */
 
@@ -23,16 +9,12 @@
     padding: 0 16px 0 0;
     position: relative;
     gap: 12px;
-
-    /* FIX: Allow items to wrap onto new lines */
     flex-wrap: wrap;
 }
 
 #projects-title-bar h1 {
     margin-right: auto;
     padding: 8px var(--main-padding);
-
-    /* FIX: Forbid the title from ever shrinking or getting squeezed */
     flex-shrink: 0;
 }
 
@@ -40,8 +22,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-
-    /* FIX: Allow buttons to wrap internally and stay right-aligned */
     flex-wrap: wrap;
     justify-content: flex-end;
 }
@@ -62,20 +42,7 @@
     font-size: 0.75rem;
 }
 
-#filter-dropdown, #sort-dropdown {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    background: rgb(12 12 12 / 98%);
-    border: 1px solid var(--main-color);
-    border-radius: 0;
-    padding: 12px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.7);
-    font-family: 'Courier New', Courier, monospace;
-    max-height: 70dvh;
-    overflow-y: auto;
-}
-
+/* Local structure overrides for Unified Dropdowns */
 #filter-dropdown {
     flex-direction: row;
     align-items: flex-start;
@@ -87,10 +54,6 @@
     align-items: flex-start;
     gap: 6px;
     min-width: 170px;
-}
-
-#filter-dropdown.open, #sort-dropdown.open {
-    display: flex;
 }
 
 #filter-tags {
@@ -299,29 +262,9 @@
     transform: scale(1.1);
 }
 
-/* ══════════════════════════════════════════════
-   Shared button
-══════════════════════════════════════════════ */
-
+/* Local button override (global .btn-theme handles colors/borders) */
 .btn-theme {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: rgb(15 15 15 / 90%);
-    border: 1px solid rgba(70, 162, 88, 0.45);
-    border-radius: 0;
-    font-size: 0.85rem;
-    font-family: 'Courier New', Courier, monospace;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    text-decoration: none;
     letter-spacing: 0.02em;
-}
-
-.btn-theme:hover {
-    background: rgba(70, 162, 88, 0.15);
-    border-color: var(--main-color);
 }
 
 /* ══════════════════════════════════════════════
@@ -384,44 +327,29 @@
         gap: 12px;
         overflow: visible;
     }
-
     #projects-title-bar h1 {
         order: 1;
         margin-right: auto;
         padding: 0;
     }
-
-    #layout-pill {
-        order: 2;
-    }
-
+    #layout-pill { order: 2; }
     #title-actions-group {
         order: 3;
         width: 100%;
         justify-content: flex-start;
     }
-
-    #filter-dropdown {
-        flex-direction: column;
-        width: 220px;
-    }
-
-    #sort-dropdown {
-        width: 180px;
-    }
-
+    #filter-dropdown { flex-direction: column; width: 220px; }
+    #sort-dropdown { width: 180px; }
     .filter-section-wrap {
         padding: 6px 0;
         min-width: unset;
         width: 100%;
     }
-
     .filter-section-wrap + .filter-section-wrap {
         border-left: none;
         border-top: 1px solid rgba(70, 162, 88, 0.25);
         padding-top: 8px;
     }
-
     .filter-section {
         grid-auto-flow: row;
         grid-template-columns: 1fr;
@@ -439,29 +367,13 @@
         border-color: rgba(70, 162, 88, 0.35);
         transform: none;
     }
-
     .cat-carousel .proj-card:hover,
     .cat-carousel .proj-card:focus {
         box-shadow: none;
     }
-
-    .btn-theme:hover {
-        background: rgb(15 15 15 / 90%);
-        border-color: rgba(70, 162, 88, 0.45);
-    }
-
-    .layout-pill-btn:hover {
-        background: transparent;
-    }
-
-    .filter-tag:hover {
-        background: transparent;
-    }
-
-    .carousel-arrow:hover {
-        color: rgba(255, 255, 255, 0.7);
-    }
-
+    .layout-pill-btn:hover { background: transparent; }
+    .filter-tag:hover { background: transparent; }
+    .carousel-arrow:hover { color: rgba(255, 255, 255, 0.7); }
     .viewed-overlay .fa-eye:hover {
         color: rgba(255, 255, 255, 0.85) !important;
         transform: none;
@@ -469,41 +381,7 @@
 }
 
 /* ══════════════════════════════════════════════
-   Themed vertical scrollbar  (all #main children)
-══════════════════════════════════════════════ */
-
-#main,
-#main * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
-}
-
-#main ::-webkit-scrollbar {
-    width: 8px;
-}
-
-#main ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 4px;
-}
-
-#main ::-webkit-scrollbar-thumb {
-    background: var(--main-color);
-    border-radius: 4px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    min-height: 32px;
-}
-
-#main ::-webkit-scrollbar-thumb:hover {
-    background: #5abf6e;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-}
-
-/* ══════════════════════════════════════════════
    Favorites — card star overlay
-   Shows on hover (desktop) or always when favorited
 ══════════════════════════════════════════════ */
 
 .fav-overlay {
@@ -515,16 +393,10 @@
     pointer-events: none;
 }
 
-/* Always show the star when the card is favorited */
-.proj-card[data-favorited="true"] .fav-overlay {
-    display: flex;
-}
+.proj-card[data-favorited="true"] .fav-overlay { display: flex; }
 
-/* On hover-capable devices: also show the star when hovering */
 @media (hover: hover) {
-    .proj-card:hover .fav-overlay {
-        display: flex;
-    }
+    .proj-card:hover .fav-overlay { display: flex; }
 }
 
 .fav-star {
@@ -532,51 +404,25 @@
     filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9));
     pointer-events: auto;
     cursor: pointer;
-    transition: color 0.15s, transform 0.15s;
-    /* Unfavorited state: outlined/dim */
     color: rgba(255, 255, 255, 0.55) !important;
 }
 
 .proj-card[data-favorited="true"] .fav-star {
-    color: #f5c518 !important; /* gold when active */
-}
-
-.fav-star:hover {
-    transform: scale(1.2);
     color: #f5c518 !important;
 }
 
 /* ══════════════════════════════════════════════
-   Row-order bar  (carousel row reorder control)
-   Shares most styles with #sort-bar via .btn-theme
-   but needs its own positioning rules
+   Row-order bar
 ══════════════════════════════════════════════ */
 
-#row-order-bar {
-    position: relative;
-}
+#row-order-bar { position: relative; }
 
+/* Local structure overrides for Unified Dropdown */
 #row-order-dropdown {
-    display: none;
     flex-direction: column;
-    position: fixed;
-    z-index: 1000;
-    background: rgb(12 12 12 / 98%);
-    border: 1px solid var(--main-color);
-    padding: 12px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.7);
-    font-family: 'Courier New', Courier, monospace;
     min-width: 170px;
-    max-height: 70dvh;
-    overflow-y: auto;
     gap: 4px;
 }
-
-#row-order-dropdown.open {
-    display: flex;
-}
-
-/* ── Sort section labels (divider + header text) ── */
 
 .sort-section-label {
     font-size: 0.7rem;
@@ -588,21 +434,10 @@
     display: block;
 }
 
-/* Grid sort divider row */
 .filter-tag.sort-divider {
     border-top: 1px solid rgba(70, 162, 88, 0.25);
     margin-top: 4px;
     padding-top: 6px;
     cursor: default;
     pointer-events: none;
-}
-
-/* Mobile: row-order bar — handled by JS positionDropdown() */
-
-/* Touch: disable hover on row-order toggle */
-@media (hover: none) {
-    #row-order-bar .btn-theme:hover {
-        background: rgb(15 15 15 / 90%);
-        border-color: rgba(70, 162, 88, 0.45);
-    }
 }

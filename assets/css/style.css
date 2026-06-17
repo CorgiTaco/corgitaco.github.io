@@ -68,21 +68,6 @@ a:hover {
     box-sizing: border-box;
 }
 
-#win-title {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.3);
-    pointer-events: none;
-    user-select: none;
-    letter-spacing: 0.03em;
-    padding: 0 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
 .header {
     display: flex;
     align-items: stretch;
@@ -128,18 +113,15 @@ a:hover {
 nav {
     width: 100%;
     margin-bottom: 0;
-    /* Terminal tab bar sits flush against the bottom border of #sticky-header */
     > ul {
         list-style-type: none;
         margin: 0;
-        /* Symmetrical padding for the whole tab strip */
         padding: 0 8px;
         font-size: 0;
         display: flex;
         width: 100%;
         align-items: flex-end;
         background: rgb(12 12 12 / 90%);
-        /* The tab bar baseline — tabs sit above this line */
         border-bottom: 2px solid var(--main-color);
         box-sizing: border-box;
         gap: 4px;
@@ -154,7 +136,6 @@ nav {
             display: inline-block;
             position: relative;
             > a {
-                /* Inactive tab — no bottom border so it sits flush above the green line */
                 border: 1px solid rgba(70, 162, 88, 0.3);
                 border-bottom: none;
                 border-radius: 6px 6px 0 0;
@@ -175,7 +156,6 @@ nav {
                 gap: 6px;
                 white-space: nowrap;
                 transition: color 0.15s, background 0.15s;
-
                 min-height: 40px;
                 box-sizing: border-box;
 
@@ -207,7 +187,7 @@ nav {
                             color: rgba(255,255,255,0.7);
                             flex-direction: row;
                             gap: 8px;
-                            min-height: unset; /* Remove min-height override for dropdown links */
+                            min-height: unset;
                             .fa {
                                 display: inline-block;
                             }
@@ -219,7 +199,6 @@ nav {
                     }
                 }
             }
-            /* Active tab — current page */
             &.active > a,
             > a.active {
                 background: rgb(22 22 22 / 98%);
@@ -248,7 +227,6 @@ nav {
     flex-grow: 0 !important;
 }
 
-/* Active tab highlight — set via JS (pagechange.js) or .active class on <li> */
 #nav-main > li.active > a {
     background: rgb(20 20 20 / 95%) !important;
     border-color: var(--main-color) !important;
@@ -261,12 +239,7 @@ nav {
 
 /* ── Mobile nav ── */
 @media (max-width: 600px) {
-
-    #vanta-bg {
-        align-items: flex-start;
-        justify-content: center;
-    }
-
+    #vanta-bg { align-items: flex-start; justify-content: center; }
     #main {
         width: 98% !important;
         left: 1% !important;
@@ -275,137 +248,37 @@ nav {
         margin: 0 !important;
         height: calc(100dvh - 40px - 56px) !important;
     }
-
-    /* Hide the desktop nav entirely */
-    .header nav {
-        display: none;
-    }
-
-    /* Bottom bar */
+    .header nav { display: none; }
     #mobile-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        box-sizing: border-box;
+        position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; box-sizing: border-box;
     }
-
-    /* The trigger button */
     #mobile-nav-trigger {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 14px 20px;
-        box-sizing: border-box;
-        background: rgb(20 20 20 / 95%);
-        border-top: 2px solid var(--main-color);
-        cursor: pointer;
-        font-size: 1rem;
-        font-family: 'Courier New', Courier, monospace;
-        letter-spacing: 0.03em;
-        user-select: none;
+        display: flex; align-items: center; justify-content: space-between;
+        width: 100%; padding: 14px 20px; box-sizing: border-box;
+        background: rgb(20 20 20 / 95%); border-top: 2px solid var(--main-color);
+        cursor: pointer; font-size: 1rem; font-family: 'Courier New', Courier, monospace;
+        letter-spacing: 0.03em; user-select: none;
     }
-
-    #mobile-nav-trigger .burger-icon {
-        font-size: 1.4rem;
-        line-height: 1;
-    }
-
-    #mobile-nav-trigger .nav-arrow {
-        display: inline-block;
-        transition: transform 0.25s ease;
-        font-style: normal;
-        font-size: 1.1rem;
-    }
-
-    /* Rotate arrow when open */
-    #mobile-nav.open #mobile-nav-trigger .nav-arrow {
-        transform: rotate(180deg);
-    }
-
-    /* The dropdown list — slides up from bottom */
+    #mobile-nav-trigger .burger-icon { font-size: 1.4rem; line-height: 1; }
+    #mobile-nav-trigger .nav-arrow { display: inline-block; transition: transform 0.25s ease; font-style: normal; font-size: 1.1rem; }
+    #mobile-nav.open #mobile-nav-trigger .nav-arrow { transform: rotate(180deg); }
     #mobile-nav-list {
-        display: none;
-        flex-direction: column;
-        background: rgb(20 20 20 / 97%);
-        border-top: 2px solid var(--main-color);
-        border-left: 2px solid var(--main-color);
-        border-right: 2px solid var(--main-color);
-        width: 100%;
-        box-sizing: border-box;
+        display: none; flex-direction: column; background: rgb(20 20 20 / 97%);
+        border-top: 2px solid var(--main-color); border-left: 2px solid var(--main-color); border-right: 2px solid var(--main-color);
+        width: 100%; box-sizing: border-box;
     }
-
-    #mobile-nav.open #mobile-nav-list {
-        display: flex;
-    }
-
+    #mobile-nav.open #mobile-nav-list { display: flex; }
     #mobile-nav-list a {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 13px 20px;
-        font-size: 0.9rem;
-        font-family: 'Courier New', Courier, monospace;
-        border-bottom: 1px solid rgba(70, 162, 88, 0.3);
-        color: rgba(255,255,255,0.7);
+        display: flex; align-items: center; gap: 10px; padding: 13px 20px;
+        font-size: 0.9rem; font-family: 'Courier New', Courier, monospace;
+        border-bottom: 1px solid rgba(70, 162, 88, 0.3); color: rgba(255,255,255,0.7);
     }
-
-    #mobile-nav-list a .fa {
-        font-size: 1rem;
-        width: 18px;
-        text-align: center;
-        opacity: 0.7;
-        flex-shrink: 0;
-    }
-
-    #mobile-nav-list a:hover .fa,
-    #mobile-nav-list a.active .fa {
-        opacity: 1;
-    }
-
-    #mobile-nav-list a:last-child {
-        border-bottom: none;
-    }
-
-    #mobile-nav-list a:hover,
-    #mobile-nav-list a.active {
-        background: var(--main-color);
-    }
-}
-/* ── Window controls (inside #titlebar) ── */
-#win-controls {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
+    #mobile-nav-list a .fa { font-size: 1rem; width: 18px; text-align: center; opacity: 0.7; flex-shrink: 0; }
+    #mobile-nav-list a:hover .fa, #mobile-nav-list a.active .fa { opacity: 1; }
+    #mobile-nav-list a:last-child { border-bottom: none; }
+    #mobile-nav-list a:hover, #mobile-nav-list a.active { background: var(--main-color); }
 }
 
-.win-btn {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    display: inline-block;
-    flex-shrink: 0;
-    opacity: 0.85;
-    transition: opacity 0.15s, filter 0.15s;
-    cursor: default;
-}
-
-.win-btn:hover {
-    opacity: 1;
-    filter: brightness(1.2);
-}
-
-.win-close    { background: #ff5f57; }
-.win-minimize { background: #febc2e; }
-.win-maximize { background: #28c840; }
-
-/* ── Active nav tab ── */
 #nav-tab-active > a {
     background: rgb(22 22 22 / 98%) !important;
     border-color: var(--main-color) !important;
@@ -419,69 +292,38 @@ nav {
     color: var(--main-color) !important;
 }
 
-/* ── Disable hover styles on touch-only devices ── */
 @media (hover: none) {
-    a:hover {
-        color: inherit;
-    }
-
+    a:hover { color: inherit; }
     #nav-main > li:hover > a {
         background: rgb(15 15 15 / 90%) !important;
         color: rgba(255,255,255,0.55) !important;
         border-color: rgba(70, 162, 88, 0.3) !important;
         border-bottom-color: var(--main-color) !important;
     }
-
-    #mobile-nav-list a:hover {
-        background: transparent !important;
-        color: rgba(255,255,255,0.7) !important;
-    }
-
-    #mobile-nav-list a:hover .fa {
-        opacity: 0.7 !important;
-    }
+    #mobile-nav-list a:hover { background: transparent !important; color: rgba(255,255,255,0.7) !important; }
+    #mobile-nav-list a:hover .fa { opacity: 0.7 !important; }
 }
 
-/* ── Themed vertical scrollbar ── */
-#main,
-#main * {
+#main, #main * {
     scrollbar-width: thin;
     scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
 }
 
-#main ::-webkit-scrollbar {
-    width: 8px;
-}
-
-#main ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 4px;
-}
-
+#main ::-webkit-scrollbar { width: 8px; }
+#main ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.06); border-radius: 4px; }
 #main ::-webkit-scrollbar-thumb {
-    background: var(--main-color);
-    border-radius: 4px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    min-height: 32px;
+    background: var(--main-color); border-radius: 4px; border: 2px solid transparent;
+    background-clip: padding-box; min-height: 32px;
 }
-
 #main ::-webkit-scrollbar-thumb:hover {
-    background: #5abf6e;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    background: #5abf6e; border: 2px solid transparent; background-clip: padding-box;
 }
-
-/* ══════════════════════════════════════════════
-   Driver.js Overrides (Matches Site Theme)
-══════════════════════════════════════════════ */
 
 :root {
-    --driver-color: #46a258; /* Matches your --main-color */
+    --driver-color: #46a258;
     --driver-font-family: 'Courier New', Courier, monospace;
 }
 
-/* Modal styling */
 .driver-popover {
     background: rgb(20 20 20 / 97%) !important;
     border: 2px solid var(--main-color) !important;
@@ -490,19 +332,9 @@ nav {
     font-family: var(--driver-font-family) !important;
 }
 
-/* Text and Titles */
-.driver-popover .driver-popover-title {
-    color: var(--main-color) !important;
-    font-weight: 600 !important;
-    font-size: 1.1rem !important;
-}
+.driver-popover .driver-popover-title { color: var(--main-color) !important; font-weight: 600 !important; font-size: 1.1rem !important; }
+.driver-popover .driver-popover-description { color: rgba(255, 255, 255, 0.85) !important; font-size: 0.95rem !important; }
 
-.driver-popover .driver-popover-description {
-    color: rgba(255, 255, 255, 0.85) !important;
-    font-size: 0.95rem !important;
-}
-
-/* Navigation Buttons */
 .driver-popover .driver-popover-footer button {
     background: rgb(15 15 15 / 90%) !important;
     border: 1px solid var(--main-color) !important;
@@ -512,27 +344,158 @@ nav {
     text-transform: uppercase !important;
     font-size: 0.75rem !important;
 }
+.driver-popover .driver-popover-footer button:hover { background: rgba(70, 162, 88, 0.15) !important; }
+.driver-progress { color: var(--main-color) !important; }
+.driver-popover .driver-arrow { border-top-color: rgb(20 20 20) !important; }
+body.driver-active .proj-card[data-favorited="false"] .fav-overlay { display: flex !important; opacity: 1 !important; }
+body.driver-active .fav-star { color: rgba(255, 255, 255, 0.8) !important; }
 
-.driver-popover .driver-popover-footer button:hover {
-    background: rgba(70, 162, 88, 0.15) !important;
+/* ══════════════════════════════════════════════
+   UNIFIED DESIGN SYSTEM
+   (Buttons, Modals, Dropdowns, Win Controls)
+══════════════════════════════════════════════ */
+
+@keyframes sysFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sysScaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ── Dropdowns ── */
+#filter-dropdown, #sort-dropdown, .carousel-filter-dropdown, .carousel-sort-dropdown, #row-order-dropdown, #blog-filter-dropdown {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    background: rgb(15 15 15 / 98%);
+    border: 1px solid var(--main-color);
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.8);
+    font-family: 'Courier New', Courier, monospace;
+    max-height: 70dvh;
+    overflow-y: auto;
+}
+#filter-dropdown.open, #sort-dropdown.open, .carousel-filter-dropdown.open, .carousel-sort-dropdown.open, #row-order-dropdown.open, #blog-filter-dropdown.open {
+    display: flex;
 }
 
-/* Progress bar color */
-.driver-progress {
+/* ── Modal Overlays ── */
+#modal-overlay, #timeline-modal-overlay, #pdf-modal-overlay, #commission-modal-overlay, #blog-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 4000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: sysFadeIn 0.2s ease forwards;
+}
+#modal-overlay.active, #timeline-modal-overlay.active, #pdf-modal-overlay.active, #commission-modal-overlay.active, #blog-modal-overlay.active {
+    display: flex;
+}
+
+/* ── Modal Inners ── */
+.modal-inner, .tm-modal, .pdf-modal, #blog-modal-inner {
+    background: rgb(20 20 20 / 97%);
+    border: 2px solid var(--main-color);
+    border-radius: 12px;
+    box-sizing: border-box;
+    animation: sysScaleIn 0.22s ease forwards;
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) rgba(255, 255, 255, 0.08);
+}
+
+/* ── Titlebars ── */
+.modal-titlebar, .tm-titlebar, .pdf-modal-titlebar, #blog-modal-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: rgb(28 28 28 / 98%);
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+    padding: 8px 12px;
+    min-height: 38px;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── Window Controls ── */
+#win-controls, .modal-win-controls, .tm-win-controls, .blog-modal-win-controls {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.win-btn, .modal-win-btn, .tm-win-btn, .blog-modal-win-btn {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    opacity: 0.85;
+    transition: opacity 0.15s, transform 0.15s;
+    cursor: pointer;
+}
+.win-btn:hover, .modal-win-btn:hover, .tm-win-btn:hover, .blog-modal-win-btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+.win-close, .modal-win-close, .tm-win-close, .blog-modal-win-close { background: #ff5f57; }
+.win-minimize, .modal-win-minimize, .tm-win-min, .blog-modal-win-minimize { background: #febc2e; }
+.win-maximize, .modal-win-maximize, .tm-win-max, .blog-modal-win-maximize { background: #28c840; }
+
+#win-title, .modal-win-title, .tm-win-title, #blog-modal-win-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.03em;
+    padding: 0 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+
+/* ── Fav Stars (Global Overlays) ── */
+.fav-star, .blog-fav-star, .modal-fav-btn .fa, .blog-modal-fav-btn .fa {
+    transition: color 0.15s, transform 0.15s;
+}
+.fav-star:hover, .blog-fav-star:hover {
+    transform: scale(1.2);
+    color: #f5c518 !important;
+}
+
+/* ── Buttons ── */
+.btn-theme, .resume-download-btn, .form-submit-btn, .tm-close-btn, #blog-modal-back, .blog-download-btn, .pdf-modal-dl-btn, .mod-link, .modal-ext-link, .modal-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(70, 162, 88, 0.08);
+    border: 1px solid rgba(70, 162, 88, 0.35);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: 'Courier New', Courier, monospace;
     color: var(--main-color) !important;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    text-decoration: none;
+    white-space: nowrap;
 }
-
-/* Arrow pointer */
-.driver-popover .driver-arrow {
-    border-top-color: rgb(20 20 20) !important;
+.btn-theme:hover, .resume-download-btn:hover, .form-submit-btn:hover:not(:disabled), .tm-close-btn:hover, #blog-modal-back:hover, .blog-download-btn:hover, .pdf-modal-dl-btn:hover, .mod-link:hover, .modal-ext-link:hover, .modal-back:hover {
+    background: rgba(70, 162, 88, 0.18);
+    border-color: var(--main-color);
+    color: #fff !important;
 }
-
-/* Force the star icon to be visible when the tour is active */
-body.driver-active .proj-card[data-favorited="false"] .fav-overlay {
-    display: flex !important;
-    opacity: 1 !important;
-}
-
-body.driver-active .fav-star {
-    color: rgba(255, 255, 255, 0.8) !important; /* Make it visible/dimmed instead of hidden */
+.form-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
