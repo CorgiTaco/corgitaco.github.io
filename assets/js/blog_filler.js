@@ -661,12 +661,22 @@
         // Inject title bar
         main.insertAdjacentHTML('beforeend', buildTitleBar(posts));
 
-        // Inject scroll container + modal
+        // Inject scroll container into #main
         main.insertAdjacentHTML('beforeend', `
             <div id="blog-scroll">
                 <div id="blog-grid"></div>
                 <div id="blog-empty"><i class="fa fa-pencil"></i><span>No posts yet.</span></div>
             </div>
+        `);
+
+        // Inject modal on <body> (outside #main) so position:fixed works correctly
+        // on mobile browsers where overflow:hidden on #main would trap fixed children.
+        // Remove any stale overlay from a previous navigation first.
+        const staleOverlay = document.getElementById('blog-modal-overlay');
+        if (staleOverlay) staleOverlay.remove();
+        document.body.style.overflow = ''; // clean up any stuck overflow from prior run
+
+        document.body.insertAdjacentHTML('beforeend', `
             <div id="blog-modal-overlay">
                 <div id="blog-modal-inner">
                     <div id="blog-modal-titlebar">

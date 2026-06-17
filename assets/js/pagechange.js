@@ -42,19 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Use Event Delegation on the document body
     document.body.addEventListener("click", (e) => {
-        // e.target.closest ensures this works even if the user clicks
-        // an icon or span *inside* the <a> tag.
         const link = e.target.closest(".nav-link");
-
-        // If a nav-link was clicked, intercept it
         if (link) {
             e.preventDefault();
             const targetUrl = link.getAttribute("href");
-
-            // Update the URL
             window.history.pushState(null, "", targetUrl);
-
-            // Fetch new content
             handleRoute(targetUrl);
         }
     });
@@ -68,6 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function handleRoute(url) {
     console.log(`URL switched to: ${url}`);
+
+    // Always restore body scroll — any open modal (commission, blog, etc.) sets
+    // document.body.style.overflow = 'hidden'. If the user navigates away before
+    // closing the modal, that value sticks and clips position:fixed elements like
+    // #mobile-nav, making the bottom nav bar disappear on mobile.
+    document.body.style.overflow = '';
 
     // Show spinner
     const loader = document.getElementById("page-loader");
@@ -84,15 +82,14 @@ function handleRoute(url) {
             const parser = new DOMParser();
             const virtualDoc = parser.parseFromString(htmlData, 'text/html');
 
-            // --- NEW: Sync Document Title ---
+            // Sync Document Title
             if (virtualDoc.title) {
                 document.title = virtualDoc.title;
             }
 
-            // --- NEW: Sync Stylesheets ---
+            // Sync Stylesheets
             Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
                 const href = newLink.getAttribute('href');
-                // If the current document doesn't already have this stylesheet, add it
                 if (!document.querySelector(`head link[href="${href}"]`)) {
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
@@ -106,12 +103,45 @@ function handleRoute(url) {
 
             if (newMainContent && currentMainElement) {
                 setInnerHTML(currentMainElement, newMainContent.innerHTML);
-                // Re-append spinner to new content and hide it
+
+                // Re-append spinner to new content
                 currentMainElement.style.position = "relative";
                 const newLoader = document.createElement("div");
                 newLoader.id = "page-loader";
                 newLoader.innerHTML = '<div class="spinner"></div>';
                 currentMainElement.appendChild(newLoader);
+
+                // --- Update mobile nav trigger label to reflect the new page ---
+                // #mobile-nav lives on <body> and is built once on first load.
+                // After SPA navigation the trigger still shows the old page name,
+                // and the active link highlight is wrong — fix both here.
+                const navPath = new URL(url, window.location.href).pathname.replace(/\/$/, '');
+                const navSegments = navPath.split('/');
+                const navLastSegment = navSegments[navSegments.length - 1]
+                    .replace(/\.html$/i, '')
+                    .replace(/\.htm$/i, '');
+                const newPageLabel = (!navLastSegment || navLastSegment.toLowerCase() === 'index')
+                    ? 'Home'
+                    : navLastSegment.charAt(0).toUpperCase() + navLastSegment.slice(1);
+
+                // Update active state on each link and find the matching icon
+                let newIcon = '';
+                document.querySelectorAll('#mobile-nav-list a').forEach(a => {
+                    const linkText = a.textContent.trim();
+                    const isMatch = linkText.toLowerCase().includes(newPageLabel.toLowerCase());
+                    a.classList.toggle('active', isMatch);
+                    if (isMatch) {
+                        const i = a.querySelector('i');
+                        if (i) newIcon = i.outerHTML + ' ';
+                    }
+                });
+
+                const trigger = document.querySelector('#mobile-nav-trigger span');
+                if (trigger) trigger.innerHTML = newIcon + newPageLabel;
+
+                // Collapse the nav if it was left open
+                document.getElementById('mobile-nav')?.classList.remove('open');
+
             } else {
                 console.error("Could not find #main element in the fetched document or current document.");
                 if (loader) loader.classList.remove("active");
@@ -124,8 +154,6 @@ function handleRoute(url) {
         });
 }
 
-// Your setInnerHTML function is actually great! It perfectly handles
-// the classic issue of inline scripts not executing when using .innerHTML.
 function setInnerHTML(elm, html) {
     elm.innerHTML = html;
 
