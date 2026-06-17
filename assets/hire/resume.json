@@ -5,11 +5,6 @@
       "school": "College",
       "date": "2025 - 2029",
       "description": "Study of electrical systems, circuits, and devices. Focus on designing and analyzing electrical components and systems."
-    },
-    {
-      "title": "Self-Taught Programmer",
-      "date": "2019 - Present",
-      "description": "No date or school provided here, just the title and description. It handles missing data gracefully."
     }
   ],
   "experience": [
