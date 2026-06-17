@@ -20,6 +20,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script src="../assets/js/script.js"></script>
+
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LFx4yMtAAAAAJRV-dTUm-8BrTuMLB5o8wvRhyRQ"></script>
+
+    <script>
+        function onSubmit(token) {
+            const form = document.getElementById("commission-form");
+            // Check if all required fields are filled out before executing the JS fetch
+            if (form.checkValidity()) {
+                // Dispatch the submit event to trigger the logic inside resume_filler.js
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            } else {
+                // Show the browser's native required field warnings
+                form.reportValidity();
+            }
+        }
+    </script>
 </head>
 
 <body id="vanta-bg">
@@ -143,21 +159,47 @@
                     <h2 class="tm-title" style="margin-bottom: 15px;">Request a Commission</h2>
                     <form id="commission-form" class="custom-form">
                         <div class="form-group">
-                            <label for="name">Name / Handle</label>
+                            <label for="name">Name / Handle <span class="req-star">*</span></label>
                             <input type="text" id="name" name="name" required autocomplete="off">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email Address</label>
+                            <label for="email">Email Address <span class="req-star">*</span></label>
                             <input type="email" id="email" name="email" required autocomplete="off">
                         </div>
 
                         <div class="form-group">
-                            <label for="message">Commission Details</label>
+                            <label for="discord">Discord Handle (Optional)</label>
+                            <input type="text" id="discord" name="discord" autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commission-type">This is... <span class="req-star">*</span></label>
+                            <select id="commission-type" name="commission_type" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="for a YouTube Video">for a YouTube Video</option>
+                                <option value="a mod port.">a mod port.</option>
+                                <option value="a new mod.">a new mod.</option>
+                                <option value="other.">other.</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="other-type-group" style="display: none;">
+                            <label for="other-type">Please specify <span class="req-star">*</span></label>
+                            <input type="text" id="other-type" name="other_type" autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Commission Details <span class="req-star">*</span></label>
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
 
-                        <button type="submit" id="commission-submit-btn" class="form-submit-btn">Send Request</button>
+                        <button type="button"
+                                class="g-recaptcha form-submit-btn"
+                                data-sitekey="6LFx4yMtAAAAAJRV-dTUm-8BrTuMLB5o8wvRhyRQ"
+                                data-callback='onSubmit'
+                                data-action='submit'
+                                id="commission-submit-btn">Send Request</button>
                     </form>
                     <div id="commission-status"></div>
                 </div>

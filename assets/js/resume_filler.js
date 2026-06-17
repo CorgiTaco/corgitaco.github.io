@@ -290,13 +290,31 @@
         const closeSuccessBtn = document.getElementById('commission-close-success-btn');
         const downloadBtn = document.getElementById('commission-download-btn');
 
+        // Dropdown elements
+        const commissionTypeSelect = document.getElementById('commission-type');
+        const otherTypeGroup = document.getElementById('other-type-group');
+        const otherTypeInput = document.getElementById('other-type');
+
         // Store the submitted data so the receipt button can use it
         let lastSubmittedData = null;
 
         // Google Apps Script URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxnnMA8XuZtjz8c0HxKzR9Wz9uEBILVzBS7RQt-AsUREwj6nZkHXXkNgkc9tok3PFrq/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6qPxEpIdDWNwNp4gUXrj9otcwOPl74Ol1gy2e_-0azcdDtYNHuYP3q8inn46x94si/exec';
 
         if (!overlay || !openBtn) return;
+
+        // Toggle "Other" field based on dropdown selection
+        if (commissionTypeSelect) {
+            commissionTypeSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'other.') {
+                    otherTypeGroup.style.display = 'block';
+                    otherTypeInput.required = true;
+                } else {
+                    otherTypeGroup.style.display = 'none';
+                    otherTypeInput.required = false;
+                }
+            });
+        }
 
         function resetModalView() {
             if (formView && successView) {
@@ -305,6 +323,10 @@
             }
             if (statusMessage) statusMessage.textContent = '';
             if (form) form.reset();
+
+            // Reset dropdown state
+            if (otherTypeGroup) otherTypeGroup.style.display = 'none';
+            if (otherTypeInput) otherTypeInput.required = false;
         }
 
         function openModal() {
@@ -333,10 +355,25 @@
 
                 const formData = new FormData(form);
 
-                // Cache the data for the receipt download
+                // --- NEW: Front-end Captcha Check ---
+                const recaptchaResponse = formData.get('g-recaptcha-response');
+                if (!recaptchaResponse) {
+                    statusMessage.textContent = 'Please complete the reCAPTCHA to verify you are human.';
+                    statusMessage.style.color = '#ff5f57';
+                    return;
+                }
+                // ------------------------------------
+
+                let cType = formData.get('commission_type');
+                if (cType === 'other.') {
+                    cType = `other. (${formData.get('other_type')})`;
+                }
+
                 lastSubmittedData = {
                     name: formData.get('name'),
                     email: formData.get('email'),
+                    discord: formData.get('discord'),
+                    commission_type: cType,
                     message: formData.get('message'),
                     date: new Date().toLocaleString()
                 };
@@ -354,24 +391,34 @@
                     const result = await response.json();
 
                     if (result.result === 'success') {
-                        // Switch from the form view to the success view
                         formView.style.display = 'none';
                         successView.style.display = 'flex';
+
+                        // --- NEW: Reset Captcha on Success ---
+                        if (typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset();
+                        }
                     } else {
                         throw new Error(result.error || 'Unknown server error');
                     }
 
                 } catch (error) {
                     console.error('Submission failed:', error);
-                    statusMessage.textContent = 'Failed to send request. Please check your connection and try again.';
-                    statusMessage.style.color = '#ff5f57'; // MacOS terminal red matching the close dot
+                    statusMessage.textContent = error.message.includes('reCAPTCHA')
+                        ? error.message
+                        : 'Failed to send request. Please check your connection and try again.';
+                    statusMessage.style.color = '#ff5f57';
+
+                    // --- NEW: Reset Captcha on Failure ---
+                    if (typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset();
+                    }
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Send Request';
                 }
             });
         }
-
         if (closeSuccessBtn) {
             closeSuccessBtn.addEventListener('click', closeModal);
         }
@@ -381,6 +428,8 @@
                 if (!lastSubmittedData) return;
 
                 // Format the receipt layout
+                const discordRow = lastSubmittedData.discord ? `\nDiscord Handle: ${lastSubmittedData.discord}` : '';
+
                 const receiptText =
                     `=========================================
       COMMISSION REQUEST RECEIPT
@@ -388,7 +437,8 @@
 
 Date Submitted: ${lastSubmittedData.date}
 Name / Handle:  ${lastSubmittedData.name}
-Email Address:  ${lastSubmittedData.email}
+Email Address:  ${lastSubmittedData.email}${discordRow}
+Request Type:   ${lastSubmittedData.commission_type}
 
 -----------------------------------------
 COMMISSION DETAILS:

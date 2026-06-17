@@ -864,8 +864,14 @@
     font-size: 0.9rem;
 }
 
+.custom-form label .req-star {
+    color: #ff5f57;
+    margin-left: 2px;
+}
+
 .custom-form input,
-.custom-form textarea {
+.custom-form textarea,
+.custom-form select {
     width: 100%;
     padding: 0.6rem;
     background: rgba(0, 0, 0, 0.2);
@@ -879,10 +885,16 @@
 }
 
 .custom-form input:focus,
-.custom-form textarea:focus {
+.custom-form textarea:focus,
+.custom-form select:focus {
     outline: none;
     border-color: var(--main-color);
     background: rgba(0, 0, 0, 0.4);
+}
+
+.custom-form select option {
+    background: rgb(20, 20, 20);
+    color: #fff;
 }
 
 .form-submit-btn {
