@@ -7,33 +7,46 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 8px;
+    column-gap: 8px;
+    row-gap: 0;
     padding-right: var(--main-padding);
     border-bottom: 1px solid rgba(70, 162, 88, 0.2);
     margin-bottom: 20px;
 }
 
+/* Mobile-first: h1 and buttons each take full width, stacked */
 #projects-title-bar h1 {
     padding-top: 15px;
-    padding-bottom: 15px;
-    flex-shrink: 0;
+    padding-bottom: 0;
+    flex: 1 0 100%;
 }
 
 #projects-title-bar > div {
-    flex-shrink: 0;
+    flex: 0 0 100%;
+    display: flex;
+    gap: 12px;
+    padding-bottom: 12px;
 }
 
-@media (max-width: 420px) {
-    #projects-title-bar {
-        padding-bottom: 12px;
+#projects-title-bar > div .resume-download-btn {
+    flex: 1;
+}
+
+/* On wider screens h1 and buttons sit side-by-side again */
+@media (min-width: 500px) {
+    #projects-title-bar h1 {
+        flex: 0 0 auto;
+        padding-top: 15px;
+        padding-bottom: 15px;
     }
 
     #projects-title-bar > div {
-        width: 100%;
+        flex: 0 0 auto;
+        padding-bottom: 0;
     }
 
     #projects-title-bar > div .resume-download-btn {
-        flex: 1;
+        flex: 0 0 auto;
     }
 }
 
