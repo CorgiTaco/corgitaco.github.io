@@ -21,21 +21,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script src="../assets/js/script.js"></script>
 
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <script>
-        function onSubmit(token) {
-            const form = document.getElementById("commission-form");
-            // Check if all required fields are filled out before executing the JS fetch
-            if (form.checkValidity()) {
-                // Dispatch the submit event to trigger the logic inside resume_filler.js
-                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-            } else {
-                // Show the browser's native required field warnings
-                form.reportValidity();
-            }
-        }
-    </script>
 </head>
 
 <body id="vanta-bg">
@@ -194,7 +180,14 @@
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
 
-                        <div class="g-recaptcha" data-sitekey="6Lc97SMtAAAAAGnCVlCWTlXWbg3RrBU3BAnI3PP6" data-theme="dark" style="margin-bottom: 15px;"></div>
+                        <div class="g-recaptcha"
+                             data-sitekey="6Lc97SMtAAAAAGnCVlCWTlXWbg3RrBU3BAnI3PP6"
+                             data-theme="dark"
+                             data-callback="onCaptchaSuccess"
+                             data-expired-callback="onCaptchaExpired"
+                             style="margin-bottom: 15px;"></div>
+
+                        <button type="submit" id="commission-submit-btn" class="form-submit-btn" disabled>Send Request</button>
 
                     </form>
                     <div id="commission-status"></div>
@@ -242,6 +235,9 @@
         </div>
     </div>
 
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script src="../assets/js/commission_form.js"></script>
     <script src="../assets/js/resume_filler.js"></script>
 
 </div>
