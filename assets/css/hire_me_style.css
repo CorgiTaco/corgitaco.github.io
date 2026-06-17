@@ -1048,3 +1048,89 @@
         min-width: unset;
     }
 }
+
+/* ══════════════════════════════════════════════
+   Commission Form & Modal
+══════════════════════════════════════════════ */
+
+#commission-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 4000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: tmFadeIn 0.18s ease forwards;
+}
+
+#commission-modal-overlay.active {
+    display: flex;
+}
+
+.custom-form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.custom-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 0.9rem;
+}
+
+.custom-form input,
+.custom-form textarea {
+    width: 100%;
+    padding: 0.6rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(70, 162, 88, 0.4);
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #fff !important;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.custom-form input:focus,
+.custom-form textarea:focus {
+    outline: none;
+    border-color: var(--main-color);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.form-submit-btn {
+    padding: 0.75rem 1.5rem;
+    background: rgba(70, 162, 88, 0.15);
+    color: var(--main-color) !important;
+    border: 1px solid rgba(70, 162, 88, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    transition: background 0.15s, border-color 0.15s;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.form-submit-btn:hover:not(:disabled) {
+    background: rgba(70, 162, 88, 0.3);
+    border-color: var(--main-color);
+}
+
+.form-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#commission-status {
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+}
