@@ -21,7 +21,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script src="../assets/js/script.js"></script>
 
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LFx4yMtAAAAAJRV-dTUm-8BrTuMLB5o8wvRhyRQ"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script>
         function onSubmit(token) {
@@ -194,12 +194,8 @@
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
 
-                        <button type="button"
-                                class="g-recaptcha form-submit-btn"
-                                data-sitekey="6LFx4yMtAAAAAJRV-dTUm-8BrTuMLB5o8wvRhyRQ"
-                                data-callback='onSubmit'
-                                data-action='submit'
-                                id="commission-submit-btn">Send Request</button>
+                        <div class="g-recaptcha" data-sitekey="6LFx4yMtAAAAAJRV-dTUm-8BrTuMLB5o8wvRhyRQ" data-theme="dark" style="margin-bottom: 15px;"></div>
+
                     </form>
                     <div id="commission-status"></div>
                 </div>

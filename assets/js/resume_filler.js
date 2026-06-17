@@ -299,7 +299,7 @@
         let lastSubmittedData = null;
 
         // Google Apps Script URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6qPxEpIdDWNwNp4gUXrj9otcwOPl74Ol1gy2e_-0azcdDtYNHuYP3q8inn46x94si/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9ZEE3yVnc--7TdFdMno7ITAhJggI3m5LY2WvFv0vIPQmUhklNwKew-FH4KEbjClHO/exec';
 
         if (!overlay || !openBtn) return;
 
