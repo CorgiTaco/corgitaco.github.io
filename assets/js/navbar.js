@@ -30,19 +30,12 @@ window._applyAlert = function(alertData) {
     banner.id = 'alert-banner';
     banner.setAttribute('role', 'alert');
 
-    var tag = document.createElement('b');
-    tag.className = 'alert-tag';
-    tag.textContent = alertData.label || '🚨 BREAKING';
-    banner.appendChild(tag);
-
     var wrap = document.createElement('div');
     wrap.className = 'alert-ticker-wrap';
 
     var ticker = document.createElement('span');
     ticker.className = 'alert-ticker-text';
     ticker.textContent = alertData.text || '';
-    // Scale duration to text length so scroll speed stays constant
-    ticker.style.animationDuration = Math.max(8, ticker.textContent.length * 0.18) + 's';
     wrap.appendChild(ticker);
     banner.appendChild(wrap);
 
@@ -59,6 +52,18 @@ window._applyAlert = function(alertData) {
         var stickyHeader = document.getElementById('sticky-header');
         if (stickyHeader) stickyHeader.appendChild(banner);
     }
+
+    // After paint: only scroll if the text doesn't fit.
+    requestAnimationFrame(function() {
+        var wrapWidth = wrap.offsetWidth || window.innerWidth;
+        var textWidth = ticker.scrollWidth || 0;
+        if (textWidth > wrapWidth) {
+            wrap.classList.add('is-scrolling');
+            ticker.classList.add('is-scrolling');
+            banner.style.setProperty('--ticker-start', wrapWidth + 'px');
+            ticker.style.animationDuration = ((wrapWidth + textWidth + 24) / 120).toFixed(1) + 's';
+        }
+    });
 };
 
 window._buildNav = function(items) {

@@ -77,40 +77,38 @@ h1 {
 
 #alert-banner:hover { background: #b51111; }
 
-.alert-tag {
-    background: rgba(0, 0, 0, 0.35);
-    padding: 5px 10px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-}
-
 .alert-ticker-wrap {
     flex: 1;
     overflow: hidden;
     display: flex;
     align-items: center;
-    padding: 5px 0;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.alert-ticker-wrap.is-scrolling {
+    justify-content: flex-start;
 }
 
 .alert-ticker-text {
     display: inline-block;
     white-space: nowrap;
-    font-size: 0.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.alert-ticker-text.is-scrolling {
     animation: alert-scroll linear infinite;
 }
 
-#alert-banner:hover .alert-ticker-text {
+#alert-banner:hover .alert-ticker-text.is-scrolling {
     animation-play-state: paused;
 }
 
+/* --ticker-start set by JS to wrap.offsetWidth so text enters from the exact right edge */
 @keyframes alert-scroll {
-    from { transform: translateX(100vw); }
-    to   { transform: translateX(-100%); }
+    from { transform: translateX(var(--ticker-start, 100vw)); }
+    to   { transform: translateX(calc(-100% - 24px)); }
 }
 
 /* ── Unified page title bar (all pages) ── */
