@@ -2,48 +2,35 @@
    Resume Page Specific Styles
 ══════════════════════════════════════════════ */
 
-/* Mobile-first: h1 and buttons each take full width, stacked */
-#projects-title-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    column-gap: 8px;
-    row-gap: 0;
-    padding-right: var(--main-padding);
-    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+/* Mobile-first: stack h1 and buttons vertically; side-by-side on wider screens */
+#page-title-bar {
     margin-bottom: 20px;
 }
 
-#projects-title-bar h1 {
-    padding-top: 15px;
-    padding-bottom: 0;
+#page-title-bar h1 {
     flex: 1 0 100%;
 }
 
-#projects-title-bar > div {
+#page-title-bar > div {
     flex: 0 0 100%;
     display: flex;
     gap: 12px;
-    padding-bottom: 12px;
+    padding-bottom: 4px;
 }
 
-#projects-title-bar > div .resume-download-btn {
+#page-title-bar > div .resume-download-btn {
     flex: 1;
 }
 
-/* On wider screens h1 and buttons sit side-by-side */
 @media (min-width: 500px) {
-    #projects-title-bar h1 {
+    #page-title-bar h1 {
         flex: 0 0 auto;
-        padding-top: 15px;
-        padding-bottom: 15px;
     }
-    #projects-title-bar > div {
+    #page-title-bar > div {
         flex: 0 0 auto;
         padding-bottom: 0;
     }
-    #projects-title-bar > div .resume-download-btn {
+    #page-title-bar > div .resume-download-btn {
         flex: 0 0 auto;
     }
 }

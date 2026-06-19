@@ -1311,7 +1311,7 @@
         scroll.insertAdjacentHTML('beforebegin', buildActionBars(presentCats, tagsByCategory));
         scroll.insertAdjacentHTML('afterend', buildCarouselLayout(projects, presentCats, tagsByCategory));
 
-        const titleBar = document.getElementById('projects-title-bar');
+        const titleBar = document.getElementById('page-title-bar');
         const filterBar = document.getElementById('filter-bar');
         const sortBar = document.getElementById('sort-bar');
 

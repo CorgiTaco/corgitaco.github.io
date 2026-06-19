@@ -310,8 +310,8 @@
         </div>`;
 
         return `
-        <div id="projects-title-bar">
-            <h1 class="page-title">Blog</h1>
+        <div id="page-title-bar">
+            <h1><i class="fa fa-pencil"></i> Blog</h1>
             <div id="title-actions-group">
                 <button id="blog-clear-viewed-btn" class="btn-theme" title="Clear view history">
                     <i class="fa fa-eye"></i> <i class="fa fa-trash"></i>

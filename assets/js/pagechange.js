@@ -1,3 +1,7 @@
+// Tracks the AbortController for the currently in-flight navigation so that
+// rapid clicks cancel the previous fetch before starting the next one.
+let _navController = null;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     // Inject spinner styles
@@ -40,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         main.appendChild(loader);
     }
 
-    // 1. Use Event Delegation on the document body
+    // Single click listener — script.js must NOT register its own to avoid double-firing.
     document.body.addEventListener("click", (e) => {
         const link = e.target.closest(".nav-link");
         if (link) {
@@ -51,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 2. Listen for browser Back/Forward button clicks
+    // Back / Forward buttons
     window.addEventListener("popstate", () => {
         handleRoute(window.location.pathname);
     });
@@ -59,35 +63,35 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function handleRoute(url) {
-    console.log(`URL switched to: ${url}`);
+    // Cancel any previous in-flight fetch so stale responses never overwrite newer ones.
+    if (_navController) _navController.abort();
+    _navController = new AbortController();
+    const signal = _navController.signal;
 
-    // Always restore body scroll — any open modal (commission, blog, etc.) sets
-    // document.body.style.overflow = 'hidden'. If the user navigates away before
-    // closing the modal, that value sticks and clips position:fixed elements like
-    // #mobile-nav, making the bottom nav bar disappear on mobile.
+    // Always restore body scroll — modals set overflow:hidden and navigation must clear it.
     document.body.style.overflow = '';
 
-    // Show spinner
     const loader = document.getElementById("page-loader");
     if (loader) loader.classList.add("active");
 
-    fetch(url)
+    // Use explicit /index.html so local dev servers work without GitHub Pages rewriting.
+    const fetchUrl = /\.html?$/.test(url) ? url : url.replace(/\/?$/, '/index.html');
+
+    fetch(fetchUrl, { signal })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (signal.aborted) return null;
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return response.text();
         })
         .then(htmlData => {
+            if (!htmlData || signal.aborted) return;
+
             const parser = new DOMParser();
             const virtualDoc = parser.parseFromString(htmlData, 'text/html');
 
-            // Sync Document Title
-            if (virtualDoc.title) {
-                document.title = virtualDoc.title;
-            }
+            if (virtualDoc.title) document.title = virtualDoc.title;
 
-            // Sync Stylesheets
+            // Sync any new stylesheets the fetched page needs
             Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
                 const href = newLink.getAttribute('href');
                 if (!document.querySelector(`head link[href="${href}"]`)) {
@@ -104,51 +108,61 @@ function handleRoute(url) {
             if (newMainContent && currentMainElement) {
                 setInnerHTML(currentMainElement, newMainContent.innerHTML);
 
-                // Re-append spinner to new content
+                // Re-inject spinner into the freshly replaced #main
                 currentMainElement.style.position = "relative";
                 const newLoader = document.createElement("div");
                 newLoader.id = "page-loader";
                 newLoader.innerHTML = '<div class="spinner"></div>';
                 currentMainElement.appendChild(newLoader);
 
-                // --- Update mobile nav trigger label to reflect the new page ---
-                // #mobile-nav lives on <body> and is built once on first load.
-                // After SPA navigation the trigger still shows the old page name,
-                // and the active link highlight is wrong — fix both here.
-                const navPath = new URL(url, window.location.href).pathname.replace(/\/$/, '');
-                const navSegments = navPath.split('/');
-                const navLastSegment = navSegments[navSegments.length - 1]
-                    .replace(/\.html$/i, '')
-                    .replace(/\.htm$/i, '');
-                const newPageLabel = (!navLastSegment || navLastSegment.toLowerCase() === 'index')
-                    ? 'Home'
-                    : navLastSegment.charAt(0).toUpperCase() + navLastSegment.slice(1);
+                // Rebuild desktop nav + update mobile nav trigger for the new page.
+                // _navReady is already resolved at this point so the .then runs immediately
+                // as a microtask — no visible delay.
+                window._navReady.then(function(items) {
+                    if (signal.aborted) return;
 
-                // Update active state on each link and find the matching icon
-                let newIcon = '';
-                document.querySelectorAll('#mobile-nav-list a').forEach(a => {
-                    const linkText = a.textContent.trim();
-                    const isMatch = linkText.toLowerCase().includes(newPageLabel.toLowerCase());
-                    a.classList.toggle('active', isMatch);
-                    if (isMatch) {
-                        const i = a.querySelector('i');
-                        if (i) newIcon = i.outerHTML + ' ';
-                    }
+                    window._buildNav(items);
+                    if (window._calcWidth) window._calcWidth();
+
+                    // Determine the site-relative path so /corgitaco.github.io prefix
+                    // (used by IntelliJ's dev server) doesn't break active-tab matching.
+                    const basePath = window._navBasePath || '';
+                    const rawPath = new URL(url, window.location.href).pathname.replace(/\/$/, '');
+                    const p = rawPath.startsWith(basePath) ? rawPath.slice(basePath.length) : rawPath;
+                    const currentPath = p || '/';
+
+                    const activeItem = items.find(function(item) {
+                        return item.href === '/'
+                            ? (currentPath === '' || currentPath === '/')
+                            : currentPath === item.href;
+                    });
+                    const newPageLabel = activeItem ? activeItem.label : 'Home';
+
+                    let newIcon = '';
+                    document.querySelectorAll('#mobile-nav-list a').forEach(function(a) {
+                        const isMatch = a.textContent.trim() === newPageLabel;
+                        a.classList.toggle('active', isMatch);
+                        if (isMatch) {
+                            const i = a.querySelector('i');
+                            if (i) newIcon = i.outerHTML + ' ';
+                        }
+                    });
+
+                    const trigger = document.querySelector('#mobile-nav-trigger span');
+                    if (trigger) trigger.innerHTML = newIcon + newPageLabel;
+
+                    document.getElementById('mobile-nav')?.classList.remove('open');
                 });
 
-                const trigger = document.querySelector('#mobile-nav-trigger span');
-                if (trigger) trigger.innerHTML = newIcon + newPageLabel;
-
-                // Collapse the nav if it was left open
-                document.getElementById('mobile-nav')?.classList.remove('open');
-
             } else {
-                console.error("Could not find #main element in the fetched document or current document.");
-                if (loader) loader.classList.remove("active");
+                console.error("Could not find #main in fetched document.");
+                const l = document.getElementById("page-loader");
+                if (l) l.classList.remove("active");
             }
         })
         .catch(error => {
-            console.error('Error loading the HTML file:', error);
+            if (error.name === 'AbortError') return; // Expected — a newer navigation superseded this one
+            console.error('Navigation error:', error);
             const l = document.getElementById("page-loader");
             if (l) l.classList.remove("active");
         });
@@ -157,17 +171,13 @@ function handleRoute(url) {
 function setInnerHTML(elm, html) {
     elm.innerHTML = html;
 
-    Array.from(elm.querySelectorAll("script"))
-        .forEach(oldScriptEl => {
-            const newScriptEl = document.createElement("script");
-
-            Array.from(oldScriptEl.attributes).forEach(attr => {
-                newScriptEl.setAttribute(attr.name, attr.value);
-            });
-
-            const scriptText = document.createTextNode(oldScriptEl.innerHTML);
-            newScriptEl.appendChild(scriptText);
-
-            oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+    // Re-create <script> elements so their code actually executes after innerHTML assignment.
+    Array.from(elm.querySelectorAll("script")).forEach(oldScriptEl => {
+        const newScriptEl = document.createElement("script");
+        Array.from(oldScriptEl.attributes).forEach(attr => {
+            newScriptEl.setAttribute(attr.name, attr.value);
         });
+        newScriptEl.appendChild(document.createTextNode(oldScriptEl.innerHTML));
+        oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+    });
 }

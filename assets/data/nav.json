@@ -1,0 +1,9 @@
+[
+    { "href": "/",           "icon": "fa-home",      "label": "Home",       "linkId": "meow" },
+    { "href": "/projects",   "icon": "fa-code",      "label": "Projects"   },
+    { "href": "/resume",     "icon": "fa-file-text", "label": "Hire"       },
+    { "href": "/commission", "icon": "fa-usd",       "label": "Commission" },
+    { "href": "/blog",       "icon": "fa-pencil",    "label": "Blog"       },
+    { "href": "/about",      "icon": "fa-user",      "label": "About"      },
+    { "href": "/donate",     "icon": "fa-heart",     "label": "Donate"     }
+]

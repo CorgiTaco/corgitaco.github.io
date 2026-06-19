@@ -16,23 +16,6 @@
    Filter & Sort bars  (shared by grid + carousel)
 ══════════════════════════════════════════════ */
 
-#projects-title-bar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 16px 0 0;
-    position: relative;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-#projects-title-bar h1 {
-    margin-right: auto;
-    padding: 8px var(--main-padding);
-    flex-shrink: 0;
-    font-size: var(--fs-page-title);
-    font-weight: var(--fw-title);
-}
 
 #title-actions-group {
     display: flex;
@@ -329,7 +312,6 @@
 .layout-pill-btn.active {
     background: rgba(70, 162, 88, 0.25);
     color: var(--main-color);
-    font-weight: 700;
 }
 
 /* ══════════════════════════════════════════════
@@ -337,16 +319,12 @@
 ══════════════════════════════════════════════ */
 
 @media (max-width: 600px) {
-    #projects-title-bar {
-        flex-wrap: wrap;
+    #page-title-bar {
         padding: 8px 12px 12px 12px;
-        gap: 12px;
         overflow: visible;
     }
-    #projects-title-bar h1 {
+    #page-title-bar h1 {
         order: 1;
-        margin-right: auto;
-        padding: 0;
     }
     #layout-pill { order: 2; }
     #title-actions-group {

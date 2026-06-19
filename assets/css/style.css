@@ -58,9 +58,24 @@ a {
 
 h1 {
     margin: 0;
-    padding-left: var(--main-padding);
     font-size: var(--fs-page-title);
     font-weight: var(--fw-title);
+}
+
+/* ── Unified page title bar (all pages) ── */
+#page-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px var(--main-padding);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+}
+
+#page-title-bar h1 {
+    margin-right: auto;
+    flex-shrink: 0;
 }
 
 a:hover {
@@ -174,7 +189,7 @@ nav {
                 box-sizing: border-box;
 
                 .fa {
-                    font-size: 0.9rem;
+                    font-size: 1.1rem;
                     display: inline-block;
                     opacity: 0.7;
                 }
