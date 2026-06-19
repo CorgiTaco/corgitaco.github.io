@@ -106,6 +106,15 @@ function handleRoute(url) {
             const currentMainElement = document.getElementById("main");
 
             if (newMainContent && currentMainElement) {
+                // Sync body-level portals (elements outside #main that scripts depend on,
+                // e.g. modal overlays on the resume page that must anchor to <body> for
+                // position:fixed to work on mobile). Clean up old portals first, then move
+                // any from the incoming page before scripts execute.
+                document.querySelectorAll('.body-portal').forEach(function(el) { el.remove(); });
+                virtualDoc.querySelectorAll('.body-portal').forEach(function(el) {
+                    document.body.appendChild(el);
+                });
+
                 setInnerHTML(currentMainElement, newMainContent.innerHTML);
 
                 // Re-inject spinner into the freshly replaced #main
