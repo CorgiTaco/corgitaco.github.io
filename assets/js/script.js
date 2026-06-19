@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     window._buildNav(navItems);
     calcWidth();
 
+    const alertData = await window._alertReady;
+    window._applyAlert(alertData);
+
     var basePath = window._navBasePath || '';
     var rawPath = window.location.pathname.replace(/\/$/, '');
     var currentPath = rawPath.startsWith(basePath) ? rawPath.slice(basePath.length) : rawPath;

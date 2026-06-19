@@ -163,6 +163,11 @@ function handleRoute(url) {
                     document.getElementById('mobile-nav')?.classList.remove('open');
                 });
 
+                window._alertReady.then(function(alertData) {
+                    if (signal.aborted) return;
+                    window._applyAlert(alertData);
+                });
+
             } else {
                 console.error("Could not find #main in fetched document.");
                 const l = document.getElementById("page-loader");

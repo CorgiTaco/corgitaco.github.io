@@ -9,7 +9,57 @@ const _basePath = (() => {
 })();
 
 window._navBasePath = _basePath;
-window._navReady = fetch(_siteOrigin + '/assets/data/nav.json').then(function(r) { return r.json(); });
+window._navReady   = fetch(_siteOrigin + '/assets/data/nav.json').then(function(r) { return r.json(); });
+window._alertReady = fetch(_siteOrigin + '/assets/data/alert.json', { cache: 'no-store' })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(config) {
+        if (!config || !config.source) return null;
+        return fetch(config.source, { cache: 'no-store' })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .catch(function() { return null; });
+    })
+    .catch(function() { return null; });
+
+window._applyAlert = function(alertData) {
+    var existing = document.getElementById('alert-banner');
+    if (existing) existing.remove();
+
+    if (!alertData || !alertData.active) return;
+
+    var banner = document.createElement('div');
+    banner.id = 'alert-banner';
+    banner.setAttribute('role', 'alert');
+
+    var tag = document.createElement('b');
+    tag.className = 'alert-tag';
+    tag.textContent = alertData.label || '🚨 BREAKING';
+    banner.appendChild(tag);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'alert-ticker-wrap';
+
+    var ticker = document.createElement('span');
+    ticker.className = 'alert-ticker-text';
+    ticker.textContent = alertData.text || '';
+    // Scale duration to text length so scroll speed stays constant
+    ticker.style.animationDuration = Math.max(8, ticker.textContent.length * 0.18) + 's';
+    wrap.appendChild(ticker);
+    banner.appendChild(wrap);
+
+    if (alertData.url) {
+        banner.addEventListener('click', function() {
+            window.open(alertData.url, '_blank', 'noopener,noreferrer');
+        });
+    }
+
+    var pageTitleBar = document.getElementById('page-title-bar');
+    if (pageTitleBar) {
+        pageTitleBar.parentNode.insertBefore(banner, pageTitleBar);
+    } else {
+        var stickyHeader = document.getElementById('sticky-header');
+        if (stickyHeader) stickyHeader.appendChild(banner);
+    }
+};
 
 window._buildNav = function(items) {
     var ul = document.getElementById('nav-main');

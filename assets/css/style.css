@@ -62,6 +62,57 @@ h1 {
     font-weight: var(--fw-title);
 }
 
+/* ── Alert / breaking-news banner ── */
+#alert-banner {
+    display: flex;
+    align-items: stretch;
+    background: #9b0e0e;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+#alert-banner:hover { background: #b51111; }
+
+.alert-tag {
+    background: rgba(0, 0, 0, 0.35);
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.alert-ticker-wrap {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.alert-ticker-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    animation: alert-scroll linear infinite;
+}
+
+#alert-banner:hover .alert-ticker-text {
+    animation-play-state: paused;
+}
+
+@keyframes alert-scroll {
+    from { transform: translateX(100vw); }
+    to   { transform: translateX(-100%); }
+}
+
 /* ── Unified page title bar (all pages) ── */
 #page-title-bar {
     display: flex;
