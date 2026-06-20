@@ -128,7 +128,7 @@ def main() -> None:
         new_row = upsert_daily_row(csv_path, now, downloads, mod_name)
         print(f"[{mod_id}] {mod_name}: wrote {new_row} -> {csv_path}")
 
-    totals_path = os.path.join(output_dir, "mod_totals.csv")
+    totals_path = os.path.join(output_dir, "project_totals.csv")
     totals_row = upsert_daily_row(totals_path, now, total_downloads)
     print(f"[totals] wrote {totals_row} -> {totals_path}")
 
