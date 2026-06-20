@@ -1365,6 +1365,8 @@ a.highlight-card-link {
     background: color-mix(in srgb, var(--cat-color, #46a258) 10%, transparent);
     white-space: nowrap;
     cursor: default;
+    position: relative;
+    overflow: hidden;
 }
 
 .skill-hidden { display: none !important; }
@@ -1382,19 +1384,49 @@ a.highlight-card-link {
     color: var(--color-text-dim);
 }
 
+@keyframes skill-shine {
+    0%   { transform: translateX(-180%) skewX(-20deg); }
+    35%  { transform: translateX(200%)  skewX(-20deg); }
+    100% { transform: translateX(200%)  skewX(-20deg); }
+}
+
 .tier-1 {
     border-color: #ffd700 !important;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.4), inset 0 0 6px rgba(255, 215, 0, 0.07);
+}
+.tier-1::before {
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 50%, transparent 100%);
 }
 
 .tier-2 {
     border-color: #c0c0c0 !important;
     box-shadow: 0 0 10px rgba(192, 192, 192, 0.4), inset 0 0 6px rgba(192, 192, 192, 0.07);
 }
+.tier-2::before {
+    background: linear-gradient(90deg, transparent 0%, rgba(220, 220, 220, 0.45) 50%, transparent 100%);
+    animation-delay: -1.4s;
+}
 
 .tier-3 {
     border-color: #cd7f32 !important;
     box-shadow: 0 0 10px rgba(205, 127, 50, 0.4), inset 0 0 6px rgba(205, 127, 50, 0.07);
+}
+.tier-3::before {
+    background: linear-gradient(90deg, transparent 0%, rgba(205, 127, 50, 0.45) 50%, transparent 100%);
+    animation-delay: -2.8s;
+}
+
+.tier-1::before,
+.tier-2::before,
+.tier-3::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    pointer-events: none;
+    animation: skill-shine 4s ease-in-out infinite;
 }
 
 .skills-more-btn {

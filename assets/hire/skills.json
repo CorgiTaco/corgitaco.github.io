@@ -27,8 +27,14 @@
   ],
   "skills": [
     {
-      "name": "Java 17",
-      "category": "language"
+      "name": "Java",
+      "category": "language",
+      "tier": 1
+    },
+    {
+      "name": "Kotlin",
+      "category": "language",
+      "tier": 2
     },
     {
       "name": "HTML 5",
@@ -56,6 +62,10 @@
     },
     {
       "name": "Fabric",
+      "category": "framework"
+    },
+    {
+      "name": "NeoForge",
       "category": "framework"
     },
     {
@@ -111,11 +121,23 @@
       "category": "general"
     },
     {
-      "name": "Game Development, Design, Testing",
+      "name": "Game Design",
       "category": "general"
     },
     {
-      "name": "Visual Effects & UGC",
+      "name": "Game Development",
+      "category": "general"
+    },
+    {
+      "name": "QA Testing",
+      "category": "general"
+    },
+    {
+      "name": "Visual Effects",
+      "category": "general"
+    },
+    {
+      "name": "UGC Creation",
       "category": "general"
     },
     {
