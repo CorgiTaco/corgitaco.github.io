@@ -262,6 +262,8 @@
     function modsToProjects(modsData) {
         if (!modsData || !Array.isArray(modsData.mods)) return [];
         return modsData.mods.map(function(m) {
+            const loaders  = Array.isArray(m.loaders)       ? m.loaders       : [];
+            const versions = Array.isArray(m.game_versions) ? m.game_versions : [];
             return {
                 type:       'minecraft_mod',
                 title:      m.title,
@@ -271,7 +273,8 @@
                 date:       m.date || null,
                 curseforge: m.curseforge || '',
                 modrinth:   m.modrinth  || '',
-                github:     m.github    || ''
+                github:     m.github    || '',
+                tags:       [...loaders, ...versions]
             };
         });
     }
