@@ -321,6 +321,20 @@
             </div>`;
     }
 
+    // ── Modrinth totals CSV parser ────────────────────────────────────────────
+
+    function parseModrinthTotalsCsv(text) {
+        const lines = text.trim().split('\n').filter(l => l.trim() && !l.startsWith('#'));
+        if (lines.length < 2) return null;
+        const headers = lines[0].split(',').map(h => h.trim());
+        const values  = lines[lines.length - 1].split(',').map(v => v.trim());
+        const row = {};
+        headers.forEach((h, i) => { row[h] = values[i]; });
+        const downloads = parseInt(row.downloads, 10);
+        if (isNaN(downloads)) return null;
+        return { downloads, date: row.date || null };
+    }
+
     // ── YouTube stats CSV parser ──────────────────────────────────────────────
 
     function parseYoutubeCsv(text) {
@@ -364,7 +378,7 @@
 
     // ── Highlights cards section ──────────────────────────────────────────────
 
-    function buildHighlightsSection(cards, youtubeStats) {
+    function buildHighlightsSection(cards, youtubeStats, modrinthStats) {
         const el = document.getElementById('highlights-section');
         if (!el || !cards || !cards.length) return;
 
@@ -379,6 +393,17 @@
                         <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
                         <span class="highlight-card-stat">${calcYearsSince(c.since)}</span>
                         <span class="highlight-card-label">${escapeHTML(c.label)}</span>
+                    </${tag}>
+                `;
+            }
+            if (c.source === 'modrinth_stats' && modrinthStats) {
+                const asOf = modrinthStats.date ? `<span class="highlight-card-asof">As of ${formatCsvDate(modrinthStats.date)}</span>` : '';
+                return `
+                    <${tag} class="${classes}"${attrs}>
+                        <i class="fa fa-download highlight-card-icon"></i>
+                        <span class="highlight-card-stat">${formatViews(modrinthStats.downloads)}</span>
+                        <span class="highlight-card-label">Minecraft Mod Downloads</span>
+                        ${asOf}
                     </${tag}>
                 `;
             }
@@ -432,14 +457,17 @@
 
         Promise.all([
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
-            fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null)
+            fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null),
+            fetch('../data/modrinth/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null)
         ]).then(function(results) {
-            var data         = results[0];
-            var csvText      = results[1];
-            var youtubeStats = csvText ? parseYoutubeCsv(csvText) : null;
+            var data           = results[0];
+            var csvText        = results[1];
+            var modrinthText   = results[2];
+            var youtubeStats   = csvText ? parseYoutubeCsv(csvText) : null;
+            var modrinthStats  = modrinthText ? parseModrinthTotalsCsv(modrinthText) : null;
             buildContactCard(data.contact);
             buildHighlightsCard(data.highlights);
-            buildHighlightsSection(data.highlight_cards, youtubeStats);
+            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats);
             populateTimeline('experience-timeline', data.experience, 'Experience');
             populateTimeline('education-timeline', data.education, 'Education');
             buildTestimonials(data.testimonials);

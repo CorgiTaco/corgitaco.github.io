@@ -48,6 +48,7 @@
     { "icon": "fa-download",       "stat": "468M+", "label": "Total Project Downloads" },
     { "icon": "fa-users",          "stat": "329M+", "label": "Players Worldwide" },
     { "icon": "fa-youtube-play", "source": "youtube_stats", "url": "https://www.youtube.com/playlist?list=PLv9ftxjIVZhOWmPEH9VbX282EZzBGV7TB" },
+    { "icon": "fa-download", "source": "modrinth_stats" },
     { "icon": "fa-cloud-download", "stat": "500K+", "label": "Weekly Downloads" }
   ],
   "testimonials": [
