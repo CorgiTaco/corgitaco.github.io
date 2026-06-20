@@ -52,7 +52,7 @@
                 <span class="win-btn win-maximize" title="Maximize"></span>
             </div>
             <span id="win-title"></span>
-            <script>document.getElementById("win-title").textContent = location.host + location.pathname.replace(/\/$/,"") + " — zsh";</script>
+            <script src="../assets/js/win_title.js"></script>
         </div>
         <div class="header">
             <nav role='navigation'>
@@ -67,10 +67,40 @@
 
         <div id="page-title-bar">
             <h1><i class="fa fa-code"></i> Projects</h1>
+            <a class="btn-theme platform-btn" href="https://modrinth.com/user/CorgiTaco" target="_blank" rel="noopener noreferrer">
+                <img src="https://modrinth.com/favicon.ico" alt="Modrinth"> Modrinth
+            </a>
+            <button class="btn-theme platform-btn" id="cf-picker-btn">
+                <img src="https://www.curseforge.com/favicon.ico" alt="CurseForge"> CurseForge
+            </button>
         </div>
     </div>
 
     <script src="../assets/js/project_filler.js"></script>
+
+    <div id="cf-picker-overlay">
+        <div class="modal-inner" id="cf-picker-modal">
+            <div class="modal-titlebar">
+                <div class="modal-win-controls">
+                    <span class="modal-win-btn modal-win-close" id="cf-picker-close"></span>
+                    <span class="modal-win-btn modal-win-minimize"></span>
+                    <span class="modal-win-btn modal-win-maximize"></span>
+                </div>
+                <span class="modal-win-title">CurseForge — zsh</span>
+            </div>
+            <h2 class="modal-title">CurseForge Profiles</h2>
+            <div class="modal-links">
+                <a href="https://www.curseforge.com/members/corgi_taco/projects" target="_blank" rel="noopener noreferrer" class="btn-theme mod-link">
+                    <img src="https://www.curseforge.com/favicon.ico" alt=""> Main
+                </a>
+                <a href="https://www.curseforge.com/members/corgi_taco_archive/projects" target="_blank" rel="noopener noreferrer" class="btn-theme mod-link">
+                    <img src="https://www.curseforge.com/favicon.ico" alt=""> Archive
+                </a>
+            </div>
+            <button class="modal-back btn-theme" id="cf-picker-back"><i class="fa fa-arrow-left"></i> Back</button>
+        </div>
+    </div>
+    <script src="../assets/js/cf_picker.js"></script>
 
 </div>
 

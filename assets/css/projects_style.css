@@ -317,6 +317,24 @@
     letter-spacing: 0.02em;
 }
 
+/* ── Platform buttons in #page-title-bar ── */
+#page-title-bar .platform-btn img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* ── CurseForge picker modal ── */
+#cf-picker-modal {
+    max-width: 400px;
+    width: 90vw;
+}
+
+#cf-picker-modal .modal-title {
+    margin-top: 16px;
+}
+
 /* ══════════════════════════════════════════════
    Layout toggle pill  (grid <-> carousel switcher)
 ══════════════════════════════════════════════ */
@@ -380,10 +398,14 @@
     }
     #page-title-bar h1 {
         order: 1;
+        flex-basis: 100%;
     }
-    #layout-pill { order: 2; }
+    #page-title-bar .platform-btn {
+        order: 2;
+    }
+    #layout-pill { order: 3; }
     #title-actions-group {
-        order: 3;
+        order: 4;
         width: 100%;
         justify-content: flex-start;
     }

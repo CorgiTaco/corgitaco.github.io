@@ -288,9 +288,9 @@
         const rowsHtml = sorted.map(v => {
             const thumb = v.thumbnail ? `<img class="yt-video-thumb" src="${escapeAttr(v.thumbnail)}" alt="" loading="lazy">` : '';
             return `
-                <div class="yt-video-row">
+                <div class="yt-video-row" role="button" tabindex="0" data-video-id="${escapeAttr(v.videoId)}" data-title="${escapeAttr(v.title)}">
                     ${thumb}
-                    <a class="yt-video-title" href="https://www.youtube.com/watch?v=${escapeAttr(v.videoId)}" target="_blank" rel="noopener noreferrer">${escapeHTML(v.title)}</a>
+                    <span class="yt-video-title">${escapeHTML(v.title)}</span>
                     <span class="yt-video-views">${formatNumber(v.viewCount)}</span>
                 </div>
             `;
@@ -311,8 +311,52 @@
             <div class="yt-video-list">${rowsHtml}</div>
         `;
 
+        body.querySelectorAll('.yt-video-row').forEach(row => {
+            const activate = () => openYoutubeVideoModal(row.dataset.videoId, row.dataset.title);
+            row.addEventListener('click', activate);
+            row.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+            });
+        });
+
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+    }
+
+    // ── YouTube video embed modal ─────────────────────────────────────────────
+
+    function openYoutubeVideoModal(videoId, title) {
+        const overlay  = document.getElementById('yt-video-overlay');
+        const modal    = document.getElementById('yt-video-modal');
+        const iframe   = document.getElementById('yt-video-iframe');
+        const winTitle = document.getElementById('yt-video-win-title');
+
+        winTitle.textContent = title + ' — zsh';
+        iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+        overlay.classList.add('active');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function bindYoutubeVideoModal() {
+        const overlay = document.getElementById('yt-video-overlay');
+        const modal   = document.getElementById('yt-video-modal');
+        const iframe  = document.getElementById('yt-video-iframe');
+        if (!overlay) return;
+
+        function close() {
+            overlay.classList.remove('active');
+            modal.classList.remove('active');
+            iframe.src = '';
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('yt-video-close-x').addEventListener('click', close);
+        document.getElementById('yt-video-back').addEventListener('click', close);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) close();
+        });
     }
 
     // ── Downloads breakdown modal ─────────────────────────────────────────────
@@ -708,6 +752,7 @@
     function bootstrap() {
         bindModalClose();
         bindPdfModal();
+        bindYoutubeVideoModal();
 
         // Prefix the commissions nav-link with the site base path so it works
         // on both GitHub Pages (basePath='') and IDE dev servers (basePath='/repo-name').

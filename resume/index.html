@@ -14,6 +14,7 @@
 
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/hire_me_style.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -39,7 +40,7 @@
                 <span class="win-btn win-maximize" title="Maximize"></span>
             </div>
             <span id="win-title"></span>
-            <script>document.getElementById("win-title").textContent = location.host + "/resume — zsh";</script>
+            <script src="../assets/js/win_title.js"></script>
         </div>
 
         <div class="header">
@@ -55,10 +56,10 @@
 
         <div id="page-title-bar">
             <h1><i class="fa fa-file-text"></i> Hire Me</h1>
-            <a class="resume-download-btn" href="https://github.com/CorgiTaco" target="_blank" rel="noopener noreferrer">
+            <a class="btn-theme" href="https://github.com/CorgiTaco" target="_blank" rel="noopener noreferrer">
                 <i class="fa fa-github"></i> GitHub
             </a>
-            <button class="resume-download-btn" id="open-pdf-btn">
+            <button class="btn-theme" id="open-pdf-btn">
                 <i class="fa fa-file-pdf-o"></i> View PDF
             </button>
         </div>
@@ -178,6 +179,25 @@
             </a>
         </div>
         <iframe id="pdf-iframe" class="pdf-iframe" src="" title="Resume PDF"></iframe>
+    </div>
+</div>
+
+<div id="yt-video-overlay" class="body-portal">
+    <div class="modal-inner" id="yt-video-modal">
+        <div class="modal-titlebar">
+            <div class="modal-win-controls">
+                <span class="modal-win-btn modal-win-close" id="yt-video-close-x"></span>
+                <span class="modal-win-btn modal-win-minimize"></span>
+                <span class="modal-win-btn modal-win-maximize"></span>
+            </div>
+            <span class="modal-win-title" id="yt-video-win-title">video — zsh</span>
+        </div>
+        <div class="modal-video-wrap">
+            <iframe id="yt-video-iframe" src="" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
+        <button class="modal-back btn-theme" id="yt-video-back"><i class="fa fa-arrow-left"></i> Back</button>
     </div>
 </div>
 
