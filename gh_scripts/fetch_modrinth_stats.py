@@ -72,12 +72,12 @@ def write_rows(csv_path: str, rows: list[dict], project_name: str = ""):
         writer.writerows(rows)
 
 
-def upsert_daily_row(csv_path: str, today: str, downloads: int, project_name: str = "") -> dict:
+def upsert_daily_row(csv_path: str, now: str, downloads: int, project_name: str = "") -> dict:
     rows = read_existing_rows(csv_path)
-    new_row = {"date": today, "downloads": downloads}
+    new_row = {"date": now, "downloads": downloads}
 
     existing_index = next(
-        (i for i, r in enumerate(rows) if r.get("date") == today), None
+        (i for i, r in enumerate(rows) if r.get("date", "")[:10] == now[:10]), None
     )
     if existing_index is not None:
         rows[existing_index] = new_row
@@ -105,7 +105,7 @@ def main():
     project_ids = [p.strip() for p in projects_env.split(",") if p.strip()]
     token = os.environ.get("MODRINTH_TOKEN")  # optional
     output_dir = os.environ.get("OUTPUT_DIR", "data/modrinth")
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     print(f"Fetching data for projects: {', '.join(project_ids)}")
     projects = get_projects(project_ids, token)
@@ -127,11 +127,11 @@ def main():
         total_downloads += downloads
         project_name = title_by_id.get(pid, title_by_slug.get(pid, pid))
         csv_path = os.path.join(output_dir, f"{pid}.csv")
-        new_row = upsert_daily_row(csv_path, today, downloads, project_name)
+        new_row = upsert_daily_row(csv_path, now, downloads, project_name)
         print(f"[{pid}] wrote {new_row} -> {csv_path}")
 
     totals_path = os.path.join(output_dir, "project_totals.csv")
-    totals_row = upsert_daily_row(totals_path, today, total_downloads)
+    totals_row = upsert_daily_row(totals_path, now, total_downloads)
     print(f"[totals] wrote {totals_row} -> {totals_path}")
 
     print("Done.")

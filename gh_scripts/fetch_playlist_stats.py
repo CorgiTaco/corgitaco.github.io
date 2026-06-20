@@ -101,7 +101,7 @@ def write_statistics_json(json_path: str, playlist_id: str, videos: list[dict]):
     os.makedirs(os.path.dirname(json_path) or ".", exist_ok=True)
     payload = {
         "playlistId": playlist_id,
-        "fetchedAt": datetime.now(timezone.utc).isoformat(),
+        "fetchedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "videoCount": len(videos),
         "totalViews": sum(v["viewCount"] for v in videos),
         "totalLikes": sum(v["likeCount"] for v in videos),
@@ -143,7 +143,7 @@ def main():
 
     csv_path  = os.environ.get("OUTPUT_PATH", "data/youtube_stats.csv")
     json_path = os.environ.get("OUTPUT_JSON", "data/statistics.json")
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     print(f"Fetching video IDs for playlist {playlist_id}...")
     video_ids = get_video_ids(api_key, playlist_id)
@@ -155,7 +155,7 @@ def main():
     write_statistics_json(json_path, playlist_id, videos)
 
     new_row = {
-        "date": today,
+        "date": now,
         "videoCount": len(videos),
         "totalViews": sum(v["viewCount"] for v in videos),
         "totalLikes": sum(v["likeCount"] for v in videos),
@@ -165,14 +165,14 @@ def main():
     rows = read_existing_rows(csv_path)
 
     existing_index = next(
-        (i for i, r in enumerate(rows) if r.get("date") == today), None
+        (i for i, r in enumerate(rows) if r.get("date", "")[:10] == now[:10]), None
     )
     if existing_index is not None:
         rows[existing_index] = new_row
-        print(f"Updated existing row for {today}.")
+        print(f"Updated existing row for {now[:10]}.")
     else:
         rows.append(new_row)
-        print(f"Appended new row for {today}.")
+        print(f"Appended new row for {now[:10]}.")
 
     write_rows(csv_path, rows)
 

@@ -297,7 +297,7 @@
         }).join('');
 
         const asOf = statsData.fetchedAt
-            ? `<span class="yt-modal-asof">As of ${formatCsvDate(statsData.fetchedAt.slice(0, 10))}</span>`
+            ? makeAsOf(statsData.fetchedAt, 'yt-modal-asof')
             : '';
 
         body.innerHTML = `
@@ -326,11 +326,11 @@
 
         const cfVal  = curseforgeStats ? formatNumber(curseforgeStats.downloads) : '—';
         const cfAsOf = curseforgeStats && curseforgeStats.date
-            ? `<span class="downloads-asof">As of ${formatCsvDate(curseforgeStats.date)}</span>` : '';
+            ? makeAsOf(curseforgeStats.date, 'downloads-asof') : '';
 
         const mrVal  = modrinthStats ? formatNumber(modrinthStats.downloads) : '—';
         const mrAsOf = modrinthStats && modrinthStats.date
-            ? `<span class="downloads-asof">As of ${formatCsvDate(modrinthStats.date)}</span>` : '';
+            ? makeAsOf(modrinthStats.date, 'downloads-asof') : '';
 
         body.innerHTML = `
             <span class="tm-tag">Downloads</span>
@@ -459,10 +459,16 @@
     // ── YouTube stats CSV parser ──────────────────────────────────────────────
 
     function parseYoutubeCsv(text) {
-        const lines = text.trim().split('\n');
+        const lines = text.trim().split('\n').filter(l => l.trim());
         if (lines.length < 2) return null;
         const headers = lines[0].split(',').map(h => h.trim());
-        const values  = lines[1].split(',').map(v => v.trim());
+        // Find the last row whose first column looks like a date/datetime
+        let dataLine = null;
+        for (let i = lines.length - 1; i >= 1; i--) {
+            if (/^\d{4}/.test(lines[i].trim())) { dataLine = lines[i]; break; }
+        }
+        if (!dataLine) return null;
+        const values = dataLine.split(',').map(v => v.trim());
         const row = {};
         headers.forEach((h, i) => { row[h] = values[i]; });
         const views = parseInt(row.totalViews, 10);
@@ -471,12 +477,13 @@
         return { views, videos: count, date: row.date || null };
     }
 
-    function formatCsvDate(dateStr) {
-        if (!dateStr) return '';
-        var p = dateStr.split('-');
-        var d = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    function makeAsOf(isoStr, cssClass) {
+        if (!isoStr) return '';
+        var d = new Date(isoStr);
+        if (isNaN(d)) return '';
+        var short = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        var full  = d.toLocaleString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+        return `<span class="${escapeAttr(cssClass)}" title="${escapeAttr(full)}">As of ${escapeHTML(short)}</span>`;
     }
 
     function calcYearsSince(yyyyMm) {
@@ -527,7 +534,7 @@
                 const totalDl = (modrinthStats ? modrinthStats.downloads : 0) + (curseforgeStats ? curseforgeStats.downloads : 0);
                 const dates = [modrinthStats && modrinthStats.date, curseforgeStats && curseforgeStats.date].filter(Boolean);
                 const latestDate = dates.sort().pop();
-                const asOf = latestDate ? `<span class="highlight-card-asof">As of ${formatCsvDate(latestDate)}</span>` : '';
+                const asOf = latestDate ? makeAsOf(latestDate, 'highlight-card-asof') : '';
                 return `
                     <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="modrinth_stats" aria-label="View download breakdown">
                         <i class="fa fa-download highlight-card-icon"></i>
@@ -538,7 +545,7 @@
                 `;
             }
             if (c.source === 'youtube_stats' && youtubeStats) {
-                const asOf = youtubeStats.date ? `<span class="highlight-card-asof">As of ${formatCsvDate(youtubeStats.date)}</span>` : '';
+                const asOf = youtubeStats.date ? makeAsOf(youtubeStats.date, 'highlight-card-asof') : '';
                 return `
                     <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="youtube_stats" aria-label="View YouTube video stats">
                         <i class="fa fa-youtube-play highlight-card-icon"></i>

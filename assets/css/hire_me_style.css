@@ -975,6 +975,14 @@
     white-space: nowrap;
 }
 
+.highlight-card-asof[title],
+.yt-modal-asof[title],
+.downloads-asof[title] {
+    cursor: help;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+}
+
 .highlight-card:hover {
     background: rgba(70, 162, 88, 0.1);
     border-color: rgba(70, 162, 88, 0.5);
