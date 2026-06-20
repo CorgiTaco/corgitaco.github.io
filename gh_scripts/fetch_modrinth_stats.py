@@ -117,16 +117,22 @@ def main():
     title_by_id = {p["id"]: p.get("title", "") for p in projects}
     title_by_slug = {p.get("slug"): p.get("title", "") for p in projects}
 
+    total_downloads = 0
     for pid in project_ids:
         downloads = by_id.get(pid, by_slug.get(pid))
         if downloads is None:
             print(f"Warning: no data returned for '{pid}', skipping.", file=sys.stderr)
             continue
 
+        total_downloads += downloads
         project_name = title_by_id.get(pid, title_by_slug.get(pid, pid))
         csv_path = os.path.join(output_dir, f"{pid}.csv")
         new_row = upsert_daily_row(csv_path, today, downloads, project_name)
         print(f"[{pid}] wrote {new_row} -> {csv_path}")
+
+    totals_path = os.path.join(output_dir, "project_totals.csv")
+    totals_row = upsert_daily_row(totals_path, today, total_downloads)
+    print(f"[totals] wrote {totals_row} -> {totals_path}")
 
     print("Done.")
 
