@@ -1,14 +1,62 @@
 {
-  "fetchedAt": "2026-06-20T21:51:16Z",
+  "fetchedAt": "2026-06-20T23:52:30Z",
   "mods": [
     {
+      "title": "CorgiLib",
+      "description": "A library mod containing code used across Corgi Taco's mods.",
+      "icon": "https://cdn.modrinth.com/data/ziOp6EO8/46be0599bd15d6eff8c6da814b28700dc53a3eb7_96.webp",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/corgilib",
+      "github": "https://github.com/CorgiTaco/CorgiLib",
+      "date": "2022-10-24",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.11",
+        "1.21.8",
+        "1.21.4",
+        "1.21.1",
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2"
+      ]
+    },
+    {
+      "title": "Oh The Biomes We've Gone",
+      "description": "An astounding sequel to the original BYG mod for 1.20.1+ with over 50+ biomes ranging from the magical to the realistic and all breathtaking!",
+      "icon": "https://cdn.modrinth.com/data/NTi7d3Xc/dd307fc5ac2b3da4f02104bfa0fe93f470108d82.png",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/oh-the-biomes-weve-gone",
+      "github": "https://github.com/Potion-Studios/Oh-The-Biomes-Weve-Gone",
+      "date": "2024-06-02",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.11",
+        "1.21.10",
+        "1.21.8",
+        "1.21.4",
+        "1.21.1",
+        "1.20.1"
+      ]
+    },
+    {
       "title": "Oh The Trees You'll Grow",
-      "description": "Tree library used by popular mods such as Oh The Biomes We've Gone.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1198/857/256/256/638775139519930532.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
-      "modrinth": "",
+      "description": "Tree library used by popular mods such as Oh The Biomes You'll Go.",
+      "icon": "https://cdn.modrinth.com/data/g8NOG5OR/03f38102401f9d01e835b19ccebe516854b03fc4.png",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/oh-the-trees-youll-grow",
       "github": "https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow",
-      "date": "2026-06-19",
+      "date": "2024-01-15",
       "loaders": [
         "Fabric",
         "Forge",
@@ -34,31 +82,79 @@
       ]
     },
     {
-      "title": "Enhanced Celestials Shader Support (Major Update)",
-      "description": "Adds full shader compatibility to Enhanced Celestials, allowing lunar events and custom moons to render correctly with modern shader packs.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1593/752/256/256/639030625676577921.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-shader-support",
-      "modrinth": "",
-      "github": "",
-      "date": "2026-04-19",
+      "title": "Enhanced Celestials",
+      "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
+      "icon": "https://cdn.modrinth.com/data/2rL16t1O/e2d4d70baba696b30bafc484b87afcddc8ecd554_96.webp",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/enhanced-celestials",
+      "github": "https://github.com/CorgiTaco/Enhanced-Celestials",
+      "date": "2022-10-26",
       "loaders": [
         "Fabric",
         "Forge",
-        "NeoForge"
+        "NeoForge",
+        "Quilt"
       ],
       "game_versions": [
         "1.21.1",
-        "1.20.1"
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2"
+      ]
+    },
+    {
+      "title": "Oh The Biomes You'll Go",
+      "description": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
+      "icon": "https://cdn.modrinth.com/data/uE1WpIAk/6477fc8713f14bd6e3c9f259043aed19fc216123_96.webp",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/biomesyougo",
+      "github": "https://github.com/AOCAWOL/BYG",
+      "date": "2021-01-25",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19",
+        "1.18.2",
+        "1.16.5",
+        "1.16.4"
+      ]
+    },
+    {
+      "title": "Block Swap",
+      "description": "A simple mod to replace a given block with another.",
+      "icon": "https://cdn.modrinth.com/data/f9kXyjJX/f1ddeadae951a373a5523c7b7501bd7ea0db85fa_96.webp",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/block-swap",
+      "github": "https://github.com/CorgiTaco/Block-Swap",
+      "date": "2022-06-06",
+      "loaders": [
+        "Fabric",
+        "Forge"
+      ],
+      "game_versions": [
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19",
+        "1.18.2"
       ]
     },
     {
       "title": "Data Anchor",
-      "description": "Simple library mod with helpful data attaching and networking utilities including attaching data to entities, chunks, players, and worlds with low boilerplate code. Its own system built from the ground up for multiloader support. ",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1182/5/256/256/638755421016469847.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/data-anchor",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco-MC/Data-Anchor",
-      "date": "2026-04-17",
+      "description": "Simple mod with helpful data attaching and networking utilities including attaching data to entities, chunks, players, and worlds with low boilerplate code. Its own system built from the ground up for multiloader support.",
+      "icon": "https://cdn.modrinth.com/data/z2XEADmE/5dc6ca415537540bbe4f75e324aebb4e327148bc.png",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/data-anchor",
+      "github": "https://github.com/CorgiTaco/Data-Anchor",
+      "date": "2025-02-19",
       "loaders": [
         "Fabric",
         "Forge",
@@ -73,40 +169,31 @@
       ]
     },
     {
-      "title": "CorgiLib",
-      "description": "A library mod containing code used across Corgi Taco's mods.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1693/756/256/256/639075035147145509.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/corgilib",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/CorgiLib",
-      "date": "2026-03-17",
+      "title": "Entity Collision FPS Fix",
+      "description": " Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976 ",
+      "icon": "https://cdn.modrinth.com/data/GiriLmaY/50a864e7fad37027b088d64392a81bdee378d20d_96.webp",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/entity-collision-fps-fix",
+      "github": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
+      "date": "2022-06-13",
       "loaders": [
         "Fabric",
-        "Forge",
-        "NeoForge",
-        "Quilt"
+        "Forge"
       ],
       "game_versions": [
-        "1.21.11",
-        "1.21.10",
-        "1.21.9",
-        "1.21.8",
-        "1.21.4",
-        "1.21.1",
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2"
+        "1.19.2",
+        "1.19.1",
+        "1.19"
       ]
     },
     {
-      "title": "TimeCore - Calendar",
-      "description": "Library mod that handles Minecraft's extremely inconsistent day time.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1704/827/256/256/639083079650559524.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/timecore-calendar",
-      "modrinth": "https://modrinth.com/mod/timecore-calendar",
-      "github": "https://github.com/CorgiTaco-MC/TimeCore",
-      "date": "2026-03-17",
+      "title": "Feature Recycler",
+      "description": "A simple mod that prevents crashes between world generation mods caused by Minecraft's Feature Cycler.",
+      "icon": "https://cdn.modrinth.com/data/IAzu52kG/3c58fa9b5d2e5cb9695c16c475d1572880940e30_96.webp",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/feature-recycler",
+      "github": "https://github.com/CorgiTaco/Feature-Recycler",
+      "date": "2024-08-06",
       "loaders": [
         "Fabric",
         "Forge",
@@ -114,69 +201,16 @@
         "Quilt"
       ],
       "game_versions": [
-        "1.21.1"
-      ]
-    },
-    {
-      "title": "Oh The Biomes We've Gone",
-      "description": "An astounding sequel to the original BYG mod for 1.20.1+ with over 50+ biomes ranging from the magical to the realistic  and all breathtaking!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1046/639/256/256/638574763263078635.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-weve-gone",
-      "modrinth": "",
-      "github": "https://github.com/Potion-Studios/Oh-The-Biomes-Weve-Gone",
-      "date": "2026-06-16",
-      "loaders": [
-        "Fabric",
-        "Forge",
-        "NeoForge",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.21.11",
-        "1.21.10",
-        "1.21.8",
-        "1.21.4",
         "1.21.1",
         "1.20.1"
       ]
     },
     {
-      "title": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
-      "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1190/101/256/256/638764927492625008.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Enhanced-Celestials",
-      "date": "2026-03-05",
-      "loaders": [
-        "Fabric",
-        "Forge",
-        "NeoForge",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.21.1",
-        "1.21",
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18.1",
-        "1.18",
-        "1.17.1",
-        "1.16.5",
-        "1.16.4"
-      ]
-    },
-    {
       "title": "World Guard",
       "description": "Mod that prevents your world from loading if its generator settings changed between now and the last time you loaded your world.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1203/632/256/256/638781096722619143.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/world-guard",
-      "modrinth": "",
+      "icon": "https://cdn.modrinth.com/data/wAb8FZwx/810d1687bf30af4ca22ebaa897e7d4080cc7bfb7.png",
+      "curseforge": "",
+      "modrinth": "https://modrinth.com/mod/world-guard",
       "github": "",
       "date": "2025-03-18",
       "loaders": [
@@ -186,553 +220,6 @@
       ],
       "game_versions": [
         "1.21.1"
-      ]
-    },
-    {
-      "title": "Oh The Biomes You'll Go Refabricated",
-      "description": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/281/230/256/256/637284761944802812.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fabric",
-      "modrinth": "",
-      "github": "https://github.com/Potion-Studios/BYG",
-      "date": "2024-11-24",
-      "loaders": [
-        "Fabric",
-        "Forge",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19",
-        "1.18.2",
-        "1.18.1",
-        "1.18",
-        "1.16.5",
-        "1.16.4",
-        "1.16.3",
-        "1.16.2",
-        "1.16.1"
-      ]
-    },
-    {
-      "title": "Feature Recycler",
-      "description": "A simple mod that prevents crashes between world generation mods caused by Minecraft's Feature Cycler.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1053/748/256/256/638584467981080316.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/feature-recycler",
-      "modrinth": "",
-      "github": "",
-      "date": "2024-10-21",
-      "loaders": [
-        "Fabric",
-        "Forge",
-        "NeoForge",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.21.1",
-        "1.20.1"
-      ]
-    },
-    {
-      "title": "Block Swap",
-      "description": "A simple mod to replace a given block with another.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/367/611/256/256/637534686697588271.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Block-Swap",
-      "date": "2023-06-20",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18",
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Enhanced Celestials(Fabric) - Blood Moons & Harvest Moons",
-      "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/340/264/256/256/637481721235377013.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-fabric",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Enhanced-Celestials",
-      "date": "2025-03-18",
-      "loaders": [
-        "Fabric",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18.1",
-        "1.18",
-        "1.17.1",
-        "1.16.5",
-        "1.16.4"
-      ]
-    },
-    {
-      "title": "Oh The Biomes You'll Go",
-      "description": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/246/22/256/256/637155296232619409.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go",
-      "modrinth": "",
-      "github": "https://github.com/Potion-Studios/BYG",
-      "date": "2024-11-24",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19",
-        "1.18.2",
-        "1.18.1",
-        "1.18",
-        "1.16.5",
-        "1.16.4",
-        "1.16.3",
-        "1.16.2",
-        "1.16.1",
-        "1.15.2",
-        "1.12.2"
-      ]
-    },
-    {
-      "title": "Block Swap (Fabric)",
-      "description": "A simple mod to replace a given block with another.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/462/916/256/256/637742565330772754.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2023-06-20",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18"
-      ]
-    },
-    {
-      "title": "Overworld Two (Forge)",
-      "description": " An optimization mod that generates the overworld(and nether too) much faster than Vaniila! ",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/326/109/256/256/637445368823128128.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/overworld-two-forge",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/overworld-two",
-      "date": "2023-03-28",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5",
-        "1.16.4"
-      ]
-    },
-    {
-      "title": "Lazy DataFixerUpper(LazyDFU) [FORGE]",
-      "description": " Makes the initialization of DataFixerUpper \"lazy\" ",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/359/41/256/256/637520662016454676.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/lazy-dfu-forge",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/lazydfu",
-      "date": "2023-01-11",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19.3",
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18.1",
-        "1.18",
-        "1.17.1",
-        "1.17",
-        "1.16.5",
-        "1.16.4",
-        "1.16.3",
-        "1.16.2",
-        "1.16.1"
-      ]
-    },
-    {
-      "title": "CameraOverhaul (Forge)",
-      "description": "A forge port of Camera Overhaul. Makes gameplay more satisfying through the use of various camera tilting.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/339/503/256/256/637479868245164532.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/camera-overhaul-forge",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Minecraft-CameraOverhaul",
-      "date": "2022-10-30",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.16.5",
-        "1.16.4",
-        "1.16.3",
-        "1.16.2",
-        "1.16.1",
-        "1.16"
-      ]
-    },
-    {
-      "title": "Entity Collision FPS Fix",
-      "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/552/981/256/256/637892935998892983.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
-      "date": "2022-06-13",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Entity Collision FPS Fix Refabricated",
-      "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/553/452/256/256/637894101323351271.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix-fabric",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
-      "date": "2022-06-13",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2"
-      ]
-    },
-    {
-      "title": "Default Amplified Biomes 2",
-      "description": "Amplifiedd biomes to season your existing Minecraft worlds!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/557/879/256/256/637905312868799966.jpeg",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/default-amplified-biomes-2",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-06-11",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Mobifier(Fabric)",
-      "description": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/541/896/256/256/637869710821405483.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier-fabric",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Mobifier",
-      "date": "2022-06-10",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.19",
-        "1.18.2"
-      ]
-    },
-    {
-      "title": "Mobifier",
-      "description": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/385/965/256/256/637574147775846044.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Mobifier",
-      "date": "2022-06-10",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19",
-        "1.18.2",
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Enhanced Celestials Mobifier Integration (Fabric)",
-      "description": "Simple bridge mod adding mobifier condition to check current lunar event.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/543/263/256/256/637873093794501806.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration-fabric",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Mobifier-Enhanced-Celestials-Addon",
-      "date": "2022-05-05",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.18.2"
-      ]
-    },
-    {
-      "title": "Enhanced Celestials Mobifier Integration",
-      "description": "Simple bridge mod adding mobifier condition to check current lunar event.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/543/198/256/256/637872937055418253.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Mobifier-Enhanced-Celestials-Addon",
-      "date": "2022-05-05",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.18.2",
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Shutup Experimental Settings!",
-      "description": "Removes the Experimental Settings prompt before world creation.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/299/190/256/256/637352261915891559.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/shutup-experimental-settings",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/ShutupExperimentalSettings",
-      "date": "2022-04-19",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18.1",
-        "1.18",
-        "1.16.5",
-        "1.16.4",
-        "1.16.3",
-        "1.16.2"
-      ]
-    },
-    {
-      "title": "Phantom Spawn Tweaks",
-      "description": "Adds some configurations that allow the user to tweak some properties of Phantom spawns",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/471/708/256/256/637760735167842201.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/phantom-spawn-tweaks",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-12-26",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5",
-        "1.16.4"
-      ]
-    },
-    {
-      "title": "Compact Status Effects Forge",
-      "description": " Reduced space consumption of status effects ",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/470/763/256/256/637758059208641561.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/compact-status-effects-forge",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/CompactStatusEffects",
-      "date": "2021-12-22",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5",
-        "1.16.4",
-        "1.16"
-      ]
-    },
-    {
-      "title": "Perfect Accuracy Forge",
-      "description": " Removes any inaccuracy from projectiles shot/thrown by players ",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/470/757/256/256/637758054850313699.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/perfect-accuracy-forge",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/PerfectAccuracy",
-      "date": "2021-12-22",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5",
-        "1.16.4",
-        "1.16"
-      ]
-    },
-    {
-      "title": "Thread Control",
-      "description": "Set the limit on how many logical processors Minecraft can use!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/437/498/256/256/637681257352109292.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/thread-control",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/MC-Thread-Control",
-      "date": "2021-09-25",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Oh The Biomes You'll Go Fixes",
-      "description": "Fixes some issues with OBYG 1.12.2",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/422/672/256/256/637652432755045028.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fixes",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-08-23",
-      "loaders": [],
-      "game_versions": [
-        "1.12.2"
-      ]
-    },
-    {
-      "title": "Better Weather (Discontinued)",
-      "description": "A mod adding new weather events and seasons!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/292/154/256/256/637324627328004118.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Better-Weather",
-      "date": "2021-08-09",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5",
-        "1.16.4",
-        "1.16.3",
-        "1.16.2",
-        "1.16.1"
-      ]
-    },
-    {
-      "title": "Structure Warden",
-      "description": "Make structures more challenging with specified conditions! Prevent block placing/breaking and more!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/417/256/256/256/637640873215616315.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/structure-warden",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-08-09",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Improved Floating Islands",
-      "description": "A custom Floating Islands implementation w/ multiple biomes.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/414/377/256/256/637636352608600902.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/improved-floating-islands",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Simple-Floating-Islands",
-      "date": "2021-08-04",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Rider Denier",
-      "description": "A simple mod to deny specific mobs from being ridden by dimension.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/404/259/256/256/637614597886800741.jpeg",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/rider-denier",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Rider-Denier",
-      "date": "2021-07-09",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5"
-      ]
-    },
-    {
-      "title": "Upstream(Fabric)",
-      "description": "A mod that adds endless, wider rivers, and configurable rivers!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/357/951/256/256/637517952804399488.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream-fabric",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Upstream",
-      "date": "2020-12-17",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.16.4"
-      ]
-    },
-    {
-      "title": "Upstream",
-      "description": "A mod that adds endless, wider rivers, and configurable rivers!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/357/952/256/256/637517952955660439.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Upstream",
-      "date": "2020-12-15",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.16.5",
-        "1.16.4"
-      ]
-    },
-    {
-      "title": "Better Weather (Fabric) (Discontinued)",
-      "description": "A mod adding new weather events!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/297/775/256/256/637346012122671995.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather-fabric",
-      "modrinth": "",
-      "github": "https://github.com/CorgiTaco/Better-Weather",
-      "date": "2020-09-12",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.16.4",
-        "1.16.3",
-        "1.16.2",
-        "1.16.1",
-        "1.15.2"
       ]
     }
   ]
