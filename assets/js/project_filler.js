@@ -259,6 +259,38 @@
         return Array.isArray(proj.tags) ? [...proj.tags] : [];
     }
 
+    function modsToProjects(modsData) {
+        if (!modsData || !Array.isArray(modsData.mods)) return [];
+        return modsData.mods.map(function(m) {
+            return {
+                type:       'minecraft_mod',
+                title:      m.title,
+                excerpt:    m.description,
+                photo:      m.icon,
+                photo_fit:  'contain',
+                date:       m.date || null,
+                curseforge: m.curseforge || '',
+                modrinth:   m.modrinth  || '',
+                github:     m.github    || ''
+            };
+        });
+    }
+
+    function statsToProjects(statsData, extraTagsMap) {
+        if (!statsData || !Array.isArray(statsData.videos)) return [];
+        return statsData.videos.map(function(v) {
+            const extra = (extraTagsMap && extraTagsMap[v.videoId]) || [];
+            const baseTags = v.channelTitle ? [v.channelTitle] : [];
+            return {
+                type: 'youtube',
+                title: v.title,
+                url: 'https://youtu.be/' + v.videoId,
+                photo_fit: 'cover',
+                tags: [...baseTags, ...extra]
+            };
+        });
+    }
+
     // ── Tag chips ─────────────────────────────────────────────────────────────
 
     function buildProjTagChips(tags, maxVisible) {
@@ -1586,16 +1618,31 @@
         var loadGrid = document.getElementById('projects-grid');
         if (loadGrid && window._sectionSpinner) window._sectionSpinner(loadGrid);
 
-        // Fetch both data files in parallel; category order is optional
+        // statistics.json and mods.json are the primary sources; projects.json is the fallback
         Promise.all([
             fetch('../assets/projects/projects.json').then(r => r.json()),
             fetch('../assets/projects/category_order.json')
                 .then(r => r.json())
-                .catch(() => ({ order: [] }))
+                .catch(() => ({ order: [] })),
+            fetch('../data/statistics.json')
+                .then(r => r.ok ? r.json() : null)
+                .catch(() => null),
+            fetch('../data/mods.json')
+                .then(r => r.ok ? r.json() : null)
+                .catch(() => null)
         ])
-            .then(([projects, orderData]) => {
+            .then(([projects, orderData, statsData, modsData]) => {
                 categoryOrder = Array.isArray(orderData.order) ? orderData.order : [];
-                init(projects);
+                const extraTagsMap = {};
+                projects.forEach(function(p) {
+                    if (p.type !== 'youtube' || !p.url) return;
+                    const vid = youtubeId(p.url);
+                    if (vid && Array.isArray(p.tags) && p.tags.length > 0) extraTagsMap[vid] = p.tags;
+                });
+                const ytProjects    = statsData ? statsToProjects(statsData, extraTagsMap) : projects.filter(p => p.type === 'youtube');
+                const modProjects   = modsData  ? modsToProjects(modsData)                 : projects.filter(p => p.type === 'minecraft_mod');
+                const otherProjects = projects.filter(p => p.type !== 'youtube' && p.type !== 'minecraft_mod');
+                init([...ytProjects, ...modProjects, ...otherProjects]);
             })
             .catch(err => console.error('Could not load project data:', err));
     }

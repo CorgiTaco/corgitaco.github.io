@@ -88,6 +88,7 @@ def get_video_details(api_key: str, video_ids: list[str]) -> list[dict]:
             details.append({
                 "videoId": item["id"],
                 "title": snippet.get("title", ""),
+                "channelTitle": snippet.get("channelTitle", ""),
                 "thumbnail": thumbnail,
                 "viewCount": int(stats.get("viewCount", 0)),
                 "likeCount": int(stats.get("likeCount", 0)) if "likeCount" in stats else 0,
