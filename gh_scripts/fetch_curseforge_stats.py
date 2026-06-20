@@ -95,15 +95,15 @@ def main() -> None:
         print("Error: CURSEFORGE_API_KEY must be set.", file=sys.stderr)
         sys.exit(1)
 
-    mod_ids_env = os.environ.get("CURSEFORGE_MOD_IDS")
+    mod_ids_env = os.environ.get("CURSEFORGE_PROJECTS")
     if not mod_ids_env:
-        print("Error: CURSEFORGE_MOD_IDS must be set.", file=sys.stderr)
+        print("Error: CURSEFORGE_PROJECTS must be set.", file=sys.stderr)
         sys.exit(1)
 
     try:
         mod_ids = [int(x.strip()) for x in mod_ids_env.split(",") if x.strip()]
     except ValueError as exc:
-        print(f"Error: CURSEFORGE_MOD_IDS must be comma-separated integers: {exc}", file=sys.stderr)
+        print(f"Error: CURSEFORGE_PROJECTS must be comma-separated integers: {exc}", file=sys.stderr)
         sys.exit(1)
 
     output_dir = os.environ.get("OUTPUT_DIR", "data/curseforge")
