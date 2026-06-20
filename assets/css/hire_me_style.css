@@ -1097,11 +1097,12 @@ a.highlight-card-link {
 
 .downloads-breakdown {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
 }
 
 .downloads-platform {
-    flex: 1;
+    flex: 1 1 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1306,9 +1307,9 @@ a.highlight-card-link {
 @media (max-width: 768px) {
     .work-with-me-panels { flex-direction: column; }
     .wwm-divider { width: auto; height: 1px; }
-    .wwm-panel { min-width: 0; }
-    .wwm-panel:first-child { padding-left: 0; padding-bottom: 16px; }
-    .wwm-panel:last-child  { padding-right: 0; padding-top: 16px; }
+    .wwm-panel { min-width: 0; padding-left: 0; padding-right: 0; }
+    .wwm-panel:first-child { padding-left: 0; padding-right: 0; padding-bottom: 20px; }
+    .wwm-panel:last-child  { padding-left: 0; padding-right: 0; padding-top: 20px; }
 }
 
 /* ══════════════════════════════════════════════
@@ -1410,6 +1411,18 @@ a.highlight-card-link {
 }
 
 .skills-more-btn[hidden] { display: none !important; }
+
+@media (max-width: 500px) {
+    .skills-category-row {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .skills-cat-label {
+        width: auto !important;
+        padding-top: 0;
+    }
+}
 
 .skills-more-btn:hover {
     background: rgba(70, 162, 88, 0.15);

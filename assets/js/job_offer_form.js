@@ -38,6 +38,7 @@
     function openModalUI() {
         const overlay = document.getElementById('job-offer-modal-overlay');
         if (!overlay) return;
+        overlay.style.display = 'flex';
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -46,6 +47,7 @@
         const overlay = document.getElementById('job-offer-modal-overlay');
         if (!overlay) return;
         overlay.classList.remove('active');
+        overlay.style.display = 'none';
         document.body.style.overflow = '';
         setTimeout(resetModal, 200);
     }
@@ -83,6 +85,7 @@
         const closeSucc   = document.getElementById('job-offer-close-success-btn');
 
         if (!overlay) return;
+        overlay.style.display = 'none';
 
         if (openBtn) openBtn.addEventListener('click', openModal);
         if (closeX)  closeX.addEventListener('click', closeModal);
