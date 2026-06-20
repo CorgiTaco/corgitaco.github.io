@@ -174,6 +174,50 @@ def mr_to_entry(proj: dict) -> dict:
     }
 
 
+# ── Merge ─────────────────────────────────────────────────────────────────────
+
+def merge(base: dict, extra: dict) -> dict:
+    """Fill empty fields of base from extra; union list fields."""
+    merged = dict(base)
+    for key, value in extra.items():
+        if isinstance(value, list) and isinstance(merged.get(key), list):
+            seen = set(merged[key])
+            for item in value:
+                if item not in seen:
+                    merged[key].append(item)
+                    seen.add(item)
+        elif not merged.get(key) and value:
+            merged[key] = value
+    if merged.get("game_versions"):
+        merged["game_versions"] = sorted(
+            merged["game_versions"], key=mc_version_sort_key, reverse=True
+        )
+    return merged
+
+
+def combine_by_title(cf_entries: list[dict], mr_entries: list[dict]) -> list[dict]:
+    """Merge CF and MR entries that share the same title; append unmatched MR entries."""
+    mr_by_title = {e["title"].lower(): e for e in mr_entries}
+    matched_titles: set[str] = set()
+    result: list[dict] = []
+
+    for cf in cf_entries:
+        key = cf["title"].lower()
+        mr = mr_by_title.get(key)
+        if mr:
+            matched_titles.add(key)
+            result.append(merge(cf, mr))
+            print(f"[merge] {cf['title']}")
+        else:
+            result.append(cf)
+
+    for mr in mr_entries:
+        if mr["title"].lower() not in matched_titles:
+            result.append(mr)
+
+    return result
+
+
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -191,7 +235,8 @@ def main() -> None:
         print("Error: CURSEFORGE_PROJECTS and/or MODRINTH_PROJECTS must be set.", file=sys.stderr)
         sys.exit(1)
 
-    mods: list[dict] = []
+    cf_entries: list[dict] = []
+    mr_entries: list[dict] = []
 
     for slug in cf_slugs:
         if not cf_api_key:
@@ -201,7 +246,7 @@ def main() -> None:
             cf_data = fetch_cf_mod_by_slug(cf_api_key, slug)
             if cf_data:
                 print(f"[CF] {cf_data.get('name')}")
-                mods.append(cf_to_entry(cf_data))
+                cf_entries.append(cf_to_entry(cf_data))
             else:
                 print(f"[CF] not found: {slug}", file=sys.stderr)
         except Exception as exc:
@@ -212,11 +257,13 @@ def main() -> None:
             mr_data = fetch_mr_project(mr_token, mr_id)
             if mr_data:
                 print(f"[MR] {mr_data.get('title')}")
-                mods.append(mr_to_entry(mr_data))
+                mr_entries.append(mr_to_entry(mr_data))
             else:
                 print(f"[MR] not found: {mr_id}", file=sys.stderr)
         except Exception as exc:
             print(f"[MR] error for {mr_id}: {exc}", file=sys.stderr)
+
+    mods = combine_by_title(cf_entries, mr_entries)
 
     os.makedirs(os.path.dirname(output_json) or ".", exist_ok=True)
     payload = {
