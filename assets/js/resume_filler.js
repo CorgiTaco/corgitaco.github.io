@@ -243,6 +243,78 @@
         document.body.style.overflow = 'hidden';
     }
 
+    // ── YouTube videos modal ──────────────────────────────────────────────────
+
+    function openYoutubeModal(statsData) {
+        const overlay  = document.getElementById('timeline-modal-overlay');
+        const body     = document.getElementById('tm-body');
+        const winTitle = document.getElementById('tm-win-title');
+
+        winTitle.textContent = 'youtube — zsh';
+
+        const sorted = [...statsData.videos].sort((a, b) => b.viewCount - a.viewCount);
+
+        const rowsHtml = sorted.map(v => {
+            const thumb = v.thumbnail ? `<img class="yt-video-thumb" src="${escapeAttr(v.thumbnail)}" alt="" loading="lazy">` : '';
+            return `
+                <div class="yt-video-row">
+                    ${thumb}
+                    <a class="yt-video-title" href="https://www.youtube.com/watch?v=${escapeAttr(v.videoId)}" target="_blank" rel="noopener noreferrer">${escapeHTML(v.title)}</a>
+                    <span class="yt-video-views">${formatNumber(v.viewCount)}</span>
+                </div>
+            `;
+        }).join('');
+
+        body.innerHTML = `
+            <span class="tm-tag">YouTube</span>
+            <div class="yt-modal-total">
+                <span class="yt-modal-total-num">${formatNumber(statsData.totalViews)}</span>
+                <span class="yt-modal-total-label">total views across ${statsData.videoCount} videos</span>
+            </div>
+            <hr class="tm-divider">
+            <div class="yt-video-list">${rowsHtml}</div>
+        `;
+
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // ── Downloads breakdown modal ─────────────────────────────────────────────
+
+    function openDownloadsModal(modrinthStats, curseforgeStatStr) {
+        const overlay  = document.getElementById('timeline-modal-overlay');
+        const body     = document.getElementById('tm-body');
+        const winTitle = document.getElementById('tm-win-title');
+
+        winTitle.textContent = 'downloads — zsh';
+
+        const modrinthVal = modrinthStats ? formatViews(modrinthStats.downloads) : '—';
+        const asOf = modrinthStats && modrinthStats.date
+            ? `<span class="downloads-asof">As of ${formatCsvDate(modrinthStats.date)}</span>` : '';
+
+        body.innerHTML = `
+            <span class="tm-tag">Downloads</span>
+            <h2 class="tm-title">Minecraft Mod Downloads</h2>
+            <hr class="tm-divider">
+            <div class="downloads-breakdown">
+                <div class="downloads-platform">
+                    <img src="https://www.curseforge.com/favicon.ico" alt="CurseForge" class="downloads-platform-icon">
+                    <span class="downloads-platform-stat">${escapeHTML(curseforgeStatStr || '—')}</span>
+                    <span class="downloads-platform-label">CurseForge</span>
+                </div>
+                <div class="downloads-platform">
+                    <img src="https://modrinth.com/favicon.ico" alt="Modrinth" class="downloads-platform-icon">
+                    <span class="downloads-platform-stat">${modrinthVal}</span>
+                    <span class="downloads-platform-label">Modrinth</span>
+                    ${asOf}
+                </div>
+            </div>
+        `;
+
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
     // ── PDF viewer modal ──────────────────────────────────────────────────────
 
     function bindPdfModal() {
@@ -366,6 +438,10 @@
         return (rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1)) + '+';
     }
 
+    function formatNumber(n) {
+        return Number(n).toLocaleString();
+    }
+
     function formatViews(n) {
         n = Number(n);
         if (!isFinite(n) || n < 0) return '—';
@@ -378,7 +454,7 @@
 
     // ── Highlights cards section ──────────────────────────────────────────────
 
-    function buildHighlightsSection(cards, youtubeStats, modrinthStats) {
+    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData) {
         const el = document.getElementById('highlights-section');
         if (!el || !cards || !cards.length) return;
 
@@ -399,23 +475,23 @@
             if (c.source === 'modrinth_stats' && modrinthStats) {
                 const asOf = modrinthStats.date ? `<span class="highlight-card-asof">As of ${formatCsvDate(modrinthStats.date)}</span>` : '';
                 return `
-                    <${tag} class="${classes}"${attrs}>
+                    <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="modrinth_stats" aria-label="View download breakdown">
                         <i class="fa fa-download highlight-card-icon"></i>
                         <span class="highlight-card-stat">${formatViews(modrinthStats.downloads)}</span>
                         <span class="highlight-card-label">Minecraft Mod Downloads</span>
                         ${asOf}
-                    </${tag}>
+                    </div>
                 `;
             }
             if (c.source === 'youtube_stats' && youtubeStats) {
                 const asOf = youtubeStats.date ? `<span class="highlight-card-asof">As of ${formatCsvDate(youtubeStats.date)}</span>` : '';
                 return `
-                    <${tag} class="${classes}"${attrs}>
+                    <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="youtube_stats" aria-label="View YouTube video stats">
                         <i class="fa fa-youtube-play highlight-card-icon"></i>
                         <span class="highlight-card-stat">${formatViews(youtubeStats.views)}</span>
                         <span class="highlight-card-label">Views across ${youtubeStats.videos} Videos</span>
                         ${asOf}
-                    </${tag}>
+                    </div>
                 `;
             }
             return `
@@ -433,6 +509,25 @@
             </div>
             <div class="highlights-cards-row">${cardsHtml}</div>
         `;
+
+        const modrinthCard = cards.find(c => c.source === 'modrinth_stats');
+        el.querySelectorAll('[data-source="modrinth_stats"]').forEach(card => {
+            const activate = () => openDownloadsModal(modrinthStats, modrinthCard && modrinthCard.curseforge_stat);
+            card.addEventListener('click', activate);
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+            });
+        });
+
+        if (statsData) {
+            el.querySelectorAll('[data-source="youtube_stats"]').forEach(card => {
+                const activate = () => openYoutubeModal(statsData);
+                card.addEventListener('click', activate);
+                card.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+                });
+            });
+        }
     }
 
     // ── Escape helpers ────────────────────────────────────────────────────────
@@ -458,16 +553,18 @@
         Promise.all([
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
             fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null),
-            fetch('../data/modrinth/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null)
+            fetch('../data/modrinth/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
+            fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null)
         ]).then(function(results) {
             var data           = results[0];
             var csvText        = results[1];
             var modrinthText   = results[2];
+            var statsData      = results[3];
             var youtubeStats   = csvText ? parseYoutubeCsv(csvText) : null;
             var modrinthStats  = modrinthText ? parseModrinthTotalsCsv(modrinthText) : null;
             buildContactCard(data.contact);
             buildHighlightsCard(data.highlights);
-            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats);
+            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData);
             populateTimeline('experience-timeline', data.experience, 'Experience');
             populateTimeline('education-timeline', data.education, 'Education');
             buildTestimonials(data.testimonials);

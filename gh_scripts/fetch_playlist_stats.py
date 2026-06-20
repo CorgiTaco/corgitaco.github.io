@@ -14,6 +14,7 @@ Required environment variables:
 """
 
 import csv
+import json
 import os
 import sys
 from datetime import datetime, timezone
@@ -60,13 +61,13 @@ def get_video_ids(api_key: str, playlist_id: str) -> list[str]:
     return video_ids
 
 
-def get_video_stats(api_key: str, video_ids: list[str]) -> list[dict]:
-    stats = []
+def get_video_details(api_key: str, video_ids: list[str]) -> list[dict]:
+    details = []
 
     for i in range(0, len(video_ids), 50):
         batch = video_ids[i : i + 50]
         params = {
-            "part": "statistics",
+            "part": "snippet,statistics",
             "id": ",".join(batch),
             "key": api_key,
         }
@@ -75,20 +76,41 @@ def get_video_stats(api_key: str, video_ids: list[str]) -> list[dict]:
         data = resp.json()
 
         for item in data.get("items", []):
-            video_stats = item.get("statistics", {})
-            stats.append(
-                {
-                    "viewCount": int(video_stats.get("viewCount", 0)),
-                    "likeCount": int(video_stats.get("likeCount", 0))
-                    if "likeCount" in video_stats
-                    else 0,
-                    "commentCount": int(video_stats.get("commentCount", 0))
-                    if "commentCount" in video_stats
-                    else 0,
-                }
+            snippet = item.get("snippet", {})
+            stats = item.get("statistics", {})
+            thumbs = snippet.get("thumbnails", {})
+            thumbnail = (
+                thumbs.get("medium", {}).get("url")
+                or thumbs.get("high", {}).get("url")
+                or thumbs.get("default", {}).get("url")
+                or ""
             )
+            details.append({
+                "videoId": item["id"],
+                "title": snippet.get("title", ""),
+                "thumbnail": thumbnail,
+                "viewCount": int(stats.get("viewCount", 0)),
+                "likeCount": int(stats.get("likeCount", 0)) if "likeCount" in stats else 0,
+                "commentCount": int(stats.get("commentCount", 0)) if "commentCount" in stats else 0,
+            })
 
-    return stats
+    return details
+
+
+def write_statistics_json(json_path: str, playlist_id: str, videos: list[dict]):
+    os.makedirs(os.path.dirname(json_path) or ".", exist_ok=True)
+    payload = {
+        "playlistId": playlist_id,
+        "fetchedAt": datetime.now(timezone.utc).isoformat(),
+        "videoCount": len(videos),
+        "totalViews": sum(v["viewCount"] for v in videos),
+        "totalLikes": sum(v["likeCount"] for v in videos),
+        "totalComments": sum(v["commentCount"] for v in videos),
+        "videos": videos,
+    }
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+    print(f"Wrote statistics.json -> {json_path}")
 
 
 def read_existing_rows(csv_path: str) -> list[dict]:
@@ -119,15 +141,18 @@ def main():
         )
         sys.exit(1)
 
-    csv_path = os.environ.get("OUTPUT_PATH", "data/youtube_stats.csv")
+    csv_path  = os.environ.get("OUTPUT_PATH", "data/youtube_stats.csv")
+    json_path = os.environ.get("OUTPUT_JSON", "data/statistics.json")
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     print(f"Fetching video IDs for playlist {playlist_id}...")
     video_ids = get_video_ids(api_key, playlist_id)
     print(f"Found {len(video_ids)} videos.")
 
-    print("Fetching video statistics...")
-    videos = get_video_stats(api_key, video_ids)
+    print("Fetching video details...")
+    videos = get_video_details(api_key, video_ids)
+
+    write_statistics_json(json_path, playlist_id, videos)
 
     new_row = {
         "date": today,
@@ -139,7 +164,6 @@ def main():
 
     rows = read_existing_rows(csv_path)
 
-    # Replace today's row if it already exists, otherwise append.
     existing_index = next(
         (i for i, r in enumerate(rows) if r.get("date") == today), None
     )

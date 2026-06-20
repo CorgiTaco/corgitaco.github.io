@@ -47,8 +47,8 @@
     { "icon": "fa-code", "dynamic": "years_since", "since": "2019-12", "label": "Years of Software Development" },
     { "icon": "fa-download",       "stat": "468M+", "label": "Total Project Downloads" },
     { "icon": "fa-users",          "stat": "329M+", "label": "Players Worldwide" },
-    { "icon": "fa-youtube-play", "source": "youtube_stats", "url": "https://www.youtube.com/playlist?list=PLv9ftxjIVZhOWmPEH9VbX282EZzBGV7TB" },
-    { "icon": "fa-download", "source": "modrinth_stats" },
+    { "icon": "fa-youtube-play", "source": "youtube_stats" },
+    { "icon": "fa-download", "source": "modrinth_stats", "curseforge_stat": "447M+" },
     { "icon": "fa-cloud-download", "stat": "500K+", "label": "Weekly Downloads" }
   ],
   "testimonials": [
