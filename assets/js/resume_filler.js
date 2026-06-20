@@ -119,6 +119,7 @@
         }).join('');
 
         container.innerHTML = html;
+        if (window._revealAll) window._revealAll(container.querySelectorAll('.timeline-item'));
 
         // Bind click events
         container.querySelectorAll('.timeline-item').forEach(el => {
@@ -229,6 +230,7 @@
 
         // Identical initial state check to project_filler.js
         setTimeout(updateArrows, 100);
+        if (window._revealEl && wrap) window._revealEl(wrap);
     }
 
     // ── Testimonial modal ─────────────────────────────────────────────────────
@@ -467,6 +469,8 @@
                 </div>
                 ${rows.join('')}
             </div>`;
+        var inner = el.querySelector('.contact-scroll');
+        if (window._revealEl && inner) window._revealEl(inner);
     }
 
     // ── Looking For card ──────────────────────────────────────────────────────
@@ -484,6 +488,8 @@
                 </div>
                 <ul class="highlights-list">${listHtml}</ul>
             </div>`;
+        var inner = el.querySelector('.highlights-scroll');
+        if (window._revealEl && inner) window._revealEl(inner);
     }
 
     // ── Modrinth totals CSV parser ────────────────────────────────────────────
@@ -632,6 +638,8 @@
                 });
             });
         }
+
+        if (window._revealAll) window._revealAll(el.querySelectorAll('.highlight-card'));
     }
 
     // ── Skills section ────────────────────────────────────────────────────────
@@ -728,6 +736,12 @@
 
         collapseSkillRows(el.querySelector('.skills-categories'), el.querySelector('#skills-more-btn'));
 
+        if (window._revealAll) {
+            var visRows = Array.from(el.querySelectorAll('.skills-category-row'))
+                .filter(function (r) { return !r.classList.contains('skill-hidden'); });
+            window._revealAll(visRows);
+        }
+
         requestAnimationFrame(() => {
             el.querySelectorAll('.skills-cat-pills').forEach(collapseOverflowPills);
         });
@@ -758,6 +772,16 @@
         // on both GitHub Pages (basePath='') and IDE dev servers (basePath='/repo-name').
         var commLink = document.querySelector('#open-commission-link');
         if (commLink) commLink.setAttribute('href', (window._navBasePath || '') + '/commission');
+
+        // Spinners for data-filled sections; reveal static sections on scroll
+        if (window._sectionSpinner) {
+            ['resume-contact-card', 'resume-highlights-card', 'highlights-section',
+             'experience-timeline', 'education-timeline', 'skills-section'].forEach(window._sectionSpinner);
+        }
+        if (window._revealAll) {
+            var panels = document.querySelectorAll('.work-with-me-section .wwm-panel');
+            if (panels.length) window._revealAll(panels);
+        }
 
         Promise.all([
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),

@@ -785,3 +785,37 @@ body.driver-active .fav-star {
     border-color: rgba(255, 255, 255, 0.4);
     color: var(--color-text) !important;
 }
+
+/* ─── Section spinner ────────────────────────────────────────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.section-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 64px;
+    width: 100%;
+}
+.section-spinner .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid rgba(70, 162, 88, 0.2);
+    border-top-color: #46a258;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+/* ─── Scroll reveal ──────────────────────────────────────────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}

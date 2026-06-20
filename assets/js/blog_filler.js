@@ -652,6 +652,14 @@
         // IMMEDIATELY inject a hidden lock element so any duplicate async calls see it instantly and abort
         main.insertAdjacentHTML('beforeend', '<div id="blog-sync-lock" style="display:none;"></div>');
 
+        // Spinner while posts are fetched
+        if (window._sectionSpinner) {
+            var blogLoadWrap = document.createElement('div');
+            blogLoadWrap.id = 'blog-load-spinner';
+            if (window._sectionSpinner) window._sectionSpinner(blogLoadWrap);
+            main.appendChild(blogLoadWrap);
+        }
+
         loadViewedHistory();
         loadFavorites();
 
@@ -663,6 +671,10 @@
         const posts   = results.filter(Boolean);
         posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
         window._blogPosts = posts;
+
+        // Remove loading spinner
+        var bls = document.getElementById('blog-load-spinner');
+        if (bls) bls.remove();
 
         // Inject title bar
         main.insertAdjacentHTML('beforeend', buildTitleBar(posts));
@@ -714,6 +726,7 @@
             const grid = document.getElementById('blog-grid');
             posts.forEach(post => grid.insertAdjacentHTML('beforeend', buildCard(post)));
             sortFavoritesFirst();
+            if (window._revealAll) window._revealAll(grid.querySelectorAll('.blog-card'));
         }
 
         wireAll(posts);

@@ -1,3 +1,35 @@
+// ── Scroll-reveal + section spinner (runs synchronously so fillers can use it) ──
+;(function () {
+    var SPIN = '<div class="section-spinner"><div class="spinner"></div></div>';
+    window._sectionSpinner = function (el) {
+        var node = typeof el === 'string' ? document.getElementById(el) : el;
+        if (node) node.innerHTML = SPIN;
+    };
+
+    if (!window.IntersectionObserver) return;
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+        });
+    }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
+
+    window._revealEl = function (el, delayMs) {
+        if (!el) return;
+        if (delayMs) el.style.setProperty('--reveal-delay', delayMs + 'ms');
+        el.classList.add('reveal');
+        io.observe(el);
+    };
+
+    window._revealAll = function (list) {
+        for (var i = 0, len = list.length; i < len; i++) {
+            window._revealEl(list[i], Math.min(i * 55, 220));
+        }
+    };
+}());
+
 // Wait for the DOM to load before targeting the element
 document.addEventListener("DOMContentLoaded", async () => {
     window.vantaEffect = VANTA.WAVES({

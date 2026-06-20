@@ -1401,6 +1401,8 @@
         const modals = document.getElementById('projects-modals');
         if (!grid) return;
 
+        grid.innerHTML = '';
+
         projects.forEach((proj, i) => {
             const id       = projectId(proj, i);
             const category = getCategory(proj);
@@ -1424,6 +1426,13 @@
 
         // ── Apply saved layout
         applyLayout(getLayout());
+
+        // Reveal cards and carousel rows as they come into view
+        if (window._revealAll) {
+            window._revealAll(grid.querySelectorAll('.proj-card'));
+            var catRows = document.querySelectorAll('.cat-row');
+            if (catRows.length) window._revealAll(catRows);
+        }
 
         // ── Global Document Click Listener
         document.addEventListener('click', (e) => {
@@ -1572,6 +1581,10 @@
                 <div id="projects-modals"></div>
             </div>
         `);
+
+        // Show spinner while data loads
+        var loadGrid = document.getElementById('projects-grid');
+        if (loadGrid && window._sectionSpinner) window._sectionSpinner(loadGrid);
 
         // Fetch both data files in parallel; category order is optional
         Promise.all([
