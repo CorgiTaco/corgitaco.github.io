@@ -27,7 +27,8 @@ jobs:
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          REGISTRY_PATH: data/mod_registry.json
+          CURSEFORGE_PROJECTS: ${{ vars.CURSEFORGE_PROJECTS }}
+          MODRINTH_PROJECTS: ${{ vars.MODRINTH_PROJECTS }}
           OUTPUT_JSON: data/mods.json
         run: python gh_scripts/fetch_mod_metadata.py
 

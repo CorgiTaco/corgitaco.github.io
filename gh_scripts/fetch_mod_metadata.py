@@ -2,20 +2,18 @@
 """
 Fetch mod metadata from CurseForge and/or Modrinth and write data/mods.json.
 
-Reads data/mod_registry.json to discover which mods to fetch.  Each registry
-entry may supply a CurseForge slug, a Modrinth project ID/slug, and an
-optional GitHub URL.  When both platforms are present the data is merged
-(CurseForge is primary; Modrinth fills in any gaps, including supported
-game versions and mod loaders).
+Reads project IDs from environment variables (same pattern as fetch_modrinth_stats.py
+and fetch_curseforge_stats.py) instead of a registry file.
 
-Required environment variables (at least one API key must be set):
+Required environment variables (at least one must be set):
   CURSEFORGE_API_KEY   - CurseForge API key
   MODRINTH_TOKEN       - Modrinth personal access token (optional; public
                          projects work without it)
 
 Optional environment variables:
-  REGISTRY_PATH        - Path to mod_registry.json (default: data/mod_registry.json)
-  OUTPUT_JSON          - Output path              (default: data/mods.json)
+  CURSEFORGE_PROJECTS  - Comma-separated CurseForge slugs (e.g. "corgilib,enhanced-celestials")
+  MODRINTH_PROJECTS    - Comma-separated Modrinth project IDs or slugs
+  OUTPUT_JSON          - Output path (default: data/mods.json)
 """
 
 import json
@@ -31,7 +29,6 @@ MR_API_BASE = "https://api.modrinth.com/v2"
 CF_GAME_ID  = 432   # Minecraft
 USER_AGENT  = "CorgiTaco/corgitaco.github.io"
 
-# CurseForge modLoader enum -> display name (None = skip "Any")
 CF_LOADER_NAMES: dict[int, str | None] = {
     0: None,
     1: "Forge",
@@ -42,7 +39,6 @@ CF_LOADER_NAMES: dict[int, str | None] = {
     6: "NeoForge",
 }
 
-# Modrinth loader slug -> display name
 MR_LOADER_DISPLAY: dict[str, str] = {
     "forge":       "Forge",
     "fabric":      "Fabric",
@@ -57,7 +53,6 @@ MR_LOADER_DISPLAY: dict[str, str] = {
     "folia":       "Folia",
 }
 
-# Only keep proper release versions like "1.20.1" or "1.21"; skip snapshots.
 _MC_RELEASE_RE = re.compile(r"^\d+\.\d+(\.\d+)?$")
 
 
@@ -179,95 +174,49 @@ def mr_to_entry(proj: dict) -> dict:
     }
 
 
-# ── Merge ─────────────────────────────────────────────────────────────────────
-
-def merge(base: dict, extra: dict) -> dict:
-    """Fill empty fields of base from extra; union list fields."""
-    merged = dict(base)
-    for key, value in extra.items():
-        if isinstance(value, list) and isinstance(merged.get(key), list):
-            seen = set(merged[key])
-            for item in value:
-                if item not in seen:
-                    merged[key].append(item)
-                    seen.add(item)
-        elif not merged.get(key) and value:
-            merged[key] = value
-    # Re-sort versions after merging so newest is always first.
-    if merged.get("game_versions"):
-        merged["game_versions"] = sorted(
-            merged["game_versions"], key=mc_version_sort_key, reverse=True
-        )
-    return merged
-
-
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    cf_api_key    = os.environ.get("CURSEFORGE_API_KEY", "")
-    mr_token      = os.environ.get("MODRINTH_TOKEN")
-    registry_path = os.environ.get("REGISTRY_PATH", "data/mod_registry.json")
-    output_json   = os.environ.get("OUTPUT_JSON",   "data/mods.json")
+    cf_api_key  = os.environ.get("CURSEFORGE_API_KEY", "")
+    mr_token    = os.environ.get("MODRINTH_TOKEN")
+    output_json = os.environ.get("OUTPUT_JSON", "data/mods.json")
 
-    if not cf_api_key and not mr_token:
-        print("Warning: no API keys set — CF lookups will be skipped.", file=sys.stderr)
+    cf_slugs_env = os.environ.get("CURSEFORGE_PROJECTS", "")
+    mr_ids_env   = os.environ.get("MODRINTH_PROJECTS", "")
 
-    with open(registry_path, encoding="utf-8") as f:
-        registry = json.load(f)
+    cf_slugs = [s.strip() for s in cf_slugs_env.split(",") if s.strip()]
+    mr_ids   = [s.strip() for s in mr_ids_env.split(",")   if s.strip()]
+
+    if not cf_slugs and not mr_ids:
+        print("Error: CURSEFORGE_PROJECTS and/or MODRINTH_PROJECTS must be set.", file=sys.stderr)
+        sys.exit(1)
 
     mods: list[dict] = []
 
-    for entry in registry:
-        cf_slug = entry.get("curseforge")
-        mr_id   = entry.get("modrinth")
-        gh_url  = entry.get("github") or ""
-
-        cf_data: dict | None = None
-        mr_data: dict | None = None
-
-        if cf_slug:
-            if cf_api_key:
-                try:
-                    cf_data = fetch_cf_mod_by_slug(cf_api_key, cf_slug)
-                    if cf_data:
-                        print(f"[CF] {cf_data.get('name')}")
-                    else:
-                        print(f"[CF] not found: {cf_slug}", file=sys.stderr)
-                except Exception as exc:
-                    print(f"[CF] error for {cf_slug}: {exc}", file=sys.stderr)
-            else:
-                print(f"[CF] skipping {cf_slug} (no CURSEFORGE_API_KEY)", file=sys.stderr)
-
-        if mr_id:
-            try:
-                mr_data = fetch_mr_project(mr_token, mr_id)
-                if mr_data:
-                    print(f"[MR] {mr_data.get('title')}")
-                else:
-                    print(f"[MR] not found: {mr_id}", file=sys.stderr)
-            except Exception as exc:
-                print(f"[MR] error for {mr_id}: {exc}", file=sys.stderr)
-
-        if cf_data is None and mr_data is None:
-            print(f"Warning: no data fetched for {entry}, skipping.", file=sys.stderr)
+    for slug in cf_slugs:
+        if not cf_api_key:
+            print(f"[CF] skipping {slug} (no CURSEFORGE_API_KEY)", file=sys.stderr)
             continue
+        try:
+            cf_data = fetch_cf_mod_by_slug(cf_api_key, slug)
+            if cf_data:
+                print(f"[CF] {cf_data.get('name')}")
+                mods.append(cf_to_entry(cf_data))
+            else:
+                print(f"[CF] not found: {slug}", file=sys.stderr)
+        except Exception as exc:
+            print(f"[CF] error for {slug}: {exc}", file=sys.stderr)
 
-        if cf_data and mr_data:
-            mod = merge(cf_to_entry(cf_data), mr_to_entry(mr_data))
-        elif cf_data:
-            mod = cf_to_entry(cf_data)
-        else:
-            mod = mr_to_entry(mr_data)  # type: ignore[arg-type]
-
-        # Registry-level github overrides anything the API returned.
-        if gh_url:
-            mod["github"] = gh_url
-
-        # Ensure modrinth URL is set when an mr_id is given but CF was primary.
-        if mr_id and not mod.get("modrinth"):
-            mod["modrinth"] = f"https://modrinth.com/mod/{mr_id}"
-
-        mods.append(mod)
+    for mr_id in mr_ids:
+        try:
+            mr_data = fetch_mr_project(mr_token, mr_id)
+            if mr_data:
+                print(f"[MR] {mr_data.get('title')}")
+                mods.append(mr_to_entry(mr_data))
+            else:
+                print(f"[MR] not found: {mr_id}", file=sys.stderr)
+        except Exception as exc:
+            print(f"[MR] error for {mr_id}: {exc}", file=sys.stderr)
 
     os.makedirs(os.path.dirname(output_json) or ".", exist_ok=True)
     payload = {
