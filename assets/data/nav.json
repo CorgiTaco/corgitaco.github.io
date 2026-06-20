@@ -5,5 +5,5 @@
     { "href": "/commission", "icon": "fa-usd",       "label": "Commission" },
     { "href": "/blog",       "icon": "fa-pencil",    "label": "Blog"       },
     { "href": "/about",      "icon": "fa-user",      "label": "About"      },
-    { "href": "/donate",     "icon": "fa-heart",     "label": "Donate"     }
+    { "href": "/donate",     "icon": "fa-heart",     "label": "Support Me" }
 ]
