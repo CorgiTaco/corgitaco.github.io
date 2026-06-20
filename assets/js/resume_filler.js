@@ -321,6 +321,95 @@
             </div>`;
     }
 
+    // ── YouTube stats CSV parser ──────────────────────────────────────────────
+
+    function parseYoutubeCsv(text) {
+        const lines = text.trim().split('\n');
+        if (lines.length < 2) return null;
+        const headers = lines[0].split(',').map(h => h.trim());
+        const values  = lines[1].split(',').map(v => v.trim());
+        const row = {};
+        headers.forEach((h, i) => { row[h] = values[i]; });
+        const views = parseInt(row.totalViews, 10);
+        const count = parseInt(row.videoCount, 10);
+        if (isNaN(views) || isNaN(count)) return null;
+        return { views, videos: count, date: row.date || null };
+    }
+
+    function formatCsvDate(dateStr) {
+        if (!dateStr) return '';
+        var p = dateStr.split('-');
+        var d = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    }
+
+    function calcYearsSince(yyyyMm) {
+        var parts = yyyyMm.split('-');
+        var start = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, 1);
+        var years = (Date.now() - start.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        var rounded = Math.round(years * 2) / 2;
+        return (rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1)) + '+';
+    }
+
+    function formatViews(n) {
+        n = Number(n);
+        if (!isFinite(n) || n < 0) return '—';
+        if (n >= 1e12) return (n / 1e12).toFixed(1).replace(/\.0$/, '') + 'T+';
+        if (n >= 1e9)  return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B+';
+        if (n >= 1e6)  return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M+';
+        if (n >= 1e3)  return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K+';
+        return n + '+';
+    }
+
+    // ── Highlights cards section ──────────────────────────────────────────────
+
+    function buildHighlightsSection(cards, youtubeStats) {
+        const el = document.getElementById('highlights-section');
+        if (!el || !cards || !cards.length) return;
+
+        const cardsHtml = cards.map(c => {
+            var tag     = c.url ? 'a' : 'div';
+            var attrs   = c.url ? ` href="${escapeAttr(c.url)}" target="_blank" rel="noopener noreferrer"` : '';
+            var classes = 'highlight-card' + (c.url ? ' highlight-card-link' : '');
+
+            if (c.dynamic === 'years_since' && c.since) {
+                return `
+                    <${tag} class="${classes}"${attrs}>
+                        <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
+                        <span class="highlight-card-stat">${calcYearsSince(c.since)}</span>
+                        <span class="highlight-card-label">${escapeHTML(c.label)}</span>
+                    </${tag}>
+                `;
+            }
+            if (c.source === 'youtube_stats' && youtubeStats) {
+                const asOf = youtubeStats.date ? `<span class="highlight-card-asof">As of ${formatCsvDate(youtubeStats.date)}</span>` : '';
+                return `
+                    <${tag} class="${classes}"${attrs}>
+                        <i class="fa fa-youtube-play highlight-card-icon"></i>
+                        <span class="highlight-card-stat">${formatViews(youtubeStats.views)}</span>
+                        <span class="highlight-card-label">Views across ${youtubeStats.videos} Videos</span>
+                        ${asOf}
+                    </${tag}>
+                `;
+            }
+            return `
+                <${tag} class="${classes}"${attrs}>
+                    <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
+                    <span class="highlight-card-stat">${escapeHTML(c.stat)}</span>
+                    <span class="highlight-card-label">${escapeHTML(c.label)}</span>
+                </${tag}>
+            `;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="highlights-cards-header resume-header">
+                <i class="fa fa-star"></i> Highlights
+            </div>
+            <div class="highlights-cards-row">${cardsHtml}</div>
+        `;
+    }
+
     // ── Escape helpers ────────────────────────────────────────────────────────
 
     function escapeHTML(str) {
@@ -341,21 +430,22 @@
         bindModalClose();
         bindPdfModal();
 
-        fetch('../assets/hire/resume.json')
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(data => {
-                buildContactCard(data.contact);
-                buildHighlightsCard(data.highlights);
-                populateTimeline('experience-timeline', data.experience, 'Experience');
-                populateTimeline('education-timeline', data.education, 'Education');
-                buildTestimonials(data.testimonials);
-            })
-            .catch(error => {
-                console.error('Error loading the resume JSON file:', error);
-            });
+        Promise.all([
+            fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
+            fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null)
+        ]).then(function(results) {
+            var data         = results[0];
+            var csvText      = results[1];
+            var youtubeStats = csvText ? parseYoutubeCsv(csvText) : null;
+            buildContactCard(data.contact);
+            buildHighlightsCard(data.highlights);
+            buildHighlightsSection(data.highlight_cards, youtubeStats);
+            populateTimeline('experience-timeline', data.experience, 'Experience');
+            populateTimeline('education-timeline', data.education, 'Education');
+            buildTestimonials(data.testimonials);
+        }).catch(function(error) {
+            console.error('Error loading resume data:', error);
+        });
     }
 
     if (document.readyState === 'loading') {

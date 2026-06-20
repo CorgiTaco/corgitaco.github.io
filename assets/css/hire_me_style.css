@@ -879,6 +879,97 @@
 }
 
 /* ══════════════════════════════════════════════
+   Highlights Cards Section
+══════════════════════════════════════════════ */
+
+.highlights-cards-section {
+    border: 1px solid rgba(70, 162, 88, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.18);
+    margin-bottom: 2rem;
+}
+
+.highlights-cards-section:empty {
+    display: none;
+}
+
+.highlights-cards-header.resume-header {
+    margin-bottom: 12px;
+}
+
+.highlights-cards-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.highlight-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 10px 26px;
+    background: rgba(70, 162, 88, 0.05);
+    border: 1px solid rgba(70, 162, 88, 0.2);
+    border-radius: 8px;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.highlight-card-asof {
+    position: absolute;
+    bottom: 5px;
+    right: 7px;
+    font-size: 0.58rem;
+    color: var(--color-text-ghost) !important;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.highlight-card:hover {
+    background: rgba(70, 162, 88, 0.1);
+    border-color: rgba(70, 162, 88, 0.5);
+}
+
+a.highlight-card-link {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.highlight-card-icon {
+    font-size: 1.3rem;
+    color: var(--main-color) !important;
+    opacity: 0.8;
+}
+
+.highlight-card-stat {
+    font-size: 1.55rem;
+    font-weight: var(--fw-title);
+    color: var(--main-color) !important;
+    line-height: 1;
+}
+
+.highlight-card-label {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted) !important;
+    line-height: 1.35;
+}
+
+@media (max-width: 700px) {
+    .highlights-cards-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 440px) {
+    .highlights-cards-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ══════════════════════════════════════════════
    Commission Form & Modal
 ══════════════════════════════════════════════ */
 

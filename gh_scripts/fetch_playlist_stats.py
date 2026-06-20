@@ -22,6 +22,8 @@ import requests
 
 API_BASE = "https://www.googleapis.com/youtube/v3"
 FIELDNAMES = ["date", "videoCount", "totalViews", "totalLikes", "totalComments"]
+USER_AGENT = "CorgiTaco/corgitaco.github.io"
+HEADERS = {"User-Agent": USER_AGENT}
 
 
 def get_video_ids(api_key: str, playlist_id: str) -> list[str]:
@@ -38,7 +40,7 @@ def get_video_ids(api_key: str, playlist_id: str) -> list[str]:
         if page_token:
             params["pageToken"] = page_token
 
-        resp = requests.get(f"{API_BASE}/playlistItems", params=params, timeout=30)
+        resp = requests.get(f"{API_BASE}/playlistItems", headers=HEADERS, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
 
@@ -68,7 +70,7 @@ def get_video_stats(api_key: str, video_ids: list[str]) -> list[dict]:
             "id": ",".join(batch),
             "key": api_key,
         }
-        resp = requests.get(f"{API_BASE}/videos", params=params, timeout=30)
+        resp = requests.get(f"{API_BASE}/videos", headers=HEADERS, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
 
