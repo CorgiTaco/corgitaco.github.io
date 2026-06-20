@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """
 Fetch total view count (and a few other aggregate stats) across all videos
-in a YouTube playlist, and write the result to a JSON file.
+in a YouTube playlist, and append a daily snapshot row to a CSV file.
+
+Each row represents one day's totals: date, video count, total views,
+total likes, total comments. If a row for today's date already exists,
+it is updated in place rather than duplicated (so re-running the same
+day is safe).
 
 Required environment variables:
   YOUTUBE_API_KEY       - YouTube Data API v3 key
   YOUTUBE_PLAYLIST_ID   - ID of the playlist to aggregate
 """
 
-import json
+import csv
 import os
 import sys
 from datetime import datetime, timezone
@@ -16,6 +21,7 @@ from datetime import datetime, timezone
 import requests
 
 API_BASE = "https://www.googleapis.com/youtube/v3"
+FIELDNAMES = ["date", "videoCount", "totalViews", "totalLikes", "totalComments"]
 
 
 def get_video_ids(api_key: str, playlist_id: str) -> list[str]:
@@ -58,7 +64,7 @@ def get_video_stats(api_key: str, video_ids: list[str]) -> list[dict]:
     for i in range(0, len(video_ids), 50):
         batch = video_ids[i : i + 50]
         params = {
-            "part": "statistics,snippet",
+            "part": "statistics",
             "id": ",".join(batch),
             "key": api_key,
         }
@@ -70,19 +76,34 @@ def get_video_stats(api_key: str, video_ids: list[str]) -> list[dict]:
             video_stats = item.get("statistics", {})
             stats.append(
                 {
-                    "videoId": item["id"],
-                    "title": item.get("snippet", {}).get("title", ""),
                     "viewCount": int(video_stats.get("viewCount", 0)),
                     "likeCount": int(video_stats.get("likeCount", 0))
                     if "likeCount" in video_stats
-                    else None,
+                    else 0,
                     "commentCount": int(video_stats.get("commentCount", 0))
                     if "commentCount" in video_stats
-                    else None,
+                    else 0,
                 }
             )
 
     return stats
+
+
+def read_existing_rows(csv_path: str) -> list[dict]:
+    if not os.path.exists(csv_path):
+        return []
+
+    with open(csv_path, "r", newline="") as f:
+        reader = csv.DictReader(f)
+        return list(reader)
+
+
+def write_rows(csv_path: str, rows: list[dict]):
+    os.makedirs(os.path.dirname(csv_path) or ".", exist_ok=True)
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def main():
@@ -96,7 +117,8 @@ def main():
         )
         sys.exit(1)
 
-    output_path = os.environ.get("OUTPUT_PATH", "data/statistics.json")
+    csv_path = os.environ.get("OUTPUT_PATH", "data/youtube_stats.csv")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     print(f"Fetching video IDs for playlist {playlist_id}...")
     video_ids = get_video_ids(api_key, playlist_id)
@@ -105,28 +127,31 @@ def main():
     print("Fetching video statistics...")
     videos = get_video_stats(api_key, video_ids)
 
-    total_views = sum(v["viewCount"] for v in videos)
-    total_likes = sum(v["likeCount"] for v in videos if v["likeCount"] is not None)
-    total_comments = sum(
-        v["commentCount"] for v in videos if v["commentCount"] is not None
-    )
-
-    result = {
-        "playlistId": playlist_id,
-        "fetchedAt": datetime.now(timezone.utc).isoformat(),
+    new_row = {
+        "date": today,
         "videoCount": len(videos),
-        "totalViews": total_views,
-        "totalLikes": total_likes,
-        "totalComments": total_comments,
-        "videos": videos,
+        "totalViews": sum(v["viewCount"] for v in videos),
+        "totalLikes": sum(v["likeCount"] for v in videos),
+        "totalComments": sum(v["commentCount"] for v in videos),
     }
 
-    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
-    with open(output_path, "w") as f:
-        json.dump(result, f, indent=2)
+    rows = read_existing_rows(csv_path)
 
-    print(f"Wrote stats to {output_path}")
-    print(f"Total views: {total_views}")
+    # Replace today's row if it already exists, otherwise append.
+    existing_index = next(
+        (i for i, r in enumerate(rows) if r.get("date") == today), None
+    )
+    if existing_index is not None:
+        rows[existing_index] = new_row
+        print(f"Updated existing row for {today}.")
+    else:
+        rows.append(new_row)
+        print(f"Appended new row for {today}.")
+
+    write_rows(csv_path, rows)
+
+    print(f"Wrote {len(rows)} total rows to {csv_path}")
+    print(f"Today's totals: {new_row}")
 
 
 if __name__ == "__main__":
