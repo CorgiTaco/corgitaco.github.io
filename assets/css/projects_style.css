@@ -331,39 +331,42 @@
 
 #layout-pill {
     display: flex;
-    border: 1px solid rgba(70, 162, 88, 0.45);
-    border-radius: 0;
-    overflow: hidden;
     flex-shrink: 0;
-    background: rgb(15 15 15 / 90%);
+    border: 1px solid rgba(70, 162, 88, 0.35);
+    border-radius: 6px;
+    overflow: hidden;
 }
 
 .layout-pill-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    padding: 6px 0;
+    padding: 6px 10px;
     background: transparent;
     border: none;
+    border-right: 1px solid rgba(70, 162, 88, 0.35);
     cursor: pointer;
-    font-size: var(--fs-body);
-    transition: background 0.15s, border-color 0.15s;
+    font-size: var(--fs-ui);
+    font-family: inherit;
+    font-weight: 500;
     line-height: 1;
-    font-family: var(--font-mono);
+    opacity: 0.55;
+    transition: background 0.12s, opacity 0.12s;
 }
 
-.layout-pill-btn + .layout-pill-btn {
-    border-left: 1px solid rgba(70, 162, 88, 0.3);
+.layout-pill-btn:last-child {
+    border-right: none;
 }
 
 .layout-pill-btn:hover {
-    background: rgba(70, 162, 88, 0.15);
+    background: rgba(70, 162, 88, 0.1);
+    opacity: 1;
 }
 
 .layout-pill-btn.active {
-    background: rgba(70, 162, 88, 0.25);
-    color: var(--main-color);
+    background: var(--main-color);
+    border-right-color: var(--main-color);
+    opacity: 1;
 }
 
 /* ══════════════════════════════════════════════
