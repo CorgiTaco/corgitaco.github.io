@@ -1272,6 +1272,7 @@ a.highlight-card-link {
     font-size: var(--fs-heading);
     font-weight: 600;
     color: var(--color-text);
+    margin-top: 10px;
 }
 
 .wwm-panel-desc {
