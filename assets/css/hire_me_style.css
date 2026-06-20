@@ -2,7 +2,7 @@
    Resume Page Specific Styles
 ══════════════════════════════════════════════ */
 
-/* Mobile-first: stack h1 and buttons vertically; side-by-side on wider screens */
+/* Resume title bar: space below, h1 stacks full-width on mobile */
 #page-title-bar {
     margin-bottom: 20px;
 }
@@ -11,26 +11,8 @@
     flex: 1 0 100%;
 }
 
-#page-title-bar > div {
-    flex: 0 0 100%;
-    display: flex;
-    gap: 12px;
-    padding-bottom: 4px;
-}
-
-#page-title-bar > div .resume-download-btn {
-    flex: 1;
-}
-
 @media (min-width: 500px) {
     #page-title-bar h1 {
-        flex: 0 0 auto;
-    }
-    #page-title-bar > div {
-        flex: 0 0 auto;
-        padding-bottom: 0;
-    }
-    #page-title-bar > div .resume-download-btn {
         flex: 0 0 auto;
     }
 }
