@@ -1,0 +1,126 @@
+{
+  "categories": [
+    {
+      "id": "language",
+      "label": "Language",
+      "color": "#f97316",
+      "icon": "fa-file-code-o"
+    },
+    {
+      "id": "framework",
+      "label": "Framework",
+      "color": "#3b82f6",
+      "icon": "fa-cubes"
+    },
+    {
+      "id": "tool",
+      "label": "Tool",
+      "color": "#ef4444",
+      "icon": "fa-wrench"
+    },
+    {
+      "id": "general",
+      "label": "General",
+      "color": "#22c55e",
+      "icon": "fa-star"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Java 17",
+      "category": "language"
+    },
+    {
+      "name": "HTML 5",
+      "category": "language"
+    },
+    {
+      "name": "CSS 3",
+      "category": "language"
+    },
+    {
+      "name": "JavaScript",
+      "category": "language"
+    },
+    {
+      "name": "C#",
+      "category": "language"
+    },
+    {
+      "name": "XAML",
+      "category": "language"
+    },
+    {
+      "name": "Forge",
+      "category": "framework"
+    },
+    {
+      "name": "Fabric",
+      "category": "framework"
+    },
+    {
+      "name": "Javalin",
+      "category": "framework"
+    },
+    {
+      "name": "JUnit",
+      "category": "framework"
+    },
+    {
+      "name": "OpenGL / Blaze3D",
+      "category": "framework"
+    },
+    {
+      "name": ".NET MAUI",
+      "category": "framework"
+    },
+    {
+      "name": "IntelliJ",
+      "category": "tool"
+    },
+    {
+      "name": "Git",
+      "category": "tool"
+    },
+    {
+      "name": "GitHub",
+      "category": "tool"
+    },
+    {
+      "name": "Notion",
+      "category": "tool"
+    },
+    {
+      "name": "VisualVM",
+      "category": "tool"
+    },
+    {
+      "name": "VSCode",
+      "category": "tool"
+    },
+    {
+      "name": "Visual Studio",
+      "category": "tool"
+    },
+    {
+      "name": "PostgreSQL",
+      "category": "tool"
+    },
+    {
+      "name": "YouTube Video Creation",
+      "category": "general"
+    },
+    {
+      "name": "Game Development, Design, Testing",
+      "category": "general"
+    },
+    {
+      "name": "Visual Effects & UGC",
+      "category": "general"
+    },
+    {
+      "name": "Tech Support",
+      "category": "general"
+    }
+  ]
+}

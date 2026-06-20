@@ -319,8 +319,8 @@
                 ${filterHtml}
             </div>
             <div id="layout-pill">
-                <button id="layout-btn-grid" class="layout-pill-btn"        title="Grid view"><i class="fa fa-th"></i></button>
-                <button id="layout-btn-list" class="layout-pill-btn active" title="List view"><i class="fa fa-list"></i></button>
+                <button id="layout-btn-grid" class="layout-pill-btn"        title="Grid view"><i class="fa fa-fw fa-th"></i></button>
+                <button id="layout-btn-list" class="layout-pill-btn active" title="List view"><i class="fa fa-fw fa-list"></i></button>
             </div>
         </div>`;
     }

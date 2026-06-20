@@ -1,5 +1,31 @@
 (function () {
 
+    // ── Hash router ───────────────────────────────────────────────────────────
+
+    var _cache = {};  // populated after bootstrap; used by hashchange handler
+
+    function pushHash(hash) {
+        history.pushState(null, '', location.pathname + location.search + '#' + hash);
+    }
+
+    function clearHash() {
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    }
+
+    function routeHash(hash) {
+        switch (hash) {
+            case 'youtube':
+                if (_cache.statsData) openYoutubeModal(_cache.statsData);
+                break;
+            case 'downloads':
+                openDownloadsModal(_cache.modrinthStats, _cache.curseforgeStats);
+                break;
+            case 'pdf':
+                if (_cache._openPdfUI) _cache._openPdfUI();
+                break;
+        }
+    }
+
     // ── Modal helpers ─────────────────────────────────────────────────────────
 
     function openModal(item, sectionLabel) {
@@ -30,10 +56,15 @@
         document.body.style.overflow = 'hidden';
     }
 
-    function closeModal() {
+    function closeModalUI() {
         const overlay = document.getElementById('timeline-modal-overlay');
         if (overlay) overlay.classList.remove('active');
         document.body.style.overflow = '';
+    }
+
+    function closeModal() {
+        closeModalUI();
+        clearHash();
     }
 
     function bindModalClose() {
@@ -336,17 +367,24 @@
 
         if (!overlay || !openBtn) return;
 
-        function openPdf() {
+        function openPdfUI() {
             iframe.src = PDF_SRC;
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        function closePdf() {
+        function closePdfUI() {
             overlay.classList.remove('active');
             iframe.src = '';
             document.body.style.overflow = '';
         }
+
+        function openPdf() { pushHash('pdf'); openPdfUI(); }
+        function closePdf() { closePdfUI(); clearHash(); }
+
+        // Expose openPdfUI for the hashchange handler
+        _cache._openPdfUI = openPdfUI;
+        _cache._closePdfUI = closePdfUI;
 
         openBtn.addEventListener('click', openPdf);
         closeX.addEventListener('click', closePdf);
@@ -354,6 +392,7 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && overlay.classList.contains('active')) closePdf();
         });
+        _cache._closePdfUI = closePdfUI;
     }
 
     // ── Contact card ─────────────────────────────────────────────────────────
@@ -377,38 +416,29 @@
             rows.push(`<div class="contact-row"><i class="fa fa-map-marker"></i><span>${escapeHTML(info.location)}</span></div>`);
         }
 
-        const pfpHtml = info.pfp
-            ? `<img src="${escapeAttr(info.pfp)}" alt="Profile" class="contact-pfp-img">`
-            : `<div class="contact-pfp-placeholder"><i class="fa fa-user"></i></div>`;
-
         el.innerHTML = `
             <div class="contact-scroll">
-                <div class="contact-inner">
-                    <div class="contact-pfp">${pfpHtml}</div>
-                    <div class="contact-details">
-                        <div class="contact-header resume-header">
-                            <i class="fa fa-address-card"></i> Contact
-                        </div>
-                        ${rows.join('')}
-                    </div>
+                <div class="contact-header resume-header">
+                    <i class="fa fa-address-card"></i> Contact
                 </div>
+                ${rows.join('')}
             </div>`;
     }
 
-    // ── Highlights card ───────────────────────────────────────────────────────
+    // ── Looking For card ──────────────────────────────────────────────────────
 
-    function buildHighlightsCard(highlights) {
+    function buildLookingForCard(items) {
         const el = document.getElementById('resume-highlights-card');
-        if (!el || !highlights || !highlights.length) return;
+        if (!el || !items || !items.length) return;
 
-        const items = highlights.map(h => `<li>${escapeHTML(h)}</li>`).join('');
+        const listHtml = items.map(h => `<li>${escapeHTML(h)}</li>`).join('');
 
         el.innerHTML = `
             <div class="highlights-scroll">
                 <div class="highlights-header resume-header">
-                    <i class="fa fa-star"></i> Highlights
+                    <i class="fa fa-search"></i> What I Am Looking For
                 </div>
-                <ul class="highlights-list">${items}</ul>
+                <ul class="highlights-list">${listHtml}</ul>
             </div>`;
     }
 
@@ -483,21 +513,27 @@
             var classes = 'highlight-card' + (c.url ? ' highlight-card-link' : '');
 
             if (c.dynamic === 'years_since' && c.since) {
+                const sinceLabel = 'Since ' + (c.since_label || c.since);
                 return `
                     <${tag} class="${classes}"${attrs}>
                         <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
                         <span class="highlight-card-stat">${calcYearsSince(c.since)}</span>
                         <span class="highlight-card-label">${escapeHTML(c.label)}</span>
+                        <span class="highlight-card-asof">${escapeHTML(sinceLabel)}</span>
                     </${tag}>
                 `;
             }
             if (c.source === 'modrinth_stats' && (modrinthStats || curseforgeStats)) {
                 const totalDl = (modrinthStats ? modrinthStats.downloads : 0) + (curseforgeStats ? curseforgeStats.downloads : 0);
+                const dates = [modrinthStats && modrinthStats.date, curseforgeStats && curseforgeStats.date].filter(Boolean);
+                const latestDate = dates.sort().pop();
+                const asOf = latestDate ? `<span class="highlight-card-asof">As of ${formatCsvDate(latestDate)}</span>` : '';
                 return `
                     <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="modrinth_stats" aria-label="View download breakdown">
                         <i class="fa fa-download highlight-card-icon"></i>
                         <span class="highlight-card-stat">${formatViews(totalDl)}</span>
                         <span class="highlight-card-label">Minecraft Mod Downloads</span>
+                        ${asOf}
                     </div>
                 `;
             }
@@ -529,7 +565,7 @@
         `;
 
         el.querySelectorAll('[data-source="modrinth_stats"]').forEach(card => {
-            const activate = () => openDownloadsModal(modrinthStats, curseforgeStats);
+            const activate = () => { pushHash('downloads'); openDownloadsModal(_cache.modrinthStats, _cache.curseforgeStats); };
             card.addEventListener('click', activate);
             card.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
@@ -538,13 +574,112 @@
 
         if (statsData) {
             el.querySelectorAll('[data-source="youtube_stats"]').forEach(card => {
-                const activate = () => openYoutubeModal(statsData);
+                const activate = () => { pushHash('youtube'); openYoutubeModal(_cache.statsData); };
                 card.addEventListener('click', activate);
                 card.addEventListener('keydown', e => {
                     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
                 });
             });
         }
+    }
+
+    // ── Skills section ────────────────────────────────────────────────────────
+
+    function collapseSkillRows(container, moreBtn) {
+        const rows = Array.from(container.querySelectorAll('.skills-category-row'));
+        if (rows.length <= 6) { moreBtn.hidden = true; return; }
+        const hidden = rows.slice(6);
+        hidden.forEach(r => r.classList.add('skill-hidden'));
+        moreBtn.textContent = `+${hidden.length} more`;
+        moreBtn.hidden = false;
+        moreBtn.addEventListener('click', () => {
+            hidden.forEach(r => r.classList.remove('skill-hidden'));
+            moreBtn.hidden = true;
+        }, { once: true });
+    }
+
+    function collapseOverflowPills(container) {
+        const pills = Array.from(container.querySelectorAll('.skill-pill:not(.skill-pill-more)'));
+        if (pills.length < 2) return;
+        const firstTop = pills[0].offsetTop;
+        const overflow = pills.filter(p => p.offsetTop > firstTop);
+        if (!overflow.length) return;
+
+        overflow.forEach(p => p.classList.add('skill-hidden'));
+
+        const color = container.dataset.catColor || 'rgba(70,162,88,0.8)';
+        const badge = document.createElement('div');
+        badge.className = 'skill-pill skill-pill-more';
+        badge.style.setProperty('--cat-color', color);
+        badge.textContent = `+${overflow.length}`;
+        container.appendChild(badge);
+
+        // If the badge itself wraps, keep hiding visible pills until it sits on row 1
+        const visible = pills.filter(p => !p.classList.contains('skill-hidden'));
+        let extra = 0;
+        while (badge.offsetTop > firstTop && visible.length > 0) {
+            visible.pop().classList.add('skill-hidden');
+            extra++;
+            badge.textContent = `+${overflow.length + extra}`;
+        }
+
+        badge.addEventListener('click', () => {
+            pills.forEach(p => p.classList.remove('skill-hidden'));
+            badge.remove();
+        }, { once: true });
+    }
+
+    function buildSkillsSection(skillsData) {
+        const el = document.getElementById('skills-section');
+        if (!el || !skillsData) return;
+
+        const catMap = {};
+        (skillsData.categories || []).forEach(c => { catMap[c.id] = c; });
+
+        // Group skills by category in order they first appear
+        const grouped = [];
+        const buckets = {};
+        skillsData.skills.forEach(s => {
+            if (!buckets[s.category]) {
+                const cat = catMap[s.category] || { id: s.category, label: s.category, color: '#888' };
+                buckets[s.category] = [];
+                grouped.push({ cat, skills: buckets[s.category] });
+            }
+            buckets[s.category].push(s);
+        });
+
+        const categoriesHtml = grouped.map(({ cat, skills }) => {
+            const color = cat.color || 'rgba(70,162,88,0.8)';
+            const pillsHtml = skills.map(s => {
+                const tierClass = s.tier >= 1 && s.tier <= 3 ? `tier-${s.tier}` : '';
+                return `<div class="skill-pill ${tierClass}" style="--cat-color:${escapeAttr(color)}">
+                    <span class="skill-name">${escapeHTML(s.name)}</span>
+                </div>`;
+            }).join('');
+            const icon = cat.icon || 'fa-circle';
+            return `<div class="skills-category-row">
+                <span class="skills-cat-label" style="color:${escapeAttr(color)}"><i class="fa fa-fw ${escapeAttr(icon)}"></i> ${escapeHTML(cat.label)}</span>
+                <div class="skills-cat-pills" data-cat-color="${escapeAttr(color)}">${pillsHtml}</div>
+            </div>`;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="skills-header resume-header">
+                <i class="fa fa-bolt"></i> Skills
+            </div>
+            <div class="skills-categories">${categoriesHtml}</div>
+            <button class="skills-more-btn" id="skills-more-btn" hidden></button>
+        `;
+
+        const labels = Array.from(el.querySelectorAll('.skills-cat-label'));
+        const maxW = Math.max(...labels.map(l => l.scrollWidth));
+        labels.forEach(l => l.style.width = maxW + 'px');
+
+        collapseSkillRows(el.querySelector('.skills-categories'), el.querySelector('#skills-more-btn'));
+
+        requestAnimationFrame(() => {
+            el.querySelectorAll('.skills-cat-pills').forEach(collapseOverflowPills);
+        });
     }
 
     // ── Escape helpers ────────────────────────────────────────────────────────
@@ -567,26 +702,59 @@
         bindModalClose();
         bindPdfModal();
 
+        // Prefix the commissions nav-link with the site base path so it works
+        // on both GitHub Pages (basePath='') and IDE dev servers (basePath='/repo-name').
+        var commLink = document.querySelector('#open-commission-link');
+        if (commLink) commLink.setAttribute('href', (window._navBasePath || '') + '/commission');
+
         Promise.all([
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
             fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null),
             fetch('../data/modrinth/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
             fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null),
-            fetch('../data/curseforge/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null)
+            fetch('../data/curseforge/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
+            fetch('../assets/hire/skills.json').then(r => r.ok ? r.json() : null).catch(() => null)
         ]).then(function(results) {
             var data             = results[0];
             var csvText          = results[1];
             var modrinthText     = results[2];
             var statsData        = results[3];
             var curseforgeText   = results[4];
+            var skillsData       = results[5];
             var youtubeStats     = csvText ? parseYoutubeCsv(csvText) : null;
             var modrinthStats    = modrinthText ? parseModrinthTotalsCsv(modrinthText) : null;
             var curseforgeStats  = curseforgeText ? parseModrinthTotalsCsv(curseforgeText) : null;
             buildContactCard(data.contact);
+            buildLookingForCard(data.looking_for);
             buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats);
+            buildSkillsSection(skillsData);
             populateTimeline('experience-timeline', data.experience, 'Experience');
             populateTimeline('education-timeline', data.education, 'Education');
             buildTestimonials(data.testimonials);
+
+            // Populate cache for hash router
+            _cache.statsData       = statsData;
+            _cache.modrinthStats   = modrinthStats;
+            _cache.curseforgeStats = curseforgeStats;
+
+            // Register hashchange listener (replace any previous from SPA re-run)
+            if (window._resumeHashHandler) window.removeEventListener('hashchange', window._resumeHashHandler);
+            window._resumeHashHandler = function () {
+                var hash = location.hash.slice(1);
+                if (!hash) {
+                    // Back-button closed a modal — close whichever overlay is open
+                    var overlay = document.getElementById('timeline-modal-overlay');
+                    if (overlay && overlay.classList.contains('active')) closeModalUI();
+                    var pdfOverlay = document.getElementById('pdf-modal-overlay');
+                    if (pdfOverlay && pdfOverlay.classList.contains('active') && _cache._closePdfUI) _cache._closePdfUI();
+                } else {
+                    routeHash(hash);
+                }
+            };
+            window.addEventListener('hashchange', window._resumeHashHandler);
+
+            // Handle hash already present on page load
+            if (location.hash) routeHash(location.hash.slice(1));
         }).catch(function(error) {
             console.error('Error loading resume data:', error);
         });

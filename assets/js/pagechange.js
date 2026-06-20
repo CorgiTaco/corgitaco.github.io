@@ -1,6 +1,7 @@
 // Tracks the AbortController for the currently in-flight navigation so that
 // rapid clicks cancel the previous fetch before starting the next one.
-let _navController = null;
+// Stored on window so SPA re-execution of this script never hits a let redeclaration error.
+window._navController = window._navController || null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -64,9 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function handleRoute(url) {
     // Cancel any previous in-flight fetch so stale responses never overwrite newer ones.
-    if (_navController) _navController.abort();
-    _navController = new AbortController();
-    const signal = _navController.signal;
+    if (window._navController) window._navController.abort();
+    window._navController = new AbortController();
+    const signal = window._navController.signal;
 
     // Always restore body scroll — modals set overflow:hidden and navigation must clear it.
     document.body.style.overflow = '';
@@ -91,13 +92,21 @@ function handleRoute(url) {
 
             if (virtualDoc.title) document.title = virtualDoc.title;
 
-            // Sync any new stylesheets the fetched page needs
+            // Sync any new stylesheets the fetched page needs.
+            // Collect load promises so content is injected only after styles apply —
+            // otherwise scripts that build UI (e.g. grid buttons) run before the
+            // stylesheet has loaded and elements render with wrong default styles.
+            const stylePromises = [];
             Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
                 const href = newLink.getAttribute('href');
                 if (!document.querySelector(`head link[href="${href}"]`)) {
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = href;
+                    stylePromises.push(new Promise(resolve => {
+                        link.onload  = resolve;
+                        link.onerror = resolve;
+                    }));
                     document.head.appendChild(link);
                 }
             });
@@ -106,6 +115,9 @@ function handleRoute(url) {
             const currentMainElement = document.getElementById("main");
 
             if (newMainContent && currentMainElement) {
+                return Promise.all(stylePromises).then(function() {
+                if (signal.aborted) return;
+
                 // Sync body-level portals (elements outside #main that scripts depend on,
                 // e.g. modal overlays on the resume page that must anchor to <body> for
                 // position:fixed to work on mobile). Clean up old portals first, then move
@@ -167,6 +179,8 @@ function handleRoute(url) {
                     if (signal.aborted) return;
                     window._applyAlert(alertData);
                 });
+
+                }); // end Promise.all(stylePromises).then
 
             } else {
                 console.error("Could not find #main in fetched document.");

@@ -54,14 +54,9 @@
 
         <div id="page-title-bar">
             <h1><i class="fa fa-file-text"></i> Hire Me</h1>
-            <div style="display: flex; gap: 12px; align-items: center;">
-                <button class="resume-download-btn" id="open-commission-btn">
-                    <i class="fa fa-paint-brush"></i> Commission Me
-                </button>
-                <button class="resume-download-btn" id="open-pdf-btn">
-                    <i class="fa fa-file-pdf-o"></i> View PDF
-                </button>
-            </div>
+            <button class="resume-download-btn" id="open-pdf-btn">
+                <i class="fa fa-file-pdf-o"></i> View PDF
+            </button>
         </div>
     </div>
 
@@ -69,6 +64,8 @@
 
         <div class="resume-top-bar">
             <div class="resume-contact-card" id="resume-contact-card">
+            </div>
+            <div class="resume-highlights-card" id="resume-highlights-card">
             </div>
         </div>
 
@@ -96,6 +93,8 @@
 
         </div>
 
+        <div class="skills-section" id="skills-section"></div>
+
         <div class="testimonials-section">
             <div class="testimonials-track-wrap">
                 <div class="testimonials-header">
@@ -105,11 +104,32 @@
             </div>
         </div>
 
+        <div class="work-with-me-section">
+            <div class="resume-header">
+                <i class="fa fa-handshake-o"></i> Work with me
+            </div>
+            <div class="work-with-me-panels">
+                <div class="wwm-panel">
+                    <div class="wwm-avatar"><i class="fa fa-briefcase"></i></div>
+                    <span class="wwm-panel-title">Job Offers</span>
+                    <span class="wwm-panel-desc">Have a role in mind? Send me your offer and let's talk.</span>
+                    <button class="wwm-btn" id="open-job-offer-btn">Send a Job Offer</button>
+                </div>
+                <div class="wwm-divider"></div>
+                <div class="wwm-panel">
+                    <div class="wwm-avatar"><i class="fa fa-usd"></i></div>
+                    <span class="wwm-panel-title">Commissions</span>
+                    <span class="wwm-panel-desc">Need a mod, video content, or something custom? Let's create something together.</span>
+                    <a class="wwm-btn nav-link" id="open-commission-link" href="/commission">Commissions</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <script src="../assets/js/commission_form.js"></script>
+    <script src="../assets/js/job_offer_form.js"></script>
     <script src="../assets/js/resume_filler.js"></script>
 
 </div>
@@ -139,94 +159,6 @@
     </div>
 </div>
 
-<div id="commission-modal-overlay" class="body-portal">
-    <div class="tm-modal" id="commission-modal">
-        <div class="tm-titlebar">
-            <div class="tm-win-controls">
-                <span class="tm-win-btn tm-win-close" id="commission-close-x"></span>
-                <span class="tm-win-btn tm-win-min"></span>
-                <span class="tm-win-btn tm-win-max"></span>
-            </div>
-            <span class="tm-win-title">commission_request.exe — zsh</span>
-        </div>
-        <div class="tm-body">
-
-            <div id="commission-form-view">
-                <h2 class="tm-title" style="margin-bottom: 15px;">Request a Commission</h2>
-                <form id="commission-form" class="custom-form">
-                    <div class="form-group">
-                        <label for="name">Name / Handle <span class="req-star">*</span></label>
-                        <input type="text" id="name" name="name" required autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address <span class="req-star">*</span></label>
-                        <input type="email" id="email" name="email" required autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="discord">Discord Handle (Optional)</label>
-                        <input type="text" id="discord" name="discord" autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="commission-type">This is... <span class="req-star">*</span></label>
-                        <select id="commission-type" name="commission_type" required>
-                            <option value="" disabled selected>Select an option</option>
-                            <option value="for a YouTube Video">for a YouTube Video</option>
-                            <option value="a mod port">a mod port</option>
-                            <option value="a new mod">a new mod</option>
-                            <option value="other">other.</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group" id="other-type-group" style="display: none;">
-                        <label for="other-type">Please specify <span class="req-star">*</span></label>
-                        <input type="text" id="other-type" name="other_type" autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Commission Details <span class="req-star">*</span></label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-
-                    <div class="g-recaptcha"
-                         data-sitekey="6Lc97SMtAAAAAGnCVlCWTlXWbg3RrBU3BAnI3PP6"
-                         data-theme="dark"
-                         data-callback="onCaptchaSuccess"
-                         data-expired-callback="onCaptchaExpired"
-                         style="margin-bottom: 15px;"></div>
-
-                    <button type="submit" id="commission-submit-btn" class="form-submit-btn" disabled>Send Request</button>
-
-                </form>
-                <div id="commission-status"></div>
-            </div>
-
-            <div id="commission-success-view" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 20px 0;">
-                <i class="fa fa-check-circle" style="font-size: 5rem; color: var(--main-color); margin-bottom: 20px;"></i>
-                <h3 style="color: #fff; margin-bottom: 12px; font-size: 1.4rem;">Commission request sent successfully!</h3>
-
-                <p style="color: rgba(255,255,255,0.85); margin-bottom: 10px; font-size: 0.95rem; line-height: 1.5;">
-                    An email will be sent shortly to your inbox with a receipt of your commission request.
-                </p>
-                <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-bottom: 25px; line-height: 1.4;">
-                    The email will be sent from `commissions@corgitaco.dev`, if you have not received it within 5 minutes check your spam!
-                </p>
-
-                <div style="display: flex; gap: 10px; width: 100%;">
-                    <button type="button" id="commission-close-success-btn" class="form-submit-btn" style="flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8) !important;">
-                        <i class="fa fa-times"></i> Close
-                    </button>
-                    <button type="button" id="commission-download-btn" class="form-submit-btn" style="flex: 2;">
-                        <i class="fa fa-download"></i> Download Receipt
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 <div id="pdf-modal-overlay" class="body-portal">
     <div class="pdf-modal">
@@ -242,6 +174,89 @@
             </a>
         </div>
         <iframe id="pdf-iframe" class="pdf-iframe" src="" title="Resume PDF"></iframe>
+    </div>
+</div>
+
+<div id="job-offer-modal-overlay" class="body-portal">
+    <div class="tm-modal" id="job-offer-modal">
+        <div class="tm-titlebar">
+            <div class="tm-win-controls">
+                <span class="tm-win-btn tm-win-close" id="job-offer-close-x"></span>
+                <span class="tm-win-btn tm-win-min"></span>
+                <span class="tm-win-btn tm-win-max"></span>
+            </div>
+            <span class="tm-win-title">job_offer.exe — zsh</span>
+        </div>
+        <div class="tm-body">
+
+            <div id="job-offer-form-view">
+                <h2 class="tm-title" style="margin-bottom: 15px;">Send a Job Offer</h2>
+                <form id="job-offer-form" class="custom-form">
+                    <div class="form-group">
+                        <label for="jo-name">Name / Handle <span class="req-star">*</span></label>
+                        <input type="text" id="jo-name" name="name" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-email">Email Address <span class="req-star">*</span></label>
+                        <input type="email" id="jo-email" name="email" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-discord">Discord Handle</label>
+                        <input type="text" id="jo-discord" name="discord" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-company">Company <span class="req-star">*</span></label>
+                        <input type="text" id="jo-company" name="company" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-role">Role / Position <span class="req-star">*</span></label>
+                        <input type="text" id="jo-role" name="role" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-job-type">Job Type <span class="req-star">*</span></label>
+                        <select id="jo-job-type" name="job_type" required>
+                            <option value="" disabled selected>Select a type</option>
+                            <option value="Full Time">Full Time</option>
+                            <option value="Part Time">Part Time</option>
+                            <option value="Contract">Contract</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-linkedin">LinkedIn / Website</label>
+                        <input type="url" id="jo-linkedin" name="linkedin" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="jo-message">Details <span class="req-star">*</span></label>
+                        <textarea id="jo-message" name="message" rows="5" required></textarea>
+                    </div>
+                    <div class="g-recaptcha"
+                         data-sitekey="6Lc97SMtAAAAAGnCVlCWTlXWbg3RrBU3BAnI3PP6"
+                         data-theme="dark"
+                         data-callback="onJobCaptchaSuccess"
+                         data-expired-callback="onJobCaptchaExpired"
+                         style="margin-bottom: 15px;"></div>
+                    <button type="submit" id="job-offer-submit-btn" class="form-submit-btn" disabled>Send Offer</button>
+                </form>
+                <div id="job-offer-status"></div>
+            </div>
+
+            <div id="job-offer-success-view" style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 20px 0;">
+                <i class="fa fa-check-circle" style="font-size: 5rem; color: var(--main-color); margin-bottom: 20px;"></i>
+                <h3 style="color: #fff; margin-bottom: 12px; font-size: 1.4rem;">Offer sent successfully!</h3>
+                <p style="color: rgba(255,255,255,0.85); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.5;">
+                    Thanks for reaching out! I'll review your offer and get back to you soon.
+                </p>
+                <div style="display: flex; gap: 10px; width: 100%;">
+                    <button type="button" id="job-offer-close-success-btn" class="form-submit-btn" style="flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8) !important;">
+                        <i class="fa fa-times"></i> Close
+                    </button>
+                    <button type="button" id="job-offer-download-btn" class="form-submit-btn" style="flex: 2;">
+                        <i class="fa fa-download"></i> Download Receipt
+                    </button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 

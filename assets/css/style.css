@@ -632,7 +632,7 @@ body.driver-active .fav-star {
 }
 
 /* ── Modal Overlays ── */
-#modal-overlay, #timeline-modal-overlay, #pdf-modal-overlay, #commission-modal-overlay, #blog-modal-overlay {
+#modal-overlay, #timeline-modal-overlay, #pdf-modal-overlay, #commission-modal-overlay, #blog-modal-overlay, #job-offer-modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -645,7 +645,7 @@ body.driver-active .fav-star {
     animation: sysFadeIn 0.2s ease forwards;
 }
 
-#modal-overlay.active, #timeline-modal-overlay.active, #pdf-modal-overlay.active, #commission-modal-overlay.active, #blog-modal-overlay.active {
+#modal-overlay.active, #timeline-modal-overlay.active, #pdf-modal-overlay.active, #commission-modal-overlay.active, #blog-modal-overlay.active, #job-offer-modal-overlay.active {
     display: flex;
 }
 

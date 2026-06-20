@@ -55,18 +55,41 @@
         checkFormReadyState();
     }
 
-    function openModal() {
+    function openModalUI() {
         const overlay = document.getElementById('commission-modal-overlay');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeModal() {
+    function closeModalUI() {
         const overlay = document.getElementById('commission-modal-overlay');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
         setTimeout(resetModalView, 200);
     }
+
+    function openModal() {
+        history.pushState(null, '', location.pathname + location.search + '#commission');
+        openModalUI();
+    }
+
+    function closeModal() {
+        closeModalUI();
+        if (location.hash === '#commission') history.replaceState(null, '', location.pathname + location.search);
+    }
+
+    // ── Hash routing ──
+    function handleCommissionHash() {
+        const hash = location.hash.slice(1);
+        const overlay = document.getElementById('commission-modal-overlay');
+        if (!overlay) return;
+        if (hash === 'commission' && !overlay.classList.contains('active')) openModalUI();
+        if (!hash && overlay.classList.contains('active')) closeModalUI();
+    }
+
+    if (window._commissionHashHandler) window.removeEventListener('hashchange', window._commissionHashHandler);
+    window._commissionHashHandler = handleCommissionHash;
+    window.addEventListener('hashchange', window._commissionHashHandler);
 
     // ── Main Initialization ──
     function initCommissionLogic() {

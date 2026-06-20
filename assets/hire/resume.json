@@ -38,13 +38,13 @@
     "phone": "+1 (213) 421-1665",
     "location": "LA County, California"
   },
-  "highlights": [
-    "Over 6 ½ years of experience designing and developing Minecraft mods using Java.",
-    "Over 468 million project downloads across my open-source projects.",
-    "Over 25 published YouTube videos for big content creators including MrBeast Gaming, SocksFor1, TommyInnit, and more! Garnering over  "
+  "looking_for": [
+    "",
+    "",
+    ""
   ],
   "highlight_cards": [
-    { "icon": "fa-code", "dynamic": "years_since", "since": "2019-12", "label": "Years of Software Development" },
+    { "icon": "fa-code", "dynamic": "years_since", "since": "2019-12", "since_label": "Dec 2019", "label": "Years of Software Development" },
     { "icon": "fa-youtube-play", "source": "youtube_stats" },
     { "icon": "fa-download", "source": "modrinth_stats" }
   ],

@@ -1358,9 +1358,9 @@
         const layoutPill = document.createElement('div');
         layoutPill.id = 'layout-pill';
         layoutPill.innerHTML = `
-            <button id="layout-btn-grid"     class="layout-pill-btn" title="Grid layout"><i class="fa fa-th"></i></button>
-            <button id="layout-btn-list"     class="layout-pill-btn" title="List layout"><i class="fa fa-list"></i></button>
-            <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-th-list"></i></button>
+            <button id="layout-btn-grid"     class="layout-pill-btn" title="Grid layout"><i class="fa fa-fw fa-th"></i></button>
+            <button id="layout-btn-list"     class="layout-pill-btn" title="List layout"><i class="fa fa-fw fa-list"></i></button>
+            <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-fw fa-th-list"></i></button>
         `;
 
         const actionsGroup = document.createElement('div');
