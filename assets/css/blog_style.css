@@ -286,6 +286,7 @@
 #blog-modal-inner {
     max-width: 1000px;
     width: 92vw;
+    max-height: 90vh;
     max-height: 90dvh;
     min-width: 0;
 }
@@ -450,6 +451,7 @@
     #blog-modal-inner {
         width: 100%;
         max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 56px - 20px);
         max-height: calc(100dvh - 56px - 20px);
     }
 

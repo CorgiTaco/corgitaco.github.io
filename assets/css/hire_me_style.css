@@ -239,6 +239,7 @@
 .tm-modal {
     max-width: 560px;
     width: 90vw;
+    max-height: 80vh;
     max-height: 80dvh;
     overflow-y: auto;
 }
@@ -454,6 +455,7 @@
     color: var(--main-color) !important;
     opacity: 0.4;
     font-family: Georgia, serif;
+    -webkit-user-select: none;
     user-select: none;
     margin-bottom: -8px;
 }
@@ -528,6 +530,7 @@
     font-family: Georgia, serif;
     display: block;
     margin-bottom: 8px;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -574,6 +577,7 @@
 
 .pdf-modal {
     width: min(860px, 92vw);
+    height: min(90vh, 1100px);
     height: min(90dvh, 1100px);
     max-width: unset;
     max-height: unset;
@@ -607,6 +611,7 @@
     }
     .pdf-modal {
         width: 100%;
+        height: calc(100vh - 56px - 20px);
         height: calc(100dvh - 56px - 20px);
     }
 }

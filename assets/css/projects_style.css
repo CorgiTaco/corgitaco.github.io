@@ -111,6 +111,7 @@
     cursor: pointer;
     font-size: var(--fs-body);
     transition: background 0.15s;
+    -webkit-user-select: none;
     user-select: none;
 }
 

@@ -50,6 +50,7 @@ body {
 #vanta-bg {
     z-index: -1;
     display: block;
+    min-height: 100vh;
     min-height: 100dvh;
     padding: 20px;
     box-sizing: border-box;
@@ -85,6 +86,7 @@ h1 {
     background: #9b0e0e;
     overflow: hidden;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.35);
     flex-shrink: 0;
@@ -199,6 +201,7 @@ a:hover {
     max-width: 900px;
     width: 90%;
     box-sizing: border-box;
+    height: calc(100vh - 40px);
     height: calc(100dvh - 40px);
 
     background-color: rgb(20 20 20 / 80%);
@@ -213,133 +216,131 @@ a:hover {
 nav {
     width: 100%;
     margin-bottom: 0;
+}
 
-    > ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0 8px;
-        font-size: 0;
-        display: flex;
-        width: 100%;
-        align-items: flex-end;
-        background: rgb(12 12 12 / 90%);
-        border-bottom: 2px solid var(--main-color);
-        box-sizing: border-box;
-        gap: 4px;
+nav > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 8px;
+    font-size: 0;
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    background: rgb(12 12 12 / 90%);
+    border-bottom: 2px solid var(--main-color);
+    box-sizing: border-box;
+    gap: 4px;
+}
 
-        > li {
-            flex: 0 0 auto;
+nav > ul > li {
+    flex: 0 0 auto;
+    display: inline-block;
+    position: relative;
+}
 
-            &.more > a .fa {
-                color: var(--main-color);
-            }
+nav > ul > li.more > a .fa {
+    color: var(--main-color);
+}
 
-            &.hidden {
-                display: none;
-            }
+nav > ul > li.hidden {
+    display: none;
+}
 
-            display: inline-block;
-            position: relative;
+nav > ul > li > a {
+    border: 1px solid rgba(70, 162, 88, 0.3);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    background: rgb(15 15 15 / 90%);
+    margin-bottom: 0;
+}
 
-            > a {
-                border: 1px solid rgba(70, 162, 88, 0.3);
-                border-bottom: none;
-                border-radius: 6px 6px 0 0;
-                background: rgb(15 15 15 / 90%);
-                margin-bottom: 0;
-            }
+nav > ul > li a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-ui);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    text-align: center;
+    text-decoration: none;
+    padding: 6px 14px;
+    gap: 6px;
+    white-space: nowrap;
+    transition: color 0.15s, background 0.15s;
+    min-height: 40px;
+    box-sizing: border-box;
+}
 
-            a {
-                font-family: var(--font-mono);
-                font-size: var(--fs-ui);
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                color: var(--color-text-muted);
-                text-align: center;
-                text-decoration: none;
-                padding: 6px 14px;
-                gap: 6px;
-                white-space: nowrap;
-                transition: color 0.15s, background 0.15s;
-                min-height: 40px;
-                box-sizing: border-box;
+nav > ul > li a .fa {
+    font-size: var(--fs-heading);
+    display: inline-block;
+    opacity: 0.7;
+}
 
-                .fa {
-                    font-size: var(--fs-heading);
-                    display: inline-block;
-                    opacity: 0.7;
-                }
+nav > ul > li a + ul {
+    display: none;
+    position: absolute;
+    top: calc(100% + 2px);
+    right: 0;
+    margin-right: 0;
+    background: rgb(15 15 15 / 97%);
+    border: 1px solid var(--main-color);
+    border-radius: 0 0 4px 4px;
+    z-index: 50;
+}
 
-                + ul {
-                    display: none;
-                    position: absolute;
-                    top: calc(100% + 2px);
-                    right: 0;
-                    margin-right: 0;
-                    background: rgb(15 15 15 / 97%);
-                    border: 1px solid var(--main-color);
-                    border-radius: 0 0 4px 4px;
-                    z-index: 50;
+nav > ul > li a + ul li {
+    margin-top: 0;
+}
 
-                    li {
-                        margin-top: 0;
+nav > ul > li a + ul li a {
+    font-family: var(--font-mono);
+    padding: 8px 16px;
+    text-align: left;
+    white-space: nowrap;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-text-dim);
+    flex-direction: row;
+    gap: 8px;
+    min-height: unset;
+}
 
-                        a {
-                            font-family: var(--font-mono);
-                            padding: 8px 16px;
-                            text-align: left;
-                            white-space: nowrap;
-                            border: none;
-                            border-radius: 0;
-                            background: transparent;
-                            color: var(--color-text-dim);
-                            flex-direction: row;
-                            gap: 8px;
-                            min-height: unset;
+nav > ul > li a + ul li a .fa {
+    display: inline-block;
+}
 
-                            .fa {
-                                display: inline-block;
-                            }
-                        }
+nav > ul > li a + ul li a:hover {
+    background: rgba(70, 162, 88, 0.2);
+    color: var(--color-text);
+}
 
-                        a:hover {
-                            background: rgba(70, 162, 88, 0.2);
-                            color: var(--color-text);
-                        }
-                    }
-                }
-            }
+nav > ul > li.active > a,
+nav > ul > li > a.active {
+    background: rgb(22 22 22 / 98%);
+    border-color: var(--main-color);
+    border-bottom-color: rgb(22 22 22 / 98%);
+    color: var(--main-color);
+    font-weight: 600;
+}
 
-            &.active > a,
-            > a.active {
-                background: rgb(22 22 22 / 98%);
-                border-color: var(--main-color);
-                border-bottom-color: rgb(22 22 22 / 98%);
-                color: var(--main-color);
-                font-weight: 600;
+nav > ul > li.active > a .fa,
+nav > ul > li > a.active .fa {
+    opacity: 1;
+    color: var(--main-color);
+}
 
-                .fa {
-                    opacity: 1;
-                    color: var(--main-color);
-                }
-            }
+nav > ul > li:hover > a {
+    background: rgba(70, 162, 88, 0.12);
+    color: var(--color-text-dim);
+    border-color: rgba(70, 162, 88, 0.6);
+    border-bottom-color: var(--main-color);
+}
 
-            &:hover {
-                > a {
-                    background: rgba(70, 162, 88, 0.12);
-                    color: var(--color-text-dim);
-                    border-color: rgba(70, 162, 88, 0.6);
-                    border-bottom-color: var(--main-color);
-                }
-
-                ul {
-                    display: block;
-                }
-            }
-        }
-    }
+nav > ul > li:hover ul {
+    display: block;
 }
 
 #nav-main.measuring > li {
@@ -370,6 +371,7 @@ nav {
         right: auto !important;
         box-sizing: border-box !important;
         margin: 0 !important;
+        height: calc(100vh - 40px - 56px) !important;
         height: calc(100dvh - 40px - 56px) !important;
     }
 
@@ -399,7 +401,8 @@ nav {
         font-size: 1rem;
         font-family: var(--font-mono);
         letter-spacing: 0.03em;
-        user-select: none;
+        -webkit-user-select: none;
+    user-select: none;
     }
 
     #mobile-nav-trigger .burger-icon {
@@ -619,6 +622,7 @@ body.driver-active .fav-star {
     padding: 12px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8);
     font-family: var(--font-mono);
+    max-height: 70vh;
     max-height: 70dvh;
     overflow-y: auto;
 }
@@ -715,6 +719,7 @@ body.driver-active .fav-star {
     font-size: var(--fs-small);
     color: var(--color-text-ghost);
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
     letter-spacing: 0.03em;
     padding: 0 80px;

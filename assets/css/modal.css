@@ -12,6 +12,7 @@
     padding: 0 0 16px 0;
     max-width: 1000px;
     width: 90vw;
+    max-height: 90vh;
     max-height: 90dvh;
     gap: 8px;
     min-width: 0;
@@ -118,6 +119,7 @@
     .modal-inner {
         width: 100%;
         max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 56px - 20px);
         max-height: calc(100dvh - 56px - 20px);
         overflow-y: auto;
     }
