@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-20T21:46:32Z",
+  "fetchedAt": "2026-06-20T21:51:16Z",
   "mods": [
     {
       "title": "Oh The Trees You'll Grow",
@@ -8,7 +8,30 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow",
-      "date": "2026-06-19"
+      "date": "2026-06-19",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "26.2",
+        "26.1.2",
+        "26.1",
+        "1.21.11",
+        "1.21.10",
+        "1.21.9",
+        "1.21.8",
+        "1.21.7",
+        "1.21.6",
+        "1.21.4",
+        "1.21.1",
+        "1.20.6",
+        "1.20.4",
+        "1.20.2",
+        "1.20.1"
+      ]
     },
     {
       "title": "Enhanced Celestials Shader Support (Major Update)",
@@ -17,7 +40,16 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-shader-support",
       "modrinth": "",
       "github": "",
-      "date": "2026-04-19"
+      "date": "2026-04-19",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge"
+      ],
+      "game_versions": [
+        "1.21.1",
+        "1.20.1"
+      ]
     },
     {
       "title": "Data Anchor",
@@ -26,7 +58,19 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/data-anchor",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco-MC/Data-Anchor",
-      "date": "2026-04-17"
+      "date": "2026-04-17",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "26.1",
+        "1.21.5",
+        "1.21.1",
+        "1.20.1"
+      ]
     },
     {
       "title": "CorgiLib",
@@ -35,7 +79,25 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/corgilib",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/CorgiLib",
-      "date": "2026-03-17"
+      "date": "2026-03-17",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.11",
+        "1.21.10",
+        "1.21.9",
+        "1.21.8",
+        "1.21.4",
+        "1.21.1",
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2"
+      ]
     },
     {
       "title": "TimeCore - Calendar",
@@ -44,7 +106,16 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/timecore-calendar",
       "modrinth": "https://modrinth.com/mod/timecore-calendar",
       "github": "https://github.com/CorgiTaco-MC/TimeCore",
-      "date": "2026-03-17"
+      "date": "2026-03-17",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.1"
+      ]
     },
     {
       "title": "Oh The Biomes We've Gone",
@@ -53,7 +124,21 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-weve-gone",
       "modrinth": "",
       "github": "https://github.com/Potion-Studios/Oh-The-Biomes-Weve-Gone",
-      "date": "2026-06-16"
+      "date": "2026-06-16",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.11",
+        "1.21.10",
+        "1.21.8",
+        "1.21.4",
+        "1.21.1",
+        "1.20.1"
+      ]
     },
     {
       "title": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
@@ -62,7 +147,29 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Enhanced-Celestials",
-      "date": "2026-03-05"
+      "date": "2026-03-05",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.1",
+        "1.21",
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18.1",
+        "1.18",
+        "1.17.1",
+        "1.16.5",
+        "1.16.4"
+      ]
     },
     {
       "title": "World Guard",
@@ -71,7 +178,15 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/world-guard",
       "modrinth": "",
       "github": "",
-      "date": "2025-03-18"
+      "date": "2025-03-18",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge"
+      ],
+      "game_versions": [
+        "1.21.1"
+      ]
     },
     {
       "title": "Oh The Biomes You'll Go Refabricated",
@@ -80,7 +195,26 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fabric",
       "modrinth": "",
       "github": "https://github.com/Potion-Studios/BYG",
-      "date": "2024-11-24"
+      "date": "2024-11-24",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19",
+        "1.18.2",
+        "1.18.1",
+        "1.18",
+        "1.16.5",
+        "1.16.4",
+        "1.16.3",
+        "1.16.2",
+        "1.16.1"
+      ]
     },
     {
       "title": "Feature Recycler",
@@ -89,7 +223,17 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/feature-recycler",
       "modrinth": "",
       "github": "",
-      "date": "2024-10-21"
+      "date": "2024-10-21",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.1",
+        "1.20.1"
+      ]
     },
     {
       "title": "Block Swap",
@@ -98,7 +242,21 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Block-Swap",
-      "date": "2023-06-20"
+      "date": "2023-06-20",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18",
+        "1.16.5"
+      ]
     },
     {
       "title": "Enhanced Celestials(Fabric) - Blood Moons & Harvest Moons",
@@ -107,7 +265,25 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-fabric",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Enhanced-Celestials",
-      "date": "2025-03-18"
+      "date": "2025-03-18",
+      "loaders": [
+        "Fabric",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18.1",
+        "1.18",
+        "1.17.1",
+        "1.16.5",
+        "1.16.4"
+      ]
     },
     {
       "title": "Oh The Biomes You'll Go",
@@ -116,7 +292,26 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go",
       "modrinth": "",
       "github": "https://github.com/Potion-Studios/BYG",
-      "date": "2024-11-24"
+      "date": "2024-11-24",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19",
+        "1.18.2",
+        "1.18.1",
+        "1.18",
+        "1.16.5",
+        "1.16.4",
+        "1.16.3",
+        "1.16.2",
+        "1.16.1",
+        "1.15.2",
+        "1.12.2"
+      ]
     },
     {
       "title": "Block Swap (Fabric)",
@@ -125,7 +320,20 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap-fabric",
       "modrinth": "",
       "github": "",
-      "date": "2023-06-20"
+      "date": "2023-06-20",
+      "loaders": [
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18"
+      ]
     },
     {
       "title": "Overworld Two (Forge)",
@@ -134,7 +342,14 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/overworld-two-forge",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/overworld-two",
-      "date": "2023-03-28"
+      "date": "2023-03-28",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5",
+        "1.16.4"
+      ]
     },
     {
       "title": "Lazy DataFixerUpper(LazyDFU) [FORGE]",
@@ -143,7 +358,26 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/lazy-dfu-forge",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/lazydfu",
-      "date": "2023-01-11"
+      "date": "2023-01-11",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19.3",
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18.1",
+        "1.18",
+        "1.17.1",
+        "1.17",
+        "1.16.5",
+        "1.16.4",
+        "1.16.3",
+        "1.16.2",
+        "1.16.1"
+      ]
     },
     {
       "title": "CameraOverhaul (Forge)",
@@ -152,7 +386,22 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/camera-overhaul-forge",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Minecraft-CameraOverhaul",
-      "date": "2022-10-30"
+      "date": "2022-10-30",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.16.5",
+        "1.16.4",
+        "1.16.3",
+        "1.16.2",
+        "1.16.1",
+        "1.16"
+      ]
     },
     {
       "title": "Entity Collision FPS Fix",
@@ -161,7 +410,17 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
-      "date": "2022-06-13"
+      "date": "2022-06-13",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.16.5"
+      ]
     },
     {
       "title": "Entity Collision FPS Fix Refabricated",
@@ -170,7 +429,16 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix-fabric",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
-      "date": "2022-06-13"
+      "date": "2022-06-13",
+      "loaders": [
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2"
+      ]
     },
     {
       "title": "Default Amplified Biomes 2",
@@ -179,7 +447,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/default-amplified-biomes-2",
       "modrinth": "",
       "github": "",
-      "date": "2022-06-11"
+      "date": "2022-06-11",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5"
+      ]
     },
     {
       "title": "Mobifier(Fabric)",
@@ -188,7 +462,14 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier-fabric",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Mobifier",
-      "date": "2022-06-10"
+      "date": "2022-06-10",
+      "loaders": [
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.19",
+        "1.18.2"
+      ]
     },
     {
       "title": "Mobifier",
@@ -197,7 +478,15 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Mobifier",
-      "date": "2022-06-10"
+      "date": "2022-06-10",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19",
+        "1.18.2",
+        "1.16.5"
+      ]
     },
     {
       "title": "Enhanced Celestials Mobifier Integration (Fabric)",
@@ -206,7 +495,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration-fabric",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Mobifier-Enhanced-Celestials-Addon",
-      "date": "2022-05-05"
+      "date": "2022-05-05",
+      "loaders": [
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.18.2"
+      ]
     },
     {
       "title": "Enhanced Celestials Mobifier Integration",
@@ -215,7 +510,14 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Mobifier-Enhanced-Celestials-Addon",
-      "date": "2022-05-05"
+      "date": "2022-05-05",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.18.2",
+        "1.16.5"
+      ]
     },
     {
       "title": "Shutup Experimental Settings!",
@@ -224,7 +526,22 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/shutup-experimental-settings",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/ShutupExperimentalSettings",
-      "date": "2022-04-19"
+      "date": "2022-04-19",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18.1",
+        "1.18",
+        "1.16.5",
+        "1.16.4",
+        "1.16.3",
+        "1.16.2"
+      ]
     },
     {
       "title": "Phantom Spawn Tweaks",
@@ -233,7 +550,14 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/phantom-spawn-tweaks",
       "modrinth": "",
       "github": "",
-      "date": "2021-12-26"
+      "date": "2021-12-26",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5",
+        "1.16.4"
+      ]
     },
     {
       "title": "Compact Status Effects Forge",
@@ -242,7 +566,15 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/compact-status-effects-forge",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/CompactStatusEffects",
-      "date": "2021-12-22"
+      "date": "2021-12-22",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5",
+        "1.16.4",
+        "1.16"
+      ]
     },
     {
       "title": "Perfect Accuracy Forge",
@@ -251,7 +583,15 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/perfect-accuracy-forge",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/PerfectAccuracy",
-      "date": "2021-12-22"
+      "date": "2021-12-22",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5",
+        "1.16.4",
+        "1.16"
+      ]
     },
     {
       "title": "Thread Control",
@@ -260,7 +600,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/thread-control",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/MC-Thread-Control",
-      "date": "2021-09-25"
+      "date": "2021-09-25",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5"
+      ]
     },
     {
       "title": "Oh The Biomes You'll Go Fixes",
@@ -269,7 +615,11 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fixes",
       "modrinth": "",
       "github": "",
-      "date": "2021-08-23"
+      "date": "2021-08-23",
+      "loaders": [],
+      "game_versions": [
+        "1.12.2"
+      ]
     },
     {
       "title": "Better Weather (Discontinued)",
@@ -278,7 +628,17 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Better-Weather",
-      "date": "2021-08-09"
+      "date": "2021-08-09",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5",
+        "1.16.4",
+        "1.16.3",
+        "1.16.2",
+        "1.16.1"
+      ]
     },
     {
       "title": "Structure Warden",
@@ -287,7 +647,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/structure-warden",
       "modrinth": "",
       "github": "",
-      "date": "2021-08-09"
+      "date": "2021-08-09",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5"
+      ]
     },
     {
       "title": "Improved Floating Islands",
@@ -296,7 +662,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/improved-floating-islands",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Simple-Floating-Islands",
-      "date": "2021-08-04"
+      "date": "2021-08-04",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5"
+      ]
     },
     {
       "title": "Rider Denier",
@@ -305,7 +677,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/rider-denier",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Rider-Denier",
-      "date": "2021-07-09"
+      "date": "2021-07-09",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5"
+      ]
     },
     {
       "title": "Upstream(Fabric)",
@@ -314,7 +692,13 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream-fabric",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Upstream",
-      "date": "2020-12-17"
+      "date": "2020-12-17",
+      "loaders": [
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.16.4"
+      ]
     },
     {
       "title": "Upstream",
@@ -323,7 +707,14 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Upstream",
-      "date": "2020-12-15"
+      "date": "2020-12-15",
+      "loaders": [
+        "Forge"
+      ],
+      "game_versions": [
+        "1.16.5",
+        "1.16.4"
+      ]
     },
     {
       "title": "Better Weather (Fabric) (Discontinued)",
@@ -332,7 +723,17 @@
       "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather-fabric",
       "modrinth": "",
       "github": "https://github.com/CorgiTaco/Better-Weather",
-      "date": "2020-09-12"
+      "date": "2020-09-12",
+      "loaders": [
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.16.4",
+        "1.16.3",
+        "1.16.2",
+        "1.16.1",
+        "1.15.2"
+      ]
     }
   ]
 }
