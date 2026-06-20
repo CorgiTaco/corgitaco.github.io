@@ -182,7 +182,7 @@
 
     // ── Layout state ──────────────────────────────────────────────────────────
 
-    let currentLayout = 'grid';
+    let currentLayout = 'list';
 
     function setLayout(l) {
         currentLayout = l;
@@ -319,8 +319,8 @@
                 ${filterHtml}
             </div>
             <div id="layout-pill">
-                <button id="layout-btn-grid" class="layout-pill-btn active" title="Grid view"><i class="fa fa-th"></i></button>
-                <button id="layout-btn-list" class="layout-pill-btn"        title="List view"><i class="fa fa-list"></i></button>
+                <button id="layout-btn-grid" class="layout-pill-btn"        title="Grid view"><i class="fa fa-th"></i></button>
+                <button id="layout-btn-list" class="layout-pill-btn active" title="List view"><i class="fa fa-list"></i></button>
             </div>
         </div>`;
     }
@@ -539,8 +539,14 @@
         });
 
         // ── Layout pill ──
-        document.getElementById('layout-btn-grid')?.addEventListener('click', () => setLayout('grid'));
-        document.getElementById('layout-btn-list')?.addEventListener('click', () => setLayout('list'));
+        document.getElementById('layout-btn-grid')?.addEventListener('click', () => {
+            setLayout('grid');
+            updateUrlParams({ view: 'grid' });
+        });
+        document.getElementById('layout-btn-list')?.addEventListener('click', () => {
+            setLayout('list');
+            updateUrlParams({ view: null }); // list is default, no param needed
+        });
 
         // ── Clear viewed ──
         document.getElementById('blog-clear-viewed-btn')?.addEventListener('click', clearViewedHistory);
@@ -712,6 +718,8 @@
 
         wireAll(posts);
         loadFilterFromParams();
+        const savedView = new URLSearchParams(window.location.search).get('view');
+        setLayout(savedView === 'grid' ? 'grid' : 'list');
         handleHash(posts);
     }
 

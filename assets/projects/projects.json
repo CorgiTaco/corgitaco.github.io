@@ -1,706 +1,574 @@
 [
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/JmJuZYkRkCY",
-      "name": "Checkpoint - I Survived 100 Days as SCARY MYTHS in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - I Survived 100 Days as SCARY MYTHS in Minecraft",
+    "url": "https://youtu.be/JmJuZYkRkCY",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/22o5RfKRlXw",
-      "name": "Checkpoint - Shin Sonic vs Security House in Minecraft",
-      "thumb_fit": "cover",
-      "tags": [
-        "Minecraft",
-        "Gameplay",
-        "Checkpoint"
-      ]
-    }
+    "title": "Checkpoint - Shin Sonic vs Security House in Minecraft",
+    "url": "https://youtu.be/22o5RfKRlXw",
+    "photo_fit": "cover",
+    "tags": ["Minecraft", "Gameplay", "Checkpoint"]
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/w1JgtGCbtl8",
-      "name": "Checkpoint - The Story of Minecraft's First CREAKING",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - The Story of Minecraft's First CREAKING",
+    "url": "https://youtu.be/w1JgtGCbtl8",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/MDb1iaFdoTU",
-      "name": "Checkpoint - Minecraft But There's Robot Upgrades",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Minecraft But There's Robot Upgrades",
+    "url": "https://youtu.be/MDb1iaFdoTU",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/lYaXatFUcuk",
-      "name": "Checkpoint - Level 1 vs Level 1000 Trap in Minecraft!",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Level 1 vs Level 1000 Trap in Minecraft!",
+    "url": "https://youtu.be/lYaXatFUcuk",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/Nbs-H07Qsww",
-      "name": "Checkpoint - Pranking My Friend with AMANDA THE ADVENTURER in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Pranking My Friend with AMANDA THE ADVENTURER in Minecraft",
+    "url": "https://youtu.be/Nbs-H07Qsww",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/K-PGP7pPLPs",
-      "name": "Checkpoint - Minecraft But There's SONIC Hearts",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Minecraft But There's SONIC Hearts",
+    "url": "https://youtu.be/K-PGP7pPLPs",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/QzL6g5-uKt0",
-      "name": "Checkpoint - This Scary Minecraft World Can HEAR You...",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - This Scary Minecraft World Can HEAR You...",
+    "url": "https://youtu.be/QzL6g5-uKt0",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/OjBo5n6WUVo",
-      "name": "Checkpoint - Cartoons vs Security House in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Cartoons vs Security House in Minecraft",
+    "url": "https://youtu.be/OjBo5n6WUVo",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/nh0AM1sG7dw",
-      "name": "Checkpoint - Minecraft But There's Time Upgrades",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Minecraft But There's Time Upgrades",
+    "url": "https://youtu.be/nh0AM1sG7dw",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/gIkswnZzVbg",
-      "name": "Checkpoint - The Scariest Minecraft Theory You DON'T Know...",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - The Scariest Minecraft Theory You DON'T Know...",
+    "url": "https://youtu.be/gIkswnZzVbg",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/RyzwLu2VN-4",
-      "name": "Checkpoint - How Big Can the Mutant Spider Get?",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - How Big Can the Mutant Spider Get?",
+    "url": "https://youtu.be/RyzwLu2VN-4",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/S_sERG-aylc",
-      "name": "Checkpoint - The Bloop vs Security House in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - The Bloop vs Security House in Minecraft",
+    "url": "https://youtu.be/S_sERG-aylc",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/qpWydUdH_Cc",
-      "name": "Checkpoint - Rebuilding an Abandoned YOUTUBER Store in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Rebuilding an Abandoned YOUTUBER Store in Minecraft",
+    "url": "https://youtu.be/qpWydUdH_Cc",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/q3uM23RN5RI",
-      "name": "Checkpoint - Minecraft But There's Candy Hearts",
-      "thumb_fit": "cover"
-    }
+    "title": "Checkpoint - Minecraft But There's Candy Hearts",
+    "url": "https://youtu.be/q3uM23RN5RI",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/R2SOKyNJ1jQ",
-      "name": "TommyInnit - Minecraft's NEW Natural Disaster Mod Is Mad",
-      "thumb_fit": "cover"
-    }
+    "title": "TommyInnit - Minecraft's NEW Natural Disaster Mod Is Mad",
+    "url": "https://youtu.be/R2SOKyNJ1jQ",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/TbrO5ONPp3s",
-      "name": "Fundy - So I Added WAY Too Many Slimes to Minecraft...",
-      "thumb_fit": "cover"
-    }
+    "title": "Fundy - So I Added WAY Too Many Slimes to Minecraft...",
+    "url": "https://youtu.be/TbrO5ONPp3s",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/xEXWdQbmvwA",
-      "name": "Karan - Minecraft Manhunt But Anything I Spell Upgrades Me",
-      "thumb_fit": "cover"
-    }
+    "title": "Karan - Minecraft Manhunt But Anything I Spell Upgrades Me",
+    "url": "https://youtu.be/xEXWdQbmvwA",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/aN7ACGpMHA0",
-      "name": "Ryguyrocky - I Survived 100 Days as a BARBARIAN in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Ryguyrocky - I Survived 100 Days as a BARBARIAN in Minecraft",
+    "url": "https://youtu.be/aN7ACGpMHA0",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/Bwgdr3E5Zcg",
-      "name": "Ryguyrocky - I Survived 100 Days as a SPY in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Ryguyrocky - I Survived 100 Days as a SPY in Minecraft",
+    "url": "https://youtu.be/Bwgdr3E5Zcg",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/Bp6EsmNjEsM",
-      "name": "Ryguyrocky - I Survived 100 Days as GOKU in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Ryguyrocky - I Survived 100 Days as GOKU in Minecraft",
+    "url": "https://youtu.be/Bp6EsmNjEsM",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/S9GMWlzdWhM",
-      "name": "Ryguyrocky - I Survived 100 Days as the AKATSUKI in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Ryguyrocky - I Survived 100 Days as the AKATSUKI in Minecraft",
+    "url": "https://youtu.be/S9GMWlzdWhM",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/eNOIe68q-AQ",
-      "name": "Ryguyrocky - I Survived 100 Days as the DEMON SLAYER in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Ryguyrocky - I Survived 100 Days as the DEMON SLAYER in Minecraft",
+    "url": "https://youtu.be/eNOIe68q-AQ",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/RsyIs_21Axg",
-      "name": "Ryguyrocky - I Survived 100 Days as the TRANSFORMERS in Minecraft",
-      "thumb_fit": "cover"
-    }
+    "title": "Ryguyrocky - I Survived 100 Days as the TRANSFORMERS in Minecraft",
+    "url": "https://youtu.be/RsyIs_21Axg",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/Cj_ncLnnyXk",
-      "name": "Socksfor1 - 100 Players Simulate Attack on Titan",
-      "thumb_fit": "cover"
-    }
+    "title": "Socksfor1 - 100 Players Simulate Attack on Titan",
+    "url": "https://youtu.be/Cj_ncLnnyXk",
+    "photo_fit": "cover"
   },
   {
     "type": "youtube",
-    "config": {
-      "url": "https://youtu.be/_NhIOEQ64q8",
-      "name": "Karl - 100 Players Survive Natural Disasters in Minecraft!",
-      "thumb_fit": "cover"
-    }
+    "title": "Karl - 100 Players Survive Natural Disasters in Minecraft!",
+    "url": "https://youtu.be/_NhIOEQ64q8",
+    "photo_fit": "cover"
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Oh The Trees You'll Grow",
-      "description": "Tree library used by popular mods such as Oh The Biomes We've Gone.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1198/857/256/256/638775139519930532.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
-      "modrinth": "",
-      "github": "",
-      "date": "2024-01-16",
-      "thumb_fit": "contain"
-    }
+    "title": "Oh The Trees You'll Grow",
+    "excerpt": "Tree library used by popular mods such as Oh The Biomes We've Gone.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1198/857/256/256/638775139519930532.png",
+    "photo_fit": "contain",
+    "date": "2024-01-16",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Enhanced Celestials Shader Support (Major Update)",
-      "description": "Adds full shader compatibility to Enhanced Celestials, allowing lunar events and custom moons to render correctly with modern shader packs.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1593/752/256/256/639030625676577921.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-shader-support",
-      "modrinth": "",
-      "github": "",
-      "date": "2026-01-04",
-      "thumb_fit": "contain"
-    }
+    "title": "Enhanced Celestials Shader Support (Major Update)",
+    "excerpt": "Adds full shader compatibility to Enhanced Celestials, allowing lunar events and custom moons to render correctly with modern shader packs.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1593/752/256/256/639030625676577921.png",
+    "photo_fit": "contain",
+    "date": "2026-01-04",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-shader-support",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Data Anchor",
-      "description": "Simple library mod with helpful data attaching and networking utilities including attaching data to entities, chunks, players, and worlds with low boilerplate code. Its own system built from the ground up for multiloader support.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1182/5/256/256/638755421016469847.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/data-anchor",
-      "modrinth": "",
-      "github": "",
-      "date": "2025-02-19",
-      "thumb_fit": "contain"
-    }
+    "title": "Data Anchor",
+    "excerpt": "Simple library mod with helpful data attaching and networking utilities including attaching data to entities, chunks, players, and worlds with low boilerplate code. Its own system built from the ground up for multiloader support.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1182/5/256/256/638755421016469847.png",
+    "photo_fit": "contain",
+    "date": "2025-02-19",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/data-anchor",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "CorgiLib",
-      "description": "A library mod containing code used across Corgi Taco's mods.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1693/756/256/256/639075035147145509.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/corgilib",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-10-24",
-      "thumb_fit": "contain"
-    }
+    "title": "CorgiLib",
+    "excerpt": "A library mod containing code used across Corgi Taco's mods.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1693/756/256/256/639075035147145509.png",
+    "photo_fit": "contain",
+    "date": "2022-10-24",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/corgilib",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "TimeCore - Calendar",
-      "description": "Library mod that handles Minecraft's extremely inconsistent day time.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1704/827/256/256/639083079650559524.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/timecore-calendar",
-      "modrinth": "https://modrinth.com/mod/timecore-calendar",
-      "github": "https://github.com/CorgiTaco-MC/TimeCore",
-      "date": "2026-03-05",
-      "thumb_fit": "contain"
-    }
+    "title": "TimeCore - Calendar",
+    "excerpt": "Library mod that handles Minecraft's extremely inconsistent day time.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1704/827/256/256/639083079650559524.png",
+    "photo_fit": "contain",
+    "date": "2026-03-05",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/timecore-calendar",
+    "modrinth": "https://modrinth.com/mod/timecore-calendar",
+    "github": "https://github.com/CorgiTaco-MC/TimeCore"
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Oh The Biomes We've Gone",
-      "description": "An astounding sequel to the original BYG mod for 1.20.1+ with over 50+ biomes ranging from the magical to the realistic  and all breathtaking!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1046/639/256/256/638574763263078635.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-weve-gone",
-      "modrinth": "",
-      "github": "",
-      "date": "2024-07-28",
-      "thumb_fit": "contain"
-    }
+    "title": "Oh The Biomes We've Gone",
+    "excerpt": "An astounding sequel to the original BYG mod for 1.20.1+ with over 50+ biomes ranging from the magical to the realistic and all breathtaking!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1046/639/256/256/638574763263078635.png",
+    "photo_fit": "contain",
+    "date": "2024-07-28",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-weve-gone",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
-      "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1190/101/256/256/638764927492625008.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-01-21",
-      "thumb_fit": "contain"
-    }
+    "title": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
+    "excerpt": "A mod adding new Lunar Events like blood moons and harvest moons!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1190/101/256/256/638764927492625008.png",
+    "photo_fit": "contain",
+    "date": "2021-01-21",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "World Guard",
-      "description": "Mod that prevents your world from loading if its generator settings changed between now and the last time you loaded your world.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1203/632/256/256/638781096722619143.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/world-guard",
-      "modrinth": "",
-      "github": "",
-      "date": "2025-03-18",
-      "thumb_fit": "contain"
-    }
+    "title": "World Guard",
+    "excerpt": "Mod that prevents your world from loading if its generator settings changed between now and the last time you loaded your world.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1203/632/256/256/638781096722619143.png",
+    "photo_fit": "contain",
+    "date": "2025-03-18",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/world-guard",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Oh The Biomes You'll Go Refabricated",
-      "description": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/281/230/256/256/637284761944802812.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-06-29",
-      "thumb_fit": "contain"
-    }
+    "title": "Oh The Biomes You'll Go Refabricated",
+    "excerpt": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/281/230/256/256/637284761944802812.png",
+    "photo_fit": "contain",
+    "date": "2020-06-29",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Feature Recycler",
-      "description": "A simple mod that prevents crashes between world generation mods caused by Minecraft's Feature Cycler.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/1053/748/256/256/638584467981080316.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/feature-recycler",
-      "modrinth": "",
-      "github": "",
-      "date": "2024-08-05",
-      "thumb_fit": "contain"
-    }
+    "title": "Feature Recycler",
+    "excerpt": "A simple mod that prevents crashes between world generation mods caused by Minecraft's Feature Cycler.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1053/748/256/256/638584467981080316.png",
+    "photo_fit": "contain",
+    "date": "2024-08-05",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/feature-recycler",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Block Swap",
-      "description": "A simple mod to replace a given block with another.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/367/611/256/256/637534686697588271.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-04-08",
-      "thumb_fit": "contain"
-    }
+    "title": "Block Swap",
+    "excerpt": "A simple mod to replace a given block with another.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/367/611/256/256/637534686697588271.png",
+    "photo_fit": "contain",
+    "date": "2021-04-08",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Enhanced Celestials(Fabric) - Blood Moons & Harvest Moons",
-      "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/340/264/256/256/637481721235377013.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-02-08",
-      "thumb_fit": "contain"
-    }
+    "title": "Enhanced Celestials (Fabric) - Blood Moons & Harvest Moons",
+    "excerpt": "A mod adding new Lunar Events like blood moons and harvest moons!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/340/264/256/256/637481721235377013.png",
+    "photo_fit": "contain",
+    "date": "2021-02-08",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Oh The Biomes You'll Go",
-      "description": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/246/22/256/256/637155296232619409.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go",
-      "modrinth": "",
-      "github": "",
-      "date": "2016-07-16",
-      "thumb_fit": "contain"
-    }
+    "title": "Oh The Biomes You'll Go",
+    "excerpt": "An Adventure & Exploration mod like no other with unique, magical, realistic, and detailed biomes!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/246/22/256/256/637155296232619409.png",
+    "photo_fit": "contain",
+    "date": "2016-07-16",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Block Swap (Fabric)",
-      "description": "A simple mod to replace a given block with another.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/462/916/256/256/637742565330772754.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-12-05",
-      "thumb_fit": "contain"
-    }
+    "title": "Block Swap (Fabric)",
+    "excerpt": "A simple mod to replace a given block with another.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/462/916/256/256/637742565330772754.png",
+    "photo_fit": "contain",
+    "date": "2021-12-05",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/block-swap-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Overworld Two (Forge)",
-      "description": "An optimization mod that generates the overworld(and nether too) much faster than Vaniila!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/326/109/256/256/637445368823128128.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/overworld-two-forge",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-12-28",
-      "thumb_fit": "contain"
-    }
+    "title": "Overworld Two (Forge)",
+    "excerpt": "An optimization mod that generates the overworld (and nether too) much faster than Vanilla!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/326/109/256/256/637445368823128128.png",
+    "photo_fit": "contain",
+    "date": "2020-12-28",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/overworld-two-forge",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Lazy DataFixerUpper(LazyDFU) [FORGE]",
-      "description": "Makes the initialization of DataFixerUpper \"lazy\"",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/359/41/256/256/637520662016454676.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/lazy-dfu-forge",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-03-23",
-      "thumb_fit": "contain"
-    }
+    "title": "Lazy DataFixerUpper (LazyDFU) [FORGE]",
+    "excerpt": "Makes the initialization of DataFixerUpper \"lazy\"",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/359/41/256/256/637520662016454676.png",
+    "photo_fit": "contain",
+    "date": "2021-03-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/lazy-dfu-forge",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "CameraOverhaul (Forge)",
-      "description": "A forge port of Camera Overhaul. Makes gameplay more satisfying through the use of various camera tilting.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/339/503/256/256/637479868245164532.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/camera-overhaul-forge",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-02-04",
-      "thumb_fit": "contain"
-    }
+    "title": "CameraOverhaul (Forge)",
+    "excerpt": "A forge port of Camera Overhaul. Makes gameplay more satisfying through the use of various camera tilting.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/339/503/256/256/637479868245164532.png",
+    "photo_fit": "contain",
+    "date": "2021-02-04",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/camera-overhaul-forge",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Entity Collision FPS Fix",
-      "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/552/981/256/256/637892935998892983.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-05-29",
-      "thumb_fit": "contain"
-    }
+    "title": "Entity Collision FPS Fix",
+    "excerpt": "Client side mod that optimizes entities on the render thread. Fixes MC-228976.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/552/981/256/256/637892935998892983.png",
+    "photo_fit": "contain",
+    "date": "2022-05-29",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Entity Collision FPS Fix Refabricated",
-      "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/553/452/256/256/637894101323351271.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-05-29",
-      "thumb_fit": "contain"
-    }
+    "title": "Entity Collision FPS Fix Refabricated",
+    "excerpt": "Client side mod that optimizes entities on the render thread. Fixes MC-228976.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/553/452/256/256/637894101323351271.png",
+    "photo_fit": "contain",
+    "date": "2022-05-29",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Default Amplified Biomes 2",
-      "description": "Amplifiedd biomes to season your existing Minecraft worlds!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/557/879/256/256/637905312868799966.jpeg",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/default-amplified-biomes-2",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-06-12",
-      "thumb_fit": "contain"
-    }
+    "title": "Default Amplified Biomes 2",
+    "excerpt": "Amplified biomes to season your existing Minecraft worlds!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/557/879/256/256/637905312868799966.jpeg",
+    "photo_fit": "contain",
+    "date": "2022-06-12",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/default-amplified-biomes-2",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Mobifier(Fabric)",
-      "description": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/541/896/256/256/637869710821405483.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-05-01",
-      "thumb_fit": "contain"
-    }
+    "title": "Mobifier (Fabric)",
+    "excerpt": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/541/896/256/256/637869710821405483.png",
+    "photo_fit": "contain",
+    "date": "2022-05-01",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Mobifier",
-      "description": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/385/965/256/256/637574147775846044.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-05-24",
-      "thumb_fit": "contain"
-    }
+    "title": "Mobifier",
+    "excerpt": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/385/965/256/256/637574147775846044.png",
+    "photo_fit": "contain",
+    "date": "2021-05-24",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/mobifier",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Enhanced Celestials Mobifier Integration (Fabric)",
-      "description": "Simple bridge mod adding mobifier condition to check current lunar event.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/543/263/256/256/637873093794501806.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-05-05",
-      "thumb_fit": "contain"
-    }
+    "title": "Enhanced Celestials Mobifier Integration (Fabric)",
+    "excerpt": "Simple bridge mod adding mobifier condition to check current lunar event.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/543/263/256/256/637873093794501806.png",
+    "photo_fit": "contain",
+    "date": "2022-05-05",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Enhanced Celestials Mobifier Integration",
-      "description": "Simple bridge mod adding mobifier condition to check current lunar event.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/543/198/256/256/637872937055418253.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration",
-      "modrinth": "",
-      "github": "",
-      "date": "2022-05-05",
-      "thumb_fit": "contain"
-    }
+    "title": "Enhanced Celestials Mobifier Integration",
+    "excerpt": "Simple bridge mod adding mobifier condition to check current lunar event.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/543/198/256/256/637872937055418253.png",
+    "photo_fit": "contain",
+    "date": "2022-05-05",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-mobifier-integration",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Shutup Experimental Settings!",
-      "description": "Removes the Experimental Settings prompt before world creation.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/299/190/256/256/637352261915891559.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/shutup-experimental-settings",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-09-09",
-      "thumb_fit": "contain"
-    }
+    "title": "Shutup Experimental Settings!",
+    "excerpt": "Removes the Experimental Settings prompt before world creation.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/299/190/256/256/637352261915891559.png",
+    "photo_fit": "contain",
+    "date": "2020-09-09",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/shutup-experimental-settings",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Phantom Spawn Tweaks",
-      "description": "Adds some configurations that allow the user to tweak some properties of Phantom spawns",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/471/708/256/256/637760735167842201.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/phantom-spawn-tweaks",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-12-26",
-      "thumb_fit": "contain"
-    }
+    "title": "Phantom Spawn Tweaks",
+    "excerpt": "Adds some configurations that allow the user to tweak some properties of Phantom spawns.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/471/708/256/256/637760735167842201.png",
+    "photo_fit": "contain",
+    "date": "2021-12-26",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/phantom-spawn-tweaks",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Compact Status Effects Forge",
-      "description": "Reduced space consumption of status effects",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/470/763/256/256/637758059208641561.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/compact-status-effects-forge",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-12-23",
-      "thumb_fit": "contain"
-    }
+    "title": "Compact Status Effects Forge",
+    "excerpt": "Reduced space consumption of status effects.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/470/763/256/256/637758059208641561.png",
+    "photo_fit": "contain",
+    "date": "2021-12-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/compact-status-effects-forge",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Perfect Accuracy Forge",
-      "description": "Removes any inaccuracy from projectiles shot/thrown by players",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/470/757/256/256/637758054850313699.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/perfect-accuracy-forge",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-12-23",
-      "thumb_fit": "contain"
-    }
+    "title": "Perfect Accuracy Forge",
+    "excerpt": "Removes any inaccuracy from projectiles shot/thrown by players.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/470/757/256/256/637758054850313699.png",
+    "photo_fit": "contain",
+    "date": "2021-12-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/perfect-accuracy-forge",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Thread Control",
-      "description": "Set the limit on how many logical processors Minecraft can use!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/437/498/256/256/637681257352109292.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/thread-control",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-09-29",
-      "thumb_fit": "contain"
-    }
+    "title": "Thread Control",
+    "excerpt": "Set the limit on how many logical processors Minecraft can use!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/437/498/256/256/637681257352109292.png",
+    "photo_fit": "contain",
+    "date": "2021-09-29",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/thread-control",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Oh The Biomes You'll Go Fixes",
-      "description": "Fixes some issues with OBYG 1.12.2",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/422/672/256/256/637652432755045028.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fixes",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-08-23",
-      "thumb_fit": "contain"
-    }
+    "title": "Oh The Biomes You'll Go Fixes",
+    "excerpt": "Fixes some issues with OBYG 1.12.2.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/422/672/256/256/637652432755045028.png",
+    "photo_fit": "contain",
+    "date": "2021-08-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go-fixes",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Better Weather (Discontinued)",
-      "description": "A mod adding new weather events and seasons!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/292/154/256/256/637324627328004118.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-08-07",
-      "thumb_fit": "contain"
-    }
+    "title": "Better Weather (Discontinued)",
+    "excerpt": "A mod adding new weather events and seasons!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/292/154/256/256/637324627328004118.png",
+    "photo_fit": "contain",
+    "date": "2020-08-07",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "project",
-    "config": {
-      "name": "Minecraft Modding",
-      "description": "A collection of mods and projects related to Minecraft modding.",
-      "photo": "./assets/projects/banners/minecraft.png",
-      "link": "",
-      "thumb_fit": "cover"
-    }
+    "title": "Minecraft Modding",
+    "excerpt": "A collection of mods and projects related to Minecraft modding.",
+    "photo": "./assets/projects/banners/minecraft.png",
+    "photo_fit": "cover",
+    "link": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Structure Warden",
-      "description": "Make structures more challenging with specified conditions! Prevent block placing/breaking and more!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/417/256/256/256/637640873215616315.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/structure-warden",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-08-09",
-      "thumb_fit": "contain"
-    }
+    "title": "Structure Warden",
+    "excerpt": "Make structures more challenging with specified conditions! Prevent block placing/breaking and more!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/417/256/256/256/637640873215616315.png",
+    "photo_fit": "contain",
+    "date": "2021-08-09",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/structure-warden",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Improved Floating Islands",
-      "description": "A custom Floating Islands implementation w/ multiple biomes.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/414/377/256/256/637636352608600902.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/improved-floating-islands",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-08-04",
-      "thumb_fit": "contain"
-    }
+    "title": "Improved Floating Islands",
+    "excerpt": "A custom Floating Islands implementation with multiple biomes.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/414/377/256/256/637636352608600902.png",
+    "photo_fit": "contain",
+    "date": "2021-08-04",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/improved-floating-islands",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Rider Denier",
-      "description": "A simple mod to deny specific mobs from being ridden by dimension.",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/404/259/256/256/637614597886800741.jpeg",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/rider-denier",
-      "modrinth": "",
-      "github": "",
-      "date": "2021-07-11",
-      "thumb_fit": "contain"
-    }
+    "title": "Rider Denier",
+    "excerpt": "A simple mod to deny specific mobs from being ridden by dimension.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/404/259/256/256/637614597886800741.jpeg",
+    "photo_fit": "contain",
+    "date": "2021-07-11",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/rider-denier",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Upstream(Fabric)",
-      "description": "A mod that adds endless, wider rivers, and configurable rivers!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/357/951/256/256/637517952804399488.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-12-16",
-      "thumb_fit": "contain"
-    }
+    "title": "Upstream (Fabric)",
+    "excerpt": "A mod that adds endless, wider rivers, and configurable rivers!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/357/951/256/256/637517952804399488.png",
+    "photo_fit": "contain",
+    "date": "2020-12-16",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream-fabric",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Upstream",
-      "description": "A mod that adds endless, wider rivers, and configurable rivers!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/357/952/256/256/637517952955660439.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-12-17",
-      "thumb_fit": "contain"
-    }
+    "title": "Upstream",
+    "excerpt": "A mod that adds endless, wider rivers, and configurable rivers!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/357/952/256/256/637517952955660439.png",
+    "photo_fit": "contain",
+    "date": "2020-12-17",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/upstream",
+    "modrinth": "",
+    "github": ""
   },
   {
     "type": "minecraft_mod",
-    "config": {
-      "name": "Better Weather (Fabric) (Discontinued)",
-      "description": "A mod adding new weather events!",
-      "photo": "https://media.forgecdn.net/avatars/thumbnails/297/775/256/256/637346012122671995.png",
-      "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather-fabric",
-      "modrinth": "",
-      "github": "",
-      "date": "2020-09-01",
-      "thumb_fit": "contain"
-    }
+    "title": "Better Weather (Fabric) (Discontinued)",
+    "excerpt": "A mod adding new weather events!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/297/775/256/256/637346012122671995.png",
+    "photo_fit": "contain",
+    "date": "2020-09-01",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather-fabric",
+    "modrinth": "",
+    "github": ""
   }
 ]

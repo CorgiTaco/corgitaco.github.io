@@ -195,10 +195,10 @@
 
     function projectId(project, index) {
         if (project.type === 'youtube') {
-            const vid = youtubeId(project.config.url);
+            const vid = youtubeId(project.url);
             return 'yt-' + (vid || index);
         }
-        if (project.config.name) return slugify(project.config.name);
+        if (project.title) return slugify(project.title);
         return 'project-' + index;
     }
 
@@ -225,7 +225,7 @@
         const keysToDelete = [];
 
         for (const key of url.searchParams.keys()) {
-            if (view === 'grid') {
+            if (view === 'grid' || view === 'list') {
                 if (key.startsWith('sort-') || key.startsWith('tags-') || key.startsWith('hideViewed-')) keysToDelete.push(key);
             } else if (view === 'carousel') {
                 if (key === 'cats' || key === 'tags' || key === 'sort' || key === 'hideViewed') keysToDelete.push(key);
@@ -233,7 +233,11 @@
         }
 
         keysToDelete.forEach(k => url.searchParams.delete(k));
-        url.searchParams.set('view', view);
+        if (view === 'carousel') {
+            url.searchParams.delete('view'); // carousel is the default — no param needed
+        } else {
+            url.searchParams.set('view', view);
+        }
         history.replaceState(null, '', url.toString());
     }
 
@@ -252,7 +256,20 @@
     }
 
     function getCustomTags(proj) {
-        return Array.isArray(proj.config.tags) ? [...proj.config.tags] : [];
+        return Array.isArray(proj.tags) ? [...proj.tags] : [];
+    }
+
+    // ── Tag chips ─────────────────────────────────────────────────────────────
+
+    function buildProjTagChips(tags, maxVisible) {
+        if (!tags || !tags.length) return '';
+        const visible  = tags.slice(0, maxVisible || 99);
+        const overflow = tags.length - visible.length;
+        const chips    = visible.map(t =>
+            `<span class="proj-tag"><i class="fa fa-tag"></i>${t}</span>`
+        ).join('');
+        const more = overflow > 0 ? `<span class="proj-tag proj-tag-overflow">+${overflow}</span>` : '';
+        return `<div class="proj-tag-row">${chips}${more}</div>`;
     }
 
     // ── Card builders ────────────────────────────────────────────────────────
@@ -271,8 +288,10 @@
     function buildYoutubeCard(cfg, id, category, tags) {
         const vid   = youtubeId(cfg.url);
         const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
-        const fit   = cfg.thumb_fit || 'cover';
-        const label = cfg.name || 'Video';
+        const fit   = cfg.photo_fit || 'cover';
+        const label = cfg.title || 'Video';
+        const tagHtml = buildProjTagChips(tags, 4);
+        const excerpt = cfg.excerpt ? `<p class="proj-card-excerpt">${cfg.excerpt}</p>` : '';
         return `
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
@@ -286,40 +305,56 @@
                     </svg>
                 </div>
             </div>
-            <div class="proj-label"><i class="fa fa-youtube-play"></i> ${label}</div>
+            <div class="proj-card-body">
+                <div class="proj-label"><i class="fa fa-youtube-play" title="${category}"></i> ${label}</div>
+                ${tagHtml}
+                ${excerpt}
+            </div>
         </div>`;
     }
 
     function buildModCard(cfg, id, category, tags) {
-        const fit = cfg.thumb_fit || 'cover';
+        const fit = cfg.photo_fit || 'cover';
+        const tagHtml = buildProjTagChips(tags, 4);
+        const excerpt = cfg.excerpt ? `<p class="proj-card-excerpt">${cfg.excerpt}</p>` : '';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.title)} tabindex="0" role="button" aria-label="Open ${cfg.title}">
             <div class="proj-thumb">
-                <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
+                <img src="${cfg.photo}" alt="${cfg.title}" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
                 <div class="fav-overlay"><i class="fa fa-star fav-star" title="Favorite"></i></div>
             </div>
-            <div class="proj-label"><i class="fa fa-puzzle-piece"></i> ${cfg.name}</div>
+            <div class="proj-card-body">
+                <div class="proj-label"><i class="fa fa-puzzle-piece" title="${category}"></i> ${cfg.title}</div>
+                ${tagHtml}
+                ${excerpt}
+            </div>
         </div>`;
     }
 
     function buildProjectCard(cfg, id, category, tags) {
-        const fit = cfg.thumb_fit || 'cover';
+        const fit = cfg.photo_fit || 'cover';
+        const tagHtml = buildProjTagChips(tags, 4);
+        const excerpt = cfg.excerpt ? `<p class="proj-card-excerpt">${cfg.excerpt}</p>` : '';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.name)} tabindex="0" role="button" aria-label="Open ${cfg.name}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.title)} tabindex="0" role="button" aria-label="Open ${cfg.title}">
             <div class="proj-thumb">
-                <img src="${cfg.photo}" alt="${cfg.name}" loading="lazy" style="object-fit:${fit}">
+                <img src="${cfg.photo}" alt="${cfg.title}" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
                 <div class="fav-overlay"><i class="fa fa-star fav-star" title="Favorite"></i></div>
             </div>
-            <div class="proj-label"><i class="fa fa-folder-open"></i> ${cfg.name}</div>
+            <div class="proj-card-body">
+                <div class="proj-label"><i class="fa fa-folder-open" title="${category}"></i> ${cfg.title}</div>
+                ${tagHtml}
+                ${excerpt}
+            </div>
         </div>`;
     }
 
     function buildCard(proj, id, category, tags) {
-        if (proj.type === 'youtube')       return buildYoutubeCard(proj.config, id, category, tags);
-        if (proj.type === 'minecraft_mod') return buildModCard(proj.config, id, category, tags);
-        if (proj.type === 'project')       return buildProjectCard(proj.config, id, category, tags);
+        if (proj.type === 'youtube')       return buildYoutubeCard(proj, id, category, tags);
+        if (proj.type === 'minecraft_mod') return buildModCard(proj, id, category, tags);
+        if (proj.type === 'project')       return buildProjectCard(proj, id, category, tags);
         return '';
     }
 
@@ -328,7 +363,7 @@
     function buildYoutubeModal(cfg, id) {
         const vid      = youtubeId(cfg.url);
         const embedUrl = `https://www.youtube.com/embed/${vid}?autoplay=1`;
-        const title    = cfg.name || 'Video';
+        const title    = cfg.title || 'Video';
         return `
             <div class="modal-inner" id="modal-${id}">
                 <div class="modal-titlebar">
@@ -363,12 +398,12 @@
                     <span class="modal-win-btn modal-win-minimize"></span>
                     <span class="modal-win-btn modal-win-maximize"></span>
                 </div>
-                <span class="modal-win-title">${cfg.name} — zsh</span>
+                <span class="modal-win-title">${cfg.title} — zsh</span>
                 <button class="modal-fav-btn btn-theme" title="Add to favorites"><i class="fa fa-star"></i></button>
             </div>
-            <img class="modal-banner" src="${cfg.photo}" alt="${cfg.name}">
-            <h2 class="modal-title">${cfg.name}</h2>
-            <p class="modal-desc">${cfg.description}</p>
+            <img class="modal-banner" src="${cfg.photo}" alt="${cfg.title}">
+            <h2 class="modal-title">${cfg.title}</h2>
+            <p class="modal-desc">${cfg.excerpt}</p>
             <div class="modal-links">${links}</div>
             <button class="modal-back btn-theme"><i class="fa fa-arrow-left"></i> Back</button>
         </div>`;
@@ -383,21 +418,21 @@
                         <span class="modal-win-btn modal-win-minimize"></span>
                         <span class="modal-win-btn modal-win-maximize"></span>
                     </div>
-                    <span class="modal-win-title">${cfg.name} — zsh</span>
+                    <span class="modal-win-title">${cfg.title} — zsh</span>
                     <button class="modal-fav-btn btn-theme" title="Add to favorites"><i class="fa fa-star"></i></button>
                 </div>
-                <img class="modal-banner" src="${cfg.photo}" alt="${cfg.name}">
-                <h2 class="modal-title">${cfg.name}</h2>
-                <p class="modal-desc">${cfg.description}</p>
+                <img class="modal-banner" src="${cfg.photo}" alt="${cfg.title}">
+                <h2 class="modal-title">${cfg.title}</h2>
+                <p class="modal-desc">${cfg.excerpt}</p>
                 ${cfg.link ? `<a href="${cfg.link}" target="_blank" rel="noopener" class="btn-theme modal-ext-link"><i class="fa fa-external-link"></i> Visit Project</a>` : ''}
                 <button class="modal-back btn-theme"><i class="fa fa-arrow-left"></i> Back</button>
             </div>`;
     }
 
     function buildModal(proj, id) {
-        if (proj.type === 'youtube')       return buildYoutubeModal(proj.config, id);
-        if (proj.type === 'minecraft_mod') return buildModModal(proj.config, id);
-        if (proj.type === 'project')       return buildProjectModal(proj.config, id);
+        if (proj.type === 'youtube')       return buildYoutubeModal(proj, id);
+        if (proj.type === 'minecraft_mod') return buildModModal(proj, id);
+        if (proj.type === 'project')       return buildProjectModal(proj, id);
         return '';
     }
 
@@ -1221,9 +1256,9 @@
         const params = new URLSearchParams(window.location.search);
         const viewParam = params.get('view');
 
-        const view = (viewParam === 'grid' || viewParam === 'carousel')
+        const view = (viewParam === 'grid' || viewParam === 'list' || viewParam === 'carousel')
             ? viewParam
-            : (localStorage.getItem(LAYOUT_KEY) || 'carousel');
+            : 'carousel';
 
         cleanUrlForView(view);
         setLayout(view);
@@ -1235,21 +1270,24 @@
     }
 
     function applyLayout(layout) {
-        const grid        = document.getElementById('projects-scroll');
-        const carousel    = document.getElementById('carousel-layout');
-        const filterBar   = document.getElementById('filter-bar');
-        const rowOrderBar = document.getElementById('row-order-bar');
-        const btnGrid     = document.getElementById('layout-btn-grid');
-        const btnCarousel = document.getElementById('layout-btn-carousel');
+        const grid         = document.getElementById('projects-scroll');
+        const projectsGrid = document.getElementById('projects-grid');
+        const carousel     = document.getElementById('carousel-layout');
+        const filterBar    = document.getElementById('filter-bar');
+        const rowOrderBar  = document.getElementById('row-order-bar');
+        const btnGrid      = document.getElementById('layout-btn-grid');
+        const btnList      = document.getElementById('layout-btn-list');
+        const btnCarousel  = document.getElementById('layout-btn-carousel');
 
         if (layout === 'carousel') {
-            if (grid)        grid.style.display        = 'none';
-            if (carousel)    carousel.style.display    = '';
-
-            if (filterBar)   filterBar.style.display   = 'none';
-            if (rowOrderBar) rowOrderBar.style.display = '';
+            if (grid)         grid.style.display        = 'none';
+            if (carousel)     carousel.style.display    = '';
+            if (filterBar)    filterBar.style.display   = 'none';
+            if (rowOrderBar)  rowOrderBar.style.display = '';
+            if (projectsGrid) projectsGrid.classList.remove('proj-list-view');
 
             if (btnGrid)     btnGrid.classList.remove('active');
+            if (btnList)     btnList.classList.remove('active');
             if (btnCarousel) btnCarousel.classList.add('active');
 
             document.querySelectorAll('.cat-carousel').forEach(track => {
@@ -1259,11 +1297,13 @@
         } else {
             if (grid)        grid.style.display        = '';
             if (carousel)    carousel.style.display    = 'none';
-
             if (filterBar)   filterBar.style.display   = '';
             if (rowOrderBar) rowOrderBar.style.display = 'none';
 
-            if (btnGrid)     btnGrid.classList.add('active');
+            if (projectsGrid) projectsGrid.classList.toggle('proj-list-view', layout === 'list');
+
+            if (btnGrid)     btnGrid.classList.toggle('active',     layout === 'grid');
+            if (btnList)     btnList.classList.toggle('active',     layout === 'list');
             if (btnCarousel) btnCarousel.classList.remove('active');
         }
     }
@@ -1319,7 +1359,8 @@
         layoutPill.id = 'layout-pill';
         layoutPill.innerHTML = `
             <button id="layout-btn-grid"     class="layout-pill-btn" title="Grid layout"><i class="fa fa-th"></i></button>
-            <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-list"></i></button>
+            <button id="layout-btn-list"     class="layout-pill-btn" title="List layout"><i class="fa fa-list"></i></button>
+            <button id="layout-btn-carousel" class="layout-pill-btn" title="Carousel layout"><i class="fa fa-th-list"></i></button>
         `;
 
         const actionsGroup = document.createElement('div');
@@ -1346,7 +1387,9 @@
         layoutPill.addEventListener('click', (e) => {
             const btn = e.target.closest('.layout-pill-btn');
             if (!btn) return;
-            const next = btn.id === 'layout-btn-carousel' ? 'carousel' : 'grid';
+            const next = btn.id === 'layout-btn-carousel' ? 'carousel'
+                       : btn.id === 'layout-btn-list'     ? 'list'
+                       : 'grid';
 
             setLayout(next);
             cleanUrlForView(next);

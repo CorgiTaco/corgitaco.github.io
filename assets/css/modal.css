@@ -195,6 +195,6 @@
 
 /* Favorites carousel row header star icon */
 #cat-row-favorites .cat-row-title .fa-star {
-    color: #f5c518 !important;
+    color: var(--color-star) !important;
     margin-right: 6px;
 }

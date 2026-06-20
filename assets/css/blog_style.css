@@ -2,7 +2,7 @@
    Blog — terminal font
 ══════════════════════════════════════════════ */
 
-#main, #main * { font-family: 'Courier New', Courier, monospace; }
+#main, #main * { font-family: var(--font-mono); }
 
 #main .fa,
 #main [class^="fa-"],
@@ -197,7 +197,7 @@
 
 .blog-viewed-dot .fa {
     font-size: var(--fs-heading);
-    color: rgba(255,255,255,0.8) !important;
+    color: var(--color-text-dim) !important;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
 }
 
@@ -229,7 +229,7 @@
     font-size: var(--fs-label);
     border: 1px solid rgba(70, 162, 88, 0.4);
     background: rgba(70, 162, 88, 0.08);
-    color: rgba(255,255,255,0.75);
+    color: var(--color-text-dim);
     white-space: nowrap;
     flex-shrink: 0;
     line-height: 1.4;
@@ -245,13 +245,13 @@
 .blog-tag-btn:hover {
     background: rgba(70, 162, 88, 0.2);
     border-color: var(--main-color);
-    color: #fff;
+    color: var(--color-text);
 }
 
 .blog-tag-overflow {
     border-color: rgba(255,255,255,0.15);
     background: transparent;
-    color: rgba(255,255,255,0.4);
+    color: var(--color-text-ghost);
     font-size: var(--fs-label);
 }
 
@@ -345,7 +345,7 @@
 #blog-modal-content li { line-height: 1.7; font-size: var(--fs-body); opacity: 0.88; margin-bottom: 0.25em; }
 
 #blog-modal-content a { color: var(--main-color); text-decoration: underline; }
-#blog-modal-content a:hover { color: #5abf6e; }
+#blog-modal-content a:hover { color: var(--color-hover); }
 
 #blog-modal-content code {
     background: rgba(70,162,88,0.12);
@@ -511,7 +511,7 @@
 
 .blog-eye-icon {
     font-size: var(--fs-heading);
-    color: rgba(255,255,255,0.8) !important;
+    color: var(--color-text-dim) !important;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
     pointer-events: auto;
     cursor: pointer;
@@ -519,7 +519,7 @@
 }
 
 .blog-eye-icon:hover {
-    color: #ff5f57 !important;
+    color: var(--color-error) !important;
     transform: scale(1.1);
 }
 
@@ -540,13 +540,13 @@
 
 .blog-fav-star {
     font-size: var(--fs-heading);
-    color: rgba(255,255,255,0.55) !important;
+    color: var(--color-text-muted) !important;
     filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9));
     pointer-events: auto;
     cursor: pointer;
 }
 
-.blog-card[data-favorited="true"] .blog-fav-star { color: #f5c518 !important; }
+.blog-card[data-favorited="true"] .blog-fav-star { color: var(--color-star) !important; }
 
 /* ══════════════════════════════════════════════
    Modal favorite star button
