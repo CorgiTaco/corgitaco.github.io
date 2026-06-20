@@ -30,7 +30,7 @@ jobs:
       - name: Fetch CurseForge download stats
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          CURSEFORGE_MOD_IDS: ${{ vars.CURSEFORGE_PROJECTS }}
+          CURSEFORGE_PROJECTS: ${{ vars.CURSEFORGE_PROJECTS }}
           OUTPUT_DIR: data/curseforge
         run: python gh_scripts/fetch_curseforge_stats.py
 
