@@ -1202,7 +1202,7 @@ a.highlight-card-link {
 .form-submit-btn {
     width: 100%;
     margin-top: 0.5rem;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 1rem;
     padding: 0.75rem 1.5rem;
 }
@@ -1284,23 +1284,24 @@ a.highlight-card-link {
 .wwm-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 8px;
     padding: 14px 36px;
-    border: 1px solid rgba(70, 162, 88, 0.4);
+    border: 1px solid rgba(70, 162, 88, 0.35);
     border-radius: 6px;
     background: rgba(70, 162, 88, 0.08);
-    color: var(--main-color);
     font-size: 1rem;
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
     text-decoration: none;
-    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .wwm-btn:hover {
     background: rgba(70, 162, 88, 0.18);
-    border-color: rgba(70, 162, 88, 0.7);
-    color: var(--main-color);
+    border-color: var(--main-color);
     text-decoration: none;
 }
 
@@ -1430,19 +1431,24 @@ a.highlight-card-link {
 }
 
 .skills-more-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin-top: 10px;
-    padding: 5px 16px;
-    border-radius: 20px;
-    border: 1px solid rgba(70, 162, 88, 0.4);
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(70, 162, 88, 0.35);
     background: rgba(70, 162, 88, 0.08);
-    color: var(--main-color) !important;
     font-size: var(--fs-ui);
+    font-weight: 500;
+    font-family: inherit;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    display: block;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .skills-more-btn[hidden] { display: none !important; }
+
 
 @media (max-width: 500px) {
     .skills-category-row {
@@ -1457,6 +1463,6 @@ a.highlight-card-link {
 }
 
 .skills-more-btn:hover {
-    background: rgba(70, 162, 88, 0.15);
-    border-color: rgba(70, 162, 88, 0.6);
+    background: rgba(70, 162, 88, 0.18);
+    border-color: var(--main-color);
 }

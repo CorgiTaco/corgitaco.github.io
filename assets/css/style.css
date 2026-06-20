@@ -751,9 +751,9 @@ body.driver-active .fav-star {
     background: rgba(70, 162, 88, 0.08);
     border: 1px solid rgba(70, 162, 88, 0.35);
     border-radius: 6px;
-    font-size: var(--fs-body);
-    font-family: var(--font-mono);
-    color: var(--main-color) !important;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 500;
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
     text-decoration: none;
@@ -763,10 +763,25 @@ body.driver-active .fav-star {
 .btn-theme:hover, .resume-download-btn:hover, .form-submit-btn:hover:not(:disabled), .tm-close-btn:hover, #blog-modal-back:hover, .blog-download-btn:hover, .pdf-modal-dl-btn:hover, .mod-link:hover, .modal-ext-link:hover, .modal-back:hover {
     background: rgba(70, 162, 88, 0.18);
     border-color: var(--main-color);
-    color: var(--color-text) !important;
 }
 
 .form-submit-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.resume-download-btn {
+    padding: 14px 36px;
+}
+
+.btn-ghost {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text) !important;
 }
