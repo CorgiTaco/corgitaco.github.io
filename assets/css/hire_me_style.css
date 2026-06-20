@@ -739,16 +739,50 @@
 }
 
 .resume-contact-card {
-    flex: 0 0 auto;
-    min-width: 200px;
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
 }
 
-.resume-highlights-card {
+.contact-inner {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.contact-pfp {
+    flex-shrink: 0;
+}
+
+.contact-pfp-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(70, 162, 88, 0.4);
+    object-fit: cover;
+    display: block;
+}
+
+.contact-pfp-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(70, 162, 88, 0.3);
+    background: rgba(70, 162, 88, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--main-color);
+}
+
+.contact-details {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 8px;
+    min-width: 0;
 }
 
 .contact-scroll,
@@ -899,8 +933,8 @@
 }
 
 .highlights-cards-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 12px;
 }
 
@@ -916,6 +950,8 @@
     border-radius: 8px;
     gap: 8px;
     transition: border-color 0.2s, background 0.2s;
+    flex: 1 1 calc((100% - 48px) / 5);
+    min-width: 100px;
 }
 
 .highlight-card-asof {
@@ -933,9 +969,12 @@
     border-color: rgba(70, 162, 88, 0.5);
 }
 
+.highlight-card {
+    cursor: pointer;
+}
+
 a.highlight-card-link {
     text-decoration: none;
-    cursor: pointer;
 }
 
 .highlight-card-icon {
@@ -958,12 +997,22 @@ a.highlight-card-link {
 }
 
 .yt-modal-total {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 4px;
-    padding: 8px 0;
+    padding: 8px 0 20px;
+}
+
+.yt-modal-asof {
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+    font-size: 0.65rem;
+    color: var(--color-text-ghost) !important;
+    white-space: nowrap;
 }
 
 .yt-modal-total-num {
@@ -1070,14 +1119,14 @@ a.highlight-card-link {
 }
 
 @media (max-width: 700px) {
-    .highlights-cards-row {
-        grid-template-columns: repeat(3, 1fr);
+    .highlight-card {
+        flex: 1 1 calc((100% - 24px) / 3);
     }
 }
 
 @media (max-width: 440px) {
-    .highlights-cards-row {
-        grid-template-columns: repeat(2, 1fr);
+    .highlight-card {
+        flex: 1 1 calc((100% - 12px) / 2);
     }
 }
 

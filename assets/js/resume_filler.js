@@ -265,11 +265,16 @@
             `;
         }).join('');
 
+        const asOf = statsData.fetchedAt
+            ? `<span class="yt-modal-asof">As of ${formatCsvDate(statsData.fetchedAt.slice(0, 10))}</span>`
+            : '';
+
         body.innerHTML = `
             <span class="tm-tag">YouTube</span>
             <div class="yt-modal-total">
                 <span class="yt-modal-total-num">${formatNumber(statsData.totalViews)}</span>
                 <span class="yt-modal-total-label">total views across ${statsData.videoCount} videos</span>
+                ${asOf}
             </div>
             <hr class="tm-divider">
             <div class="yt-video-list">${rowsHtml}</div>
@@ -281,15 +286,19 @@
 
     // ── Downloads breakdown modal ─────────────────────────────────────────────
 
-    function openDownloadsModal(modrinthStats, curseforgeStatStr) {
+    function openDownloadsModal(modrinthStats, curseforgeStats) {
         const overlay  = document.getElementById('timeline-modal-overlay');
         const body     = document.getElementById('tm-body');
         const winTitle = document.getElementById('tm-win-title');
 
         winTitle.textContent = 'downloads — zsh';
 
-        const modrinthVal = modrinthStats ? formatViews(modrinthStats.downloads) : '—';
-        const asOf = modrinthStats && modrinthStats.date
+        const cfVal  = curseforgeStats ? formatNumber(curseforgeStats.downloads) : '—';
+        const cfAsOf = curseforgeStats && curseforgeStats.date
+            ? `<span class="downloads-asof">As of ${formatCsvDate(curseforgeStats.date)}</span>` : '';
+
+        const mrVal  = modrinthStats ? formatNumber(modrinthStats.downloads) : '—';
+        const mrAsOf = modrinthStats && modrinthStats.date
             ? `<span class="downloads-asof">As of ${formatCsvDate(modrinthStats.date)}</span>` : '';
 
         body.innerHTML = `
@@ -299,14 +308,15 @@
             <div class="downloads-breakdown">
                 <div class="downloads-platform">
                     <img src="https://www.curseforge.com/favicon.ico" alt="CurseForge" class="downloads-platform-icon">
-                    <span class="downloads-platform-stat">${escapeHTML(curseforgeStatStr || '—')}</span>
+                    <span class="downloads-platform-stat">${cfVal}</span>
                     <span class="downloads-platform-label">CurseForge</span>
+                    ${cfAsOf}
                 </div>
                 <div class="downloads-platform">
                     <img src="https://modrinth.com/favicon.ico" alt="Modrinth" class="downloads-platform-icon">
-                    <span class="downloads-platform-stat">${modrinthVal}</span>
+                    <span class="downloads-platform-stat">${mrVal}</span>
                     <span class="downloads-platform-label">Modrinth</span>
-                    ${asOf}
+                    ${mrAsOf}
                 </div>
             </div>
         `;
@@ -367,12 +377,21 @@
             rows.push(`<div class="contact-row"><i class="fa fa-map-marker"></i><span>${escapeHTML(info.location)}</span></div>`);
         }
 
+        const pfpHtml = info.pfp
+            ? `<img src="${escapeAttr(info.pfp)}" alt="Profile" class="contact-pfp-img">`
+            : `<div class="contact-pfp-placeholder"><i class="fa fa-user"></i></div>`;
+
         el.innerHTML = `
             <div class="contact-scroll">
-                <div class="contact-header resume-header">
-                    <i class="fa fa-address-card"></i> Contact
+                <div class="contact-inner">
+                    <div class="contact-pfp">${pfpHtml}</div>
+                    <div class="contact-details">
+                        <div class="contact-header resume-header">
+                            <i class="fa fa-address-card"></i> Contact
+                        </div>
+                        ${rows.join('')}
+                    </div>
                 </div>
-                ${rows.join('')}
             </div>`;
     }
 
@@ -454,7 +473,7 @@
 
     // ── Highlights cards section ──────────────────────────────────────────────
 
-    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData) {
+    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData, curseforgeStats) {
         const el = document.getElementById('highlights-section');
         if (!el || !cards || !cards.length) return;
 
@@ -472,14 +491,13 @@
                     </${tag}>
                 `;
             }
-            if (c.source === 'modrinth_stats' && modrinthStats) {
-                const asOf = modrinthStats.date ? `<span class="highlight-card-asof">As of ${formatCsvDate(modrinthStats.date)}</span>` : '';
+            if (c.source === 'modrinth_stats' && (modrinthStats || curseforgeStats)) {
+                const totalDl = (modrinthStats ? modrinthStats.downloads : 0) + (curseforgeStats ? curseforgeStats.downloads : 0);
                 return `
                     <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="modrinth_stats" aria-label="View download breakdown">
                         <i class="fa fa-download highlight-card-icon"></i>
-                        <span class="highlight-card-stat">${formatViews(modrinthStats.downloads)}</span>
+                        <span class="highlight-card-stat">${formatViews(totalDl)}</span>
                         <span class="highlight-card-label">Minecraft Mod Downloads</span>
-                        ${asOf}
                     </div>
                 `;
             }
@@ -510,9 +528,8 @@
             <div class="highlights-cards-row">${cardsHtml}</div>
         `;
 
-        const modrinthCard = cards.find(c => c.source === 'modrinth_stats');
         el.querySelectorAll('[data-source="modrinth_stats"]').forEach(card => {
-            const activate = () => openDownloadsModal(modrinthStats, modrinthCard && modrinthCard.curseforge_stat);
+            const activate = () => openDownloadsModal(modrinthStats, curseforgeStats);
             card.addEventListener('click', activate);
             card.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
@@ -554,17 +571,19 @@
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
             fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null),
             fetch('../data/modrinth/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
-            fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null)
+            fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null),
+            fetch('../data/curseforge/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null)
         ]).then(function(results) {
-            var data           = results[0];
-            var csvText        = results[1];
-            var modrinthText   = results[2];
-            var statsData      = results[3];
-            var youtubeStats   = csvText ? parseYoutubeCsv(csvText) : null;
-            var modrinthStats  = modrinthText ? parseModrinthTotalsCsv(modrinthText) : null;
+            var data             = results[0];
+            var csvText          = results[1];
+            var modrinthText     = results[2];
+            var statsData        = results[3];
+            var curseforgeText   = results[4];
+            var youtubeStats     = csvText ? parseYoutubeCsv(csvText) : null;
+            var modrinthStats    = modrinthText ? parseModrinthTotalsCsv(modrinthText) : null;
+            var curseforgeStats  = curseforgeText ? parseModrinthTotalsCsv(curseforgeText) : null;
             buildContactCard(data.contact);
-            buildHighlightsCard(data.highlights);
-            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData);
+            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats);
             populateTimeline('experience-timeline', data.experience, 'Experience');
             populateTimeline('education-timeline', data.education, 'Education');
             buildTestimonials(data.testimonials);
