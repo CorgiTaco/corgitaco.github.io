@@ -88,6 +88,14 @@ def upsert_daily_row(csv_path: str, today: str, downloads: int, project_name: st
     return new_row
 
 
+def write_projects_json(output_dir: str, projects: list[dict]) -> None:
+    os.makedirs(output_dir, exist_ok=True)
+    json_path = os.path.join(output_dir, "projects.json")
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(projects, f, indent=2)
+    print(f"Wrote {len(projects)} projects -> {json_path}")
+
+
 def main():
     projects_env = os.environ.get("MODRINTH_PROJECTS")
     if not projects_env:
@@ -101,6 +109,8 @@ def main():
 
     print(f"Fetching data for projects: {', '.join(project_ids)}")
     projects = get_projects(project_ids, token)
+
+    write_projects_json(output_dir, projects)
 
     by_id = {p["id"]: int(p.get("downloads", 0)) for p in projects}
     by_slug = {p.get("slug"): int(p.get("downloads", 0)) for p in projects}
