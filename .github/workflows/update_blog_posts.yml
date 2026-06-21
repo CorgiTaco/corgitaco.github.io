@@ -128,9 +128,14 @@ jobs:
               '{action: $action, secret: $secret, title: $title, photo: $photo, date: $date, author: $author, excerpt: $excerpt, tags: $tags, slug: $slug}')
 
             # -L: follow Apps Script's 302 redirect to the actual JSON response.
+            # No -X POST here on purpose: curl infers POST from -d on the
+            # first request, then correctly downgrades to GET when following
+            # the redirect (Apps Script's content-echo endpoint only accepts
+            # GET/HEAD). Forcing -X POST would re-send POST on the redirect
+            # too, which gets rejected with 405.
             # -w: append the HTTP status code on its own line so we can tell
             # success from failure without parsing HTML error pages.
-            response=$(curl -fsS -L -X POST "$BLOG_WEBHOOK_URL" \
+            response=$(curl -fsS -L "$BLOG_WEBHOOK_URL" \
               -H "Content-Type: application/json" \
               -d "$payload" \
               -w "\nHTTP_STATUS:%{http_code}")
