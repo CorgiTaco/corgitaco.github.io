@@ -418,12 +418,11 @@
     // ── Modal builders ───────────────────────────────────────────────────────
 
     function buildYoutubeModal(cfg, id, tags) {
-        const vid      = youtubeId(cfg.url);
-        const embedUrl = `https://www.youtube.com/embed/${vid}?autoplay=1`;
-        const title    = cfg.title || 'Video';
-        const tagHtml  = buildProjTagChips(tags);
+        const vid     = youtubeId(cfg.url);
+        const title   = cfg.title || 'Video';
+        const tagHtml = buildProjTagChips(tags);
         return `
-            <div class="modal-inner" id="modal-${id}">
+            <div class="modal-inner" id="modal-${id}" data-yt-vid="${vid || ''}" data-yt-url="${cfg.url || ''}">
                 <div class="modal-titlebar">
                     <div class="modal-win-controls">
                         <span class="modal-win-btn modal-win-close"></span>
@@ -434,9 +433,13 @@
                     <button class="modal-fav-btn btn-theme" title="Add to favorites"><i class="fa fa-star"></i></button>
                 </div>
                 <div class="modal-video-wrap">
-                    <iframe data-src="${embedUrl}" src="" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
+                    <div class="yt-player-slot"></div>
+                    <div class="yt-embed-fallback" style="display:none">
+                        <p>Embedding is disabled for this video.</p>
+                        <a href="${cfg.url || '#'}" target="_blank" rel="noopener" class="btn-theme">
+                            <i class="fa fa-youtube-play"></i> Watch on YouTube
+                        </a>
+                    </div>
                 </div>
                 ${tagHtml}
                 ${cfg.views > 0 ? `<div class="modal-downloads"><i class="fa fa-eye"></i> ${formatDownloads(cfg.views)} views</div>` : ''}
@@ -1372,6 +1375,57 @@
         }
     }
 
+    // ── YouTube IFrame API ───────────────────────────────────────────────────
+
+    let _ytPlayer = null;
+
+    function loadYTApi(cb) {
+        if (window.YT && window.YT.Player) { cb(); return; }
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function() { if (prev) prev(); cb(); };
+        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+        }
+    }
+
+    function openYoutubePlayer(modalEl, vid) {
+        const wrap     = modalEl.querySelector('.modal-video-wrap');
+        const slot     = wrap.querySelector('.yt-player-slot');
+        const fallback = wrap.querySelector('.yt-embed-fallback');
+        if (!slot) return;
+
+        destroyYoutubePlayer();
+        slot.innerHTML = '';
+        slot.style.display = '';
+        if (fallback) fallback.style.display = 'none';
+
+        loadYTApi(function() {
+            _ytPlayer = new YT.Player(slot, {
+                videoId: vid,
+                width: '100%',
+                height: '100%',
+                playerVars: { autoplay: 1, origin: location.origin },
+                events: {
+                    onError: function(e) {
+                        if (e.data === 101 || e.data === 150) {
+                            slot.style.display = 'none';
+                            if (fallback) fallback.style.display = '';
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    function destroyYoutubePlayer() {
+        if (_ytPlayer) {
+            try { _ytPlayer.destroy(); } catch {}
+            _ytPlayer = null;
+        }
+    }
+
     // ── Main init ────────────────────────────────────────────────────────────
 
     function init(projects) {
@@ -1581,9 +1635,8 @@
         const target = document.getElementById('modal-' + id);
         if (!target) return;
 
-        target.querySelectorAll('iframe[data-src]').forEach(iframe => {
-            iframe.src = iframe.dataset.src;
-        });
+        const vid = target.dataset.ytVid;
+        if (vid) openYoutubePlayer(target, vid);
 
         // Sync the favorites star in this modal
         const favBtn = target.querySelector('.modal-fav-btn');
@@ -1613,11 +1666,11 @@
     }
 
     function closeModal() {
+        destroyYoutubePlayer();
         const overlay = document.getElementById('modal-overlay');
         overlay.classList.remove('active');
         document.querySelectorAll('.modal-inner').forEach(el => el.classList.remove('active'));
         document.body.style.overflow = '';
-        overlay.querySelectorAll('iframe[data-src]').forEach(iframe => { iframe.src = ''; });
 
         if (location.hash.startsWith('#project-')) {
             history.pushState(null, '', location.pathname + location.search);

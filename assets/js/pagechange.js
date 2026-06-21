@@ -92,10 +92,8 @@ function handleRoute(url) {
 
             if (virtualDoc.title) document.title = virtualDoc.title;
 
-            // Sync any new stylesheets the fetched page needs.
-            // Collect load promises so content is injected only after styles apply —
-            // otherwise scripts that build UI (e.g. grid buttons) run before the
-            // stylesheet has loaded and elements render with wrong default styles.
+            // Sync any new stylesheets and head scripts the fetched page needs.
+            // Collect load promises so content is injected only after resources apply.
             const stylePromises = [];
             Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
                 const href = newLink.getAttribute('href');
@@ -110,6 +108,22 @@ function handleRoute(url) {
                     document.head.appendChild(link);
                 }
             });
+
+            // Sync head <script src> tags (e.g. Chart.js on the stats page).
+            // Scripts must load sequentially to respect dependency order.
+            const headScripts = Array.from(virtualDoc.querySelectorAll('head script[src]'));
+            const scriptLoadChain = headScripts.reduce((chain, newScript) => {
+                const src = newScript.getAttribute('src');
+                if (document.querySelector(`script[src="${src}"]`)) return chain;
+                return chain.then(() => new Promise(resolve => {
+                    const s = document.createElement('script');
+                    s.src = src;
+                    s.onload  = resolve;
+                    s.onerror = resolve;
+                    document.head.appendChild(s);
+                }));
+            }, Promise.resolve());
+            stylePromises.push(scriptLoadChain);
 
             const newMainContent = virtualDoc.getElementById("main");
             const currentMainElement = document.getElementById("main");

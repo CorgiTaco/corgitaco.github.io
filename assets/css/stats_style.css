@@ -1,14 +1,16 @@
-/* ── Let #main scroll, not the inner container ── */
+/* ── Stats page: flex column fills #main, no outer scroll ── */
 
 #main {
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 #stats-container {
-    padding: 20px var(--main-padding) 40px;
+    padding: 20px var(--main-padding) 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    flex: 1;
+    min-height: 0;
+    gap: 0;
 }
 
 /* ── Accordions ── */
@@ -16,6 +18,13 @@
 .stat-accordion {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+    min-height: 0;
+}
+
+/* Open accordion fills remaining vertical space */
+.stat-accordion.is-open {
+    flex: 1;
 }
 
 .stat-acc-header {
@@ -34,6 +43,7 @@
     width: 100%;
     text-align: left;
     transition: opacity 0.15s;
+    flex-shrink: 0;
 }
 
 .stat-acc-header:hover { opacity: 0.75; }
@@ -67,15 +77,18 @@
     transform: rotate(180deg);
 }
 
-/* Smooth height animation via grid trick */
+/* Body uses grid trick for open/close animation,
+   and fills the accordion's flex space when open */
 .stat-acc-body {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.35s ease;
+    min-height: 0;
 }
 
 .is-open .stat-acc-body {
     grid-template-rows: 1fr;
+    flex: 1;
 }
 
 .stat-acc-inner {
@@ -85,10 +98,13 @@
     gap: 12px;
     padding-top: 0;
     transition: padding-top 0.35s ease;
+    min-height: 0;
 }
 
 .is-open .stat-acc-inner {
     padding-top: 20px;
+    padding-bottom: 20px;
+    overflow-y: auto;
 }
 
 /* ── Loading state ── */
@@ -157,19 +173,57 @@
     margin-left: auto;
 }
 
-/* ── Date range / period toggle bar ── */
+/* ── Date range wrapper (preset bar + expandable custom row) ── */
+
+.stat-range-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
 .stat-range-bar {
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
     align-items: center;
-    padding: 4px 0 2px;
 }
 
-/* Range bar sitting between section-head and chart (not inside head) */
-.stat-section > .stat-range-bar {
-    padding: 0 0 4px;
+.stat-custom-range {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2px 0 0;
+}
+
+.stat-date-input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(70, 162, 88, 0.35);
+    border-radius: 3px;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 3px 6px;
+    cursor: pointer;
+    outline: none;
+    width: 118px;
+    color-scheme: dark;
+}
+
+.stat-date-input:focus {
+    border-color: rgba(70, 162, 88, 0.8);
+}
+
+.stat-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.stat-range-sep {
+    color: rgba(255, 255, 255, 0.3);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
 }
 
 .stat-ctrl-btn {
@@ -356,6 +410,20 @@
     .stat-ctrl-btn {
         flex: 1;
         text-align: center;
+    }
+
+    .stat-date-input {
+        width: 100%;
+        flex: 1;
+    }
+
+    .stat-custom-range {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stat-range-sep {
+        display: none;
     }
 
     .stat-chart-tall { height: 200px; }

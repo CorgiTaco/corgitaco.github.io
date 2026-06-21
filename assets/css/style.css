@@ -179,7 +179,7 @@ a:hover {
 #sticky-header {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 200;
     background: transparent;
     flex-shrink: 0;
 }

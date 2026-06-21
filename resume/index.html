@@ -193,9 +193,13 @@
             <span class="modal-win-title" id="yt-video-win-title">video — zsh</span>
         </div>
         <div class="modal-video-wrap">
-            <iframe id="yt-video-iframe" src="" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+            <div id="yt-video-player-slot"></div>
+            <div id="yt-video-fallback" class="yt-embed-fallback" style="display:none">
+                <p>Embedding is disabled for this video.</p>
+                <a id="yt-video-fallback-link" href="#" target="_blank" rel="noopener" class="btn-theme">
+                    <i class="fa fa-youtube-play"></i> Watch on YouTube
+                </a>
+            </div>
         </div>
         <button class="modal-back btn-theme" id="yt-video-back"><i class="fa fa-arrow-left"></i> Back</button>
     </div>

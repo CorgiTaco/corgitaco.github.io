@@ -325,31 +325,76 @@
         document.body.style.overflow = 'hidden';
     }
 
+    // ── YouTube IFrame API helpers ────────────────────────────────────────────
+
+    let _resumeYtPlayer = null;
+
+    function loadYTApi(cb) {
+        if (window.YT && window.YT.Player) { cb(); return; }
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function() { if (prev) prev(); cb(); };
+        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+        }
+    }
+
+    function destroyResumeYtPlayer() {
+        if (_resumeYtPlayer) {
+            try { _resumeYtPlayer.destroy(); } catch {}
+            _resumeYtPlayer = null;
+        }
+    }
+
     // ── YouTube video embed modal ─────────────────────────────────────────────
 
     function openYoutubeVideoModal(videoId, title) {
         const overlay  = document.getElementById('yt-video-overlay');
         const modal    = document.getElementById('yt-video-modal');
-        const iframe   = document.getElementById('yt-video-iframe');
         const winTitle = document.getElementById('yt-video-win-title');
+        const slot     = document.getElementById('yt-video-player-slot');
+        const fallback = document.getElementById('yt-video-fallback');
+        const fbLink   = document.getElementById('yt-video-fallback-link');
 
         winTitle.textContent = title + ' — zsh';
-        iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
         overlay.classList.add('active');
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        destroyResumeYtPlayer();
+        slot.innerHTML = '';
+        slot.style.display = '';
+        if (fallback) fallback.style.display = 'none';
+        if (fbLink) fbLink.href = 'https://youtu.be/' + videoId;
+
+        loadYTApi(function() {
+            _resumeYtPlayer = new YT.Player(slot, {
+                videoId: videoId,
+                width: '100%',
+                height: '100%',
+                playerVars: { autoplay: 1, origin: location.origin },
+                events: {
+                    onError: function(e) {
+                        if (e.data === 101 || e.data === 150) {
+                            slot.style.display = 'none';
+                            if (fallback) fallback.style.display = '';
+                        }
+                    }
+                }
+            });
+        });
     }
 
     function bindYoutubeVideoModal() {
         const overlay = document.getElementById('yt-video-overlay');
         const modal   = document.getElementById('yt-video-modal');
-        const iframe  = document.getElementById('yt-video-iframe');
         if (!overlay) return;
 
         function close() {
+            destroyResumeYtPlayer();
             overlay.classList.remove('active');
             modal.classList.remove('active');
-            iframe.src = '';
             document.body.style.overflow = '';
         }
 

@@ -76,7 +76,7 @@
             borderWidth:      2,
             pointRadius:      n <= 10 ? 3 : n <= 40 ? 1 : 0,
             pointHoverRadius: 5,
-            tension:          0.35,
+            tension:          0,
             fill,
             spanGaps:         false,
         };
@@ -91,7 +91,7 @@
             borderWidth:      1.5,
             pointRadius:      0,
             pointHoverRadius: 4,
-            tension:          0.3,
+            tension:          0,
             spanGaps:         false,
         };
     }
@@ -180,7 +180,7 @@
         { label: 'All', days: null },
     ];
 
-    function makeRangeEl(lastDate, onChange) {
+    function makeRangeEl(firstDate, lastDate, onChange) {
         const wrap      = el('div', 'stat-range-wrap');
         const bar       = el('div', 'stat-range-bar');
         const customRow = el('div', 'stat-custom-range');
@@ -201,11 +201,19 @@
             if (!days) { btn.classList.add('is-active'); activePreset = btn; }
             btn.addEventListener('click', () => {
                 activatePreset(btn);
-                if (!days) { onChange(null, null); return; }
-                const last   = new Date((lastDate || new Date().toISOString().slice(0, 10)) + 'T00:00:00Z');
-                const from   = new Date(last);
+                if (!days) {
+                    fromIn.value = firstDate || '';
+                    toIn.value   = lastDate  || '';
+                    onChange(null, null);
+                    return;
+                }
+                const last    = new Date((lastDate || new Date().toISOString().slice(0, 10)) + 'T00:00:00Z');
+                const from    = new Date(last);
                 from.setUTCDate(from.getUTCDate() - days + 1);
-                onChange(from.toISOString().slice(0, 10), null);
+                const fromStr = from.toISOString().slice(0, 10);
+                fromIn.value  = fromStr;
+                toIn.value    = lastDate || new Date().toISOString().slice(0, 10);
+                onChange(fromStr, null);
             });
             bar.appendChild(btn);
         });
@@ -218,11 +226,13 @@
         });
         bar.appendChild(customBtn);
 
-        // Date inputs
+        // Date inputs — pre-filled to the full data range (matching "All")
         const fromIn = document.createElement('input');
         fromIn.type = 'date'; fromIn.className = 'stat-date-input';
+        fromIn.value = firstDate || '';
         const toIn = document.createElement('input');
         toIn.type = 'date'; toIn.className = 'stat-date-input';
+        toIn.value = lastDate || '';
         const applyBtn = el('button', 'stat-ctrl-btn', 'Apply');
 
         applyBtn.addEventListener('click', () => {
@@ -389,7 +399,7 @@
         if (!labels.length) { chartDiv.innerHTML = '<p class="stat-no-data">No history yet.</p>'; return; }
 
         let chart = null;
-        section.insertBefore(makeRangeEl(labels[labels.length - 1], (from, to) => { if (chart) sliceChart(chart, labels, [data], from, to); }), chartDiv);
+        section.insertBefore(makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => { if (chart) sliceChart(chart, labels, [data], from, to); }), chartDiv);
         chart = renderChart(chartDiv.querySelector('canvas'), labels, [mkDataset(title, data, col, { fill: true })]);
     }
 
@@ -416,7 +426,7 @@
 
         const chartDiv = section.querySelector('.stat-chart-wrap');
         let chart = null;
-        section.insertBefore(makeRangeEl(labels[labels.length - 1], (from, to) => { if (chart) sliceChart(chart, labels, [cfData, mrData, totData], from, to); }), chartDiv);
+        section.insertBefore(makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => { if (chart) sliceChart(chart, labels, [cfData, mrData, totData], from, to); }), chartDiv);
 
         const opts = baseOptions();
         opts.plugins.legend.display = true;
@@ -481,7 +491,8 @@
         // Date range control (between head and chart)
         const allDates = Object.values(deltaMap).flatMap(d => d.map(r => r.date)).sort();
         const lastDate = allDates[allDates.length - 1] || '';
-        const rangeEl  = makeRangeEl(lastDate, (from, to) => { fromStr = from; toStr = to; render(); });
+        const firstDate = allDates[0] || '';
+        const rangeEl  = makeRangeEl(firstDate, lastDate, (from, to) => { fromStr = from; toStr = to; render(); });
         section.appendChild(rangeEl);
         section.appendChild(body);
         container.appendChild(section);
@@ -576,7 +587,7 @@
         body.appendChild(chartWrap);
         body.appendChild(legendSide);
 
-        section.appendChild(makeRangeEl(labels[labels.length - 1] || '', (from, to) => { if (chart) sliceChart(chart, labels, origData, from, to); }));
+        section.appendChild(makeRangeEl(labels[0] || '', labels[labels.length - 1] || '', (from, to) => { if (chart) sliceChart(chart, labels, origData, from, to); }));
         section.appendChild(body);
         container.appendChild(section);
 
@@ -635,7 +646,7 @@
         body.appendChild(legendSide);
 
         const origData = allDatasets.map(ds => [...ds.data]);
-        section.appendChild(makeRangeEl(allDates[allDates.length - 1] || '', (from, to) => { if (chart) sliceChart(chart, allDates, origData, from, to); }));
+        section.appendChild(makeRangeEl(allDates[0] || '', allDates[allDates.length - 1] || '', (from, to) => { if (chart) sliceChart(chart, allDates, origData, from, to); }));
         section.appendChild(body);
         container.appendChild(section);
 
@@ -678,7 +689,25 @@
 
         container.innerHTML = '';
 
-        function makeAccordion(label, icon, buildFn) {
+        // Build each chart in its own task, starting only after the open animation finishes.
+        function scheduleBuilds(bodyEl, builders) {
+            function runAll() {
+                function next(i) {
+                    if (i >= builders.length) return;
+                    builders[i]();
+                    setTimeout(() => next(i + 1), 0);
+                }
+                next(0);
+            }
+            // Wait for the CSS grid-template-rows transition to complete
+            bodyEl.addEventListener('transitionend', function onEnd(e) {
+                if (e.propertyName !== 'grid-template-rows') return;
+                bodyEl.removeEventListener('transitionend', onEnd);
+                runAll();
+            });
+        }
+
+        function makeAccordion(label, icon, builders) {
             const acc    = el('div', 'stat-accordion');
             const header = el('button', 'stat-acc-header');
             header.innerHTML = `
@@ -694,7 +723,10 @@
 
             let built = false;
             const panel = {
-                open()  { acc.classList.add('is-open'); if (!built) { requestAnimationFrame(() => { buildFn(inner); built = true; }); } },
+                open() {
+                    acc.classList.add('is-open');
+                    if (!built) { built = true; scheduleBuilds(bodyEl, builders.map(b => () => b(inner))); }
+                },
                 close() { acc.classList.remove('is-open'); },
                 get isOpen() { return acc.classList.contains('is-open'); },
             };
@@ -705,17 +737,18 @@
         }
 
         const panels = [
-            makeAccordion('YouTube', 'fa-youtube-play', inner => {
-                buildOverviewChart(inner, 'Total Views', 'fa-eye', ytTotals, 'views', YT_COLOR);
-                if (videos.length) buildViewsDeltaChart(inner, videos, videoRows);
-                if (videos.length) buildVideoOverlayChart(inner, videos, videoRows);
-            }),
-            makeAccordion('Minecraft Mods', 'fa-puzzle-piece', inner => {
-                if (mods.length) buildModOverviewChart(inner, mods, modRows);
-                if (mods.length) buildDownloadsDeltaChart(inner, mods, modRows);
-                if (mods.length) buildModChart(inner, mods, modRows);
-            }),
+            makeAccordion('YouTube', 'fa-youtube-play', [
+                inner => buildOverviewChart(inner, 'Total Views', 'fa-eye', ytTotals, 'views', YT_COLOR),
+                inner => { if (videos.length) buildVideoOverlayChart(inner, videos, videoRows); },
+                inner => { if (videos.length) buildViewsDeltaChart(inner, videos, videoRows); },
+            ]),
+            makeAccordion('Minecraft Mods', 'fa-puzzle-piece', [
+                inner => { if (mods.length) buildModOverviewChart(inner, mods, modRows); },
+                inner => { if (mods.length) buildModChart(inner, mods, modRows); },
+                inner => { if (mods.length) buildDownloadsDeltaChart(inner, mods, modRows); },
+            ]),
         ];
+
     }
 
     if (document.readyState === 'loading') {
