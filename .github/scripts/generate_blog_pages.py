@@ -223,6 +223,10 @@ def generate_html(slug, meta, body):
     <meta property="og:url" content="https://corgitaco.dev/blog/{html_mod.escape(slug)}/">
     <meta property="og:type" content="article">
     {og_image}
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
+    <meta property="og:image:type" content="image/png">
+    <meta property="twitter:card" content="summary_large_image">
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
