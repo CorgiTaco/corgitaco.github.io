@@ -49,7 +49,7 @@ jobs:
           MODRINTH_PROJECTS: ${{ vars.MODRINTH_PROJECTS }}
           OUTPUT_JSON: data/mods.json
           HISTORY_DIR: data/history/mods
-        run: python gh_scripts/fetch_mod_metadata.py
+        run: python .github/scripts/fetch_mod_metadata.py
 
       - name: Commit and push if changed
         run: |

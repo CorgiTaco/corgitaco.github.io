@@ -750,17 +750,18 @@
 .contact-pfp {
     flex-shrink: 0;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .contact-pfp-img {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     border: 2px solid rgba(70, 162, 88, 0.4);
     object-fit: cover;
     object-position: center top;
     display: block;
-    align-self: center;
 }
 
 .contact-pfp-placeholder {
@@ -796,6 +797,7 @@
     gap: 8px;
     height: 100%;
 }
+
 
 .contact-header,
 .highlights-header {

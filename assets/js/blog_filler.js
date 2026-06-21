@@ -65,17 +65,7 @@
             c.dataset.favorited = isFavorited(slug) ? 'true' : 'false';
         });
 
-        // Sync open modal star
-        const modalStar = document.getElementById('blog-modal-fav-btn');
-        if (modalStar && modalStar.dataset.slug === slug) syncModalStar(modalStar, slug);
-
         sortFavoritesFirst();
-    }
-
-    function syncModalStar(btn, slug) {
-        const faved = isFavorited(slug);
-        btn.classList.toggle('active', faved);
-        btn.title = faved ? 'Remove from favorites' : 'Add to favorites';
     }
 
     function sortFavoritesFirst() {
@@ -394,95 +384,18 @@
         </div>`;
     }
 
-    // ── Open / close modal ────────────────────────────────────────────────────
+    // ── Open post (navigate to post page) ─────────────────────────────────────
 
-    function openModal(post) {
+    function openPost(post) {
         markAsViewed(post.slug);
-
-        // If hide-viewed is on, re-apply so card disappears if needed
         const hideViewedCb = document.getElementById('blog-hide-viewed');
         if (hideViewedCb && hideViewedCb.checked) applyFilter();
-
-        const overlay  = document.getElementById('blog-modal-overlay');
-        const inner    = document.getElementById('blog-modal-inner');
-        const winTitle = document.getElementById('blog-modal-win-title');
-        const banner   = document.getElementById('blog-modal-banner');
-        const content  = document.getElementById('blog-modal-content');
-        const sidebar  = document.getElementById('blog-modal-sidebar');
-        const favBtn   = document.getElementById('blog-modal-fav-btn');
-
-        winTitle.textContent = post.title + ' — zsh';
-
-        if (post.photo) {
-            banner.src = post.photo; banner.alt = post.title;
-            banner.style.objectFit = post.photo_fit || 'cover';
-            banner.style.display = 'block';
+        const path = (window._navBasePath || '') + '/blog/' + post.slug + '/';
+        if (typeof handleRoute === 'function') {
+            history.pushState(null, '', path);
+            handleRoute(path);
         } else {
-            banner.style.display = 'none';
-        }
-
-        // Wire fav button
-        if (favBtn) {
-            favBtn.dataset.slug = post.slug;
-            syncModalStar(favBtn, post.slug);
-            favBtn.onclick = (e) => { e.stopPropagation(); toggleFavorite(post.slug); };
-        }
-
-        // Sidebar
-        const dateHtml = post.date ? `
-            <div class="blog-sidebar-section">
-                <div class="blog-sidebar-label"><i class="fa fa-calendar"></i> Published</div>
-                <div class="blog-sidebar-value">${formatDate(post.date)}</div>
-            </div>` : '';
-
-        const authorHtml = post.author ? `
-            <div class="blog-sidebar-section">
-                <div class="blog-sidebar-label"><i class="fa fa-user"></i> Author</div>
-                <div class="blog-sidebar-value">${post.author}</div>
-            </div>` : '';
-
-        let downloadsHtml = '';
-        if (Array.isArray(post.downloads) && post.downloads.length > 0) {
-            const btns = post.downloads.map(dl => `
-                <a href="${dl.url}" target="_blank" rel="noopener" class="blog-download-btn">
-                    <i class="fa fa-download"></i><span>${dl.name}</span>
-                </a>`).join('');
-            downloadsHtml = `
-            <div class="blog-sidebar-section">
-                <div class="blog-sidebar-label"><i class="fa fa-download"></i> Downloads</div>
-                <div id="blog-modal-downloads">${btns}</div>
-            </div>`;
-        }
-
-        const tagsHtml = (post.tags && post.tags.length) ? `
-            <div class="blog-sidebar-section">
-                <div class="blog-sidebar-label"><i class="fa fa-tag"></i> Tags</div>
-                <div class="blog-sidebar-tags">${buildTagChips(post.tags)}</div>
-            </div>` : '';
-
-        sidebar.innerHTML = dateHtml + authorHtml + downloadsHtml + tagsHtml;
-
-        // Render markdown
-        if (typeof marked !== 'undefined') {
-            marked.setOptions({ breaks: true, gfm: true });
-            content.innerHTML = marked.parse(post.body || '');
-        } else {
-            content.textContent = post.body || '';
-        }
-
-        inner.scrollTop = 0;
-        inner.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        history.pushState(null, '', location.pathname + location.search + '#blog-' + post.slug);
-    }
-
-    function closeModal() {
-        document.getElementById('blog-modal-overlay').classList.remove('active');
-        document.getElementById('blog-modal-inner').classList.remove('active');
-        document.body.style.overflow = '';
-        if (location.hash.startsWith('#blog-')) {
-            history.pushState(null, '', location.pathname + location.search);
+            window.location.href = path;
         }
     }
 
@@ -523,11 +436,11 @@
                 applyFilter();
                 return;
             }
-            // Card → open modal
+            // Card → open post page
             const card = e.target.closest('.blog-card');
             if (card) {
                 const post = posts.find(p => p.slug === card.dataset.slug);
-                if (post) openModal(post);
+                if (post) openPost(post);
             }
         });
 
@@ -536,7 +449,7 @@
             const card = e.target.closest('.blog-card');
             if (!card) return;
             const post = posts.find(p => p.slug === card.dataset.slug);
-            if (post) openModal(post);
+            if (post) openPost(post);
         });
 
         // ── Layout pill ──
@@ -589,14 +502,6 @@
             });
         }
 
-        // ── Modal controls ──
-        document.getElementById('blog-modal-close-btn')?.addEventListener('click', closeModal);
-        document.getElementById('blog-modal-back')?.addEventListener('click', closeModal);
-        document.getElementById('blog-modal-overlay')?.addEventListener('click', (e) => {
-            if (e.target === document.getElementById('blog-modal-overlay')) closeModal();
-        });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-        window.addEventListener('popstate', () => handleHash(window._blogPosts || []));
     }
 
     // ── Discover & fetch posts ────────────────────────────────────────────────
@@ -638,8 +543,16 @@
     function handleHash(posts) {
         const hash = location.hash;
         if (!hash.startsWith('#blog-')) return;
-        const post = posts.find(p => p.slug === hash.replace('#blog-', ''));
-        if (post) openModal(post);
+        const slug = hash.replace('#blog-', '');
+        const post = posts.find(p => p.slug === slug);
+        if (!post) return;
+        const path = (window._navBasePath || '') + '/blog/' + post.slug + '/';
+        if (typeof handleRoute === 'function') {
+            history.pushState(null, '', path);
+            handleRoute(path);
+        } else {
+            window.location.href = path;
+        }
     }
 
     // ── Bootstrap ─────────────────────────────────────────────────────────────
@@ -688,11 +601,9 @@
             </div>
         `);
 
-        // Inject modal on <body> (outside #main) so position:fixed works correctly
-        // on mobile browsers where overflow:hidden on #main would trap fixed children.
-        // Remove any stale overlay from a previous navigation first.
-        const staleOverlay = document.getElementById('blog-modal-overlay');
-        if (staleOverlay) staleOverlay.remove();
+        // Inject subscribe modal on <body> (outside #main) so position:fixed works correctly.
+        // Remove any stale modal from a previous navigation first.
+        document.getElementById('subscribe-modal-overlay')?.remove();
         document.body.style.overflow = ''; // clean up any stuck overflow from prior run
 
         document.body.insertAdjacentHTML('beforeend', `
@@ -719,30 +630,6 @@
                             <button type="button" id="subscribe-back-btn" class="form-submit-btn btn-ghost" style="width:100%;margin-top:8px"><i class="fa fa-arrow-left"></i> Back</button>
                         </form>
                         <div id="subscribe-result" style="margin-top:14px;font-size:var(--fs-body);min-height:1.2em"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="blog-modal-overlay">
-                <div id="blog-modal-inner">
-                    <div id="blog-modal-titlebar">
-                        <div class="blog-modal-win-controls">
-                            <span class="blog-modal-win-btn blog-modal-win-close" id="blog-modal-close-btn"></span>
-                            <span class="blog-modal-win-btn blog-modal-win-minimize"></span>
-                            <span class="blog-modal-win-btn blog-modal-win-maximize"></span>
-                        </div>
-                        <span id="blog-modal-win-title"></span>
-                        <button class="blog-modal-fav-btn btn-theme" id="blog-modal-fav-btn" title="Add to favorites">
-                            <i class="fa fa-star"></i>
-                        </button>
-                    </div>
-                    <img id="blog-modal-banner" src="" alt="">
-                    <div id="blog-modal-body">
-                        <div id="blog-modal-content"></div>
-                        <div id="blog-modal-sidebar"></div>
-                    </div>
-                    <div id="blog-modal-footer">
-                        <button id="blog-modal-back"><i class="fa fa-arrow-left"></i> Back</button>
                     </div>
                 </div>
             </div>

@@ -83,7 +83,7 @@ window._buildNav = function(items) {
     items.forEach(function(item) {
         var isActive = item.href === '/'
             ? (currentPath === '' || currentPath === '/')
-            : currentPath === item.href;
+            : currentPath === item.href || currentPath.startsWith(item.href + '/');
 
         var li = document.createElement('li');
         if (isActive) li.id = 'nav-tab-active';

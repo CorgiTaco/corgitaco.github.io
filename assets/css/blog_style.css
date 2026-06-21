@@ -586,3 +586,35 @@
     align-items: flex-start;
     gap: 0;
 }
+
+/* ══════════════════════════════════════════════
+   Blog post — standalone page
+══════════════════════════════════════════════ */
+
+body.blog-post-page #blog-modal-inner {
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0;
+    border: none;
+    animation: none;
+}
+
+body.blog-post-page #blog-modal-footer {
+    position: static;
+}
+
+body.blog-post-page #blog-modal-sidebar {
+    top: 0;
+}
+
+@media (max-width: 700px) {
+    body.blog-post-page #blog-modal-inner {
+        max-width: 100%;
+        max-height: none;
+    }
+}

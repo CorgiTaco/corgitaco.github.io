@@ -131,6 +131,10 @@ function handleRoute(url) {
                     Object.values(Chart.instances).forEach(c => { try { c.destroy(); } catch {} });
                 }
 
+                // Sync body class so page-specific CSS scopes (e.g. body.blog-post-page)
+                // apply correctly after SPA navigation.
+                document.body.className = virtualDoc.body.className;
+
                 setInnerHTML(currentMainElement, newMainContent.innerHTML);
 
                 // Re-inject spinner into the freshly replaced #main
@@ -159,7 +163,7 @@ function handleRoute(url) {
                     const activeItem = items.find(function(item) {
                         return item.href === '/'
                             ? (currentPath === '' || currentPath === '/')
-                            : currentPath === item.href;
+                            : currentPath === item.href || currentPath.startsWith(item.href + '/');
                     });
                     const newPageLabel = activeItem ? activeItem.label : 'Home';
 
