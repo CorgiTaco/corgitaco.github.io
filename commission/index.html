@@ -23,6 +23,7 @@
     -->
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/resume_style.css">
+    <link rel="stylesheet" href="../assets/css/commission_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -40,7 +41,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 
-<body id="vanta-bg">
+<body id="vanta-bg" class="commission-page">
 
 
 <div id="main">
@@ -75,10 +76,11 @@
         </div>
     </div>
 
-    <p>Work in progress...</p>
+    <div id="commission-container"></div>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="../assets/js/commission_form.js"></script>
+    <script src="../assets/js/commission_filler.js"></script>
 
 </div>
 
@@ -117,9 +119,10 @@
                         <select id="commission-type" name="commission_type" required>
                             <option value="" disabled selected>Select an option</option>
                             <option value="for a YouTube Video">for a YouTube Video</option>
-                            <option value="a mod port">a mod port</option>
-                            <option value="a new mod">a new mod</option>
-                            <option value="other">other.</option>
+                            <option value="a new mod">a Minecraft mod</option>
+                            <option value="a Minecraft plugin">a Minecraft plugin</option>
+                            <option value="a mod port">a Minecraft mod port / update</option>
+                            <option value="other">other</option>
                         </select>
                     </div>
 

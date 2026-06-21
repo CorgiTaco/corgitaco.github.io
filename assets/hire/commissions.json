@@ -1,0 +1,172 @@
+{
+  "commonFields": [
+    { "id": "name",    "label": "Name / Handle",  "type": "text",  "required": true },
+    { "id": "email",   "label": "Email Address",   "type": "email", "required": true },
+    { "id": "discord", "label": "Discord Handle",  "type": "text"                   }
+  ],
+  "types": [
+    {
+      "key":       "youtube",
+      "label":     "YouTube Video",
+      "icon":      "fa-youtube-play",
+      "btnLabel":  "Commission a Video",
+      "modalType": "for a YouTube Video",
+      "description": "Need custom Minecraft content built specifically for your video or live event? I can create bespoke mods, plugins, maps, or game modes designed around your concept — from subscriber specials to large-scale MrBeast-style events.",
+      "examples": [
+        {
+          "title":       "SocksFor1 — Modded Series",
+          "description": "Custom mod suite built around a subscriber-driven modded playthrough.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Event Game Mode",
+          "description": "Full multiplayer game mode commissioned for a YouTube challenge video.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Custom Map & Mechanics",
+          "description": "Bespoke adventure map with hand-written mechanics for a series premiere.",
+          "image":       "",
+          "link":        ""
+        }
+      ],
+      "fields": [
+        { "id": "channel", "label": "Your YouTube Channel", "type": "url",      "placeholder": "https://youtube.com/..." },
+        { "id": "message", "label": "Video Concept / Brief", "type": "textarea", "required": true }
+      ]
+    },
+    {
+      "key":       "mod",
+      "label":     "Minecraft Mod",
+      "icon":      "fa-cube",
+      "btnLabel":  "Commission a Mod",
+      "modalType": "a new mod",
+      "description": "From small quality-of-life tweaks to sprawling content mods, I can build exactly what you have in mind. I specialise in world-generation, biome overhauls, terrain systems, and complex data-driven content across Forge, Fabric, and NeoForge.",
+      "examples": [
+        {
+          "title":       "World Blender",
+          "description": "Blends all registered biomes from every loaded mod into one seamless world.",
+          "image":       "",
+          "link":        "https://www.curseforge.com/minecraft/mc-mods/world-blender"
+        },
+        {
+          "title":       "Biomes O' Plenty Port",
+          "description": "Custom terrain integration layer bridging BOP biomes with a client's modpack.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Custom Content Mod",
+          "description": "Data-driven mobs, items, and world-gen structures tailored to a modpack theme.",
+          "image":       "",
+          "link":        ""
+        }
+      ],
+      "fields": [
+        { "id": "mc_versions", "label": "Minecraft Version(s)", "type": "text",     "required": true, "placeholder": "e.g. 1.20.1, 1.21" },
+        { "id": "loader",      "label": "Mod Loader",           "type": "select",   "required": true, "options": ["Forge", "Fabric", "NeoForge", "Multiple"] },
+        { "id": "message",     "label": "Mod Description / Details", "type": "textarea", "required": true }
+      ]
+    },
+    {
+      "key":       "plugin",
+      "label":     "Minecraft Plugin",
+      "icon":      "fa-plug",
+      "btnLabel":  "Commission a Plugin",
+      "modalType": "a Minecraft plugin",
+      "description": "Need server-side functionality without a full client mod? I build Paper/Spigot plugins for everything from simple admin utilities and economy hooks to complete custom game modes and mini-games for your server network.",
+      "examples": [
+        {
+          "title":       "Economy System",
+          "description": "Custom shop, currency, and auction house plugin for a survival server.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Mini-Game Engine",
+          "description": "Modular lobby + arena system supporting multiple simultaneous game instances.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Admin Tooling",
+          "description": "Role-based permission utility with per-world rules and audit logging.",
+          "image":       "",
+          "link":        ""
+        }
+      ],
+      "fields": [
+        { "id": "server_software", "label": "Server Software",              "type": "select",   "required": true, "options": ["Paper", "Spigot", "Purpur", "Other"] },
+        { "id": "message",         "label": "Plugin Description / Details", "type": "textarea", "required": true }
+      ]
+    },
+    {
+      "key":       "port",
+      "label":     "Minecraft Mod Port / Update",
+      "icon":      "fa-refresh",
+      "btnLabel":  "Request a Port / Update",
+      "modalType": "a mod port",
+      "description": "Favourite mod stuck on an old version? I can port or update mods to modern Minecraft versions and loader targets — including API migrations (Forge → NeoForge, MCP → Mojmap) and compatibility fixes for current modpacks.",
+      "examples": [
+        {
+          "title":       "1.12 → 1.20 Port",
+          "description": "Full source migration of a popular magic mod from legacy Forge to modern NeoForge.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Forge → Fabric Port",
+          "description": "Cross-loader port maintaining full feature parity with the original.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Compatibility Update",
+          "description": "Dependency and API surface updates to bring an unmaintained mod back to life.",
+          "image":       "",
+          "link":        ""
+        }
+      ],
+      "fields": [
+        { "id": "mod_link",       "label": "Mod Name / Link",             "type": "text",     "required": true },
+        { "id": "target_version", "label": "Target Minecraft Version(s)", "type": "text",     "required": true, "placeholder": "e.g. 1.21.1" },
+        { "id": "loader",         "label": "Mod Loader",                  "type": "select",   "required": true, "options": ["Forge", "Fabric", "NeoForge", "Multiple"] },
+        { "id": "message",        "label": "Additional Details",          "type": "textarea", "required": true }
+      ]
+    },
+    {
+      "key":       "other",
+      "label":     "Other",
+      "icon":      "fa-ellipsis-h",
+      "btnLabel":  "Send a Request",
+      "modalType": "other",
+      "description": "Have something in mind that doesn't fit neatly into a category? Reach out anyway — whether it's a technical consultation, a tool for your workflow, or anything else Minecraft-adjacent, I'm happy to discuss what's possible.",
+      "examples": [
+        {
+          "title":       "Technical Consultation",
+          "description": "Architecture review and recommendations for a complex modpack or server setup.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Build Tool / Script",
+          "description": "Custom CI pipeline or tooling script for a mod development team.",
+          "image":       "",
+          "link":        ""
+        },
+        {
+          "title":       "Something Else Entirely",
+          "description": "If it's Minecraft-adjacent and needs code, let's talk.",
+          "image":       "",
+          "link":        ""
+        }
+      ],
+      "fields": [
+        { "id": "commission_type", "label": "What do you need?", "type": "text",     "required": true },
+        { "id": "message",         "label": "Details",           "type": "textarea", "required": true }
+      ]
+    }
+  ]
+}

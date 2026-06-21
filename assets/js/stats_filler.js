@@ -892,12 +892,17 @@
         }
 
         function makeAccordion(label, icon, builders) {
-            const acc    = el('div', 'stat-accordion');
-            const header = el('button', 'stat-acc-header');
-            header.innerHTML = `
-                <span class="stat-acc-icon-wrap"><i class="fa ${icon}"></i></span>
-                <span class="stat-acc-label">${label}</span>
-                <i class="fa fa-chevron-down stat-acc-caret"></i>`;
+            const acc      = el('div', 'stat-accordion');
+            const header   = el('div', 'stat-acc-header');
+            const toggle   = el('button', 'stat-acc-toggle');
+            const caretBtn = el('button', 'stat-acc-caret-btn');
+            toggle.type   = 'button';
+            caretBtn.type = 'button';
+            caretBtn.setAttribute('aria-label', 'Toggle');
+            toggle.innerHTML   = `<span class="stat-acc-icon-wrap"><i class="fa ${icon}"></i></span><span class="stat-acc-label">${label}</span>`;
+            caretBtn.innerHTML = `<i class="fa fa-chevron-down stat-acc-caret"></i>`;
+            header.appendChild(toggle);
+            header.appendChild(caretBtn);
             const bodyEl = el('div', 'stat-acc-body');
             const inner  = el('div', 'stat-acc-inner');
             bodyEl.appendChild(inner);
@@ -914,9 +919,11 @@
                 close() { acc.classList.remove('is-open'); },
                 get isOpen() { return acc.classList.contains('is-open'); },
             };
-            header.addEventListener('click', () => {
+            function toggle_() {
                 if (panel.isOpen) { panel.close(); } else { panels.forEach(p => p.close()); panel.open(); }
-            });
+            }
+            toggle.addEventListener('click', toggle_);
+            caretBtn.addEventListener('click', toggle_);
             return panel;
         }
 

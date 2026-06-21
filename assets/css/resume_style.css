@@ -1165,50 +1165,6 @@ a.highlight-card-link {
    Commission Form & Modal
 ══════════════════════════════════════════════ */
 
-.custom-form .form-group {
-    margin-bottom: 1.2rem;
-}
-
-.custom-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: var(--color-text-dim) !important;
-    font-size: var(--fs-body);
-}
-
-.custom-form label .req-star {
-    color: var(--color-error);
-    margin-left: 2px;
-}
-
-.custom-form input,
-.custom-form textarea,
-.custom-form select {
-    width: 100%;
-    padding: 0.6rem;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(70, 162, 88, 0.4);
-    border-radius: 4px;
-    box-sizing: border-box;
-    color: var(--color-text) !important;
-    font-family: var(--font-mono);
-    font-size: var(--fs-body);
-    transition: border-color 0.15s, background 0.15s;
-}
-
-.custom-form input:focus,
-.custom-form textarea:focus,
-.custom-form select:focus {
-    outline: none;
-    border-color: var(--main-color);
-    background: rgba(0, 0, 0, 0.4);
-}
-
-.custom-form select option {
-    background: rgb(20, 20, 20);
-    color: var(--color-text);
-}
 
 .form-submit-btn {
     width: 100%;

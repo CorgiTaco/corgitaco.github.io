@@ -312,6 +312,7 @@
         return `
         <div id="page-title-bar">
             <h1><i class="fa fa-pencil"></i> Blog</h1>
+            <button class="btn-theme" id="blog-subscribe-btn"><i class="fa fa-envelope"></i> Subscribe</button>
             <div id="title-actions-group">
                 <button id="blog-clear-viewed-btn" class="btn-theme" title="Clear view history">
                     <i class="fa fa-eye"></i> <i class="fa fa-trash"></i>
@@ -695,6 +696,32 @@
         document.body.style.overflow = ''; // clean up any stuck overflow from prior run
 
         document.body.insertAdjacentHTML('beforeend', `
+            <div id="subscribe-modal-overlay">
+                <div class="tm-modal" id="subscribe-modal">
+                    <div class="tm-titlebar">
+                        <div class="tm-win-controls">
+                            <span class="tm-win-btn tm-win-close" id="subscribe-close-x"></span>
+                            <span class="tm-win-btn tm-win-min"></span>
+                            <span class="tm-win-btn tm-win-max"></span>
+                        </div>
+                        <span class="tm-win-title">subscribe — zsh</span>
+                    </div>
+                    <div class="tm-body" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:24px 32px 28px">
+                        <i class="fa fa-envelope" style="font-size:2.5rem;color:var(--main-color);margin-bottom:16px;opacity:0.8"></i>
+                        <h2 class="tm-title" style="margin-bottom:8px">Subscribe to the Newsletter</h2>
+                        <p style="color:var(--color-text-dim);font-size:var(--fs-body);margin-bottom:24px;line-height:1.5">Get new posts straight to your inbox. No spam, unsubscribe anytime.</p>
+                        <form id="subscribe-form" class="custom-form" style="width:100%;text-align:left">
+                            <div class="form-group">
+                                <label for="subscribe-email">Email Address <span class="req-star">*</span></label>
+                                <input type="email" id="subscribe-email" name="email" placeholder="you@example.com" required autocomplete="email">
+                            </div>
+                            <button type="submit" id="subscribe-submit-btn" class="form-submit-btn" style="width:100%">Subscribe</button>
+                        </form>
+                        <div id="subscribe-result" style="margin-top:14px;font-size:var(--fs-body);min-height:1.2em"></div>
+                    </div>
+                </div>
+            </div>
+
             <div id="blog-modal-overlay">
                 <div id="blog-modal-inner">
                     <div id="blog-modal-titlebar">
@@ -730,10 +757,104 @@
         }
 
         wireAll(posts);
+        wireSubscribe();
         loadFilterFromParams();
         const savedView = new URLSearchParams(window.location.search).get('view');
         setLayout(savedView === 'grid' ? 'grid' : 'list');
         handleHash(posts);
+    }
+
+    // ── Subscribe modal ───────────────────────────────────────────────────────
+
+    function wireSubscribe() {
+        const WEB_APP_URL = 'https://corgitaco.dev/subscribe';
+
+        const overlay   = document.getElementById('subscribe-modal-overlay');
+        const openBtn   = document.getElementById('blog-subscribe-btn');
+        const closeX    = document.getElementById('subscribe-close-x');
+        const form      = document.getElementById('subscribe-form');
+        const submitBtn = document.getElementById('subscribe-submit-btn');
+        const resultDiv = document.getElementById('subscribe-result');
+
+        function openSubscribe() {
+            resultDiv.textContent = '';
+            resultDiv.style.color = '';
+            form.reset();
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSubscribe() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (openBtn)  openBtn.addEventListener('click', openSubscribe);
+        if (closeX)   closeX.addEventListener('click', closeSubscribe);
+        if (overlay)  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSubscribe(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) closeSubscribe();
+        });
+
+        if (!form) return;
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('subscribe-email').value.trim();
+            if (!email) return;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending…';
+            resultDiv.textContent = '';
+            resultDiv.style.color = '';
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'email=' + encodeURIComponent(email)
+            })
+            .then(function (response) {
+                return response.text().then(function (text) {
+                    return { ok: response.ok, text: text };
+                });
+            })
+            .then(function (result) {
+                const isError =
+                    result.text.includes('failed to send') ||
+                    result.text.includes('Invalid email') ||
+                    result.text.includes('Something went wrong') ||
+                    result.text.includes('Forbidden');
+
+                if (!result.ok || isError) {
+                    resultDiv.style.color = '#ff5f57';
+                    resultDiv.textContent = extractMessage(result.text) || 'Something went wrong. Please try again.';
+                } else {
+                    resultDiv.style.color = 'var(--main-color)';
+                    resultDiv.textContent = extractMessage(result.text) || 'Check your inbox to confirm your subscription!';
+                    form.reset();
+                }
+            })
+            .catch(function () {
+                resultDiv.style.color = '#ff5f57';
+                resultDiv.textContent = 'Network error — please check your connection and try again.';
+            })
+            .finally(function () {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Subscribe';
+            });
+        });
+
+        function extractMessage(html) {
+            const match = html.match(/<h2>(.*?)<\/h2>\s*(<p[^>]*>(.*?)<\/p>)?/is);
+            if (!match) return null;
+            const heading = stripTags(match[1]);
+            const body    = match[3] ? stripTags(match[3]) : '';
+            return body ? heading + ' ' + body : heading;
+        }
+
+        function stripTags(str) {
+            return str.replace(/<[^>]*>/g, '').trim();
+        }
     }
 
     if (document.readyState === 'loading') {

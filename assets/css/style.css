@@ -632,7 +632,7 @@ body.driver-active .fav-star {
 }
 
 /* ── Modal Overlays ── */
-#modal-overlay, #timeline-modal-overlay, #pdf-modal-overlay, #commission-modal-overlay, #blog-modal-overlay, #job-offer-modal-overlay, #cf-picker-overlay, #yt-video-overlay {
+#modal-overlay, #timeline-modal-overlay, #pdf-modal-overlay, #commission-modal-overlay, #blog-modal-overlay, #job-offer-modal-overlay, #cf-picker-overlay, #yt-video-overlay, #subscribe-modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -645,7 +645,7 @@ body.driver-active .fav-star {
     animation: sysFadeIn 0.2s ease forwards;
 }
 
-#modal-overlay.active, #timeline-modal-overlay.active, #pdf-modal-overlay.active, #commission-modal-overlay.active, #blog-modal-overlay.active, #job-offer-modal-overlay.active, #cf-picker-overlay.active, #yt-video-overlay.active {
+#modal-overlay.active, #timeline-modal-overlay.active, #pdf-modal-overlay.active, #commission-modal-overlay.active, #blog-modal-overlay.active, #job-offer-modal-overlay.active, #cf-picker-overlay.active, #yt-video-overlay.active, #subscribe-modal-overlay.active {
     display: flex;
 }
 
@@ -837,6 +837,50 @@ body.driver-active .fav-star {
 .form-submit-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.custom-form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.custom-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: var(--fs-body);
+    color: var(--color-text);
+}
+
+.custom-form label .req-star {
+    color: var(--color-error);
+    margin-left: 2px;
+}
+
+.custom-form input,
+.custom-form textarea,
+.custom-form select {
+    width: 100%;
+    padding: 0.6rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(70, 162, 88, 0.4);
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: var(--color-text) !important;
+    font-family: var(--font-mono);
+    font-size: var(--fs-body);
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.custom-form input:focus,
+.custom-form textarea:focus,
+.custom-form select:focus {
+    outline: none;
+    border-color: var(--main-color);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.custom-form select option {
+    background: rgb(20, 20, 20);
+    color: var(--color-text);
 }
 
 .resume-download-btn {
