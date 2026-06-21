@@ -5,37 +5,20 @@ Fetch YouTube playlist stats. Writes:
   {HISTORY_DIR}/totals.csv              — daily playlist-level history
   {HISTORY_DIR}/videos/{video_id}.csv  — daily per-video history
 
-On first run, migrates legacy playlist totals from LEGACY_CSV.
-
-statistics.json schema:
-  {
-    "playlistId": "...",
-    "fetchedAt": "...",
-    "totals": { "video_count": N, "views": N, "likes": N, "comments": N },
-    "videos": [
-      {
-        "id": "...",
-        "title": "...",
-        "channel": "...",
-        "thumbnail": "...",
-        "stats": { "views": N, "likes": N, "comments": N }
-      }
-    ]
-  }
+History is capped at 5 years; rows older than that are dropped on each run.
 
 Environment variables:
   YOUTUBE_API_KEY      - YouTube Data API v3 key
   YOUTUBE_PLAYLIST_ID  - Playlist ID
   OUTPUT_JSON          - Output path      (default: data/statistics.json)
   HISTORY_DIR          - History dir      (default: data/history/youtube)
-  LEGACY_CSV           - Old totals CSV   (default: data/youtube_stats.csv)
 """
 
 import csv
 import json
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import requests
 
@@ -45,6 +28,8 @@ HEADERS    = {"User-Agent": USER_AGENT}
 
 TOTALS_FIELDS = ["date", "video_count", "views", "likes", "comments"]
 VIDEO_FIELDS  = ["date", "views", "likes", "comments"]
+
+MAX_HISTORY_DAYS = 5 * 365
 
 
 # ── YouTube API ───────────────────────────────────────────────────────────────
@@ -94,9 +79,9 @@ def get_video_details(api_key: str, video_ids: list[str]) -> list[dict]:
                 "channel":   snippet.get("channelTitle", ""),
                 "thumbnail": thumbnail,
                 "stats": {
-                    "views":    int(stats.get("viewCount",   0)),
-                    "likes":    int(stats.get("likeCount",   0)) if "likeCount"   in stats else 0,
-                    "comments": int(stats.get("commentCount",0)) if "commentCount" in stats else 0,
+                    "views":    int(stats.get("viewCount",    0)),
+                    "likes":    int(stats.get("likeCount",    0)) if "likeCount"    in stats else 0,
+                    "comments": int(stats.get("commentCount", 0)) if "commentCount" in stats else 0,
                 },
             })
     return details
@@ -119,6 +104,11 @@ def write_csv(path: str, rows: list[dict], fieldnames: list[str]) -> None:
         w.writerows(rows)
 
 
+def trim_old_rows(rows: list[dict], cutoff: str) -> list[dict]:
+    """Drop any rows whose date is older than cutoff (YYYY-MM-DD)."""
+    return [r for r in rows if r.get("date", "")[:10] >= cutoff]
+
+
 def upsert_row(rows: list[dict], now: str, new_row: dict) -> list[dict]:
     idx = next((i for i, r in enumerate(rows) if r.get("date", "")[:10] == now[:10]), None)
     if idx is not None:
@@ -128,26 +118,11 @@ def upsert_row(rows: list[dict], now: str, new_row: dict) -> list[dict]:
     return rows
 
 
-# ── Legacy migration ──────────────────────────────────────────────────────────
-
-def migrate_legacy_totals(legacy_csv: str) -> list[dict]:
-    result = []
-    for row in read_csv_rows(legacy_csv):
-        result.append({
-            "date":        row.get("date", ""),
-            "video_count": row.get("videoCount", 0),
-            "views":       row.get("totalViews", 0),
-            "likes":       row.get("totalLikes", 0),
-            "comments":    row.get("totalComments", 0),
-        })
-    return result
-
-
 # ── History writers ───────────────────────────────────────────────────────────
 
-def write_video_history(video: dict, now: str, videos_dir: str) -> None:
+def write_video_history(video: dict, now: str, videos_dir: str, cutoff: str) -> None:
     path = os.path.join(videos_dir, f"{video['id']}.csv")
-    rows = read_csv_rows(path)
+    rows = trim_old_rows(read_csv_rows(path), cutoff)
     s = video["stats"]
     rows = upsert_row(rows, now, {
         "date":     now,
@@ -158,15 +133,9 @@ def write_video_history(video: dict, now: str, videos_dir: str) -> None:
     write_csv(path, rows, VIDEO_FIELDS)
 
 
-def write_totals_history(videos: list[dict], now: str, history_dir: str,
-                         legacy_csv: str) -> None:
+def write_totals_history(videos: list[dict], now: str, history_dir: str, cutoff: str) -> None:
     path = os.path.join(history_dir, "totals.csv")
-
-    if not os.path.exists(path):
-        rows = migrate_legacy_totals(legacy_csv)
-    else:
-        rows = read_csv_rows(path)
-
+    rows = trim_old_rows(read_csv_rows(path), cutoff)
     rows = upsert_row(rows, now, {
         "date":        now,
         "video_count": len(videos),
@@ -186,22 +155,23 @@ def main() -> None:
         print("Error: YOUTUBE_API_KEY and YOUTUBE_PLAYLIST_ID must be set.", file=sys.stderr)
         sys.exit(1)
 
-    output_json = os.environ.get("OUTPUT_JSON",  "data/statistics.json")
-    history_dir = os.environ.get("HISTORY_DIR",  "data/history/youtube")
-    legacy_csv  = os.environ.get("LEGACY_CSV",   "data/youtube_stats.csv")
+    output_json = os.environ.get("OUTPUT_JSON", "data/statistics.json")
+    history_dir = os.environ.get("HISTORY_DIR", "data/history/youtube")
     videos_dir  = os.path.join(history_dir, "videos")
     now         = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    cutoff      = (datetime.now(timezone.utc) - timedelta(days=MAX_HISTORY_DAYS)).strftime("%Y-%m-%d")
+
+    os.makedirs(videos_dir, exist_ok=True)
 
     print(f"Fetching video IDs for playlist {playlist_id}...")
     video_ids = get_video_ids(api_key, playlist_id)
     print(f"Found {len(video_ids)} videos. Fetching details...")
     videos = get_video_details(api_key, video_ids)
 
-    os.makedirs(videos_dir, exist_ok=True)
     for video in videos:
-        write_video_history(video, now, videos_dir)
-    write_totals_history(videos, now, history_dir, legacy_csv)
-    print(f"Wrote history -> {history_dir}/")
+        write_video_history(video, now, videos_dir, cutoff)
+    write_totals_history(videos, now, history_dir, cutoff)
+    print(f"Wrote history -> {history_dir}/  (cutoff: {cutoff})")
 
     totals = {
         "video_count": len(videos),
