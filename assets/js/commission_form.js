@@ -94,8 +94,9 @@
     // ── Main Initialization ──
     function initCommissionLogic() {
         const overlay = document.getElementById('commission-modal-overlay');
-        const openBtn = document.getElementById('open-commission-btn');
-        const closeX  = document.getElementById('commission-close-x');
+        const openBtn   = document.getElementById('open-commission-btn');
+        const closeX    = document.getElementById('commission-close-x');
+        const backBtn   = document.getElementById('commission-back-btn');
         const form = document.getElementById('commission-form');
         const submitBtn = document.getElementById('commission-submit-btn');
         const statusMessage = document.getElementById('commission-status');
@@ -105,7 +106,7 @@
         const closeSuccessBtn = document.getElementById('commission-close-success-btn');
         const downloadBtn = document.getElementById('commission-download-btn');
 
-        if (!overlay || !openBtn) return;
+        if (!overlay) return;
 
         // Bind form interactions to validity check
         form.addEventListener("input", checkFormReadyState);
@@ -126,7 +127,8 @@
             });
         }
 
-        openBtn.addEventListener('click', openModal);
+        if (openBtn) openBtn.addEventListener('click', openModal);
+        if (backBtn) backBtn.addEventListener('click', closeModal);
         closeX.addEventListener('click', closeModal);
         overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
 
