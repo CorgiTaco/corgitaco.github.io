@@ -1,6 +1,8 @@
 name: Update YouTube Playlist Stats
 
 on:
+  push:
+    branches: [main]
   schedule:
     - cron: "0 6 * * *"
   workflow_dispatch: {}
@@ -9,7 +11,23 @@ permissions:
   contents: write
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      needed: ${{ steps.check.outputs.needed }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          if [ ! -f "data/history/youtube/totals.csv" ]; then
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          fi
+
   update-stats:
+    needs: check
+    if: needs.check.outputs.needed == 'true' || github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -29,7 +47,6 @@ jobs:
           YOUTUBE_PLAYLIST_ID: ${{ vars.YOUTUBE_PLAYLIST_ID }}
           OUTPUT_JSON: data/statistics.json
           HISTORY_DIR: data/history/youtube
-          LEGACY_CSV: data/youtube_stats.csv
         run: python gh_scripts/fetch_playlist_stats.py
 
       - name: Commit and push if changed

@@ -1,15 +1,33 @@
 name: Update Mod Metadata
 
 on:
+  push:
+    branches: [main]
   schedule:
     - cron: "0 7 * * *"
   workflow_dispatch: {}
 
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      needed: ${{ steps.check.outputs.needed }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          if [ ! -f "data/history/mods/totals.csv" ]; then
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          fi
+
 permissions:
   contents: write
 
-jobs:
   update-metadata:
+    needs: check
+    if: needs.check.outputs.needed == 'true' || github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
