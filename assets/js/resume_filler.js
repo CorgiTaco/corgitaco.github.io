@@ -350,17 +350,24 @@
     // ── YouTube video embed modal ─────────────────────────────────────────────
 
     function openYoutubeVideoModal(videoId, title) {
-        const overlay  = document.getElementById('yt-video-overlay');
-        const modal    = document.getElementById('yt-video-modal');
-        const winTitle = document.getElementById('yt-video-win-title');
-        const slot     = document.getElementById('yt-video-player-slot');
-        const fallback = document.getElementById('yt-video-fallback');
-        const fbLink   = document.getElementById('yt-video-fallback-link');
+        const overlay   = document.getElementById('yt-video-overlay');
+        const modal     = document.getElementById('yt-video-modal');
+        const winTitle  = document.getElementById('yt-video-win-title');
+        const slot      = document.getElementById('yt-video-player-slot');
+        const fallback  = document.getElementById('yt-video-fallback');
+        const fbLink    = document.getElementById('yt-video-fallback-link');
+        const statsBtn  = document.getElementById('yt-video-stats-btn');
 
         winTitle.textContent = title + ' — zsh';
         overlay.classList.add('active');
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        if (statsBtn) {
+            statsBtn.dataset.videoId    = videoId;
+            statsBtn.dataset.videoTitle = title;
+            statsBtn.style.display      = '';
+        }
 
         destroyResumeYtPlayer();
         slot.innerHTML = '';
@@ -387,11 +394,13 @@
     }
 
     function bindYoutubeVideoModal() {
-        const overlay = document.getElementById('yt-video-overlay');
-        const modal   = document.getElementById('yt-video-modal');
+        const overlay  = document.getElementById('yt-video-overlay');
+        const modal    = document.getElementById('yt-video-modal');
+        const statsBtn = document.getElementById('yt-video-stats-btn');
         if (!overlay) return;
 
         function close() {
+            if (window.closeProjectStats) window.closeProjectStats();
             destroyResumeYtPlayer();
             overlay.classList.remove('active');
             modal.classList.remove('active');
@@ -402,8 +411,16 @@
         document.getElementById('yt-video-back').addEventListener('click', close);
         overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && overlay.classList.contains('active')) close();
+            if (e.key === 'Escape' && overlay.classList.contains('active') && !window._projStatsOpen) close();
         });
+
+        if (statsBtn) {
+            statsBtn.addEventListener('click', () => {
+                if (window.openProjectStats) {
+                    window.openProjectStats('youtube', statsBtn.dataset.videoId, statsBtn.dataset.videoTitle);
+                }
+            });
+        }
     }
 
     // ── Downloads breakdown modal ─────────────────────────────────────────────
