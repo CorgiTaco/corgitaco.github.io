@@ -716,6 +716,7 @@
                                 <input type="email" id="subscribe-email" name="email" placeholder="you@example.com" required autocomplete="email">
                             </div>
                             <button type="submit" id="subscribe-submit-btn" class="form-submit-btn" style="width:100%">Subscribe</button>
+                            <button type="button" id="subscribe-back-btn" class="form-submit-btn btn-ghost" style="width:100%;margin-top:8px"><i class="fa fa-arrow-left"></i> Back</button>
                         </form>
                         <div id="subscribe-result" style="margin-top:14px;font-size:var(--fs-body);min-height:1.2em"></div>
                     </div>
@@ -772,6 +773,7 @@
         const overlay   = document.getElementById('subscribe-modal-overlay');
         const openBtn   = document.getElementById('blog-subscribe-btn');
         const closeX    = document.getElementById('subscribe-close-x');
+        const backBtn   = document.getElementById('subscribe-back-btn');
         const form      = document.getElementById('subscribe-form');
         const submitBtn = document.getElementById('subscribe-submit-btn');
         const resultDiv = document.getElementById('subscribe-result');
@@ -791,6 +793,7 @@
 
         if (openBtn)  openBtn.addEventListener('click', openSubscribe);
         if (closeX)   closeX.addEventListener('click', closeSubscribe);
+        if (backBtn)  backBtn.addEventListener('click', closeSubscribe);
         if (overlay)  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSubscribe(); });
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) closeSubscribe();
