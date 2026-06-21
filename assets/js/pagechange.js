@@ -135,6 +135,22 @@ function handleRoute(url) {
                 // apply correctly after SPA navigation.
                 document.body.className = virtualDoc.body.className;
 
+                // Sync favicon — resolve the fetched page's icon href against the
+                // target URL so relative paths (e.g. ../assets/favicons/blog.svg) work.
+                var newIconEl = virtualDoc.querySelector('head link[rel="icon"]');
+                var faviconEl = document.querySelector('head link[rel="icon"]');
+                if (newIconEl) {
+                    var iconHref = newIconEl.getAttribute('href');
+                    var resolvedIcon = new URL(iconHref, new URL(url, window.location.href)).href;
+                    if (!faviconEl) {
+                        faviconEl = document.createElement('link');
+                        faviconEl.rel = 'icon';
+                        document.head.appendChild(faviconEl);
+                    }
+                    faviconEl.href = resolvedIcon;
+                    if (newIconEl.type) faviconEl.type = newIconEl.type;
+                }
+
                 setInnerHTML(currentMainElement, newMainContent.innerHTML);
 
                 // Re-inject spinner into the freshly replaced #main
