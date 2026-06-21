@@ -264,6 +264,7 @@
         return modsData.mods.map(function(m) {
             const loaders  = Array.isArray(m.loaders)       ? m.loaders       : [];
             const versions = Array.isArray(m.game_versions) ? m.game_versions : [];
+            const stats    = m.stats || {};
             return {
                 type:         'minecraft_mod',
                 title:        m.title,
@@ -271,11 +272,11 @@
                 photo:        m.icon,
                 photo_fit:    'contain',
                 date:         m.date || null,
-                curseforge:   m.curseforge   || '',
-                modrinth:     m.modrinth     || '',
-                github:       m.github       || '',
-                downloads_cf: m.downloads_cf || 0,
-                downloads_mr: m.downloads_mr || 0,
+                curseforge:   m.curseforge_url  || '',
+                modrinth:     m.modrinth_url    || '',
+                github:       m.github_url      || '',
+                downloads_cf: stats.downloads_cf    || 0,
+                downloads_mr: stats.downloads_mr    || 0,
                 tags:         [...loaders, ...versions]
             };
         });
@@ -284,14 +285,15 @@
     function statsToProjects(statsData, extraTagsMap) {
         if (!statsData || !Array.isArray(statsData.videos)) return [];
         return statsData.videos.map(function(v) {
-            const extra = (extraTagsMap && extraTagsMap[v.videoId]) || [];
-            const baseTags = v.channelTitle ? [v.channelTitle] : [];
+            const extra    = (extraTagsMap && extraTagsMap[v.id]) || [];
+            const baseTags = v.channel ? [v.channel] : [];
+            const stats    = v.stats || {};
             return {
                 type:      'youtube',
                 title:     v.title,
-                url:       'https://youtu.be/' + v.videoId,
+                url:       'https://youtu.be/' + v.id,
                 photo_fit: 'cover',
-                views:     v.viewCount || 0,
+                views:     stats.views || 0,
                 tags:      [...baseTags, ...extra]
             };
         });
