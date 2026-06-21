@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-21T00:02:04Z",
+  "fetchedAt": "2026-06-21T00:06:53Z",
   "mods": [
     {
       "title": "Oh The Trees You'll Grow",
@@ -31,7 +31,9 @@
         "1.20.4",
         "1.20.2",
         "1.20.1"
-      ]
+      ],
+      "downloads_cf": 35154078,
+      "downloads_mr": 5998621
     },
     {
       "title": "Data Anchor",
@@ -52,7 +54,9 @@
         "1.21.5",
         "1.21.1",
         "1.20.1"
-      ]
+      ],
+      "downloads_cf": 13165593,
+      "downloads_mr": 1335644
     },
     {
       "title": "CorgiLib",
@@ -79,7 +83,9 @@
         "1.19.4",
         "1.19.3",
         "1.19.2"
-      ]
+      ],
+      "downloads_cf": 82424338,
+      "downloads_mr": 12389221
     },
     {
       "title": "TimeCore - Calendar",
@@ -97,7 +103,9 @@
       ],
       "game_versions": [
         "1.21.1"
-      ]
+      ],
+      "downloads_cf": 308,
+      "downloads_mr": 0
     },
     {
       "title": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
@@ -128,7 +136,9 @@
         "1.17.1",
         "1.16.5",
         "1.16.4"
-      ]
+      ],
+      "downloads_cf": 42003868,
+      "downloads_mr": 0
     },
     {
       "title": "World Guard",
@@ -145,7 +155,9 @@
       ],
       "game_versions": [
         "1.21.1"
-      ]
+      ],
+      "downloads_cf": 3930,
+      "downloads_mr": 4469
     },
     {
       "title": "Feature Recycler",
@@ -164,7 +176,9 @@
       "game_versions": [
         "1.21.1",
         "1.20.1"
-      ]
+      ],
+      "downloads_cf": 11964581,
+      "downloads_mr": 482611
     },
     {
       "title": "Block Swap",
@@ -188,7 +202,9 @@
         "1.18.2",
         "1.18",
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 8305876,
+      "downloads_mr": 1353713
     },
     {
       "title": "Enhanced Celestials(Fabric) - Blood Moons & Harvest Moons",
@@ -215,7 +231,9 @@
         "1.17.1",
         "1.16.5",
         "1.16.4"
-      ]
+      ],
+      "downloads_cf": 6772939,
+      "downloads_mr": 0
     },
     {
       "title": "Block Swap (Fabric)",
@@ -237,7 +255,9 @@
         "1.19",
         "1.18.2",
         "1.18"
-      ]
+      ],
+      "downloads_cf": 6517678,
+      "downloads_mr": 0
     },
     {
       "title": "Overworld Two (Forge)",
@@ -253,7 +273,9 @@
       "game_versions": [
         "1.16.5",
         "1.16.4"
-      ]
+      ],
+      "downloads_cf": 722308,
+      "downloads_mr": 0
     },
     {
       "title": "Lazy DataFixerUpper(LazyDFU) [FORGE]",
@@ -281,7 +303,9 @@
         "1.16.3",
         "1.16.2",
         "1.16.1"
-      ]
+      ],
+      "downloads_cf": 60331548,
+      "downloads_mr": 0
     },
     {
       "title": "CameraOverhaul (Forge)",
@@ -305,7 +329,9 @@
         "1.16.2",
         "1.16.1",
         "1.16"
-      ]
+      ],
+      "downloads_cf": 2729737,
+      "downloads_mr": 0
     },
     {
       "title": "Entity Collision FPS Fix",
@@ -325,7 +351,9 @@
         "1.19",
         "1.18.2",
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 32982963,
+      "downloads_mr": 1241006
     },
     {
       "title": "Entity Collision FPS Fix Refabricated",
@@ -343,7 +371,9 @@
         "1.19.1",
         "1.19",
         "1.18.2"
-      ]
+      ],
+      "downloads_cf": 1950625,
+      "downloads_mr": 0
     },
     {
       "title": "Default Amplified Biomes 2",
@@ -358,7 +388,9 @@
       ],
       "game_versions": [
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 920,
+      "downloads_mr": 0
     },
     {
       "title": "Mobifier(Fabric)",
@@ -374,7 +406,9 @@
       "game_versions": [
         "1.19",
         "1.18.2"
-      ]
+      ],
+      "downloads_cf": 179180,
+      "downloads_mr": 0
     },
     {
       "title": "Mobifier",
@@ -391,7 +425,9 @@
         "1.19",
         "1.18.2",
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 991738,
+      "downloads_mr": 0
     },
     {
       "title": "Enhanced Celestials Mobifier Integration (Fabric)",
@@ -406,7 +442,9 @@
       ],
       "game_versions": [
         "1.18.2"
-      ]
+      ],
+      "downloads_cf": 1638,
+      "downloads_mr": 0
     },
     {
       "title": "Enhanced Celestials Mobifier Integration",
@@ -422,7 +460,9 @@
       "game_versions": [
         "1.18.2",
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 20059,
+      "downloads_mr": 0
     },
     {
       "title": "Shutup Experimental Settings!",
@@ -446,7 +486,9 @@
         "1.16.4",
         "1.16.3",
         "1.16.2"
-      ]
+      ],
+      "downloads_cf": 50434628,
+      "downloads_mr": 0
     },
     {
       "title": "Phantom Spawn Tweaks",
@@ -462,7 +504,9 @@
       "game_versions": [
         "1.16.5",
         "1.16.4"
-      ]
+      ],
+      "downloads_cf": 17011,
+      "downloads_mr": 0
     },
     {
       "title": "Compact Status Effects Forge",
@@ -479,7 +523,9 @@
         "1.16.5",
         "1.16.4",
         "1.16"
-      ]
+      ],
+      "downloads_cf": 4991,
+      "downloads_mr": 0
     },
     {
       "title": "Perfect Accuracy Forge",
@@ -496,7 +542,9 @@
         "1.16.5",
         "1.16.4",
         "1.16"
-      ]
+      ],
+      "downloads_cf": 35290,
+      "downloads_mr": 0
     },
     {
       "title": "Thread Control",
@@ -511,7 +559,9 @@
       ],
       "game_versions": [
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 34073,
+      "downloads_mr": 0
     },
     {
       "title": "Oh The Biomes You'll Go Fixes",
@@ -524,7 +574,9 @@
       "loaders": [],
       "game_versions": [
         "1.12.2"
-      ]
+      ],
+      "downloads_cf": 32979,
+      "downloads_mr": 0
     },
     {
       "title": "Better Weather (Discontinued)",
@@ -543,7 +595,9 @@
         "1.16.3",
         "1.16.2",
         "1.16.1"
-      ]
+      ],
+      "downloads_cf": 2885263,
+      "downloads_mr": 0
     },
     {
       "title": "Structure Warden",
@@ -558,7 +612,9 @@
       ],
       "game_versions": [
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 9891,
+      "downloads_mr": 0
     },
     {
       "title": "Improved Floating Islands",
@@ -573,7 +629,9 @@
       ],
       "game_versions": [
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 2835,
+      "downloads_mr": 0
     },
     {
       "title": "Rider Denier",
@@ -588,7 +646,9 @@
       ],
       "game_versions": [
         "1.16.5"
-      ]
+      ],
+      "downloads_cf": 146,
+      "downloads_mr": 0
     },
     {
       "title": "Upstream(Fabric)",
@@ -603,7 +663,9 @@
       ],
       "game_versions": [
         "1.16.4"
-      ]
+      ],
+      "downloads_cf": 4276,
+      "downloads_mr": 0
     },
     {
       "title": "Upstream",
@@ -619,7 +681,9 @@
       "game_versions": [
         "1.16.5",
         "1.16.4"
-      ]
+      ],
+      "downloads_cf": 2535136,
+      "downloads_mr": 0
     },
     {
       "title": "Better Weather (Fabric) (Discontinued)",
@@ -638,7 +702,9 @@
         "1.16.2",
         "1.16.1",
         "1.15.2"
-      ]
+      ],
+      "downloads_cf": 154194,
+      "downloads_mr": 0
     },
     {
       "title": "Oh The Biomes You'll Go",
@@ -668,7 +734,9 @@
         "1.16.1",
         "1.15.2",
         "1.12.2"
-      ]
+      ],
+      "downloads_cf": 60805210,
+      "downloads_mr": 1675414
     },
     {
       "title": "Oh The Biomes We've Gone",
@@ -691,7 +759,9 @@
         "1.21.4",
         "1.21.1",
         "1.20.1"
-      ]
+      ],
+      "downloads_cf": 0,
+      "downloads_mr": 8828442
     },
     {
       "title": "Enhanced Celestials",
@@ -713,7 +783,9 @@
         "1.19.4",
         "1.19.3",
         "1.19.2"
-      ]
+      ],
+      "downloads_cf": 0,
+      "downloads_mr": 2056456
     }
   ]
 }
