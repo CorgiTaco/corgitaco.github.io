@@ -49,39 +49,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     function calcWidth() {
-        $('#nav-main').addClass('measuring');
+        function measure() {
+            $('#nav-main').addClass('measuring');
+            var navwidth = 0;
+            $('#nav-main > li:not(.more)').each(function() {
+                navwidth += $(this).outerWidth(true) + 4;
+            });
+            var more          = $('#nav-main .more');
+            var morewidth     = more.is(':visible') ? more.outerWidth(true) : (more.data('width') || 80);
+            var containerWidth  = $('#nav-main').width() - 2;
+            var availablespace  = containerWidth - morewidth;
+            $('#nav-main').removeClass('measuring');
+            return { navwidth: navwidth, containerWidth: containerWidth, availablespace: availablespace };
+        }
 
-        var navwidth = 0;
-        var more = $('#nav-main .more');
-        var morewidth = more.is(':visible') ? more.outerWidth(true) : (more.data('width') || 80);
-
-        $('#nav-main > li:not(.more)').each(function() {
-            navwidth += $(this).outerWidth(true) + 4;
-        });
-
-        var containerWidth = $('#nav-main').width() - 2;
-        var availablespace = containerWidth - morewidth;
-
-        $('#nav-main').removeClass('measuring');
-
-        if (navwidth > availablespace) {
+        // Collapse items into "more" until everything fits
+        var m;
+        while ((m = measure()).navwidth > m.availablespace) {
             var lastItem = $('#nav-main > li:not(.more)').last();
-            if (lastItem.length > 0) {
-                lastItem.attr('data-width', lastItem.outerWidth(true) + 4);
-                lastItem.prependTo($('#nav-main .more ul'));
-                calcWidth();
-            }
-        } else {
+            if (!lastItem.length) break;
+            lastItem.attr('data-width', lastItem.outerWidth(true) + 4);
+            lastItem.prependTo($('#nav-main .more ul'));
+        }
+
+        // Restore items from "more" as long as there is space
+        while (true) {
+            m = measure();
             var firstMoreElement = $('#nav-main li.more li').first();
-            if (firstMoreElement.length > 0) {
-                var isLastInDropdown = ($('#nav-main li.more li').length === 1);
-                var spaceNeeded = navwidth + firstMoreElement.data('width');
-                var spaceAvailable = isLastInDropdown ? containerWidth : availablespace;
-                if (spaceNeeded <= spaceAvailable) {
-                    firstMoreElement.insertBefore($('#nav-main .more'));
-                    calcWidth();
-                }
-            }
+            if (!firstMoreElement.length) break;
+            var isLastInDropdown = ($('#nav-main li.more li').length === 1);
+            var spaceNeeded      = m.navwidth + (firstMoreElement.data('width') || 0);
+            var spaceAvailable   = isLastInDropdown ? m.containerWidth : m.availablespace;
+            if (spaceNeeded > spaceAvailable) break;
+            firstMoreElement.insertBefore($('#nav-main .more'));
         }
 
         if ($('.more li').length > 0) {

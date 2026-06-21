@@ -92,7 +92,7 @@ function handleRoute(url) {
 
             if (virtualDoc.title) document.title = virtualDoc.title;
 
-            // Sync any new stylesheets and head scripts the fetched page needs.
+            // Sync any new stylesheets the fetched page needs.
             // Collect load promises so content is injected only after resources apply.
             const stylePromises = [];
             Array.from(virtualDoc.querySelectorAll('head link[rel="stylesheet"]')).forEach(newLink => {
@@ -109,8 +109,6 @@ function handleRoute(url) {
                 }
             });
 
-            // Sync head <script src> tags (e.g. Chart.js on the stats page).
-
             const newMainContent = virtualDoc.getElementById("main");
             const currentMainElement = document.getElementById("main");
 
@@ -126,6 +124,12 @@ function handleRoute(url) {
                 virtualDoc.querySelectorAll('.body-portal').forEach(function(el) {
                     document.body.appendChild(el);
                 });
+
+                // Destroy any Chart.js instances before replacing content so their
+                // internal RAF loops and resize observers don't keep running after navigation.
+                if (window.Chart) {
+                    Object.values(Chart.instances).forEach(c => { try { c.destroy(); } catch {} });
+                }
 
                 setInnerHTML(currentMainElement, newMainContent.innerHTML);
 
