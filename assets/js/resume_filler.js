@@ -285,7 +285,7 @@
 
         winTitle.textContent = 'youtube — zsh';
 
-        const sorted = [...statsData.videos].sort((a, b) => b.viewCount - a.viewCount);
+        const sorted = [...statsData.videos].sort((a, b) => (b.stats && b.stats.views || 0) - (a.stats && a.stats.views || 0));
 
         const rowsHtml = sorted.map(v => {
             const thumb = v.thumbnail ? `<img class="yt-video-thumb" src="${escapeAttr(v.thumbnail)}" alt="" loading="lazy">` : '';
@@ -293,7 +293,7 @@
                 <div class="yt-video-row" role="button" tabindex="0" data-video-id="${escapeAttr(v.videoId)}" data-title="${escapeAttr(v.title)}">
                     ${thumb}
                     <span class="yt-video-title">${escapeHTML(v.title)}</span>
-                    <span class="yt-video-views">${formatNumber(v.viewCount)}</span>
+                    <span class="yt-video-views">${formatNumber(v.stats && v.stats.views || 0)}</span>
                 </div>
             `;
         }).join('');
@@ -305,8 +305,8 @@
         body.innerHTML = `
             <span class="tm-tag">YouTube</span>
             <div class="yt-modal-total">
-                <span class="yt-modal-total-num">${formatNumber(statsData.totalViews)}</span>
-                <span class="yt-modal-total-label">total views across ${statsData.videoCount} videos</span>
+                <span class="yt-modal-total-num">${formatNumber(statsData.totals && statsData.totals.views || 0)}</span>
+                <span class="yt-modal-total-label">total views across ${statsData.totals && statsData.totals.video_count || 0} videos</span>
                 ${asOf}
             </div>
             <hr class="tm-divider">
@@ -830,21 +830,29 @@
 
         Promise.all([
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
-            fetch('../data/youtube_stats.csv').then(r => r.ok ? r.text() : null).catch(() => null),
-            fetch('../data/modrinth/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
             fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null),
-            fetch('../data/curseforge/project_totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
+            fetch('../data/mods.json').then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../assets/hire/skills.json').then(r => r.ok ? r.json() : null).catch(() => null)
         ]).then(function(results) {
-            var data             = results[0];
-            var csvText          = results[1];
-            var modrinthText     = results[2];
-            var statsData        = results[3];
-            var curseforgeText   = results[4];
-            var skillsData       = results[5];
-            var youtubeStats     = csvText ? parseYoutubeCsv(csvText) : null;
-            var modrinthStats    = modrinthText ? parseModrinthTotalsCsv(modrinthText) : null;
-            var curseforgeStats  = curseforgeText ? parseModrinthTotalsCsv(curseforgeText) : null;
+            var data        = results[0];
+            var statsData   = results[1];
+            var modsData    = results[2];
+            var skillsData  = results[3];
+
+            var youtubeStats = statsData && statsData.totals ? {
+                views:  statsData.totals.views,
+                videos: statsData.totals.video_count,
+                date:   statsData.fetchedAt || null,
+            } : null;
+
+            var modrinthStats   = null;
+            var curseforgeStats = null;
+            if (modsData && modsData.mods) {
+                var dlCF = 0, dlMR = 0;
+                modsData.mods.forEach(function(m) { dlCF += (m.stats && m.stats.downloads_cf) || 0; dlMR += (m.stats && m.stats.downloads_mr) || 0; });
+                curseforgeStats = { downloads: dlCF, date: modsData.fetchedAt || null };
+                modrinthStats   = { downloads: dlMR, date: modsData.fetchedAt || null };
+            }
             buildContactCard(data.contact);
             buildLookingForCard(data.looking_for);
             buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats);

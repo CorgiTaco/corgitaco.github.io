@@ -608,12 +608,6 @@
         head.innerHTML = `<h2 class="stat-section-title"><i class="fa ${icon}"></i> ${title}</h2>`;
         section.appendChild(head);
 
-        // Select / Deselect All
-        makeControlBar(head,
-            () => { visible.fill(true);  entityMeta.forEach((_, i) => chart && chart.setDatasetVisibility(i, true));  chart && chart.update(); chips && setChipsState(chips, visible); },
-            () => { visible.fill(false); entityMeta.forEach((_, i) => chart && chart.setDatasetVisibility(i, false)); chart && chart.update(); chips && setChipsState(chips, visible); },
-        );
-
         // Day / Week / Month mode bar (right-aligned in head)
         const modeBar = el('div', 'stat-range-bar');
         modeBar.style.marginLeft = 'auto';
@@ -635,6 +629,12 @@
         const chartWrap  = el('div', 'stat-chart-wrap stat-chart-overlay');
         chartWrap.innerHTML = '<canvas></canvas>';
         const legendSide = el('div', 'stat-legend-side');
+
+        // Select / Deselect All above legend
+        makeControlBar(legendSide,
+            () => { visible.fill(true);  entityMeta.forEach((_, i) => chart && chart.setDatasetVisibility(i, true));  chart && chart.update(); chips && setChipsState(chips, visible); },
+            () => { visible.fill(false); entityMeta.forEach((_, i) => chart && chart.setDatasetVisibility(i, false)); chart && chart.update(); chips && setChipsState(chips, visible); },
+        );
         const body       = el('div', 'stat-chart-and-legend');
         body.appendChild(chartWrap);
         body.appendChild(legendSide);
@@ -734,14 +734,13 @@
         let chart = null;
         let chips = null;
 
-        makeControlBar(head,
-            () => { visible.fill(true);  datasets.forEach((_, i) => chart && chart.setDatasetVisibility(i, true));  chart && chart.update(); chips && setChipsState(chips, visible); },
-            () => { visible.fill(false); datasets.forEach((_, i) => chart && chart.setDatasetVisibility(i, false)); chart && chart.update(); chips && setChipsState(chips, visible); },
-        );
-
         const chartWrap  = el('div', 'stat-chart-wrap stat-chart-overlay');
         chartWrap.innerHTML = '<canvas></canvas>';
         const legendSide = el('div', 'stat-legend-side');
+        makeControlBar(legendSide,
+            () => { visible.fill(true);  datasets.forEach((_, i) => chart && chart.setDatasetVisibility(i, true));  chart && chart.update(); chips && setChipsState(chips, visible); },
+            () => { visible.fill(false); datasets.forEach((_, i) => chart && chart.setDatasetVisibility(i, false)); chart && chart.update(); chips && setChipsState(chips, visible); },
+        );
         const body       = el('div', 'stat-chart-and-legend');
         body.appendChild(chartWrap);
         body.appendChild(legendSide);
@@ -800,14 +799,13 @@
             chart.update();
         }
 
-        makeControlBar(head,
-            () => { visible.fill(true);  mods.forEach((_, i) => toggleMod(i, true));  chips && setChipsState(chips, visible); },
-            () => { visible.fill(false); mods.forEach((_, i) => toggleMod(i, false)); chips && setChipsState(chips, visible); },
-        );
-
         const chartWrap  = el('div', 'stat-chart-wrap stat-chart-overlay');
         chartWrap.innerHTML = '<canvas></canvas>';
         const legendSide = el('div', 'stat-legend-side');
+        makeControlBar(legendSide,
+            () => { visible.fill(true);  mods.forEach((_, i) => toggleMod(i, true));  chips && setChipsState(chips, visible); },
+            () => { visible.fill(false); mods.forEach((_, i) => toggleMod(i, false)); chips && setChipsState(chips, visible); },
+        );
         const body       = el('div', 'stat-chart-and-legend');
         body.appendChild(chartWrap);
         body.appendChild(legendSide);
