@@ -592,16 +592,18 @@
     }
 
     // ── Per-entity delta line chart (New Downloads / New Views) ──────────────
-    // deltaMap:  { id: [{date, value}] }  — pre-computed daily deltas per entity
-    // entityMeta: [{id, label, col, imgSrc?}]
+    // getDeltaMap: function returning { id: [{date, value}] }
+    // entityMeta:  [{id, label, col, imgSrc?}]
+    // headExtra:   optional element inserted in head before the mode bar
 
-    function buildEntityDeltaChart(container, title, icon, deltaMap, entityMeta) {
+    function buildEntityDeltaChart(container, title, icon, getDeltaMap, entityMeta, headExtra) {
         if (!entityMeta.length) return;
 
-        // Sort by total delta value (highest first)
+        // Sort by total delta value (highest first) using initial data
         entityMeta = [...entityMeta].sort((a, b) => {
-            const sumA = (deltaMap[a.id] || []).reduce((s, r) => s + r.value, 0);
-            const sumB = (deltaMap[b.id] || []).reduce((s, r) => s + r.value, 0);
+            const dm = getDeltaMap();
+            const sumA = (dm[a.id] || []).reduce((s, r) => s + r.value, 0);
+            const sumB = (dm[b.id] || []).reduce((s, r) => s + r.value, 0);
             return sumB - sumA;
         });
 
@@ -618,7 +620,8 @@
         section.appendChild(head);
         container.appendChild(section);
 
-        const totalDeltas = Object.values(deltaMap).reduce((s, arr) => s + arr.length, 0);
+        const initDm = getDeltaMap();
+        const totalDeltas = Object.values(initDm).reduce((s, arr) => s + arr.length, 0);
         if (!totalDeltas) {
             const msg = el('p', 'stat-no-data');
             msg.style.cssText = 'position:static;padding:40px 0;opacity:0.45;text-align:center';
@@ -626,6 +629,8 @@
             section.appendChild(msg);
             return;
         }
+
+        if (headExtra) head.appendChild(headExtra);
 
         // Day / Week / Month mode bar (right-aligned in head)
         const modeBar = el('div', 'stat-range-bar');
@@ -659,7 +664,7 @@
         body.appendChild(legendSide);
 
         // Date range control (between head and chart)
-        const allDates = Object.values(deltaMap).flatMap(d => d.map(r => r.date)).sort();
+        const allDates = Object.values(initDm).flatMap(d => d.map(r => r.date)).sort();
         const lastDate = allDates[allDates.length - 1] || '';
         const firstDate = allDates[0] || '';
         const rangeEl  = makeRangeEl(firstDate, lastDate, (from, to) => { fromStr = from; toStr = to; render(); });
@@ -667,6 +672,7 @@
         section.appendChild(body);
 
         function render() {
+            const deltaMap = getDeltaMap();
             const dateBuckets = new Set();
             const bucketedMap = {};
 
@@ -701,19 +707,43 @@
             label: e.label, imgSrc: e.imgSrc, col: e.col || palette(i),
         })), (i, active) => { visible[i] = active; chart && (chart.setDatasetVisibility(i, active), chart.update()); },
         (i, entering) => { if (chart) setGlow(chart, entering ? i : null); });
+
+        return { rerender: render };
     }
 
     // ── Section: new downloads per mod (delta) ────────────────────────────────
 
     function buildDownloadsDeltaChart(container, mods, modRows) {
-        const deltaMap   = {};
+        const deltaMaps  = { cf: {}, mr: {}, total: {} };
         const entityMeta = [];
         mods.forEach((m, i) => {
             const sorted = [...(modRows[m.id] || [])].sort((a, b) => fmtDate(a.date).localeCompare(fmtDate(b.date)));
-            deltaMap[m.id] = computeEntityDeltas(sorted, 'downloads_total');
+            deltaMaps.cf[m.id]    = computeEntityDeltas(sorted, 'downloads_cf');
+            deltaMaps.mr[m.id]    = computeEntityDeltas(sorted, 'downloads_mr');
+            deltaMaps.total[m.id] = computeEntityDeltas(sorted, 'downloads_total');
             entityMeta.push({ id: m.id, label: m.title, col: palette(i), imgSrc: m.icon });
         });
-        buildEntityDeltaChart(container, 'New Downloads', 'fa-bar-chart', deltaMap, entityMeta);
+
+        let activeSource = 'total';
+        const getDeltaMap = () => deltaMaps[activeSource];
+
+        const sourceBar = el('div', 'stat-range-bar');
+        let activeSrcBtn = null;
+        [['CurseForge', 'cf', CF_COLOR], ['Modrinth', 'mr', MR_COLOR], ['Combined', 'total', TOT_COLOR]].forEach(([label, key, col]) => {
+            const btn = el('button', 'stat-ctrl-btn', label);
+            btn.style.setProperty('--ctrl-col', col);
+            if (key === 'total') { btn.classList.add('is-active'); activeSrcBtn = btn; }
+            btn.addEventListener('click', () => {
+                if (key === activeSource) return;
+                if (activeSrcBtn) activeSrcBtn.classList.remove('is-active');
+                (activeSrcBtn = btn).classList.add('is-active');
+                activeSource = key;
+                instance && instance.rerender();
+            });
+            sourceBar.appendChild(btn);
+        });
+
+        const instance = buildEntityDeltaChart(container, 'New Downloads', 'fa-bar-chart', getDeltaMap, entityMeta, sourceBar);
     }
 
     // ── Section: new views per video (delta) ──────────────────────────────────
@@ -726,7 +756,7 @@
             deltaMap[v.id] = computeEntityDeltas(sorted, 'views');
             entityMeta.push({ id: v.id, label: v.title, col: palette(i), imgSrc: v.thumbnail });
         });
-        buildEntityDeltaChart(container, 'New Views', 'fa-bar-chart', deltaMap, entityMeta);
+        buildEntityDeltaChart(container, 'New Views', 'fa-bar-chart', () => deltaMap, entityMeta);
     }
 
     // ── Section: YouTube overlay chart (cumulative per video) ─────────────────
@@ -791,20 +821,50 @@
         const allDates   = [...new Set(mods.flatMap(m => (modRows[m.id] || []).map(r => fmtDate(r.date))))].sort();
         const allDatasets = [];
         const modRanges  = [];
+        const modDataBySource = {};
 
         mods.forEach((m, mi) => {
             const byDate = {};
             (modRows[m.id] || []).forEach(r => { byDate[fmtDate(r.date)] = r; });
+            modDataBySource[m.id] = {
+                downloads_total: allDates.map(d => d in byDate ? (Number(byDate[d].downloads_total) || 0) : null),
+                downloads_cf:    allDates.map(d => d in byDate ? (Number(byDate[d].downloads_cf)    || 0) : null),
+                downloads_mr:    allDates.map(d => d in byDate ? (Number(byDate[d].downloads_mr)    || 0) : null),
+            };
             const start = allDatasets.length;
-            allDatasets.push(mkDataset(m.title, allDates.map(d => d in byDate ? (Number(byDate[d].downloads_total) || 0) : null), palette(mi)));
+            allDatasets.push(mkDataset(m.title, modDataBySource[m.id].downloads_total, palette(mi)));
             modRanges.push({ start, end: allDatasets.length });
         });
 
+        let sourceKey = 'downloads_total';
         const visible = new Array(mods.length).fill(true);
         const section = el('section', 'stat-section');
         const head    = el('div', 'stat-section-head');
         head.innerHTML = `<h2 class="stat-section-title"><i class="fa fa-download"></i> Downloads Per Mod</h2>`;
         section.appendChild(head);
+
+        // Source toggle
+        const sourceBar = el('div', 'stat-range-bar');
+        let activeSrcBtn = null;
+        [['CurseForge', 'downloads_cf', CF_COLOR], ['Modrinth', 'downloads_mr', MR_COLOR], ['Combined', 'downloads_total', TOT_COLOR]].forEach(([label, key, col]) => {
+            const btn = el('button', 'stat-ctrl-btn', label);
+            if (key === 'downloads_total') { btn.classList.add('is-active'); activeSrcBtn = btn; }
+            btn.addEventListener('click', () => {
+                if (key === sourceKey) return;
+                if (activeSrcBtn) activeSrcBtn.classList.remove('is-active');
+                (activeSrcBtn = btn).classList.add('is-active');
+                sourceKey = key;
+                mods.forEach((m, mi) => {
+                    const newData = modDataBySource[m.id][key];
+                    allDatasets[modRanges[mi].start].data = [...newData];
+                    origData[modRanges[mi].start] = [...newData];
+                });
+                chart.data.datasets.forEach((ds, i) => { ds.data = origData[i]; });
+                chart.update('none');
+            });
+            sourceBar.appendChild(btn);
+        });
+        head.appendChild(sourceBar);
 
         let chart = null;
         let chips = null;
