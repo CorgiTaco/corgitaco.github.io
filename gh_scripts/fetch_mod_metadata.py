@@ -73,20 +73,16 @@ def cf_headers(api_key: str) -> dict:
     return {"Accept": "application/json", "x-api-key": api_key}
 
 
-def fetch_cf_mod_by_slug(api_key: str, slug: str) -> dict | None:
-    params = {"gameId": CF_GAME_ID, "slug": slug, "pageSize": 10}
+def fetch_cf_mod_by_id(api_key: str, mod_id: int) -> dict | None:
     resp = requests.get(
-        f"{CF_API_BASE}/v1/mods/search",
+        f"{CF_API_BASE}/v1/mods/{mod_id}",
         headers=cf_headers(api_key),
-        params=params,
         timeout=30,
     )
+    if resp.status_code == 404:
+        return None
     resp.raise_for_status()
-    items = resp.json().get("data", [])
-    for item in items:
-        if item.get("slug") == slug:
-            return item
-    return items[0] if items else None
+    return resp.json().get("data")
 
 
 def _cf_loaders_and_versions(mod: dict) -> tuple[list[str], list[str]]:
@@ -225,32 +221,32 @@ def main() -> None:
     mr_token    = os.environ.get("MODRINTH_TOKEN")
     output_json = os.environ.get("OUTPUT_JSON", "data/mods.json")
 
-    cf_slugs_env = os.environ.get("CURSEFORGE_PROJECTS", "")
-    mr_ids_env   = os.environ.get("MODRINTH_PROJECTS", "")
+    cf_ids_env = os.environ.get("CURSEFORGE_PROJECTS", "")
+    mr_ids_env = os.environ.get("MODRINTH_PROJECTS", "")
 
-    cf_slugs = [s.strip() for s in cf_slugs_env.split(",") if s.strip()]
-    mr_ids   = [s.strip() for s in mr_ids_env.split(",")   if s.strip()]
+    cf_ids = [int(s.strip()) for s in cf_ids_env.split(",") if s.strip()]
+    mr_ids = [s.strip() for s in mr_ids_env.split(",") if s.strip()]
 
-    if not cf_slugs and not mr_ids:
+    if not cf_ids and not mr_ids:
         print("Error: CURSEFORGE_PROJECTS and/or MODRINTH_PROJECTS must be set.", file=sys.stderr)
         sys.exit(1)
 
     cf_entries: list[dict] = []
     mr_entries: list[dict] = []
 
-    for slug in cf_slugs:
+    for mod_id in cf_ids:
         if not cf_api_key:
-            print(f"[CF] skipping {slug} (no CURSEFORGE_API_KEY)", file=sys.stderr)
+            print(f"[CF] skipping {mod_id} (no CURSEFORGE_API_KEY)", file=sys.stderr)
             continue
         try:
-            cf_data = fetch_cf_mod_by_slug(cf_api_key, slug)
+            cf_data = fetch_cf_mod_by_id(cf_api_key, mod_id)
             if cf_data:
                 print(f"[CF] {cf_data.get('name')}")
                 cf_entries.append(cf_to_entry(cf_data))
             else:
-                print(f"[CF] not found: {slug}", file=sys.stderr)
+                print(f"[CF] not found: {mod_id}", file=sys.stderr)
         except Exception as exc:
-            print(f"[CF] error for {slug}: {exc}", file=sys.stderr)
+            print(f"[CF] error for {mod_id}: {exc}", file=sys.stderr)
 
     for mr_id in mr_ids:
         try:
