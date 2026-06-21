@@ -127,9 +127,23 @@ jobs:
               --arg slug "$slug" \
               '{action: $action, secret: $secret, title: $title, photo: $photo, date: $date, author: $author, excerpt: $excerpt, tags: $tags, slug: $slug}')
 
-            curl -fsS -X POST "$BLOG_WEBHOOK_URL" \
+            # -L: follow Apps Script's 302 redirect to the actual JSON response.
+            # -w: append the HTTP status code on its own line so we can tell
+            # success from failure without parsing HTML error pages.
+            response=$(curl -fsS -L -X POST "$BLOG_WEBHOOK_URL" \
               -H "Content-Type: application/json" \
-              -d "$payload"
+              -d "$payload" \
+              -w "\nHTTP_STATUS:%{http_code}")
+
+            http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
+            body=$(echo "$response" | sed '$d')
+
+            echo "Webhook response (HTTP $http_status): $body"
+
+            if [ "$http_status" != "200" ]; then
+              echo "::error::Webhook call failed for $title (HTTP $http_status)"
+              exit 1
+            fi
 
             echo "Notified newsletter webhook for: $title"
           done
