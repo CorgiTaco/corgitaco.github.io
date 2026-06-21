@@ -228,6 +228,18 @@
     overflow: hidden;
 }
 
+.proj-downloads {
+    padding: 2px 12px 4px;
+    font-size: 0.75rem;
+    color: var(--accent, #46a258);
+    opacity: 0.85;
+}
+
+.proj-downloads .fa {
+    margin-right: 3px;
+    font-size: 0.7rem;
+}
+
 .proj-label {
     padding: 8px 12px 4px;
     font-size: 0.95rem;

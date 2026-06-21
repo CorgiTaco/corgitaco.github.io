@@ -265,16 +265,18 @@
             const loaders  = Array.isArray(m.loaders)       ? m.loaders       : [];
             const versions = Array.isArray(m.game_versions) ? m.game_versions : [];
             return {
-                type:       'minecraft_mod',
-                title:      m.title,
-                excerpt:    m.description,
-                photo:      m.icon,
-                photo_fit:  'contain',
-                date:       m.date || null,
-                curseforge: m.curseforge || '',
-                modrinth:   m.modrinth  || '',
-                github:     m.github    || '',
-                tags:       [...loaders, ...versions]
+                type:         'minecraft_mod',
+                title:        m.title,
+                excerpt:      m.description,
+                photo:        m.icon,
+                photo_fit:    'contain',
+                date:         m.date || null,
+                curseforge:   m.curseforge   || '',
+                modrinth:     m.modrinth     || '',
+                github:       m.github       || '',
+                downloads_cf: m.downloads_cf || 0,
+                downloads_mr: m.downloads_mr || 0,
+                tags:         [...loaders, ...versions]
             };
         });
     }
@@ -292,6 +294,14 @@
                 tags: [...baseTags, ...extra]
             };
         });
+    }
+
+    // ── Download count formatter ─────────────────────────────────────────────
+
+    function formatDownloads(n) {
+        if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (n >= 1_000)     return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+        return String(n);
     }
 
     // ── Tag chips ─────────────────────────────────────────────────────────────
@@ -352,6 +362,10 @@
         const fit = cfg.photo_fit || 'cover';
         const tagHtml = buildProjTagChips(tags, 4);
         const excerpt = cfg.excerpt ? `<p class="proj-card-excerpt">${cfg.excerpt}</p>` : '';
+        const totalDownloads = (cfg.downloads_cf || 0) + (cfg.downloads_mr || 0);
+        const dlHtml = totalDownloads > 0
+            ? `<div class="proj-downloads"><i class="fa fa-download"></i> ${formatDownloads(totalDownloads)}</div>`
+            : '';
         return `
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.title)} tabindex="0" role="button" aria-label="Open ${cfg.title}">
             <div class="proj-thumb">
@@ -361,6 +375,7 @@
             </div>
             <div class="proj-card-body">
                 <div class="proj-label"><i class="fa fa-puzzle-piece" title="${category}"></i> ${cfg.title}</div>
+                ${dlHtml}
                 ${tagHtml}
                 ${excerpt}
             </div>

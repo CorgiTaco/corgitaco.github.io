@@ -116,6 +116,8 @@ def cf_to_entry(mod: dict) -> dict:
         "date":          date[:10],
         "loaders":       loaders,
         "game_versions": game_versions,
+        "downloads_cf":  int(mod.get("downloadCount") or 0),
+        "downloads_mr":  0,
     }
 
 
@@ -167,16 +169,20 @@ def mr_to_entry(proj: dict) -> dict:
         "date":          (proj.get("published") or "")[:10],
         "loaders":       loaders,
         "game_versions": game_versions,
+        "downloads_cf":  0,
+        "downloads_mr":  int(proj.get("downloads") or 0),
     }
 
 
 # ── Merge ─────────────────────────────────────────────────────────────────────
 
 def merge(base: dict, extra: dict) -> dict:
-    """Fill empty fields of base from extra; union list fields."""
+    """Fill empty fields of base from extra; union list fields; sum download fields."""
     merged = dict(base)
     for key, value in extra.items():
-        if isinstance(value, list) and isinstance(merged.get(key), list):
+        if key in ("downloads_cf", "downloads_mr"):
+            merged[key] = merged.get(key, 0) + value
+        elif isinstance(value, list) and isinstance(merged.get(key), list):
             seen = set(merged[key])
             for item in value:
                 if item not in seen:
