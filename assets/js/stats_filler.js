@@ -61,6 +61,22 @@
         Chart.defaults.borderColor = 'rgba(255,255,255,0.07)';
         Chart.defaults.font.family = "'Courier New', Courier, monospace";
         Chart.defaults.font.size   = 11;
+
+        Chart.register({
+            id: 'datasetGlow',
+            beforeDatasetDraw(chart, args) {
+                const idx = chart._glowDatasetIdx;
+                if (idx == null || args.index !== idx) return;
+                const col = chart.data.datasets[idx].borderColor || '#ffffff';
+                chart.ctx.save();
+                chart.ctx.shadowBlur  = 22;
+                chart.ctx.shadowColor = col;
+            },
+            afterDatasetDraw(chart, args) {
+                if (chart._glowDatasetIdx == null || args.index !== chart._glowDatasetIdx) return;
+                chart.ctx.restore();
+            },
+        });
     }
 
     function hexAlpha(hex, a) {
@@ -115,8 +131,8 @@
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    filter:    ctx => ctx.parsed.y != null,
-                    callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y)}` },
+                    enabled:  false, // replaced by HTML external tooltip
+                    external: function() {}, // assigned per-chart in renderChart
                 },
             },
             scales: {
@@ -141,8 +157,132 @@
         return o;
     }
 
+    const DEFAULT_EVENTS = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+
+    function setGlow(chart, dsIdx) {
+        // Clear previous glow
+        if (chart._glowDatasetIdx != null) {
+            const prev = chart.data.datasets[chart._glowDatasetIdx];
+            if (prev && prev._origBW !== undefined) { prev.borderWidth = prev._origBW; delete prev._origBW; }
+        }
+        chart._glowDatasetIdx = dsIdx ?? null;
+        if (dsIdx != null) {
+            const ds = chart.data.datasets[dsIdx];
+            if (ds) { ds._origBW = ds.borderWidth; ds.borderWidth = (ds.borderWidth || 2) * 3; }
+        }
+        chart.update('none');
+    }
+
     function renderChart(canvas, labels, datasets, opts) {
-        return new Chart(canvas, { type: 'line', data: { labels, datasets }, options: opts || baseOptions() });
+        opts = opts || baseOptions();
+
+        // Tooltip lives as an absolutely-positioned div inside the chart-wrap
+        const wrap = canvas.parentNode;
+        const tooltipEl = document.createElement('div');
+        tooltipEl.className = 'chart-tooltip-ext';
+        wrap.appendChild(tooltipEl);
+
+        let locked      = false;
+        let lastPoints  = [];
+        let lastTitle   = '';
+        let lastCaretX  = 0;
+        let lastCaretY  = 0;
+
+        function sortedPoints(points) {
+            return [...points]
+                .filter(p => p.parsed.y != null)
+                .sort((a, b) => (b.parsed.y ?? -Infinity) - (a.parsed.y ?? -Infinity));
+        }
+
+        function positionTooltip(chart, caretX, caretY) {
+            const ca      = chart.chartArea;
+            const midX    = (ca.left + ca.right) / 2;
+            const onRight = caretX > midX; // cursor on right half → put tooltip to its left
+            const OFFSET  = 14;
+            tooltipEl.style.display = 'block';
+            const ttW = tooltipEl.offsetWidth  || 0;
+            const ttH = tooltipEl.offsetHeight || 0;
+            const x   = Math.max(ca.left, Math.min(ca.right - ttW,
+                            onRight ? caretX - ttW - OFFSET : caretX + OFFSET));
+            const y   = Math.max(ca.top, Math.min(ca.bottom - ttH, caretY - ttH / 2));
+            tooltipEl.style.left = x + 'px';
+            tooltipEl.style.top  = y + 'px';
+        }
+
+        function renderTooltipItems(chart, points, title, interactive) {
+            const sorted = sortedPoints(points);
+            let html = `<div class="cte-title">${title}</div><div class="cte-items">`;
+            sorted.forEach(p => {
+                const hidden = !chart.isDatasetVisible(p.datasetIndex);
+                const col    = p.dataset.borderColor || '#fff';
+                html += `<div class="cte-item${hidden ? ' cte-hidden' : ''}" data-ds="${p.datasetIndex}"${interactive ? ' role="button" tabindex="0"' : ''}>
+                    <span class="cte-dot" style="background:${col}"></span>
+                    <span class="cte-label">${p.dataset.label}</span>
+                    <span class="cte-val">${fmtNum(p.parsed.y)}</span>
+                </div>`;
+            });
+            html += '</div>';
+            tooltipEl.innerHTML = html;
+
+            // Glow on hover (always attached; pointer-events CSS gates firing when not locked)
+            tooltipEl.querySelectorAll('.cte-item').forEach(row => {
+                const dsIdx = Number(row.dataset.ds);
+                row.addEventListener('mouseenter', () => setGlow(chart, dsIdx));
+                row.addEventListener('mouseleave', () => setGlow(chart, null));
+            });
+
+            if (interactive) {
+                tooltipEl.querySelectorAll('.cte-item').forEach(row => {
+                    row.addEventListener('click', e => {
+                        e.stopPropagation();
+                        const dsIdx  = Number(row.dataset.ds);
+                        const nowVis = !chart.isDatasetVisible(dsIdx);
+                        chart.setDatasetVisibility(dsIdx, nowVis);
+                        chart.update('none');
+                        row.classList.toggle('cte-hidden', !nowVis);
+                    });
+                });
+            }
+        }
+
+        // Wire the external tooltip callback into the options
+        opts.plugins.tooltip.external = function({ chart, tooltip }) {
+            if (locked) return;
+            if (!tooltip.dataPoints?.length || tooltip.opacity === 0) {
+                tooltipEl.style.display = 'none';
+                return;
+            }
+            lastPoints = tooltip.dataPoints;
+            lastTitle  = tooltip.title?.[0] || '';
+            lastCaretX = tooltip.caretX;
+            lastCaretY = tooltip.caretY;
+            renderTooltipItems(chart, lastPoints, lastTitle, false);
+            positionTooltip(chart, lastCaretX, lastCaretY);
+        };
+
+        const chart = new Chart(canvas, { type: 'line', data: { labels, datasets }, options: opts });
+
+        // Canvas click = lock / unlock
+        canvas.addEventListener('click', () => {
+            if (locked) {
+                locked = false;
+                canvas.classList.remove('chart-locked');
+                tooltipEl.style.display = 'none';
+                tooltipEl.classList.remove('is-locked');
+                chart.options.events = DEFAULT_EVENTS;
+                chart.update('none');
+            } else {
+                if (!lastPoints.length) return;
+                locked = true;
+                canvas.classList.add('chart-locked');
+                chart.options.events = [];
+                tooltipEl.classList.add('is-locked');
+                renderTooltipItems(chart, lastPoints, lastTitle, true);
+                positionTooltip(chart, lastCaretX, lastCaretY);
+            }
+        });
+
+        return chart;
     }
 
     // ── Date-aligned multi-series builder ─────────────────────────────────────
@@ -336,7 +476,7 @@
 
     // ── Custom legend chips ───────────────────────────────────────────────────
 
-    function buildLegend(parent, items, onToggle) {
+    function buildLegend(parent, items, onToggle, onHover) {
         const wrap  = el('div', 'stat-legend');
         const chips = items.map((item, i) => {
             const chip = el('button', 'stat-legend-chip active');
@@ -354,6 +494,10 @@
 
             chip.appendChild(el('span', 'stat-legend-label', item.label));
             chip.addEventListener('click', () => { const a = chip.classList.toggle('active'); onToggle(i, a); });
+            if (onHover) {
+                chip.addEventListener('mouseenter', () => onHover(i, true));
+                chip.addEventListener('mouseleave', () => onHover(i, false));
+            }
             wrap.appendChild(chip);
             return chip;
         });
@@ -445,6 +589,13 @@
     function buildEntityDeltaChart(container, title, icon, deltaMap, entityMeta) {
         if (!entityMeta.length) return;
 
+        // Sort by total delta value (highest first)
+        entityMeta = [...entityMeta].sort((a, b) => {
+            const sumA = (deltaMap[a.id] || []).reduce((s, r) => s + r.value, 0);
+            const sumB = (deltaMap[b.id] || []).reduce((s, r) => s + r.value, 0);
+            return sumB - sumA;
+        });
+
         let mode    = 'day';
         let fromStr = null;
         let toStr   = null;
@@ -530,7 +681,8 @@
 
         chips = buildLegend(legendSide, entityMeta.map((e, i) => ({
             label: e.label, imgSrc: e.imgSrc, col: e.col || palette(i),
-        })), (i, active) => { visible[i] = active; chart && (chart.setDatasetVisibility(i, active), chart.update()); });
+        })), (i, active) => { visible[i] = active; chart && (chart.setDatasetVisibility(i, active), chart.update()); },
+        (i, entering) => { if (chart) setGlow(chart, entering ? i : null); });
     }
 
     // ── Section: new downloads per mod (delta) ────────────────────────────────
@@ -562,6 +714,13 @@
     // ── Section: YouTube overlay chart (cumulative per video) ─────────────────
 
     function buildVideoOverlayChart(container, videos, videoRows) {
+        // Sort by latest cumulative view count (highest first)
+        videos = [...videos].sort((a, b) => {
+            const rowsA = [...(videoRows[a.id] || [])].sort((x, y) => fmtDate(x.date).localeCompare(fmtDate(y.date)));
+            const rowsB = [...(videoRows[b.id] || [])].sort((x, y) => fmtDate(x.date).localeCompare(fmtDate(y.date)));
+            return (Number(rowsB[rowsB.length - 1]?.views) || 0) - (Number(rowsA[rowsA.length - 1]?.views) || 0);
+        });
+
         const section = el('section', 'stat-section');
         const head    = el('div', 'stat-section-head');
         head.innerHTML = `<h2 class="stat-section-title"><i class="fa fa-youtube-play"></i> Views Per Video</h2>`;
@@ -598,12 +757,20 @@
         }
 
         chips = buildLegend(legendSide, videos.map((v, i) => ({ label: v.title, imgSrc: v.thumbnail, col: palette(i) })),
-            (i, active) => { visible[i] = active; chart && (chart.setDatasetVisibility(i, active), chart.update()); });
+            (i, active) => { visible[i] = active; chart && (chart.setDatasetVisibility(i, active), chart.update()); },
+            (i, entering) => { if (chart) setGlow(chart, entering ? i : null); });
     }
 
     // ── Section: merged mod chart (cumulative per mod) ────────────────────────
 
     function buildModChart(container, mods, modRows) {
+        // Sort by latest cumulative download count (highest first)
+        mods = [...mods].sort((a, b) => {
+            const rowsA = [...(modRows[a.id] || [])].sort((x, y) => fmtDate(x.date).localeCompare(fmtDate(y.date)));
+            const rowsB = [...(modRows[b.id] || [])].sort((x, y) => fmtDate(x.date).localeCompare(fmtDate(y.date)));
+            return (Number(rowsB[rowsB.length - 1]?.downloads_total) || 0) - (Number(rowsA[rowsA.length - 1]?.downloads_total) || 0);
+        });
+
         const allDates   = [...new Set(mods.flatMap(m => (modRows[m.id] || []).map(r => fmtDate(r.date))))].sort();
         const allDatasets = [];
         const modRanges  = [];
@@ -657,7 +824,8 @@
         }
 
         chips = buildLegend(legendSide, mods.map((m, i) => ({ label: m.title, imgSrc: m.icon, col: palette(i) })),
-            (i, active) => toggleMod(i, active));
+            (i, active) => toggleMod(i, active),
+            (i, entering) => { if (chart) setGlow(chart, entering ? modRanges[i].start : null); });
     }
 
     // ── Bootstrap ─────────────────────────────────────────────────────────────

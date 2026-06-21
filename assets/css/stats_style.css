@@ -250,6 +250,95 @@
     color: var(--main-color);
 }
 
+/* ── Chart locked state ── */
+
+canvas.chart-locked {
+    cursor: crosshair;
+    outline: 1px solid rgba(70, 162, 88, 0.5);
+    border-radius: 4px;
+}
+
+/* ── HTML tooltip ── */
+
+.chart-tooltip-ext {
+    display: none;
+    position: absolute;
+    z-index: 50;
+    background: rgba(18, 18, 18, 0.96);
+    border: 1px solid rgba(70, 162, 88, 0.35);
+    border-radius: 6px;
+    padding: 8px 0 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    pointer-events: none;
+    min-width: 180px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+    white-space: nowrap;
+}
+
+.chart-tooltip-ext.is-locked {
+    pointer-events: auto;
+}
+
+.cte-title {
+    padding: 0 10px 6px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 4px;
+    white-space: nowrap;
+}
+
+.cte-items {
+    max-height: 220px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(70, 162, 88, 0.4) transparent;
+}
+
+.cte-items::-webkit-scrollbar       { width: 4px; }
+.cte-items::-webkit-scrollbar-thumb { background: rgba(70, 162, 88, 0.4); border-radius: 2px; }
+
+.cte-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    transition: background 0.1s;
+    cursor: default;
+}
+
+.is-locked .cte-item {
+    cursor: pointer;
+}
+
+.is-locked .cte-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.cte-hidden {
+    opacity: 0.35;
+}
+
+.cte-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cte-label {
+    flex: 1;
+    white-space: nowrap;
+}
+
+.cte-val {
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 /* ── Chart wrappers ── */
 
 .stat-chart-wrap {
