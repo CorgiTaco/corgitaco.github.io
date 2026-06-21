@@ -41,9 +41,9 @@
     "discord": "corgitaco"
   },
   "looking_for": [
-    "",
-    "",
-    ""
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   ],
   "highlight_cards": [
     { "icon": "fa-code", "dynamic": "years_since", "since": "2019-12", "since_label": "Dec 2019", "label": "Years of Software Development" },
