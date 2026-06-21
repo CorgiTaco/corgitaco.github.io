@@ -338,7 +338,7 @@
 
         PRESETS.forEach(({ label, days }) => {
             const btn = el('button', 'stat-ctrl-btn', label);
-            if (!days) { btn.classList.add('is-active'); activePreset = btn; }
+            if (days === 30) { btn.classList.add('is-active'); activePreset = btn; }
             btn.addEventListener('click', () => {
                 activatePreset(btn);
                 if (!days) {
@@ -399,6 +399,18 @@
         customRow.appendChild(applyBtn);
         wrap.appendChild(bar);
         wrap.appendChild(customRow);
+
+        // fire the default 1M range immediately
+        if (lastDate) {
+            const last = new Date(lastDate + 'T00:00:00Z');
+            const from = new Date(last);
+            from.setUTCDate(from.getUTCDate() - 30 + 1);
+            const fromStr = from.toISOString().slice(0, 10);
+            fromIn.value = fromStr;
+            toIn.value   = lastDate;
+            onChange(fromStr, null);
+        }
+
         return wrap;
     }
 
