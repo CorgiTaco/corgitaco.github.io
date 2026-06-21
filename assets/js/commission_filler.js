@@ -116,6 +116,13 @@
             inner.appendChild(buildCarousel(type.examples));
         }
 
+        var bodyBtn = document.createElement('button');
+        bodyBtn.className = 'btn-theme comm-modal-btn comm-body-modal-btn';
+        bodyBtn.type = 'button';
+        bodyBtn.dataset.modalType = type.modalType;
+        bodyBtn.textContent = type.btnLabel;
+        inner.appendChild(bodyBtn);
+
         return acc;
     }
 
@@ -137,19 +144,18 @@
         var acc = document.querySelector('.comm-accordion[data-type="' + k + '"]');
         if (!acc) return;
 
-        var modalBtn = acc.querySelector('.comm-modal-btn');
-        if (modalBtn) {
-            modalBtn.addEventListener('click', function (e) {
+        acc.querySelectorAll('.comm-modal-btn').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 var overlay = document.getElementById('commission-modal-overlay');
                 if (overlay) overlay.classList.add('active');
                 var sel = document.getElementById('commission-type');
                 if (sel) {
-                    sel.value = modalBtn.dataset.modalType;
+                    sel.value = btn.dataset.modalType;
                     sel.dispatchEvent(new Event('change'));
                 }
             });
-        }
+        });
 
         function toggle() {
             if (acc.classList.contains('is-open')) {
