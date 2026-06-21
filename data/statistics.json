@@ -1,244 +1,298 @@
 {
   "playlistId": "PLv9ftxjIVZhOWmPEH9VbX282EZzBGV7TB",
-  "fetchedAt": "2026-06-20T21:03:43Z",
-  "videoCount": 26,
-  "totalViews": 73595604,
-  "totalLikes": 784928,
-  "totalComments": 34108,
+  "fetchedAt": "2026-06-21T00:28:02Z",
+  "totals": {
+    "video_count": 26,
+    "views": 73599137,
+    "likes": 784970,
+    "comments": 34110
+  },
   "videos": [
     {
-      "videoId": "JmJuZYkRkCY",
+      "id": "JmJuZYkRkCY",
       "title": "I Survived 100 Days as SCARY MYTHS in Minecraft",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/JmJuZYkRkCY/mqdefault.jpg",
-      "viewCount": 1265259,
-      "likeCount": 8871,
-      "commentCount": 182
+      "stats": {
+        "views": 1265327,
+        "likes": 8873,
+        "comments": 182
+      }
     },
     {
-      "videoId": "22o5RfKRlXw",
+      "id": "22o5RfKRlXw",
       "title": "Shin Sonic vs Security House in Minecraft",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/22o5RfKRlXw/mqdefault.jpg",
-      "viewCount": 6082363,
-      "likeCount": 28779,
-      "commentCount": 425
+      "stats": {
+        "views": 6082563,
+        "likes": 28779,
+        "comments": 425
+      }
     },
     {
-      "videoId": "w1JgtGCbtl8",
+      "id": "w1JgtGCbtl8",
       "title": "The Story of Minecraft's First CREAKING",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/w1JgtGCbtl8/mqdefault.jpg",
-      "viewCount": 538171,
-      "likeCount": 5442,
-      "commentCount": 143
+      "stats": {
+        "views": 538183,
+        "likes": 5442,
+        "comments": 143
+      }
     },
     {
-      "videoId": "MDb1iaFdoTU",
+      "id": "MDb1iaFdoTU",
       "title": "Minecraft But There's Robot Upgrades",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/MDb1iaFdoTU/mqdefault.jpg",
-      "viewCount": 1553909,
-      "likeCount": 12631,
-      "commentCount": 184
+      "stats": {
+        "views": 1554053,
+        "likes": 12632,
+        "comments": 184
+      }
     },
     {
-      "videoId": "lYaXatFUcuk",
+      "id": "lYaXatFUcuk",
       "title": "Level 1 vs Level 1000 Trap in Minecraft!",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/lYaXatFUcuk/mqdefault.jpg",
-      "viewCount": 1536168,
-      "likeCount": 10857,
-      "commentCount": 322
+      "stats": {
+        "views": 1536269,
+        "likes": 10858,
+        "comments": 322
+      }
     },
     {
-      "videoId": "Nbs-H07Qsww",
+      "id": "Nbs-H07Qsww",
       "title": "Pranking My Friend with AMANDA THE ADVENTURER in Minecraft",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/Nbs-H07Qsww/mqdefault.jpg",
-      "viewCount": 707017,
-      "likeCount": 5884,
-      "commentCount": 123
+      "stats": {
+        "views": 707086,
+        "likes": 5885,
+        "comments": 123
+      }
     },
     {
-      "videoId": "K-PGP7pPLPs",
+      "id": "K-PGP7pPLPs",
       "title": "Minecraft But There's SONIC Hearts",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/K-PGP7pPLPs/mqdefault.jpg",
-      "viewCount": 1692840,
-      "likeCount": 10664,
-      "commentCount": 182
+      "stats": {
+        "views": 1692878,
+        "likes": 10664,
+        "comments": 182
+      }
     },
     {
-      "videoId": "QzL6g5-uKt0",
+      "id": "QzL6g5-uKt0",
       "title": "This Scary Minecraft World Can HEAR You...",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/QzL6g5-uKt0/mqdefault.jpg",
-      "viewCount": 1009697,
-      "likeCount": 8414,
-      "commentCount": 398
+      "stats": {
+        "views": 1009702,
+        "likes": 8415,
+        "comments": 398
+      }
     },
     {
-      "videoId": "OjBo5n6WUVo",
+      "id": "OjBo5n6WUVo",
       "title": "Cartoons vs Security House in Minecraft",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/OjBo5n6WUVo/mqdefault.jpg",
-      "viewCount": 2347957,
-      "likeCount": 15992,
-      "commentCount": 249
+      "stats": {
+        "views": 2348106,
+        "likes": 15993,
+        "comments": 249
+      }
     },
     {
-      "videoId": "nh0AM1sG7dw",
+      "id": "nh0AM1sG7dw",
       "title": "Minecraft But There's Time Upgrades",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/nh0AM1sG7dw/mqdefault.jpg",
-      "viewCount": 1406661,
-      "likeCount": 13019,
-      "commentCount": 218
+      "stats": {
+        "views": 1406699,
+        "likes": 13019,
+        "comments": 218
+      }
     },
     {
-      "videoId": "gIkswnZzVbg",
+      "id": "gIkswnZzVbg",
       "title": "The Scariest Minecraft Theory You DON'T Know...",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/gIkswnZzVbg/mqdefault.jpg",
-      "viewCount": 1025975,
-      "likeCount": 10549,
-      "commentCount": 430
+      "stats": {
+        "views": 1026091,
+        "likes": 10549,
+        "comments": 430
+      }
     },
     {
-      "videoId": "RyzwLu2VN-4",
+      "id": "RyzwLu2VN-4",
       "title": "How Big Can the Mutant Spider Get?",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/RyzwLu2VN-4/mqdefault.jpg",
-      "viewCount": 896786,
-      "likeCount": 7236,
-      "commentCount": 132
+      "stats": {
+        "views": 896861,
+        "likes": 7237,
+        "comments": 132
+      }
     },
     {
-      "videoId": "S_sERG-aylc",
+      "id": "S_sERG-aylc",
       "title": "The Bloop vs Security House in Minecraft",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/S_sERG-aylc/mqdefault.jpg",
-      "viewCount": 2181891,
-      "likeCount": 14894,
-      "commentCount": 285
+      "stats": {
+        "views": 2181985,
+        "likes": 14895,
+        "comments": 285
+      }
     },
     {
-      "videoId": "qpWydUdH_Cc",
+      "id": "qpWydUdH_Cc",
       "title": "Rebuilding an Abandoned YOUTUBER Store in Minecraft",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/qpWydUdH_Cc/mqdefault.jpg",
-      "viewCount": 943847,
-      "likeCount": 8420,
-      "commentCount": 388
+      "stats": {
+        "views": 943893,
+        "likes": 8421,
+        "comments": 388
+      }
     },
     {
-      "videoId": "q3uM23RN5RI",
+      "id": "q3uM23RN5RI",
       "title": "Minecraft But There's Candy Hearts",
-      "channelTitle": "Checkpoint",
+      "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/q3uM23RN5RI/mqdefault.jpg",
-      "viewCount": 1205028,
-      "likeCount": 7838,
-      "commentCount": 166
+      "stats": {
+        "views": 1205118,
+        "likes": 7838,
+        "comments": 166
+      }
     },
     {
-      "videoId": "R2SOKyNJ1jQ",
+      "id": "R2SOKyNJ1jQ",
       "title": "Minecraft's NEW Natural Disaster Mod Is Mad",
-      "channelTitle": "TommyInnit",
+      "channel": "TommyInnit",
       "thumbnail": "https://i.ytimg.com/vi/R2SOKyNJ1jQ/mqdefault.jpg",
-      "viewCount": 865057,
-      "likeCount": 56843,
-      "commentCount": 3178
+      "stats": {
+        "views": 865060,
+        "likes": 56843,
+        "comments": 3178
+      }
     },
     {
-      "videoId": "TbrO5ONPp3s",
+      "id": "TbrO5ONPp3s",
       "title": "So I Added WAY Too Many Slimes to Minecraft...",
-      "channelTitle": "Fundy",
+      "channel": "Fundy",
       "thumbnail": "https://i.ytimg.com/vi/TbrO5ONPp3s/mqdefault.jpg",
-      "viewCount": 3007774,
-      "likeCount": 98659,
-      "commentCount": 7258
+      "stats": {
+        "views": 3008097,
+        "likes": 98667,
+        "comments": 7260
+      }
     },
     {
-      "videoId": "xEXWdQbmvwA",
+      "id": "xEXWdQbmvwA",
       "title": "Minecraft Manhunt But Anything I Spell Upgrades Me",
-      "channelTitle": "Karan",
+      "channel": "Karan",
       "thumbnail": "https://i.ytimg.com/vi/xEXWdQbmvwA/mqdefault.jpg",
-      "viewCount": 410554,
-      "likeCount": 9979,
-      "commentCount": 389
+      "stats": {
+        "views": 410554,
+        "likes": 9979,
+        "comments": 389
+      }
     },
     {
-      "videoId": "aN7ACGpMHA0",
+      "id": "aN7ACGpMHA0",
       "title": "I Survived 100 Days as a BARBARIAN in Minecraft",
-      "channelTitle": "Ryguyrocky",
+      "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/aN7ACGpMHA0/mqdefault.jpg",
-      "viewCount": 624783,
-      "likeCount": 9257,
-      "commentCount": 966
+      "stats": {
+        "views": 624808,
+        "likes": 9257,
+        "comments": 966
+      }
     },
     {
-      "videoId": "Bwgdr3E5Zcg",
+      "id": "Bwgdr3E5Zcg",
       "title": "I Survived 100 Days as a SPY in Minecraft",
-      "channelTitle": "Ryguyrocky",
+      "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/Bwgdr3E5Zcg/mqdefault.jpg",
-      "viewCount": 1854996,
-      "likeCount": 20662,
-      "commentCount": 1215
+      "stats": {
+        "views": 1855071,
+        "likes": 20663,
+        "comments": 1215
+      }
     },
     {
-      "videoId": "Bp6EsmNjEsM",
+      "id": "Bp6EsmNjEsM",
       "title": "I Survived 100 Days as GOKU in Minecraft",
-      "channelTitle": "Ryguyrocky",
+      "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/Bp6EsmNjEsM/mqdefault.jpg",
-      "viewCount": 3863347,
-      "likeCount": 39960,
-      "commentCount": 3862
+      "stats": {
+        "views": 3863667,
+        "likes": 39961,
+        "comments": 3862
+      }
     },
     {
-      "videoId": "S9GMWlzdWhM",
+      "id": "S9GMWlzdWhM",
       "title": "I Survived 100 Days as the AKATSUKI in Minecraft",
-      "channelTitle": "Ryguyrocky",
+      "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/S9GMWlzdWhM/mqdefault.jpg",
-      "viewCount": 2161641,
-      "likeCount": 23636,
-      "commentCount": 2065
+      "stats": {
+        "views": 2161670,
+        "likes": 23636,
+        "comments": 2065
+      }
     },
     {
-      "videoId": "eNOIe68q-AQ",
+      "id": "eNOIe68q-AQ",
       "title": "I Survived 100 Days as the DEMON SLAYER in Minecraft",
-      "channelTitle": "Ryguyrocky",
+      "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/eNOIe68q-AQ/mqdefault.jpg",
-      "viewCount": 4119121,
-      "likeCount": 54215,
-      "commentCount": 0
+      "stats": {
+        "views": 4119814,
+        "likes": 54227,
+        "comments": 0
+      }
     },
     {
-      "videoId": "RsyIs_21Axg",
+      "id": "RsyIs_21Axg",
       "title": "I Survived 100 Days as the TRANSFORMERS in Minecraft",
-      "channelTitle": "Ryguyrocky",
+      "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/RsyIs_21Axg/mqdefault.jpg",
-      "viewCount": 3283625,
-      "likeCount": 33070,
-      "commentCount": 1825
+      "stats": {
+        "views": 3283967,
+        "likes": 33071,
+        "comments": 1825
+      }
     },
     {
-      "videoId": "Cj_ncLnnyXk",
+      "id": "Cj_ncLnnyXk",
       "title": "100 Players Simulate Attack on Titan",
-      "channelTitle": "Socksfor1",
+      "channel": "Socksfor1",
       "thumbnail": "https://i.ytimg.com/vi/Cj_ncLnnyXk/mqdefault.jpg",
-      "viewCount": 7323722,
-      "likeCount": 136864,
-      "commentCount": 7362
+      "stats": {
+        "views": 7323886,
+        "likes": 136866,
+        "comments": 7362
+      }
     },
     {
-      "videoId": "_NhIOEQ64q8",
+      "id": "_NhIOEQ64q8",
       "title": "100 Players Survive Natural Disasters in Minecraft!",
-      "channelTitle": "Karl",
+      "channel": "Karl",
       "thumbnail": "https://i.ytimg.com/vi/_NhIOEQ64q8/mqdefault.jpg",
-      "viewCount": 21687415,
-      "likeCount": 132293,
-      "commentCount": 2161
+      "stats": {
+        "views": 21687729,
+        "likes": 132300,
+        "comments": 2161
+      }
     }
   ]
 }
