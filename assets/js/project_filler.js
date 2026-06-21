@@ -267,6 +267,7 @@
             const stats    = m.stats || {};
             return {
                 type:         'minecraft_mod',
+                mod_id:       m.id || null,
                 title:        m.title,
                 excerpt:      m.description,
                 photo:        m.icon,
@@ -443,6 +444,7 @@
                 </div>
                 ${tagHtml}
                 ${cfg.views > 0 ? `<div class="modal-downloads"><i class="fa fa-eye"></i> ${formatDownloads(cfg.views)} views</div>` : ''}
+                ${vid ? `<button class="modal-stats-btn btn-theme" data-stats-type="youtube" data-stats-id="${vid}" data-stats-title="${title.replace(/"/g, '&quot;')}"><i class="fa fa-bar-chart"></i> Statistics</button>` : ''}
                 <button class="modal-back btn-theme"><i class="fa fa-arrow-left"></i> Back</button>
             </div>`;
     }
@@ -471,6 +473,7 @@
             ${tagHtml}
             ${(cfg.downloads_cf || cfg.downloads_mr) ? `<div class="modal-downloads"><i class="fa fa-download"></i> ${formatDownloads((cfg.downloads_cf || 0) + (cfg.downloads_mr || 0))} downloads</div>` : ''}
             <div class="modal-links">${links}</div>
+            ${cfg.mod_id ? `<button class="modal-stats-btn btn-theme" data-stats-type="mod" data-stats-id="${cfg.mod_id}" data-stats-title="${cfg.title.replace(/"/g, '&quot;')}"><i class="fa fa-bar-chart"></i> Statistics</button>` : ''}
             <button class="modal-back btn-theme"><i class="fa fa-arrow-left"></i> Back</button>
         </div>`;
     }
@@ -1596,7 +1599,11 @@
         });
 
         document.getElementById('projects-modals').addEventListener('click', (e) => {
-            if (e.target.closest('.modal-back')) closeModal();
+            if (e.target.closest('.modal-back')) { closeModal(); return; }
+            const statsBtn = e.target.closest('.modal-stats-btn');
+            if (statsBtn && window.openProjectStats) {
+                window.openProjectStats(statsBtn.dataset.statsType, statsBtn.dataset.statsId, statsBtn.dataset.statsTitle);
+            }
         });
 
         document.getElementById('modal-overlay').addEventListener('click', (e) => {
@@ -1604,7 +1611,7 @@
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Escape' && !window._projStatsOpen) closeModal();
         });
 
         window.addEventListener('hashchange', handleHash);

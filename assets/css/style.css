@@ -649,6 +649,23 @@ body.driver-active .fav-star {
     display: flex;
 }
 
+#proj-stats-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 4001;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: sysFadeIn 0.2s ease forwards;
+}
+
+#proj-stats-overlay.active {
+    display: flex;
+}
+
 /* ── Modal Inners ── */
 .modal-inner, .tm-modal, .pdf-modal, #blog-modal-inner {
     background: rgb(20 20 20 / 97%);

@@ -1,6 +1,6 @@
 /* ── Stats page: flex column fills #main, no outer scroll ── */
 
-#main {
+body.stats-page #main {
     overflow: hidden;
 }
 

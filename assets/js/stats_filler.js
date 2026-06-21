@@ -554,9 +554,8 @@
         const chartDiv = section.querySelector('.stat-chart-wrap');
         if (!labels.length) { chartDiv.innerHTML = '<p class="stat-no-data">No history yet.</p>'; return; }
 
-        let chart = null;
-        section.insertBefore(makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => { if (chart) sliceChart(chart, labels, [data], from, to); }), chartDiv);
-        chart = renderChart(chartDiv.querySelector('canvas'), labels, [mkDataset(title, data, col, { fill: true })]);
+        const chart = renderChart(chartDiv.querySelector('canvas'), labels, [mkDataset(title, data, col, { fill: true })]);
+        section.insertBefore(makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => { sliceChart(chart, labels, [data], from, to); }), chartDiv);
     }
 
     // ── Section: mod totals overview (CF + MR + Total) ────────────────────────
@@ -581,17 +580,15 @@
         container.appendChild(section);
 
         const chartDiv = section.querySelector('.stat-chart-wrap');
-        let chart = null;
-        section.insertBefore(makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => { if (chart) sliceChart(chart, labels, [cfData, mrData, totData], from, to); }), chartDiv);
-
         const opts = baseOptions();
         opts.plugins.legend.display = true;
         opts.plugins.legend.labels  = { color: 'rgba(255,255,255,0.6)', boxWidth: 10, padding: 14 };
-        chart = renderChart(chartDiv.querySelector('canvas'), labels, [
+        const chart = renderChart(chartDiv.querySelector('canvas'), labels, [
             mkDataset('CurseForge', cfData,  CF_COLOR),
             mkDataset('Modrinth',   mrData,  MR_COLOR),
             mkDataset('Total',      totData, TOT_COLOR, { fill: true }),
         ], opts);
+        section.insertBefore(makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => { sliceChart(chart, labels, [cfData, mrData, totData], from, to); }), chartDiv);
     }
 
     // ── Per-entity delta line chart (New Downloads / New Views) ──────────────
@@ -619,6 +616,16 @@
         const head    = el('div', 'stat-section-head');
         head.innerHTML = `<h2 class="stat-section-title"><i class="fa ${icon}"></i> ${title}</h2>`;
         section.appendChild(head);
+        container.appendChild(section);
+
+        const totalDeltas = Object.values(deltaMap).reduce((s, arr) => s + arr.length, 0);
+        if (!totalDeltas) {
+            const msg = el('p', 'stat-no-data');
+            msg.style.cssText = 'position:static;padding:40px 0;opacity:0.45;text-align:center';
+            msg.textContent = 'Not enough history yet — check back after the next data update.';
+            section.appendChild(msg);
+            return;
+        }
 
         // Day / Week / Month mode bar (right-aligned in head)
         const modeBar = el('div', 'stat-range-bar');
@@ -658,7 +665,6 @@
         const rangeEl  = makeRangeEl(firstDate, lastDate, (from, to) => { fromStr = from; toStr = to; render(); });
         section.appendChild(rangeEl);
         section.appendChild(body);
-        container.appendChild(section);
 
         function render() {
             const dateBuckets = new Set();
@@ -757,12 +763,12 @@
         body.appendChild(chartWrap);
         body.appendChild(legendSide);
 
-        section.appendChild(makeRangeEl(labels[0] || '', labels[labels.length - 1] || '', (from, to) => { if (chart) sliceChart(chart, labels, origData, from, to); }));
         section.appendChild(body);
         container.appendChild(section);
 
         if (labels.length) {
             chart = renderChart(chartWrap.querySelector('canvas'), labels, datasets);
+            section.insertBefore(makeRangeEl(labels[0] || '', labels[labels.length - 1] || '', (from, to) => { sliceChart(chart, labels, origData, from, to); }), body);
         } else {
             chartWrap.innerHTML = '<p class="stat-no-data">No history yet.</p>';
         }
@@ -823,12 +829,12 @@
         body.appendChild(legendSide);
 
         const origData = allDatasets.map(ds => [...ds.data]);
-        section.appendChild(makeRangeEl(allDates[0] || '', allDates[allDates.length - 1] || '', (from, to) => { if (chart) sliceChart(chart, allDates, origData, from, to); }));
         section.appendChild(body);
         container.appendChild(section);
 
         if (allDates.length) {
             chart = renderChart(chartWrap.querySelector('canvas'), allDates, allDatasets);
+            section.insertBefore(makeRangeEl(allDates[0] || '', allDates[allDates.length - 1] || '', (from, to) => { sliceChart(chart, allDates, origData, from, to); }), body);
         } else {
             chartWrap.innerHTML = '<p class="stat-no-data">No history yet.</p>';
         }
