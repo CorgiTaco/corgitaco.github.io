@@ -33,10 +33,12 @@
     }
   ],
   "contact": {
+    "pfp": "https://github.com/corgitaco.png",
     "jobTitle": "Software Developer",
     "email": "corgitaco@corgitaco.dev",
     "phone": "+1 (213) 421-1665",
-    "location": "LA County, California"
+    "location": "LA County, California",
+    "discord": "corgitaco"
   },
   "looking_for": [
     "",

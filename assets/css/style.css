@@ -17,7 +17,7 @@
     --font-mono: 'Courier New', Courier, monospace;
 
     /* ── Universal type scale ── */
-    --fs-page-title: 1.6rem; /* page h1 titles — Blog, Projects, Hire Me, etc. */
+    --fs-page-title: 1.6rem; /* page h1 titles — Blog, Projects, Resume, etc. */
     --fs-heading: 1.1rem; /* section headers, card titles                    */
     --fs-body: 0.9rem; /* primary readable content                        */
     --fs-meta: 0.78rem; /* dates, institutions, sub-info                   */
