@@ -141,15 +141,13 @@
         if (modalBtn) {
             modalBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                var openBtn = document.getElementById('open-commission-btn');
-                if (openBtn) openBtn.click();
-                setTimeout(function () {
-                    var sel = document.getElementById('commission-type');
-                    if (sel) {
-                        sel.value = modalBtn.dataset.modalType;
-                        sel.dispatchEvent(new Event('change'));
-                    }
-                }, 50);
+                var overlay = document.getElementById('commission-modal-overlay');
+                if (overlay) overlay.classList.add('active');
+                var sel = document.getElementById('commission-type');
+                if (sel) {
+                    sel.value = modalBtn.dataset.modalType;
+                    sel.dispatchEvent(new Event('change'));
+                }
             });
         }
 

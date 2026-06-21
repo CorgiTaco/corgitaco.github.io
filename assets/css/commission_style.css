@@ -4,8 +4,12 @@ body.commission-page #main {
     overflow: hidden;
 }
 
+body.commission-page #page-title-bar {
+    margin-bottom: 0;
+}
+
 #commission-container {
-    padding: 20px var(--main-padding) 0;
+    padding: 0 var(--main-padding);
     display: flex;
     flex-direction: column;
     flex: 1;

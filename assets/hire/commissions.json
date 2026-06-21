@@ -9,7 +9,7 @@
       "key":       "youtube",
       "label":     "YouTube Video",
       "icon":      "fa-youtube-play",
-      "btnLabel":  "Commission a Video",
+      "btnLabel":  "Commission",
       "modalType": "for a YouTube Video",
       "description": "Need custom Minecraft content built specifically for your video or live event? I can create bespoke mods, plugins, maps, or game modes designed around your concept — from subscriber specials to large-scale MrBeast-style events.",
       "examples": [
@@ -41,7 +41,7 @@
       "key":       "mod",
       "label":     "Minecraft Mod",
       "icon":      "fa-cube",
-      "btnLabel":  "Commission a Mod",
+      "btnLabel":  "Commission",
       "modalType": "a new mod",
       "description": "From small quality-of-life tweaks to sprawling content mods, I can build exactly what you have in mind. I specialise in world-generation, biome overhauls, terrain systems, and complex data-driven content across Forge, Fabric, and NeoForge.",
       "examples": [
@@ -74,7 +74,7 @@
       "key":       "plugin",
       "label":     "Minecraft Plugin",
       "icon":      "fa-plug",
-      "btnLabel":  "Commission a Plugin",
+      "btnLabel":  "Commission",
       "modalType": "a Minecraft plugin",
       "description": "Need server-side functionality without a full client mod? I build Paper/Spigot plugins for everything from simple admin utilities and economy hooks to complete custom game modes and mini-games for your server network.",
       "examples": [
@@ -106,7 +106,7 @@
       "key":       "port",
       "label":     "Minecraft Mod Port / Update",
       "icon":      "fa-refresh",
-      "btnLabel":  "Request a Port / Update",
+      "btnLabel":  "Commission",
       "modalType": "a mod port",
       "description": "Favourite mod stuck on an old version? I can port or update mods to modern Minecraft versions and loader targets — including API migrations (Forge → NeoForge, MCP → Mojmap) and compatibility fixes for current modpacks.",
       "examples": [
@@ -140,7 +140,7 @@
       "key":       "other",
       "label":     "Other",
       "icon":      "fa-ellipsis-h",
-      "btnLabel":  "Send a Request",
+      "btnLabel":  "Commission",
       "modalType": "other",
       "description": "Have something in mind that doesn't fit neatly into a category? Reach out anyway — whether it's a technical consultation, a tool for your workflow, or anything else Minecraft-adjacent, I'm happy to discuss what's possible.",
       "examples": [
