@@ -4,6 +4,7 @@
     { "href": "/resume",     "icon": "fa-file-text", "label": "Resume"     },
     { "href": "/commission", "icon": "fa-usd",       "label": "Commissions" },
     { "href": "/blog",       "icon": "fa-pencil",    "label": "Blog"       },
+    { "href": "/statistics", "icon": "fa-bar-chart", "label": "Statistics" },
     { "href": "/about",      "icon": "fa-user",      "label": "About"      },
     { "href": "/donate",     "icon": "fa-heart",     "label": "Support Me" }
 ]

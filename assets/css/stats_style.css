@@ -1,0 +1,385 @@
+/* ── Let #main scroll, not the inner container ── */
+
+#main {
+    overflow-y: auto;
+}
+
+#stats-container {
+    padding: 20px var(--main-padding) 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ── Accordions ── */
+
+.stat-accordion {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-acc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--fs-heading);
+    font-weight: 600;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+    padding: 10px 2px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: opacity 0.15s;
+}
+
+.stat-acc-header:hover { opacity: 0.75; }
+
+.stat-acc-icon-wrap {
+    color: var(--main-color);
+    background: rgba(70, 162, 88, 0.15);
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    font-size: var(--fs-body);
+    flex-shrink: 0;
+}
+
+.stat-acc-label {
+    flex: 1;
+}
+
+.stat-acc-caret {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.8rem;
+    transition: transform 0.35s ease;
+    flex-shrink: 0;
+}
+
+.is-open .stat-acc-caret {
+    transform: rotate(180deg);
+}
+
+/* Smooth height animation via grid trick */
+.stat-acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s ease;
+}
+
+.is-open .stat-acc-body {
+    grid-template-rows: 1fr;
+}
+
+.stat-acc-inner {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 0;
+    transition: padding-top 0.35s ease;
+}
+
+.is-open .stat-acc-inner {
+    padding-top: 20px;
+}
+
+/* ── Loading state ── */
+
+.stat-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 60px 0;
+    justify-content: center;
+    opacity: 0.6;
+    font-size: 1rem;
+}
+
+/* ── Section cards ── */
+
+.stat-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(70, 162, 88, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.stat-section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(70, 162, 88, 0.2);
+}
+
+.stat-section-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-section-title .fa {
+    color: var(--main-color);
+    font-size: 1rem;
+}
+
+/* ── Big summary number ── */
+
+.stat-big-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--main-color);
+    letter-spacing: -0.02em;
+    margin-left: auto;
+}
+
+/* ── Select / Deselect controls ── */
+
+.stat-controls {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+}
+
+/* ── Date range / period toggle bar ── */
+
+.stat-range-bar {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 4px 0 2px;
+}
+
+/* Range bar sitting between section-head and chart (not inside head) */
+.stat-section > .stat-range-bar {
+    padding: 0 0 4px;
+}
+
+.stat-ctrl-btn {
+    background: transparent;
+    border: 1px solid rgba(70, 162, 88, 0.4);
+    color: var(--main-color);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.stat-ctrl-btn:hover {
+    background: rgba(70, 162, 88, 0.12);
+    border-color: var(--main-color);
+}
+
+.stat-ctrl-btn.is-active {
+    background: rgba(70, 162, 88, 0.22);
+    border-color: rgba(70, 162, 88, 0.8);
+    color: var(--main-color);
+}
+
+/* ── Chart wrappers ── */
+
+.stat-chart-wrap {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(70, 162, 88, 0.15);
+    border-radius: 6px;
+    padding: 16px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.stat-chart-tall { height: 280px; }
+.stat-chart-mid  { height: 240px; }
+
+.stat-no-data {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    opacity: 0.4;
+    font-size: var(--fs-body);
+}
+
+/* ── Chart + sidebar layout ── */
+
+.stat-chart-and-legend {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+}
+
+.stat-chart-and-legend .stat-chart-wrap {
+    flex: 1;
+    min-width: 0;
+    height: 440px;
+}
+
+.stat-legend-side {
+    width: 210px;
+    height: 440px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(70, 162, 88, 0.12);
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stat-legend-side .stat-legend {
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stat-legend-side .stat-legend-chip {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 8px;
+}
+
+.stat-legend-side .stat-legend-label {
+    max-width: none;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+
+/* ── Legend chips ── */
+
+.stat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.stat-legend-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px 4px 5px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.15s, border-color 0.15s, background 0.15s, opacity 0.15s;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.stat-legend-chip.active {
+    color: var(--color-text);
+    border-color: var(--chip-col, rgba(255, 255, 255, 0.2));
+    background: color-mix(in srgb, var(--chip-col, #fff) 8%, transparent);
+}
+
+.stat-legend-chip:hover {
+    border-color: var(--chip-col, rgba(255, 255, 255, 0.35));
+}
+
+.stat-legend-thumb {
+    width: 48px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+}
+
+.stat-legend-chip.active .stat-legend-thumb { opacity: 1; }
+
+.stat-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    opacity: 0.4;
+    transition: opacity 0.15s;
+}
+
+.stat-legend-chip.active .stat-legend-dot { opacity: 1; }
+
+.stat-legend-label {
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ── Responsive ── */
+
+@media (max-width: 600px) {
+    .stat-big-num {
+        font-size: 1.4rem;
+        margin-left: 0;
+    }
+
+    .stat-section-head {
+        row-gap: 8px;
+    }
+
+    .stat-controls {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .stat-ctrl-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .stat-chart-tall { height: 200px; }
+    .stat-chart-mid  { height: 180px; }
+
+    .stat-chart-and-legend {
+        flex-direction: column;
+    }
+
+    .stat-chart-and-legend .stat-chart-wrap {
+        height: 240px;
+    }
+
+    .stat-legend-side {
+        width: 100%;
+        height: 160px;
+    }
+
+    .stat-legend-thumb {
+        width: 36px;
+        height: 22px;
+    }
+
+    .stat-legend-label {
+        max-width: 110px;
+    }
+}

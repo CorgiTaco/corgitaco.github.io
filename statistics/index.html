@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta property="og:title" content="Corgi Taco's Statistics">
+    <meta property="og:description" content="Download and view statistics for Corgi Taco's Minecraft mods and YouTube videos.">
+    <meta property="og:url" content="https://corgitaco.dev/statistics">
+    <meta property="og:type" content="website">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Corgi Taco's Statistics</title>
+
+    <link rel="shortcut icon" href="" type="image/x-icon">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/stats_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+    <script src="../assets/js/navbar.js"></script>
+    <script src="../assets/js/script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body id="vanta-bg">
+
+<div id="main">
+    <script src="../assets/js/pagechange.js"></script>
+
+    <div id="sticky-header">
+        <div id="titlebar">
+            <div id="win-controls">
+                <span class="win-btn win-close" title="Close"></span>
+                <span class="win-btn win-minimize" title="Minimize"></span>
+                <span class="win-btn win-maximize" title="Maximize"></span>
+            </div>
+            <span id="win-title"></span>
+            <script src="../assets/js/win_title.js"></script>
+        </div>
+        <div class="header">
+            <nav role="navigation">
+                <ul id="nav-main">
+                    <li class="more hidden" data-width="80">
+                        <a href="#">☰</a>
+                        <ul></ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="page-title-bar">
+            <h1><i class="fa fa-bar-chart"></i> Statistics</h1>
+        </div>
+    </div>
+
+    <div id="stats-container"></div>
+
+    <script src="../assets/js/stats_filler.js"></script>
+</div>
+
+</body>
+</html>
