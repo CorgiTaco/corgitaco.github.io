@@ -860,7 +860,7 @@ body.driver-active .fav-star {
 .custom-form select {
     width: 100%;
     padding: 0.6rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgb(30, 30, 30);
     border: 1px solid rgba(70, 162, 88, 0.4);
     border-radius: 4px;
     box-sizing: border-box;
@@ -868,6 +868,9 @@ body.driver-active .fav-star {
     font-family: var(--font-mono);
     font-size: var(--fs-body);
     transition: border-color 0.15s, background 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+    color-scheme: dark;
 }
 
 .custom-form input:focus,
@@ -875,7 +878,7 @@ body.driver-active .fav-star {
 .custom-form select:focus {
     outline: none;
     border-color: var(--main-color);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(22, 22, 22);
 }
 
 .custom-form select option {
