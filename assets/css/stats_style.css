@@ -556,4 +556,21 @@ canvas.chart-locked {
     .stat-legend-label {
         max-width: 110px;
     }
+
+    body.stats-page #main {
+        overflow: hidden auto;
+    }
+
+    #stats-container {
+        flex: none;
+        padding-bottom: 24px;
+    }
+
+    .stat-accordion.is-open {
+        flex: none;
+    }
+
+    .is-open .stat-acc-body {
+        flex: none;
+    }
 }

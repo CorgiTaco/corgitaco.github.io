@@ -312,7 +312,6 @@
         return `
         <div id="page-title-bar">
             <h1><i class="fa fa-pencil"></i> Blog</h1>
-            <button class="btn-theme" id="blog-subscribe-btn"><i class="fa fa-envelope"></i> Subscribe</button>
             <div id="title-actions-group">
                 <button id="blog-clear-viewed-btn" class="btn-theme" title="Clear view history">
                     <i class="fa fa-eye"></i> <i class="fa fa-trash"></i>
@@ -323,6 +322,7 @@
                 <button id="layout-btn-grid" class="layout-pill-btn"        title="Grid view"><i class="fa fa-fw fa-th"></i></button>
                 <button id="layout-btn-list" class="layout-pill-btn active" title="List view"><i class="fa fa-fw fa-list"></i></button>
             </div>
+            <button class="btn-theme" id="blog-subscribe-btn"><i class="fa fa-envelope"></i> Subscribe</button>
         </div>`;
     }
 

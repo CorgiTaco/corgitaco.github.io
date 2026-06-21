@@ -282,4 +282,25 @@ a.comm-card-title:hover { color: var(--main-color); }
 
 @media (max-width: 600px) {
     .comm-carousel-card { flex: 0 0 300px; width: 300px; }
+
+    body.commission-page #main {
+        overflow: hidden auto;
+    }
+
+    #commission-container {
+        flex: none;
+        padding-bottom: 24px;
+    }
+
+    .comm-accordion.is-open {
+        flex: none;
+    }
+
+    .comm-accordion.is-open .comm-acc-body {
+        flex: none;
+    }
+
+    .comm-modal-btn {
+        display: none;
+    }
 }
