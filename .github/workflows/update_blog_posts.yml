@@ -53,3 +53,83 @@ jobs:
             git commit -m "chore: update blog posts index [skip ci]"
             git push
           fi
+
+      - name: Detect newly added blog posts
+        id: detect-new-posts
+        run: |
+          BLOG_DIR="assets/blog"
+
+          # On a normal push event, compare against the commit before this push.
+          # On workflow_dispatch (no "before" commit), fall back to the previous commit.
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            BASE_SHA="${{ github.event.before }}"
+          else
+            BASE_SHA=$(git rev-parse HEAD~1 2>/dev/null || echo "")
+          fi
+
+          if [ -z "$BASE_SHA" ]; then
+            echo "No base commit to diff against — skipping new post detection."
+            echo "new_files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # --diff-filter=A => only files that were ADDED, not modified/renamed/deleted
+          NEW_FILES=$(git diff --name-only --diff-filter=A "$BASE_SHA" HEAD -- "$BLOG_DIR"/*.md || true)
+
+          echo "Newly added blog post files:"
+          echo "$NEW_FILES"
+
+          # Encode as a single line, space-separated, for passing between steps
+          NEW_FILES_LINE=$(echo "$NEW_FILES" | tr '\n' ' ')
+          echo "new_files=$NEW_FILES_LINE" >> "$GITHUB_OUTPUT"
+
+      - name: Send newsletter for each new post
+        if: steps.detect-new-posts.outputs.new_files != ''
+        env:
+          BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
+          BLOG_WEBHOOK_URL: ${{ secrets.BLOG_WEBHOOK_URL }}
+          NEW_FILES: ${{ steps.detect-new-posts.outputs.new_files }}
+        run: |
+          for file in $NEW_FILES; do
+            [ -f "$file" ] || continue
+            echo "Processing new post: $file"
+
+            filename=$(basename "$file")
+            slug="${filename%.md}"
+
+            # Extract the YAML frontmatter (between the first two '---' lines)
+            frontmatter=$(awk '/^---$/{c++; next} c==1' "$file")
+
+            get_field() {
+              echo "$frontmatter" | grep -m1 "^$1:" | sed "s/^$1:[[:space:]]*//"
+            }
+
+            title=$(get_field "title")
+            photo=$(get_field "photo")
+            date=$(get_field "date")
+            author=$(get_field "author")
+            excerpt=$(get_field "excerpt")
+            tags=$(get_field "tags")
+
+            echo "Title: $title"
+            echo "Slug: $slug"
+
+            # Build JSON payload safely with jq (handles escaping)
+            payload=$(jq -n \
+              --arg action "sendPost" \
+              --arg secret "$BLOG_WEBHOOK_SECRET" \
+              --arg title "$title" \
+              --arg photo "$photo" \
+              --arg date "$date" \
+              --arg author "$author" \
+              --arg excerpt "$excerpt" \
+              --arg tags "$tags" \
+              --arg slug "$slug" \
+              '{action: $action, secret: $secret, title: $title, photo: $photo, date: $date, author: $author, excerpt: $excerpt, tags: $tags, slug: $slug}')
+
+            curl -fsS -X POST "$BLOG_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d "$payload"
+
+            echo "Notified newsletter webhook for: $title"
+          done
