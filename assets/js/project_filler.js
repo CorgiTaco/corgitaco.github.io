@@ -287,11 +287,12 @@
             const extra = (extraTagsMap && extraTagsMap[v.videoId]) || [];
             const baseTags = v.channelTitle ? [v.channelTitle] : [];
             return {
-                type: 'youtube',
-                title: v.title,
-                url: 'https://youtu.be/' + v.videoId,
+                type:      'youtube',
+                title:     v.title,
+                url:       'https://youtu.be/' + v.videoId,
                 photo_fit: 'cover',
-                tags: [...baseTags, ...extra]
+                views:     v.viewCount || 0,
+                tags:      [...baseTags, ...extra]
             };
         });
     }
@@ -337,6 +338,9 @@
         const label = cfg.title || 'Video';
         const tagHtml = buildProjTagChips(tags, 4);
         const excerpt = cfg.excerpt ? `<p class="proj-card-excerpt">${cfg.excerpt}</p>` : '';
+        const viewsHtml = cfg.views > 0
+            ? `<div class="proj-downloads"><i class="fa fa-eye"></i> ${formatDownloads(cfg.views)}</div>`
+            : '';
         return `
         <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
@@ -352,6 +356,7 @@
             </div>
             <div class="proj-card-body">
                 <div class="proj-label"><i class="fa fa-youtube-play" title="${category}"></i> ${label}</div>
+                ${viewsHtml}
                 ${tagHtml}
                 ${excerpt}
             </div>
@@ -410,10 +415,11 @@
 
     // ── Modal builders ───────────────────────────────────────────────────────
 
-    function buildYoutubeModal(cfg, id) {
+    function buildYoutubeModal(cfg, id, tags) {
         const vid      = youtubeId(cfg.url);
         const embedUrl = `https://www.youtube.com/embed/${vid}?autoplay=1`;
         const title    = cfg.title || 'Video';
+        const tagHtml  = buildProjTagChips(tags);
         return `
             <div class="modal-inner" id="modal-${id}">
                 <div class="modal-titlebar">
@@ -430,16 +436,19 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
                 </div>
+                ${tagHtml}
+                ${cfg.views > 0 ? `<div class="modal-downloads"><i class="fa fa-eye"></i> ${formatDownloads(cfg.views)} views</div>` : ''}
                 <button class="modal-back btn-theme"><i class="fa fa-arrow-left"></i> Back</button>
             </div>`;
     }
 
-    function buildModModal(cfg, id) {
+    function buildModModal(cfg, id, tags) {
         const links = [
             cfg.curseforge ? `<a href="${cfg.curseforge}" target="_blank" rel="noopener" class="btn-theme mod-link"><img src="https://www.curseforge.com/favicon.ico" alt=""> CurseForge</a>` : '',
             cfg.modrinth   ? `<a href="${cfg.modrinth}"   target="_blank" rel="noopener" class="btn-theme mod-link"><img src="https://modrinth.com/favicon.ico"   alt=""> Modrinth</a>` : '',
             cfg.github     ? `<a href="${cfg.github}"     target="_blank" rel="noopener" class="btn-theme mod-link"><i class="fa fa-github"></i> GitHub</a>` : '',
         ].filter(Boolean).join('');
+        const tagHtml = buildProjTagChips(tags);
         return `
         <div class="modal-inner" id="modal-${id}">
             <div class="modal-titlebar">
@@ -454,6 +463,8 @@
             <img class="modal-banner" src="${cfg.photo}" alt="${cfg.title}">
             <h2 class="modal-title">${cfg.title}</h2>
             <p class="modal-desc">${cfg.excerpt}</p>
+            ${tagHtml}
+            ${(cfg.downloads_cf || cfg.downloads_mr) ? `<div class="modal-downloads"><i class="fa fa-download"></i> ${formatDownloads((cfg.downloads_cf || 0) + (cfg.downloads_mr || 0))} downloads</div>` : ''}
             <div class="modal-links">${links}</div>
             <button class="modal-back btn-theme"><i class="fa fa-arrow-left"></i> Back</button>
         </div>`;
@@ -480,8 +491,9 @@
     }
 
     function buildModal(proj, id) {
-        if (proj.type === 'youtube')       return buildYoutubeModal(proj, id);
-        if (proj.type === 'minecraft_mod') return buildModModal(proj, id);
+        const tags = getCustomTags(proj);
+        if (proj.type === 'youtube')       return buildYoutubeModal(proj, id, tags);
+        if (proj.type === 'minecraft_mod') return buildModModal(proj, id, tags);
         if (proj.type === 'project')       return buildProjectModal(proj, id);
         return '';
     }

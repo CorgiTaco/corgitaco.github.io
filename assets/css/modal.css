@@ -68,6 +68,38 @@
     display: block;
 }
 
+/* ── Tags inside modal ── */
+
+.modal-inner .proj-tag-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px 24px 0;
+    overflow: visible;
+}
+
+.modal-inner .proj-tag {
+    font-size: 0.975rem;
+    padding: 3px 9px;
+    gap: 5px;
+}
+
+.modal-inner .proj-tag .fa {
+    font-size: 0.87rem;
+}
+
+/* ── Download total ── */
+
+.modal-downloads {
+    font-size: 0.9rem;
+    color: var(--accent, #46a258);
+    opacity: 0.85;
+    margin-top: 6px;
+}
+
+.modal-downloads .fa {
+    margin-right: 4px;
+}
+
 /* ── Action buttons ── */
 
 .modal-links {
