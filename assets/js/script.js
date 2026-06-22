@@ -123,8 +123,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         var isActive = item.href === '/'
             ? (currentPath === '' || currentPath === '/')
             : currentPath === item.href;
-        var activeAttr = isActive ? ' class="active"' : '';
-        return '<a href="' + (basePath + item.href) + '"' + activeAttr + '>'
+        var activeClass = isActive ? 'nav-link active' : 'nav-link';
+        return '<a href="' + (basePath + item.href) + '" class="' + activeClass + '">'
             + '<i class="' + iconClass + '"></i> ' + item.label + '</a>';
     }).join('');
 
