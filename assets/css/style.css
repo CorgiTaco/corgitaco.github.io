@@ -281,7 +281,7 @@ nav > ul > li a .fa {
 nav > ul > li a + ul {
     display: none;
     position: absolute;
-    top: calc(100% + 2px);
+    top: 100%;
     right: 0;
     margin-right: 0;
     background: rgb(15 15 15 / 97%);
@@ -339,7 +339,8 @@ nav > ul > li:hover > a {
     border-bottom-color: var(--main-color);
 }
 
-nav > ul > li:hover ul {
+nav > ul > li:hover ul,
+nav > ul > li.more.open ul {
     display: block;
 }
 

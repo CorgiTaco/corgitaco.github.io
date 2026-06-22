@@ -47,6 +47,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Single click listener — script.js must NOT register its own to avoid double-firing.
     document.body.addEventListener("click", (e) => {
+        // Burger menu toggle: click locks/unlocks the overflow dropdown.
+        const moreToggle = e.target.closest('li.more > a');
+        if (moreToggle) {
+            e.preventDefault();
+            moreToggle.closest('li.more').classList.toggle('open');
+            return;
+        }
+
+        // Close burger menu when clicking outside it.
+        const moreLi = document.querySelector('li.more');
+        if (moreLi && !moreLi.contains(e.target)) {
+            moreLi.classList.remove('open');
+        }
+
         const link = e.target.closest(".nav-link");
         if (link) {
             e.preventDefault();

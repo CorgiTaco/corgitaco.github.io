@@ -416,6 +416,7 @@
         order: 2;
     }
     #layout-pill { order: 3; }
+    #blog-subscribe-btn { order: 3; }
     #title-actions-group {
         order: 4;
         width: 100%;
