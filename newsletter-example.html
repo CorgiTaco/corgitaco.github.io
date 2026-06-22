@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
+  <title>Today's Digest</title>
+</head>
+<body style="margin:0;padding:0;background:#0d0d0d;">
+
+  <!-- Hidden inbox preview text -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#0d0d0d;font-size:1px;line-height:1px;">The posts you missed, in one place.</div>
+
+  <!-- Full-width dark backdrop -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d0d0d" style="background:#0d0d0d;margin:0;padding:0;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+
+        <!-- Window card (600px, green border, rounded) -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#141414;border:2px solid #46a258;border-radius:12px;overflow:hidden;">
+
+          <!-- Title bar -->
+          <tr>
+            <td bgcolor="#1c1c1c" style="background:#1c1c1c;border-bottom:1px solid #26492f;padding:10px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="70" style="font-size:13px;line-height:13px;white-space:nowrap;">
+                    <span style="color:#ff5f57;">&#9679;</span>&nbsp;
+                    <span style="color:#febc2e;">&#9679;</span>&nbsp;
+                    <span style="color:#28c840;">&#9679;</span>
+                  </td>
+                  <td align="center" style="color:#7a7a7a;font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.03em;white-space:nowrap;">digest &mdash; zsh</td>
+                  <td width="70">&nbsp;</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Body (no hero banner — each post shows its own photo on its card) -->
+          <tr>
+            <td style="padding:30px 30px 26px;">
+
+              <!-- Green tag label -->
+              <span style="display:inline-block;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border:1px solid #2e6b3a;border-radius:4px;color:#5abf6e;background:#13251a;">Digest</span>
+
+              <!-- Title -->
+              <h1 style="margin:16px 0 18px;color:#ffffff;font-family:'Courier New',Courier,monospace;font-size:23px;font-weight:700;line-height:1.3;">Today's Digest</h1>
+
+              <!-- Divider -->
+              <div style="border-top:1px solid #26492f;font-size:0;line-height:0;margin:0 0 20px;">&nbsp;</div>
+
+              <!-- Content (bodyHtml = buildDigestBody_(posts)) — each card is one clickable anchor with the post photo on top -->
+              <p style="margin:0 0 20px;color:#c2c2c2;font-size:15px;line-height:1.7;font-family:'Courier New',Courier,monospace;">Here are the 3 posts you missed:</p>
+
+              <!-- Post 1 -->
+              <a href="https://corgitaco.dev/blog/worldgen-that-scales/" target="_blank" style="display:block;margin:0 0 14px;text-decoration:none;background:#181818;border:1px solid #26492f;border-radius:8px;overflow:hidden;font-family:'Courier New',Courier,monospace;">
+                <img src="https://corgitaco.dev/assets/blog/img/first_post.jpg" alt="Building Worldgen That Scales" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-bottom:1px solid #26492f;outline:none;">
+                <span style="display:block;padding:16px 18px;">
+                  <span style="display:block;color:#5abf6e;font-size:16px;font-weight:700;line-height:1.35;">Building Worldgen That Scales &rarr;</span>
+                  <span style="display:block;margin:6px 0 0;color:#7a7a7a;font-size:12px;">Corgi Taco &middot; June 18, 2026 &middot; Worldgen</span>
+                  <span style="display:block;margin:8px 0 0;color:#c2c2c2;font-size:14px;line-height:1.6;">A deep dive into chunk-based generation and how to keep it performant at scale.</span>
+                </span>
+              </a>
+
+              <!-- Post 2 -->
+              <a href="https://corgitaco.dev/blog/rewriting-the-mod-loader/" target="_blank" style="display:block;margin:0 0 14px;text-decoration:none;background:#181818;border:1px solid #26492f;border-radius:8px;overflow:hidden;font-family:'Courier New',Courier,monospace;">
+                <img src="https://corgitaco.dev/assets/blog/img/first_post.jpg" alt="Why I Rewrote My Mod Loader" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-bottom:1px solid #26492f;outline:none;">
+                <span style="display:block;padding:16px 18px;">
+                  <span style="display:block;color:#5abf6e;font-size:16px;font-weight:700;line-height:1.35;">Why I Rewrote My Mod Loader &rarr;</span>
+                  <span style="display:block;margin:6px 0 0;color:#7a7a7a;font-size:12px;">Corgi Taco &middot; June 15, 2026 &middot; Mods</span>
+                  <span style="display:block;margin:8px 0 0;color:#c2c2c2;font-size:14px;line-height:1.6;">Lessons learned from tearing down and rebuilding the loader from scratch.</span>
+                </span>
+              </a>
+
+              <!-- Post 3 (no photo — shows the card without a thumbnail) -->
+              <a href="https://corgitaco.dev/blog/shaders-no-math/" target="_blank" style="display:block;margin:0 0 14px;text-decoration:none;background:#181818;border:1px solid #26492f;border-radius:8px;overflow:hidden;font-family:'Courier New',Courier,monospace;">
+                <span style="display:block;padding:16px 18px;">
+                  <span style="display:block;color:#5abf6e;font-size:16px;font-weight:700;line-height:1.35;">Shaders for People Who Hate Math &rarr;</span>
+                  <span style="display:block;margin:6px 0 0;color:#7a7a7a;font-size:12px;">Corgi Taco &middot; June 12, 2026 &middot; Tutorials</span>
+                  <span style="display:block;margin:8px 0 0;color:#c2c2c2;font-size:14px;line-height:1.6;">An approachable intro to writing your first shader without a math degree.</span>
+                </span>
+              </a>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td bgcolor="#101010" style="background:#101010;border-top:1px solid #26492f;padding:18px 30px;">
+              <p style="margin:0 0 6px;color:#8a8a8a;font-family:'Courier New',Courier,monospace;font-size:12px;line-height:1.6;">You are receiving this because you subscribed at <a href="https://corgitaco.dev" style="color:#5abf6e;text-decoration:none;">corgitaco.dev</a>.</p>
+              <p style="margin:0;color:#8a8a8a;font-family:'Courier New',Courier,monospace;font-size:12px;line-height:1.6;">Don't want these emails? <a href="https://corgitaco.dev/subscribe?action=unsubscribe&amp;token=a1b2c3d4e5f6" style="color:#46a258;text-decoration:underline;">Unsubscribe</a></p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

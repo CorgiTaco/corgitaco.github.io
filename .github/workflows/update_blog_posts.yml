@@ -42,6 +42,9 @@ jobs:
       - name: Generate static blog post pages
         run: python3 .github/scripts/generate_blog_pages.py
 
+      # NOTE: subscriber emails are NOT sent here. daily-blog-newsletter.yml
+      # sends one digest of new posts at 3pm ET (only if there are any).
+
       - name: Commit and push changes if any
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

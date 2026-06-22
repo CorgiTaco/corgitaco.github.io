@@ -1,103 +1,28 @@
 name: Send Daily Blog Newsletter
 
+# Sends ONE digest of the posts added in the last 24h, at 3:00 PM Eastern daily,
+# only if there are new posts. GitHub cron is UTC and not DST-aware, so we fire
+# at both 19:00 and 20:00 UTC; notify_new_posts.py only proceeds when it is
+# 15:00 in America/New_York, so it runs exactly once at 3pm ET year-round.
 on:
   schedule:
-    # Runs at 20:00 UTC (3:00 PM EST).
-    # Change the '20' to '19' if you are currently observing EDT.
-    - cron: '0 20 * * *'
-  workflow_dispatch: # Allows you to run it manually from the Actions tab for testing
+    - cron: '0 19 * * *'   # 15:00 America/New_York during EDT (summer)
+    - cron: '0 20 * * *'   # 15:00 America/New_York during EST (winter)
+  workflow_dispatch:        # manual run (sends the last-24h digest immediately)
 
 jobs:
-  send-newsletters:
+  send-digest:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required to fetch git history for the 24-hour lookback
+          fetch-depth: 0    # full history for the 24-hour "added" lookback
 
-      - name: Detect blog posts added in the last 24 hours
-        id: detect-new-posts
-        run: |
-          BLOG_DIR="assets/blog"
-          
-          # Find files that were 'Added' (--diff-filter=A) in the last 24 hours.
-          # We use sort -u to ensure we don't get duplicates if multiple commits happened.
-          NEW_FILES=$(git log --diff-filter=A --since="24 hours ago" --name-only --pretty=format:"" -- "$BLOG_DIR" | grep '\.md$' | sort -u || true)
-
-          echo "Newly added blog post files from the last 24 hours:"
-          echo "$NEW_FILES"
-
-          if [ -z "$NEW_FILES" ]; then
-            echo "No new files detected."
-            echo "new_files=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # Encode as a single line, space-separated, for passing to the next step
-          NEW_FILES_LINE=$(echo "$NEW_FILES" | tr '\n' ' ')
-          echo "new_files=$NEW_FILES_LINE" >> "$GITHUB_OUTPUT"
-
-      - name: Send newsletter for each new post
-        if: steps.detect-new-posts.outputs.new_files != ''
+      - name: Send digest of new posts
         env:
+          BLOG_WEBHOOK_URL:    ${{ secrets.BLOG_WEBHOOK_URL }}
           BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
-          BLOG_WEBHOOK_URL: ${{ secrets.BLOG_WEBHOOK_URL }}
-          NEW_FILES: ${{ steps.detect-new-posts.outputs.new_files }}
-        run: |
-          for file in $NEW_FILES; do
-            [ -f "$file" ] || continue
-            echo "Processing new post: $file"
-
-            filename=$(basename "$file")
-            slug="${filename%.md}"
-
-            # Extract the YAML frontmatter (between the first two '---' lines)
-            frontmatter=$(awk '/^---$/{c++; next} c==1' "$file")
-
-            get_field() {
-              echo "$frontmatter" | grep -m1 "^$1:" | sed "s/^$1:[[:space:]]*//"
-            }
-
-            title=$(get_field "title")
-            photo=$(get_field "photo")
-            date=$(get_field "date")
-            author=$(get_field "author")
-            excerpt=$(get_field "excerpt")
-            tags=$(get_field "tags")
-
-            echo "Title: $title"
-            echo "Slug: $slug"
-
-            # Build JSON payload safely with jq (handles escaping)
-            payload=$(jq -n \
-              --arg action "sendPost" \
-              --arg secret "$BLOG_WEBHOOK_SECRET" \
-              --arg title "$title" \
-              --arg photo "$photo" \
-              --arg date "$date" \
-              --arg author "$author" \
-              --arg excerpt "$excerpt" \
-              --arg tags "$tags" \
-              --arg slug "$slug" \
-              '{action: $action, secret: $secret, title: $title, photo: $photo, date: $date, author: $author, excerpt: $excerpt, tags: $tags, slug: $slug}')
-
-            # -L: follow Apps Script's 302 redirect
-            response=$(curl -fsS -L "$BLOG_WEBHOOK_URL" \
-              -H "Content-Type: application/json" \
-              -d "$payload" \
-              -w "\nHTTP_STATUS:%{http_code}")
-
-            http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
-            body=$(echo "$response" | sed '$d')
-
-            echo "Webhook response (HTTP $http_status): $body"
-
-            if [ "$http_status" != "200" ]; then
-              echo "::error::Webhook call failed for $title (HTTP $http_status)"
-              exit 1
-            fi
-
-            echo "Notified newsletter webhook for: $title"
-          done
+          EVENT_NAME:          ${{ github.event_name }}
+          LOOKBACK_HOURS:      '24'
+        run: python3 .github/scripts/notify_new_posts.py

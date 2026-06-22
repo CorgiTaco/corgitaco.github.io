@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- PREVIEW of buildConfirmEmail_() in gs/emailtemplate.gs (the double opt-in email).
+     Token shown (EXAMPLE-TOKEN-abc123) is a placeholder for the real per-signup token. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
+  <title>Confirm your subscription</title>
+</head>
+<body style="margin:0;padding:0;background:#0d0d0d;">
+
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#0d0d0d;font-size:1px;line-height:1px;">One click to start getting the digest.</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d0d0d" style="background:#0d0d0d;margin:0;padding:0;">
+    <tr><td align="center" style="padding:24px 12px;">
+
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#141414;border:2px solid #46a258;border-radius:12px;overflow:hidden;">
+
+        <!-- Title bar -->
+        <tr><td bgcolor="#1c1c1c" style="background:#1c1c1c;border-bottom:1px solid #26492f;padding:10px 16px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td width="70" style="font-size:13px;line-height:13px;white-space:nowrap;">
+              <span style="color:#ff5f57;">&#9679;</span>&nbsp;<span style="color:#febc2e;">&#9679;</span>&nbsp;<span style="color:#28c840;">&#9679;</span>
+            </td>
+            <td align="center" style="color:#7a7a7a;font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:0.03em;white-space:nowrap;">confirm — zsh</td>
+            <td width="70">&nbsp;</td>
+          </tr></table>
+        </td></tr>
+
+        <!-- Body -->
+        <tr><td style="padding:30px 30px 26px;">
+          <span style="display:inline-block;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border:1px solid #2e6b3a;border-radius:4px;color:#5abf6e;background:#13251a;">Confirm</span>
+          <h1 style="margin:16px 0 18px;color:#ffffff;font-family:'Courier New',Courier,monospace;font-size:23px;font-weight:700;line-height:1.3;">Confirm your subscription</h1>
+          <div style="border-top:1px solid #26492f;font-size:0;line-height:0;margin:0 0 20px;">&nbsp;</div>
+
+          <p style="margin:0 0 18px;color:#c2c2c2;font-size:15px;line-height:1.7;font-family:'Courier New',Courier,monospace;">Thanks for subscribing to Corgi Taco's Blog! Confirm your email and you'll start getting a digest of the posts you missed.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 6px;"><tr><td>
+            <a href="https://corgitaco.dev/subscribe?action=confirm&amp;token=EXAMPLE-TOKEN-abc123" target="_blank" style="display:inline-block;padding:12px 24px;background:#13251a;border:1px solid #46a258;border-radius:6px;color:#5abf6e;font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:500;text-decoration:none;">Confirm subscription →</a>
+          </td></tr></table>
+          <p style="margin:16px 0 0;color:#7a7a7a;font-family:'Courier New',Courier,monospace;font-size:12px;line-height:1.6;">Or paste this link into your browser:<br><a href="https://corgitaco.dev/subscribe?action=confirm&amp;token=EXAMPLE-TOKEN-abc123" style="color:#5abf6e;">https://corgitaco.dev/subscribe?action=confirm&amp;token=EXAMPLE-TOKEN-abc123</a></p>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td bgcolor="#101010" style="background:#101010;border-top:1px solid #26492f;padding:18px 30px;">
+          <p style="margin:0;color:#8a8a8a;font-family:'Courier New',Courier,monospace;font-size:12px;line-height:1.6;">You received this because this address was used to subscribe at <a href="https://corgitaco.dev" style="color:#5abf6e;text-decoration:none;">corgitaco.dev</a>. If that wasn't you, just ignore this email.</p>
+        </td></tr>
+
+      </table>
+
+    </td></tr>
+  </table>
+
+</body>
+</html>
