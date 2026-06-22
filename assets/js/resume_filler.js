@@ -42,7 +42,8 @@
             <span class="tm-tag">${sectionLabel}</span>
             <h2 class="tm-title">${item.title}</h2>
             ${institution ? `<p class="tm-institution">${institution}</p>` : ''}
-            ${item.date    ? `<p class="tm-date">${item.date}</p>` : ''}
+            ${item.date     ? `<p class="tm-date">${item.date}</p>` : ''}
+            ${item.location ? `<p class="tm-location">${escapeHTML(item.location)}</p>` : ''}
             <hr class="tm-divider">
             <p class="tm-desc">${item.longDescription || item.description}</p>
             ${skills.length ? `
@@ -102,7 +103,10 @@
 
         const html = sortedItems.map(item => {
             const institution = item.employer || item.school || '';
-            const institutionHtml = institution ? `<span class="timeline-institution">${institution}</span>` : '';
+            const location = item.location ? `<span class="timeline-location">${escapeHTML(item.location)}</span>` : '';
+            const metaHtml = institution || location
+                ? `<span class="timeline-meta">${institution}${institution && location ? ' | ' : ''}${location}</span>`
+                : '';
             const isPresent = item.date && item.date.toLowerCase().includes('present');
             const dotClass = isPresent ? 'timeline-dot glow' : 'timeline-dot';
             const dateHtml = item.date ? `<span class="timeline-date">${item.date}</span>` : '';
@@ -111,7 +115,7 @@
                 <div class="timeline-item" data-item='${JSON.stringify(item).replace(/'/g, "&#39;")}' data-section="${sectionLabel}" role="button" tabindex="0" aria-label="Open details for ${item.title}">
                     <div class="${dotClass}"></div>
                     <h3 class="timeline-title">${item.title}</h3>
-                    ${institutionHtml}
+                    ${metaHtml}
                     ${dateHtml}
                     <p class="timeline-desc">${item.description}</p>
                 </div>

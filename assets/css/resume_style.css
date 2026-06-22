@@ -157,6 +157,15 @@
     letter-spacing: 0.01em;
 }
 
+.timeline-meta {
+    display: block;
+    font-size: var(--fs-meta);
+    color: var(--color-text-muted);
+    margin-bottom: 3px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
 .timeline-item {
     position: relative;
     cursor: pointer;

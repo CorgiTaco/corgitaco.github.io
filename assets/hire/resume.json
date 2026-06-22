@@ -11,24 +11,28 @@
     {
       "title": "Minecraft Mod Developer",
       "date": "Dec 2019 - Present",
+      "location": "Remote",
       "description": "• Created, designed, and programmed various free and open-source Minecraft mods downloaded by over 329 million players worldwide with over half million weekly downloads utilizing Forge and Fabric mod loaders in Java.\n• Work on numerous teams to bring ideas and concepts to life.\n• Provide support and address bugs reported by players.\n• Design various libraries for other developers to optimize their development times."
     },
     {
       "title": "HCR Carrier",
       "employer": "USPS",
       "date": "Dec 2025 - Present",
+      "location": "Kern County, California",
       "description": "Delivering mail and packages to customers in a timely and efficient manner. Responsible for sorting, organizing, and delivering mail."
     },
     {
       "title": "Java Developer",
       "employer": "SocksFor1",
       "date": "Jul 2023 - Nov 2023",
+      "location": "Remote",
       "description": "• Programmed engaging Minecraft mods for 100+ player YouTube video events watched by millions.\n• Worked closely with a team to design, program, and add content to Minecraft. \n• Conducted gameplay testing and used JUnit Tests to validate and optimize intricate systems before recording.\n• Leveraged Minecraft’s shader and OpenGL pipeline to create stunning visuals."
     },
     {
       "title": "Java Game Developer",
       "employer": "MrBeast Gaming",
       "date": "Jun 2022 - May 2023",
+      "location": "Remote",
       "description": "• Led a team to design and develop high-quality Minecraft YouTube videos viewed by millions.• Led hundreds of testing events involving hundreds of players, ensuring the quality and performance of videos."
     }
   ],
