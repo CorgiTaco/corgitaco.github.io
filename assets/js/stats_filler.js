@@ -444,9 +444,12 @@
     function computeEntityDeltas(sortedRows, key) {
         const result = [];
         for (let i = 1; i < sortedRows.length; i++) {
+            const prevDate = new Date(fmtDate(sortedRows[i - 1].date) + 'T00:00:00Z');
+            const currDate = new Date(fmtDate(sortedRows[i].date)     + 'T00:00:00Z');
+            const dayGap   = Math.round((currDate - prevDate) / 86400000);
             result.push({
                 date:  fmtDate(sortedRows[i].date),
-                value: Math.max(0, (Number(sortedRows[i][key]) || 0) - (Number(sortedRows[i - 1][key]) || 0)),
+                value: dayGap === 1 ? Math.max(0, (Number(sortedRows[i][key]) || 0) - (Number(sortedRows[i - 1][key]) || 0)) : null,
             });
         }
         return result;
@@ -568,7 +571,7 @@
         const cfData  = agg.map(r => r.downloads_cf);
         const mrData  = agg.map(r => r.downloads_mr);
         const totData = agg.map(r => r.downloads_total);
-        const current = totData[totData.length - 1] || 0;
+        const current = mods.reduce((sum, m) => sum + ((m.stats && m.stats.downloads_total) || 0), 0) || totData[totData.length - 1] || 0;
 
         const section = el('section', 'stat-section');
         section.innerHTML = `

@@ -294,7 +294,7 @@
         const rowsHtml = sorted.map(v => {
             const thumb = v.thumbnail ? `<img class="yt-video-thumb" src="${escapeAttr(v.thumbnail)}" alt="" loading="lazy">` : '';
             return `
-                <div class="yt-video-row" role="button" tabindex="0" data-video-id="${escapeAttr(v.videoId)}" data-title="${escapeAttr(v.title)}">
+                <div class="yt-video-row" role="button" tabindex="0" data-video-id="${escapeAttr(v.id)}" data-title="${escapeAttr(v.title)}">
                     ${thumb}
                     <span class="yt-video-title">${escapeHTML(v.title)}</span>
                     <span class="yt-video-views">${formatNumber(v.stats && v.stats.views || 0)}</span>
@@ -881,7 +881,10 @@
             var curseforgeStats = null;
             if (modsData && modsData.mods) {
                 var dlCF = 0, dlMR = 0;
-                modsData.mods.forEach(function(m) { dlCF += (m.stats && m.stats.downloads_cf) || 0; dlMR += (m.stats && m.stats.downloads_mr) || 0; });
+                modsData.mods.forEach(function(m) {
+                    dlCF += (m.stats && m.stats.downloads_cf) || 0;
+                    dlMR += (m.stats && m.stats.downloads_mr) || 0;
+                });
                 curseforgeStats = { downloads: dlCF, date: modsData.fetchedAt || null };
                 modrinthStats   = { downloads: dlMR, date: modsData.fetchedAt || null };
             }
