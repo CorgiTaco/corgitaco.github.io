@@ -89,8 +89,10 @@
 }
 
 @media (max-width: 600px) {
-    #blog-grid.blog-list-view .blog-card { height: 110px; }
-    #blog-grid.blog-list-view .blog-card-thumb { width: 130px; min-width: 130px; }
+    #blog-grid.blog-list-view .blog-card { height: 100px; }
+    #blog-grid.blog-list-view .blog-card-thumb { width: 120px; min-width: 120px; }
+    #blog-grid.blog-list-view .blog-card-body { justify-content: flex-start; padding: 10px 12px; }
+    #blog-grid.blog-list-view .blog-card-excerpt { display: none; }
 }
 
 /* ══════════════════════════════════════════════
