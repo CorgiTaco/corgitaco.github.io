@@ -1,0 +1,28 @@
+name: Send Recent Posts (manual)
+
+# Manual only — never runs on a schedule or push. Sends a one-off digest of the
+# most recent N blog posts to all confirmed subscribers. Run it from the Actions
+# tab → "Send Recent Posts (manual)" → Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'How many of the most recent posts to send'
+        required: false
+        default: '5'
+
+jobs:
+  send-recent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # full history for the newest-first fallback ordering
+
+      - name: Send the most recent posts
+        env:
+          BLOG_WEBHOOK_URL:    ${{ secrets.BLOG_WEBHOOK_URL }}
+          BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
+          COUNT:               ${{ github.event.inputs.count }}
+        run: python3 .github/scripts/send_recent_posts.py

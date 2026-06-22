@@ -78,6 +78,24 @@ def post_to_dict(md_path):
     }
 
 
+def send_payload(url, secret, posts):
+    """POST {action:'sendPost', secret, posts} to the newsletter webhook."""
+    body = json.dumps({'action': 'sendPost', 'secret': secret, 'posts': posts}).encode('utf-8')
+    req = urllib.request.Request(
+        url, data=body, method='POST',
+        headers={'Content-Type': 'application/json'}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            print('Webhook response [%s]: %s' % (resp.status, resp.read().decode('utf-8', 'ignore')))
+    except urllib.error.HTTPError as err:
+        print('Webhook HTTP error [%s]: %s' % (err.code, err.read().decode('utf-8', 'ignore')))
+        sys.exit(1)
+    except urllib.error.URLError as err:
+        print('Webhook request failed: %s' % err.reason)
+        sys.exit(1)
+
+
 def main():
     if os.environ.get('EVENT_NAME', '').strip() == 'schedule' and not is_eastern_3pm():
         print('Not 3pm in America/New_York — skipping this scheduled run.')
@@ -98,21 +116,7 @@ def main():
     posts = [post_to_dict(f) for f in files]
     print('Sending digest of %d post(s): %s'
           % (len(posts), ', '.join(p['slug'] for p in posts)))
-
-    body = json.dumps({'action': 'sendPost', 'secret': secret, 'posts': posts}).encode('utf-8')
-    req = urllib.request.Request(
-        url, data=body, method='POST',
-        headers={'Content-Type': 'application/json'}
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            print('Webhook response [%s]: %s' % (resp.status, resp.read().decode('utf-8', 'ignore')))
-    except urllib.error.HTTPError as err:
-        print('Webhook HTTP error [%s]: %s' % (err.code, err.read().decode('utf-8', 'ignore')))
-        sys.exit(1)
-    except urllib.error.URLError as err:
-        print('Webhook request failed: %s' % err.reason)
-        sys.exit(1)
+    send_payload(url, secret, posts)
 
 
 if __name__ == '__main__':
