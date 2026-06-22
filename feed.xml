@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Corgi Taco&#x27;s Blog</title>
+    <link>https://corgitaco.dev/blog/</link>
+    <description>Posts about Minecraft modding and more from Corgi Taco.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://corgitaco.dev/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Welcome to My Blog!</title>
+      <link>https://corgitaco.dev/blog/welcome_to_my_blog/</link>
+      <guid isPermaLink="true">https://corgitaco.dev/blog/welcome_to_my_blog/</guid>
+      <pubDate>Tue, 16 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Welcome to my Blog!</description>
+        <category>News</category>
+    </item>
+  </channel>
+</rss>

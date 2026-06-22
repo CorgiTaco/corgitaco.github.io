@@ -233,6 +233,7 @@ def generate_html(slug, meta, body):
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{title} — Corgi Taco</title>
 
+    <link rel="alternate" type="application/rss+xml" title="Corgi Taco's Blog" href="https://corgitaco.dev/feed.xml">
     <link rel="icon" href="../../assets/favicons/blog.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="../../assets/css/projects_style.css">

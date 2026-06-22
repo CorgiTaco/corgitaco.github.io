@@ -42,6 +42,9 @@ jobs:
       - name: Generate static blog post pages
         run: python3 .github/scripts/generate_blog_pages.py
 
+      - name: Generate RSS feed
+        run: python3 .github/scripts/generate_rss.py
+
       # NOTE: subscriber emails are NOT sent here. daily-blog-newsletter.yml
       # sends one digest of new posts at 3pm ET (only if there are any).
 
@@ -54,6 +57,7 @@ jobs:
 
           git add assets/blog/internal/posts.txt
           git add blog/
+          git add feed.xml
 
           if git diff --staged --quiet; then
             echo "Nothing changed — skipping commit."
