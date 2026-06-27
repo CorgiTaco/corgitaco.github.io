@@ -243,9 +243,9 @@
             var atStart = track.scrollLeft <= 4;
             var atEnd   = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
             prevBtn.style.opacity       = atStart ? '0' : '1';
-            prevBtn.style.pointerEvents = atStart ? 'none' : '';
+            prevBtn.style.pointerEvents = atStart ? 'none' : 'auto';
             nextBtn.style.opacity       = atEnd   ? '0' : '1';
-            nextBtn.style.pointerEvents = atEnd   ? 'none' : '';
+            nextBtn.style.pointerEvents = atEnd   ? 'none' : 'auto';
         }
 
         prevBtn.addEventListener('click', function () { smoothScroll(track, -track.clientWidth * 0.75, 400); });
@@ -256,7 +256,7 @@
         wrap.appendChild(track);
         wrap.appendChild(nextBtn);
 
-        requestAnimationFrame(updateArrows);
+        wrap._refreshArrows = updateArrows;
         return wrap;
     }
 
@@ -331,7 +331,9 @@
             // Insert before the action button at the bottom
             var bodyBtn = inner.querySelector('.comm-body-modal-btn');
             inner.insertBefore(exLabel, bodyBtn);
-            inner.insertBefore(buildProjectsCarousel(cards), bodyBtn);
+            var carousel = buildProjectsCarousel(cards);
+            inner.insertBefore(carousel, bodyBtn);
+            requestAnimationFrame(carousel._refreshArrows);
         });
     }
 
@@ -396,9 +398,9 @@
             var atStart = track.scrollLeft <= 4;
             var atEnd   = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
             prevBtn.style.opacity       = atStart ? '0' : '1';
-            prevBtn.style.pointerEvents = atStart ? 'none' : '';
+            prevBtn.style.pointerEvents = atStart ? 'none' : 'auto';
             nextBtn.style.opacity       = atEnd   ? '0' : '1';
-            nextBtn.style.pointerEvents = atEnd   ? 'none' : '';
+            nextBtn.style.pointerEvents = atEnd   ? 'none' : 'auto';
         }
 
         prevBtn.addEventListener('click', function () { smoothScroll(track, -track.clientWidth * 0.75, 400); });
