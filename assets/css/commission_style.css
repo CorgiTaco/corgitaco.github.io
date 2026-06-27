@@ -137,6 +137,14 @@ body.commission-page #page-title-bar {
     overflow-y: auto;
 }
 
+/* ── Carousel controls ── */
+
+.comm-carousel-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
 /* ── Description ── */
 
 .comm-acc-desc {

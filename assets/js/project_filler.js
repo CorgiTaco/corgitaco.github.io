@@ -345,7 +345,7 @@
             ? `<div class="proj-downloads"><i class="fa fa-eye"></i> ${formatDownloads(cfg.views)}</div>`
             : '';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} tabindex="0" role="button" aria-label="Open ${label}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, label)} data-views="${cfg.views || 0}" tabindex="0" role="button" aria-label="Open ${label}">
             <div class="proj-thumb yt-thumb">
                 <img src="${thumb}" alt="YouTube video thumbnail" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
@@ -375,7 +375,7 @@
             ? `<div class="proj-downloads"><i class="fa fa-download"></i> ${formatDownloads(totalDownloads)}</div>`
             : '';
         return `
-        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.title)} tabindex="0" role="button" aria-label="Open ${cfg.title}">
+        <div class="proj-card" ${cardAttrs(id, category, tags, cfg.date, cfg.title)} data-downloads="${totalDownloads}" tabindex="0" role="button" aria-label="Open ${cfg.title}">
             <div class="proj-thumb">
                 <img src="${cfg.photo}" alt="${cfg.title}" loading="lazy" style="object-fit:${fit}">
                 <div class="viewed-overlay"><i class="fa fa-eye" title="Mark as unread"></i></div>
@@ -668,17 +668,30 @@
                     </div>
                 </div>`;
 
+            const defaultSort = catSlug === 'minecraft-mod' ? 'downloads-desc'
+                              : catSlug === 'youtube'       ? 'views-desc'
+                              : 'date-desc';
+
+            const extraSortOptions = catSlug === 'minecraft-mod'
+                ? `<label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="downloads-desc"><span>Downloads (High→Low)</span></label>
+                   <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="downloads-asc"><span>Downloads (Low→High)</span></label>`
+                : catSlug === 'youtube'
+                ? `<label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="views-desc"><span>Views (High→Low)</span></label>
+                   <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="views-asc"><span>Views (Low→High)</span></label>`
+                : '';
+
             const rowSort = `
-                <div class="carousel-sort-bar">
+                <div class="carousel-sort-bar" data-default-sort="${defaultSort}">
                     <button class="btn-theme carousel-sort-toggle">
                         <i class="fa fa-sort"></i><span> Sort </span><i class="fa fa-chevron-down carousel-sort-chevron"></i>
                     </button>
                     <div class="carousel-sort-dropdown">
-                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="date-desc" checked><span>Date (Newest)</span></label>
+                        <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="date-desc" ${defaultSort === 'date-desc' ? 'checked' : ''}><span>Date (Newest)</span></label>
                         <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="date-asc"><span>Date (Oldest)</span></label>
                         <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="name-asc"><span>Name (A-Z)</span></label>
                         <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="name-desc"><span>Name (Z-A)</span></label>
                         <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="tags-asc"><span>Tags (A-Z)</span></label>
+                        ${extraSortOptions}
                     </div>
                 </div>`;
 
@@ -945,18 +958,19 @@
 
             dropdown.addEventListener('change', e => {
                 if (e.target.type === 'radio') {
-                    updateUrlParams({ [`sort-${catSlug}`]: e.target.value === 'date-desc' ? null : e.target.value });
+                    const isDefault = e.target.value === (sortBar.dataset.defaultSort || 'date-desc');
+                    updateUrlParams({ [`sort-${catSlug}`]: isDefault ? null : e.target.value });
                     applyLocalSort(track, e.target.value);
                 }
             });
 
             const sortVal = params.get(`sort-${catSlug}`);
-            if (sortVal) {
-                const radio = dropdown.querySelector(`input[name="sort-${catSlug}"][value="${sortVal}"]`);
-                if (radio) {
-                    radio.checked = true;
-                    applyLocalSort(track, sortVal);
-                }
+            const defaultSort = sortBar.dataset.defaultSort || 'date-desc';
+            const activeSort = sortVal || defaultSort;
+            const radio = dropdown.querySelector(`input[name="sort-${catSlug}"][value="${activeSort}"]`);
+            if (radio) {
+                radio.checked = true;
+                applyLocalSort(track, activeSort);
             }
         });
     }
@@ -1217,6 +1231,14 @@
                 const bCat = (b.dataset.category || '').replace(/-/g, ' ');
                 const catCmp = catOrderIndex(aCat) - catOrderIndex(bCat);
                 return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
+            } else if (sortVal === 'downloads-desc') {
+                return Number(b.dataset.downloads || 0) - Number(a.dataset.downloads || 0);
+            } else if (sortVal === 'downloads-asc') {
+                return Number(a.dataset.downloads || 0) - Number(b.dataset.downloads || 0);
+            } else if (sortVal === 'views-desc') {
+                return Number(b.dataset.views || 0) - Number(a.dataset.views || 0);
+            } else if (sortVal === 'views-asc') {
+                return Number(a.dataset.views || 0) - Number(b.dataset.views || 0);
             }
             return 0;
         };

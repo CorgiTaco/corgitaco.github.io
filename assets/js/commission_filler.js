@@ -167,6 +167,9 @@
         card.setAttribute('tabindex', '0');
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', 'Open ' + proj.title);
+        card.dataset.views = proj.views || 0;
+        card.dataset.name  = proj.title || '';
+        card.dataset.tags  = (proj.tags || []).map(function(t) { return slugify(t); }).join(' ');
         card.innerHTML =
             '<div class="proj-thumb yt-thumb">' +
                 '<img src="' + thumb + '" alt="YouTube video thumbnail" loading="lazy" style="object-fit:cover">' +
@@ -202,6 +205,9 @@
         card.setAttribute('tabindex', '0');
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', 'Open ' + proj.title);
+        card.dataset.downloads = totalDl;
+        card.dataset.name      = proj.title || '';
+        card.dataset.tags      = (proj.tags || []).map(function(t) { return slugify(t); }).join(' ');
         card.innerHTML =
             '<div class="proj-thumb">' +
                 '<img src="' + (proj.photo || '') + '" alt="' + proj.title.replace(/"/g, '&quot;') + '" loading="lazy" style="object-fit:contain">' +
@@ -216,6 +222,186 @@
         card.addEventListener('click', function () { openProjModal(id, proj); });
         card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') openProjModal(id, proj); });
         return card;
+    }
+
+    // ── Carousel controls (sort + filter) ────────────────────────────────────
+
+    function buildCarouselControls(type, cards) {
+        var isYt  = type === 'youtube';
+        var isMod = type === 'mod';
+        var uid   = type + '-comm';
+
+        // Collect unique tags
+        var tagSet = {};
+        cards.forEach(function(card) {
+            (card.dataset.tags || '').split(' ').filter(Boolean).forEach(function(t) {
+                tagSet[t] = true;
+            });
+        });
+        var tags = Object.keys(tagSet).sort();
+
+        var tagChecks = tags.map(function(t) {
+            return '<label class="filter-tag"><input type="checkbox" class="comm-carousel-tag-cb" value="' + t + '" checked><span>' + t + '</span></label>';
+        }).join('');
+
+        var filterDropdown = tags.length
+            ? '<div class="carousel-filter-dropdown" id="comm-filter-dd-' + uid + '">' +
+                  '<label class="filter-tag filter-select-all-tag"><input type="checkbox" class="comm-carousel-select-all" checked><span>Select all</span></label>' +
+                  tagChecks +
+              '</div>'
+            : '';
+
+        var statOptions = isYt
+            ? '<label class="filter-tag"><input type="radio" name="comm-sort-' + uid + '" value="views-desc" checked><span>Views (High→Low)</span></label>' +
+              '<label class="filter-tag"><input type="radio" name="comm-sort-' + uid + '" value="views-asc"><span>Views (Low→High)</span></label>'
+            : isMod
+            ? '<label class="filter-tag"><input type="radio" name="comm-sort-' + uid + '" value="downloads-desc" checked><span>Downloads (High→Low)</span></label>' +
+              '<label class="filter-tag"><input type="radio" name="comm-sort-' + uid + '" value="downloads-asc"><span>Downloads (Low→High)</span></label>'
+            : '';
+
+        var sortDropdown =
+            '<div class="carousel-sort-dropdown" id="comm-sort-dd-' + uid + '">' +
+                '<label class="filter-tag"><input type="radio" name="comm-sort-' + uid + '" value="name-asc"><span>Name (A→Z)</span></label>' +
+                '<label class="filter-tag"><input type="radio" name="comm-sort-' + uid + '" value="name-desc"><span>Name (Z→A)</span></label>' +
+                statOptions +
+            '</div>';
+
+        var html =
+            '<div class="comm-carousel-controls">' +
+                '<div class="carousel-sort-bar">' +
+                    '<button class="btn-theme carousel-sort-toggle" type="button"><i class="fa fa-sort"></i><span> Sort </span><i class="fa fa-chevron-down carousel-sort-chevron"></i></button>' +
+                    sortDropdown +
+                '</div>' +
+                (tags.length
+                    ? '<div class="carousel-filter-bar">' +
+                          '<button class="btn-theme carousel-filter-toggle" type="button"><i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down carousel-filter-chevron"></i></button>' +
+                          filterDropdown +
+                      '</div>'
+                    : '') +
+            '</div>';
+
+        return html;
+    }
+
+    function positionCommDropdown(toggle, dropdown) {
+        dropdown.style.visibility = 'hidden';
+        dropdown.style.display = 'flex';
+        var tb  = toggle.getBoundingClientRect();
+        var dw  = dropdown.offsetWidth;
+        var dh  = dropdown.offsetHeight;
+        var main = document.getElementById('main');
+        var mb  = main ? main.getBoundingClientRect() : { left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight };
+        var PAD = 6;
+        var top  = tb.bottom + 1;
+        if (top + dh > mb.bottom - PAD) top = Math.max(mb.top + PAD, tb.top - dh - 1);
+        var left = tb.right - dw;
+        if (left < mb.left + PAD)        left = mb.left + PAD;
+        if (left + dw > mb.right - PAD)  left = mb.right - dw - PAD;
+        dropdown.style.top  = top  + 'px';
+        dropdown.style.left = left + 'px';
+        dropdown.style.display = '';
+        dropdown.style.visibility = '';
+    }
+
+    function wireCarouselControls(controlsEl, track, type) {
+        var sortBar    = controlsEl.querySelector('.carousel-sort-bar');
+        var filterBar  = controlsEl.querySelector('.carousel-filter-bar');
+
+        function closeAll(except) {
+            controlsEl.querySelectorAll('.carousel-sort-dropdown.open, .carousel-filter-dropdown.open').forEach(function(dd) {
+                if (dd === except) return;
+                dd.classList.remove('open');
+                var chev = dd.previousElementSibling && dd.previousElementSibling.querySelector('.carousel-sort-chevron, .carousel-filter-chevron');
+                if (chev) chev.style.transform = '';
+            });
+        }
+
+        function sortCards(val) {
+            var cards = Array.from(track.querySelectorAll('.proj-card'));
+            cards.sort(function(a, b) {
+                if (val === 'views-desc')     return Number(b.dataset.views || 0) - Number(a.dataset.views || 0);
+                if (val === 'views-asc')      return Number(a.dataset.views || 0) - Number(b.dataset.views || 0);
+                if (val === 'downloads-desc') return Number(b.dataset.downloads || 0) - Number(a.dataset.downloads || 0);
+                if (val === 'downloads-asc')  return Number(a.dataset.downloads || 0) - Number(b.dataset.downloads || 0);
+                if (val === 'name-asc')       return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+                if (val === 'name-desc')      return (b.dataset.name || '').localeCompare(a.dataset.name || '');
+                return 0;
+            });
+            cards.forEach(function(c) { track.appendChild(c); });
+        }
+
+        function applyFilter(filterBar) {
+            var checkedTags = filterBar
+                ? Array.from(filterBar.querySelectorAll('.comm-carousel-tag-cb:checked')).map(function(cb) { return cb.value; })
+                : null;
+            var selectAll = filterBar ? filterBar.querySelector('.comm-carousel-select-all') : null;
+            var allChecked = !selectAll || selectAll.checked;
+            track.querySelectorAll('.proj-card').forEach(function(card) {
+                if (allChecked) { card.style.display = ''; return; }
+                var cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+                card.style.display = cardTags.some(function(t) { return checkedTags.indexOf(t) !== -1; }) ? '' : 'none';
+            });
+        }
+
+        // Wire sort
+        if (sortBar) {
+            var sortToggle   = sortBar.querySelector('.carousel-sort-toggle');
+            var sortDropdown = sortBar.querySelector('.carousel-sort-dropdown');
+            var sortChev     = sortBar.querySelector('.carousel-sort-chevron');
+
+            sortToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeAll(sortDropdown);
+                positionCommDropdown(sortToggle, sortDropdown);
+                var open = sortDropdown.classList.toggle('open');
+                sortChev.style.transform = open ? 'rotate(180deg)' : '';
+            });
+            sortDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+            sortDropdown.addEventListener('change', function(e) {
+                if (e.target.type === 'radio') sortCards(e.target.value);
+            });
+
+            // Apply default sort immediately
+            var defaultRadio = sortDropdown.querySelector('input[type="radio"][checked]');
+            if (defaultRadio) sortCards(defaultRadio.value);
+        }
+
+        // Wire filter
+        if (filterBar) {
+            var filterToggle   = filterBar.querySelector('.carousel-filter-toggle');
+            var filterDropdown = filterBar.querySelector('.carousel-filter-dropdown');
+            var filterChev     = filterBar.querySelector('.carousel-filter-chevron');
+            var selectAll      = filterDropdown.querySelector('.comm-carousel-select-all');
+
+            filterToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeAll(filterDropdown);
+                positionCommDropdown(filterToggle, filterDropdown);
+                var open = filterDropdown.classList.toggle('open');
+                filterChev.style.transform = open ? 'rotate(180deg)' : '';
+            });
+            filterDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+
+            if (selectAll) {
+                selectAll.addEventListener('change', function() {
+                    filterDropdown.querySelectorAll('.comm-carousel-tag-cb').forEach(function(cb) {
+                        cb.checked = selectAll.checked;
+                    });
+                    applyFilter(filterDropdown);
+                });
+            }
+
+            filterDropdown.querySelectorAll('.comm-carousel-tag-cb').forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    var all = Array.from(filterDropdown.querySelectorAll('.comm-carousel-tag-cb')).every(function(c) { return c.checked; });
+                    if (selectAll) selectAll.checked = all;
+                    applyFilter(filterDropdown);
+                });
+            });
+        }
+
+        // Close on outside click
+        document.addEventListener('click', function() { closeAll(null); });
     }
 
     function buildProjectsCarousel(cards) {
@@ -293,7 +479,7 @@
                     ? data.statsData.videos
                     : data.projectsJson.filter(function (p) { return p.type === 'youtube'; });
 
-                videos.slice(0, 20).forEach(function (v) {
+                videos.forEach(function (v) {
                     var proj = v.url
                         ? v  // already a project object from projects.json
                         : { type: 'youtube', url: 'https://youtu.be/' + v.id, title: v.title, views: (v.stats && v.stats.views) || 0 };
@@ -321,7 +507,7 @@
                     })
                     : data.projectsJson.filter(function (p) { return p.type === 'minecraft_mod'; });
 
-                mods.slice(0, 20).forEach(function (m) {
+                mods.forEach(function (m) {
                     cards.push(buildModProjectCard(m));
                 });
             }
@@ -331,9 +517,19 @@
             // Insert before the action button at the bottom
             var bodyBtn = inner.querySelector('.comm-body-modal-btn');
             inner.insertBefore(exLabel, bodyBtn);
+
+            // Controls (sort + filter)
+            var controlsHtml = buildCarouselControls(type, cards);
+            var controlsEl = document.createElement('div');
+            controlsEl.innerHTML = controlsHtml;
+            controlsEl = controlsEl.firstElementChild;
+            inner.insertBefore(controlsEl, bodyBtn);
+
             var carousel = buildProjectsCarousel(cards);
             inner.insertBefore(carousel, bodyBtn);
             requestAnimationFrame(carousel._refreshArrows);
+
+            wireCarouselControls(controlsEl, carousel.querySelector('.comm-carousel-track'), type);
         });
     }
 
