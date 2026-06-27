@@ -636,7 +636,7 @@
         if (type.description) {
             var desc = document.createElement('p');
             desc.className = 'comm-acc-desc';
-            desc.textContent = type.description;
+            desc.innerHTML = type.description.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
             inner.appendChild(desc);
         }
 

@@ -1,79 +1,178 @@
 {
   "commonFields": [
-    { "id": "name",    "label": "Name / Handle",  "type": "text",  "required": true },
-    { "id": "email",   "label": "Email Address",   "type": "email", "required": true },
-    { "id": "discord", "label": "Discord Handle",  "type": "text"                   }
+    {
+      "id": "name",
+      "label": "Name / Handle",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "email",
+      "label": "Email Address",
+      "type": "email",
+      "required": true
+    },
+    {
+      "id": "discord",
+      "label": "Discord Handle",
+      "type": "text"
+    }
   ],
   "types": [
     {
-      "key":       "youtube",
-      "label":     "YouTube Video",
-      "icon":      "fa-youtube-play",
-      "btnLabel":  "Commission",
+      "key": "youtube",
+      "label": "YouTube Video",
+      "icon": "fa-youtube-play",
+      "btnLabel": "Commission",
       "modalType": "for a YouTube Video",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "description": "With 5+ years of experience creating Minecraft Mods for content creators including MrBeast Gaming, SocksFor1, and more, I can bring your own Minecraft modded video ideas to life. With my knowledge surrounding viewer engagement, video pacing, and visuals, I can help you create a unique and engaging video experiences for your audience. I will be sure to not disappoint you! I even go so far to see beyond the vision of your idea to make your video come to life better than you could've ever imagined for your audience!",
       "examples": [
       ],
       "fields": [
-        { "id": "channel", "label": "Your YouTube Channel", "type": "url",      "placeholder": "https://youtube.com/..." },
-        { "id": "message", "label": "Video Concept / Brief", "type": "textarea", "required": true }
+        {
+          "id": "channel",
+          "label": "Your YouTube Channel",
+          "type": "url",
+          "placeholder": "https://youtube.com/..."
+        },
+        {
+          "id": "message",
+          "label": "Video Concept / Brief",
+          "type": "textarea",
+          "required": true
+        }
       ]
     },
     {
-      "key":       "mod",
-      "label":     "Minecraft Mod",
-      "icon":      "fa-cube",
-      "btnLabel":  "Commission",
+      "key": "mod",
+      "label": "Minecraft Mod",
+      "icon": "fa-cube",
+      "btnLabel": "Commission",
       "modalType": "a new mod",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "description": "This section is for NEW mods ONLY! If you're a youtuber please use the Youtube Video drop down instead. Mod ports/updates use the Minecraft Mod Port drop down. For Minecraft Plugins use the \"Minecraft Plugin\" drop down. \n\n For everyone else, I can create a custom Minecraft mod for you! My main specialty is Minecraft World Generation, but I have experience in everything else such as mobs, visuals, optimizations, and more! I can make mods for Forge, Neoforge, and Fabric mod loaders for any Minecraft version above 1.14.4+! Multi Loader projects are available for versions 1.18+",
       "examples": [
       ],
       "fields": [
-        { "id": "mc_versions", "label": "Minecraft Version(s)", "type": "text",     "required": true, "placeholder": "e.g. 1.20.1, 1.21" },
-        { "id": "loader",      "label": "Mod Loader",           "type": "select",   "required": true, "options": ["Forge", "Fabric", "NeoForge", "Multiple"] },
-        { "id": "message",     "label": "Mod Description / Details", "type": "textarea", "required": true }
+        {
+          "id": "mc_versions",
+          "label": "Minecraft Version(s)",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g. 1.20.1, 1.21"
+        },
+        {
+          "id": "loader",
+          "label": "Mod Loader",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Forge",
+            "Fabric",
+            "NeoForge",
+            "Multiple"
+          ]
+        },
+        {
+          "id": "message",
+          "label": "Mod Description / Details",
+          "type": "textarea",
+          "required": true
+        }
       ]
     },
     {
-      "key":       "plugin",
-      "label":     "Minecraft Plugin",
-      "icon":      "fa-plug",
-      "btnLabel":  "Commission",
+      "key": "plugin",
+      "label": "Minecraft Plugin",
+      "icon": "fa-plug",
+      "btnLabel": "Commission",
       "modalType": "a Minecraft plugin",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "description": "Although I have no published Minecraft Plugins, I have moderate experience creating plugins for Paper and Spigot servers. I would love to have privilege to do this for a server.",
       "examples": [
       ],
       "fields": [
-        { "id": "server_software", "label": "Server Software",              "type": "select",   "required": true, "options": ["Paper", "Spigot", "Purpur", "Other"] },
-        { "id": "message",         "label": "Plugin Description / Details", "type": "textarea", "required": true }
+        {
+          "id": "server_software",
+          "label": "Server Software",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Paper",
+            "Spigot",
+            "Purpur",
+            "Other"
+          ]
+        },
+        {
+          "id": "message",
+          "label": "Plugin Description / Details",
+          "type": "textarea",
+          "required": true
+        }
       ]
     },
     {
-      "key":       "port",
-      "label":     "Minecraft Mod Port / Update",
-      "icon":      "fa-refresh",
-      "btnLabel":  "Commission",
+      "key": "port",
+      "label": "Minecraft Mod Port / Update",
+      "icon": "fa-refresh",
+      "btnLabel": "Commission",
       "modalType": "a mod port",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "description": "I can port any mod of your choice to any Minecraft version above 1.14.4+! I can port mods for Forge, Neoforge, and Fabric mod loaders. Multi Loader projects are available for versions 1.18+.",
       "examples": [],
       "fields": [
-        { "id": "mod_link",       "label": "Mod Name / Link",             "type": "text",     "required": true },
-        { "id": "target_version", "label": "Target Minecraft Version(s)", "type": "text",     "required": true, "placeholder": "e.g. 1.21.1" },
-        { "id": "loader",         "label": "Mod Loader",                  "type": "select",   "required": true, "options": ["Forge", "Fabric", "NeoForge", "Multiple"] },
-        { "id": "message",        "label": "Additional Details",          "type": "textarea", "required": true }
+        {
+          "id": "mod_link",
+          "label": "Mod Name / Link",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "target_version",
+          "label": "Target Minecraft Version(s)",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g. 1.21.1"
+        },
+        {
+          "id": "loader",
+          "label": "Mod Loader",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Forge",
+            "Fabric",
+            "NeoForge",
+            "Multiple"
+          ]
+        },
+        {
+          "id": "message",
+          "label": "Additional Details",
+          "type": "textarea",
+          "required": true
+        }
       ]
     },
     {
-      "key":       "other",
-      "label":     "Other",
-      "icon":      "fa-ellipsis-h",
-      "btnLabel":  "Commission",
+      "key": "other",
+      "label": "Other",
+      "icon": "fa-ellipsis-h",
+      "btnLabel": "Commission",
       "modalType": "other",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "description": "Want something else not listed here? I can do other things too! Just let me know what you need and we can discuss it! I am open to new experiences and challenges. As an FYI I do have a performance first approach to my plugin work.",
       "examples": [],
       "fields": [
-        { "id": "commission_type", "label": "What do you need?", "type": "text",     "required": true },
-        { "id": "message",         "label": "Details",           "type": "textarea", "required": true }
+        {
+          "id": "commission_type",
+          "label": "What do you need?",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "message",
+          "label": "Details",
+          "type": "textarea",
+          "required": true
+        }
       ]
     }
   ]
