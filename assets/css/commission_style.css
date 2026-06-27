@@ -133,8 +133,7 @@ body.commission-page #page-title-bar {
 }
 
 .comm-accordion.is-open .comm-acc-inner {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 16px;
     overflow-y: auto;
 }
 
@@ -213,12 +212,6 @@ body.commission-page #page-title-bar {
     box-shadow: 0 0 0 2px var(--main-color);
 }
 
-.comm-card-img {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    display: block;
-}
 
 .comm-card-img-placeholder {
     width: 100%;
@@ -229,6 +222,7 @@ body.commission-page #page-title-bar {
     background: rgba(70, 162, 88, 0.07);
     color: rgba(70, 162, 88, 0.3);
     font-size: 2.5rem;
+    flex-shrink: 0;
 }
 
 .comm-card-body {
@@ -291,10 +285,18 @@ a.comm-card-title:hover { color: var(--main-color); }
     padding-right: 8px;
 }
 
+/* Size proj-card instances inside the commission carousel */
+.comm-carousel-track .proj-card {
+    flex: 0 0 300px;
+    width: 300px;
+}
+
 @media (max-width: 600px) {
     .comm-carousel-card { flex: 0 0 300px; width: 300px; }
+    .comm-carousel-track .proj-card { flex: 0 0 260px; width: 260px; }
 
     .comm-modal-btn {
         display: none;
     }
 }
+
