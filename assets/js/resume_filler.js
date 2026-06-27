@@ -160,31 +160,10 @@
         wrap.appendChild(prevBtn);
         wrap.appendChild(nextBtn);
 
-        // Identical smoothScroll to project_filler.js — cubic ease-out, 450ms
-        function smoothScroll(element, distance, duration) {
-            const start = element.scrollLeft;
-            let startTime = null;
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const progress = Math.min(timeElapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                element.scrollLeft = start + (distance * ease);
-                if (timeElapsed < duration) requestAnimationFrame(animation);
-            }
-            requestAnimationFrame(animation);
-        }
+        function updateArrows() { window._updateCarouselArrows(track, prevBtn, nextBtn); }
 
-        // Identical threshold logic to project_filler.js
-        function updateArrows() {
-            const canScrollLeft  = track.scrollLeft > 2;
-            const canScrollRight = track.scrollLeft < (track.scrollWidth - track.clientWidth - 2);
-            prevBtn.classList.toggle('visible', canScrollLeft);
-            nextBtn.classList.toggle('visible', canScrollRight);
-        }
-
-        prevBtn.addEventListener('click', () => smoothScroll(track, -track.clientWidth * 0.75, 450));
-        nextBtn.addEventListener('click', () => smoothScroll(track,  track.clientWidth * 0.75, 450));
+        prevBtn.addEventListener('click', () => window._smoothScroll(track, -track.clientWidth * 0.75, 450));
+        nextBtn.addEventListener('click', () => window._smoothScroll(track,  track.clientWidth * 0.75, 450));
 
         track.addEventListener('scroll', updateArrows);
         window.addEventListener('resize', updateArrows);
@@ -232,7 +211,6 @@
             });
         });
 
-        // Identical initial state check to project_filler.js
         setTimeout(updateArrows, 100);
         if (window._revealEl && wrap) window._revealEl(wrap);
     }
@@ -333,24 +311,6 @@
 
     let _resumeYtPlayer = null;
 
-    function loadYTApi(cb) {
-        if (window.YT && window.YT.Player) { cb(); return; }
-        const prev = window.onYouTubeIframeAPIReady;
-        window.onYouTubeIframeAPIReady = function() { if (prev) prev(); cb(); };
-        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-            const tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            document.head.appendChild(tag);
-        }
-    }
-
-    function destroyResumeYtPlayer() {
-        if (_resumeYtPlayer) {
-            try { _resumeYtPlayer.destroy(); } catch {}
-            _resumeYtPlayer = null;
-        }
-    }
-
     // ── YouTube video embed modal ─────────────────────────────────────────────
 
     function openYoutubeVideoModal(videoId, title) {
@@ -373,27 +333,14 @@
             statsBtn.style.display      = '';
         }
 
-        destroyResumeYtPlayer();
+        _resumeYtPlayer = window._destroyYTPlayer(_resumeYtPlayer);
         slot.innerHTML = '';
         slot.style.display = '';
         if (fallback) fallback.style.display = 'none';
         if (fbLink) fbLink.href = 'https://youtu.be/' + videoId;
 
-        loadYTApi(function() {
-            _resumeYtPlayer = new YT.Player(slot, {
-                videoId: videoId,
-                width: '100%',
-                height: '100%',
-                playerVars: { autoplay: 1, origin: location.origin },
-                events: {
-                    onError: function(e) {
-                        if (e.data === 101 || e.data === 150) {
-                            slot.style.display = 'none';
-                            if (fallback) fallback.style.display = '';
-                        }
-                    }
-                }
-            });
+        window._loadYTApi(function () {
+            _resumeYtPlayer = window._openYTPlayer(slot, fallback, videoId);
         });
     }
 
@@ -405,7 +352,7 @@
 
         function close() {
             if (window.closeProjectStats) window.closeProjectStats();
-            destroyResumeYtPlayer();
+            _resumeYtPlayer = window._destroyYTPlayer(_resumeYtPlayer);
             overlay.classList.remove('active');
             modal.classList.remove('active');
             document.body.style.overflow = '';

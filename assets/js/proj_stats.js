@@ -551,7 +551,29 @@
     window.closeProjectStats = closeProjectStats;
 
     // ── Wire overlay controls ────────────────────────────────────────────────────
+    function ensureOverlay() {
+        if (document.getElementById('proj-stats-overlay')) return;
+        const div = document.createElement('div');
+        div.id = 'proj-stats-overlay';
+        div.className = 'body-portal';
+        div.innerHTML = `
+            <div class="proj-stats-modal">
+                <div class="modal-titlebar">
+                    <div class="modal-win-controls">
+                        <span class="modal-win-btn modal-win-close" id="proj-stats-close"></span>
+                        <span class="modal-win-btn modal-win-minimize"></span>
+                        <span class="modal-win-btn modal-win-maximize"></span>
+                    </div>
+                    <span class="modal-win-title" id="proj-stats-title">Statistics — zsh</span>
+                </div>
+                <div id="proj-stats-body" class="proj-stats-body"></div>
+                <button class="modal-back btn-theme" id="proj-stats-back" style="margin:12px 24px;align-self:stretch;padding:16px 20px;font-size:var(--fs-body);"><i class="fa fa-arrow-left"></i> Back</button>
+            </div>`;
+        document.body.appendChild(div);
+    }
+
     function wireOverlay() {
+        ensureOverlay();
         const overlay  = document.getElementById('proj-stats-overlay');
         const backBtn  = document.getElementById('proj-stats-back');
         const closeBtn = document.getElementById('proj-stats-close');

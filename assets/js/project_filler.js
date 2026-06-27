@@ -166,7 +166,7 @@
             const wrap = favRow.querySelector('.cat-carousel-wrap');
             const leftBtn = wrap.querySelector('.carousel-arrow.left');
             const rightBtn = wrap.querySelector('.carousel-arrow.right');
-            updateCarouselArrows(track, leftBtn, rightBtn);
+            window._updateCarouselArrows(track, leftBtn, rightBtn);
         }
     }
 
@@ -776,86 +776,34 @@
         dropdown.style.visibility = '';
     }
 
-    function updateCarouselArrows(track, leftBtn, rightBtn) {
-        if (!track || !leftBtn || !rightBtn) return;
-        const canScrollLeft  = track.scrollLeft > 2;
-        const canScrollRight = track.scrollLeft < (track.scrollWidth - track.clientWidth - 2);
-        leftBtn.classList.toggle('visible', canScrollLeft);
-        rightBtn.classList.toggle('visible', canScrollRight);
-    }
-
     function wireSingleCarouselArrows(rowEl) {
-        function smoothScroll(element, distance, duration) {
-            const start = element.scrollLeft;
-            let startTime = null;
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const progress = Math.min(timeElapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                element.scrollLeft = start + (distance * ease);
-                if (timeElapsed < duration) requestAnimationFrame(animation);
-            }
-            requestAnimationFrame(animation);
-        }
-
         const wrap     = rowEl.querySelector('.cat-carousel-wrap');
         const track    = wrap.querySelector('.cat-carousel');
         const leftBtn  = wrap.querySelector('.carousel-arrow.left');
         const rightBtn = wrap.querySelector('.carousel-arrow.right');
 
-        function doUpdate() { updateCarouselArrows(track, leftBtn, rightBtn); }
+        function doUpdate() { window._updateCarouselArrows(track, leftBtn, rightBtn); }
 
         track.addEventListener('scroll', doUpdate);
         window.addEventListener('resize', doUpdate);
-        leftBtn.addEventListener('click',  () => smoothScroll(track, -track.clientWidth * 0.75, 450));
-        rightBtn.addEventListener('click', () => smoothScroll(track,  track.clientWidth * 0.75, 450));
+        leftBtn.addEventListener('click',  () => window._smoothScroll(track, -track.clientWidth * 0.75, 450));
+        rightBtn.addEventListener('click', () => window._smoothScroll(track,  track.clientWidth * 0.75, 450));
         track._updateArrows = doUpdate;
         setTimeout(doUpdate, 100);
     }
 
     function wireCarouselArrows() {
-        function smoothScroll(element, distance, duration) {
-            const start = element.scrollLeft;
-            let startTime = null;
-
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const progress = Math.min(timeElapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                element.scrollLeft = start + (distance * ease);
-
-                if (timeElapsed < duration) requestAnimationFrame(animation);
-            }
-            requestAnimationFrame(animation);
-        }
-
         document.querySelectorAll('.cat-carousel-wrap').forEach(wrap => {
-            const track = wrap.querySelector('.cat-carousel');
-            const leftBtn = wrap.querySelector('.carousel-arrow.left');
+            const track    = wrap.querySelector('.cat-carousel');
+            const leftBtn  = wrap.querySelector('.carousel-arrow.left');
             const rightBtn = wrap.querySelector('.carousel-arrow.right');
 
-            function updateArrows() {
-                if (!track) return;
-                const canScrollLeft = track.scrollLeft > 2;
-                const canScrollRight = track.scrollLeft < (track.scrollWidth - track.clientWidth - 2);
-
-                leftBtn.classList.toggle('visible', canScrollLeft);
-                rightBtn.classList.toggle('visible', canScrollRight);
-            }
+            function updateArrows() { window._updateCarouselArrows(track, leftBtn, rightBtn); }
 
             track.addEventListener('scroll', updateArrows);
             window.addEventListener('resize', updateArrows);
-
-            leftBtn.addEventListener('click', () => {
-                smoothScroll(track, -track.clientWidth * 0.75, 450);
-            });
-
-            rightBtn.addEventListener('click', () => {
-                smoothScroll(track, track.clientWidth * 0.75, 450);
-            });
-
+            leftBtn.addEventListener('click',  () => window._smoothScroll(track, -track.clientWidth * 0.75, 450));
+            rightBtn.addEventListener('click', () => window._smoothScroll(track,  track.clientWidth * 0.75, 450));
             track._updateArrows = updateArrows;
             setTimeout(updateArrows, 100);
         });
@@ -1382,51 +1330,20 @@
 
     let _ytPlayer = null;
 
-    function loadYTApi(cb) {
-        if (window.YT && window.YT.Player) { cb(); return; }
-        const prev = window.onYouTubeIframeAPIReady;
-        window.onYouTubeIframeAPIReady = function() { if (prev) prev(); cb(); };
-        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-            const tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            document.head.appendChild(tag);
-        }
-    }
-
     function openYoutubePlayer(modalEl, vid) {
         const wrap     = modalEl.querySelector('.modal-video-wrap');
         const slot     = wrap.querySelector('.yt-player-slot');
         const fallback = wrap.querySelector('.yt-embed-fallback');
         if (!slot) return;
 
-        destroyYoutubePlayer();
+        _ytPlayer = window._destroyYTPlayer(_ytPlayer);
         slot.innerHTML = '';
         slot.style.display = '';
         if (fallback) fallback.style.display = 'none';
 
-        loadYTApi(function() {
-            _ytPlayer = new YT.Player(slot, {
-                videoId: vid,
-                width: '100%',
-                height: '100%',
-                playerVars: { autoplay: 1, origin: location.origin },
-                events: {
-                    onError: function(e) {
-                        if (e.data === 101 || e.data === 150) {
-                            slot.style.display = 'none';
-                            if (fallback) fallback.style.display = '';
-                        }
-                    }
-                }
-            });
+        window._loadYTApi(function () {
+            _ytPlayer = window._openYTPlayer(slot, fallback, vid);
         });
-    }
-
-    function destroyYoutubePlayer() {
-        if (_ytPlayer) {
-            try { _ytPlayer.destroy(); } catch {}
-            _ytPlayer = null;
-        }
     }
 
     // ── Main init ────────────────────────────────────────────────────────────
@@ -1673,7 +1590,7 @@
     }
 
     function closeModal() {
-        destroyYoutubePlayer();
+        _ytPlayer = window._destroyYTPlayer(_ytPlayer);
         const overlay = document.getElementById('modal-overlay');
         overlay.classList.remove('active');
         document.querySelectorAll('.modal-inner').forEach(el => el.classList.remove('active'));
