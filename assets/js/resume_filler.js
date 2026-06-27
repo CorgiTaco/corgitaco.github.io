@@ -387,36 +387,91 @@
 
         winTitle.textContent = 'downloads — zsh';
 
-        const cfVal  = curseforgeStats ? formatNumber(curseforgeStats.downloads) : '—';
-        const cfAsOf = curseforgeStats && curseforgeStats.date
-            ? makeAsOf(curseforgeStats.date, 'downloads-asof') : '';
+        const cfHtml = curseforgeStats ? `
+                <div class="downloads-platform">
+                    <img src="https://www.curseforge.com/favicon.ico" alt="CurseForge" class="downloads-platform-icon">
+                    <span class="downloads-platform-stat">${formatNumber(curseforgeStats.downloads)}</span>
+                    <span class="downloads-platform-label">CurseForge</span>
+                    ${curseforgeStats.date ? makeAsOf(curseforgeStats.date, 'downloads-asof') : ''}
+                </div>` : '';
 
-        const mrVal  = modrinthStats ? formatNumber(modrinthStats.downloads) : '—';
-        const mrAsOf = modrinthStats && modrinthStats.date
-            ? makeAsOf(modrinthStats.date, 'downloads-asof') : '';
+        const mrHtml = modrinthStats ? `
+                <div class="downloads-platform">
+                    <img src="https://modrinth.com/favicon.ico" alt="Modrinth" class="downloads-platform-icon">
+                    <span class="downloads-platform-stat">${formatNumber(modrinthStats.downloads)}</span>
+                    <span class="downloads-platform-label">Modrinth</span>
+                    ${modrinthStats.date ? makeAsOf(modrinthStats.date, 'downloads-asof') : ''}
+                </div>` : '';
 
         body.innerHTML = `
             <span class="tm-tag">Downloads</span>
             <h2 class="tm-title">Minecraft Mod Downloads</h2>
             <hr class="tm-divider">
-            <div class="downloads-breakdown">
-                <div class="downloads-platform">
-                    <img src="https://www.curseforge.com/favicon.ico" alt="CurseForge" class="downloads-platform-icon">
-                    <span class="downloads-platform-stat">${cfVal}</span>
-                    <span class="downloads-platform-label">CurseForge</span>
-                    ${cfAsOf}
-                </div>
-                <div class="downloads-platform">
-                    <img src="https://modrinth.com/favicon.ico" alt="Modrinth" class="downloads-platform-icon">
-                    <span class="downloads-platform-stat">${mrVal}</span>
-                    <span class="downloads-platform-label">Modrinth</span>
-                    ${mrAsOf}
-                </div>
-            </div>
+            <div class="downloads-breakdown">${cfHtml}${mrHtml}</div>
         `;
 
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+    }
+
+    function showModalLoading(winTitleText) {
+        var overlay  = document.getElementById('timeline-modal-overlay');
+        var body     = document.getElementById('tm-body');
+        document.getElementById('tm-win-title').textContent = winTitleText;
+        body.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.5)"><i class="fa fa-spinner fa-spin"></i> Loading…</div>';
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function loadAndOpenDownloadsDelta(hoursBack, modsData, timestamp) {
+        showModalLoading('downloads — zsh');
+        var mods = (modsData && modsData.mods) || [];
+        var fetches = mods.map(function(m) {
+            return fetch('../data/history/mods/' + m.id + '.csv')
+                .then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; })
+                .then(function(text) {
+                    if (!text) return { cf: 0, mr: 0 };
+                    var rows = parseCSVRows(text).filter(function(r) { return !isNaN(Number(r[1])); });
+                    return {
+                        cf: deltaFromRows(rows, 1, hoursBack) || 0,
+                        mr: deltaFromRows(rows, 2, hoursBack) || 0,
+                    };
+                });
+        });
+        Promise.all(fetches).then(function(results) {
+            var cfDelta = 0, mrDelta = 0;
+            results.forEach(function(r) { cfDelta += r.cf; mrDelta += r.mr; });
+            openDownloadsModal(
+                mrDelta !== 0 ? { downloads: mrDelta, date: timestamp } : null,
+                cfDelta !== 0 ? { downloads: cfDelta, date: timestamp } : null
+            );
+        });
+    }
+
+    function loadAndOpenYoutubeDelta(hoursBack, statsData, timestamp) {
+        showModalLoading('youtube — zsh');
+        var videos = (statsData && statsData.videos) || [];
+        var fetches = videos.map(function(v) {
+            return fetch('../data/history/youtube/videos/' + v.id + '.csv')
+                .then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; })
+                .then(function(text) {
+                    var delta = 0;
+                    if (text) {
+                        var rows = parseCSVRows(text).filter(function(r) { return !isNaN(Number(r[1])); });
+                        delta = deltaFromRows(rows, 1, hoursBack) || 0;
+                    }
+                    return { id: v.id, title: v.title, channel: v.channel, thumbnail: v.thumbnail, stats: { views: delta } };
+                });
+        });
+        Promise.all(fetches).then(function(deltaVideos) {
+            var active = deltaVideos.filter(function(v) { return v.stats.views !== 0; });
+            var totalViews = active.reduce(function(s, v) { return s + v.stats.views; }, 0);
+            openYoutubeModal({
+                fetchedAt: timestamp,
+                totals: { views: totalViews, video_count: active.length },
+                videos: active,
+            });
+        });
     }
 
     // ── PDF viewer modal ──────────────────────────────────────────────────────
@@ -562,17 +617,18 @@
     }
 
     function deltaFromRows(rows, valueColIndex, hoursBack) {
-        if (!rows || rows.length < 2) return null;
-        var now   = new Date(rows[rows.length - 1][0]);
+        // Skip header row (first row has non-numeric values)
+        var data = rows.filter(function(r) { return !isNaN(Number(r[valueColIndex])); });
+        if (!data || data.length < 2) return null;
+        var now    = new Date(data[data.length - 1][0]);
         var cutoff = new Date(now.getTime() - hoursBack * 3600 * 1000);
-        var latest = Number(rows[rows.length - 1][valueColIndex]);
-        // Find the last row that is at or before the cutoff
+        var latest = Number(data[data.length - 1][valueColIndex]);
         var baseline = null;
-        for (var i = rows.length - 2; i >= 0; i--) {
-            var t = new Date(rows[i][0]);
-            if (t <= cutoff) { baseline = Number(rows[i][valueColIndex]); break; }
+        for (var i = data.length - 2; i >= 0; i--) {
+            if (new Date(data[i][0]) <= cutoff) { baseline = Number(data[i][valueColIndex]); break; }
         }
-        if (baseline === null) return null;
+        // Fall back to oldest row if history doesn't reach the cutoff
+        if (baseline === null) baseline = Number(data[0][valueColIndex]);
         return latest - baseline;
     }
 
@@ -613,6 +669,20 @@
         const el = document.getElementById('highlights-section');
         if (!el || !cards || !cards.length) return;
 
+        var d = historyDeltas || {};
+
+        function deltaCard(icon, val, label, asOfIso, source) {
+            if (val === null || val === undefined) return '';
+            var asOf  = asOfIso ? makeAsOf(asOfIso, 'highlight-card-asof') : '';
+            var extra = source ? ` data-source="${source}"` : '';
+            return `<div class="highlight-card highlight-card-link" role="button" tabindex="0"${extra}>
+                <i class="fa ${icon} highlight-card-icon"></i>
+                <span class="highlight-card-stat">${formatViews(Math.abs(val))}</span>
+                <span class="highlight-card-label">${label}</span>
+                ${asOf}
+            </div>`;
+        }
+
         const cardsHtml = cards.map(c => {
             var tag     = c.url ? 'a' : 'div';
             var attrs   = c.url ? ` href="${escapeAttr(c.url)}" target="_blank" rel="noopener noreferrer"` : '';
@@ -641,7 +711,8 @@
                         <span class="highlight-card-label">Minecraft Mod Downloads</span>
                         ${asOf}
                     </div>
-                `;
+                ` + deltaCard('fa-download', d.mods24h, 'Last 24h Mod Downloads', d.modsTs, 'mods_delta_24h')
+                  + deltaCard('fa-download', d.mods7d,  'Last 7d Mod Downloads',  d.modsTs, 'mods_delta_7d');
             }
             if (c.source === 'youtube_stats' && youtubeStats) {
                 const asOf = youtubeStats.date ? makeAsOf(youtubeStats.date, 'highlight-card-asof') : '';
@@ -652,7 +723,8 @@
                         <span class="highlight-card-label">Views across ${youtubeStats.videos} Videos</span>
                         ${asOf}
                     </div>
-                `;
+                ` + deltaCard('fa-eye', d.views24h, 'Last 24h YouTube Views', d.ytTs, 'youtube_delta_24h')
+                  + deltaCard('fa-eye', d.views7d,  'Last 7d YouTube Views',  d.ytTs, 'youtube_delta_7d');
             }
             return `
                 <${tag} class="${classes}"${attrs}>
@@ -663,31 +735,11 @@
             `;
         }).join('');
 
-        var deltaCardsHtml = '';
-        if (historyDeltas) {
-            var d = historyDeltas;
-            function deltaCard(icon, val, label, periodLabel, periodShort) {
-                if (val === null || val === undefined) return '';
-                var sign = val >= 0 ? '+' : '-';
-                return `<div class="highlight-card">
-                    <i class="fa ${icon} highlight-card-icon"></i>
-                    <span class="highlight-card-stat">${sign}${formatViews(Math.abs(val))} <span class="highlight-card-period">/ ${periodShort}</span></span>
-                    <span class="highlight-card-label">${label}</span>
-                    <span class="highlight-card-asof">${periodLabel}</span>
-                </div>`;
-            }
-            deltaCardsHtml =
-                deltaCard('fa-download', d.mods24h,  'Mod Downloads',  'Last 24 Hours', '24h') +
-                deltaCard('fa-download', d.mods7d,   'Mod Downloads',  'Last 7 Days',   '7d')  +
-                deltaCard('fa-eye',      d.views24h, 'YouTube Views',  'Last 24 Hours', '24h') +
-                deltaCard('fa-eye',      d.views7d,  'YouTube Views',  'Last 7 Days',   '7d');
-        }
-
         el.innerHTML = `
             <div class="highlights-cards-header resume-header">
                 <i class="fa fa-star"></i> Highlights
             </div>
-            <div class="highlights-cards-row">${cardsHtml}${deltaCardsHtml}</div>
+            <div class="highlights-cards-row">${cardsHtml}</div>
         `;
 
         el.querySelectorAll('[data-source="modrinth_stats"]').forEach(card => {
@@ -704,6 +756,23 @@
                 card.addEventListener('click', activate);
                 card.addEventListener('keydown', e => {
                     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+                });
+            });
+        }
+
+        if (historyDeltas) {
+            var hd = historyDeltas;
+            [
+                { sel: 'mods_delta_24h',    fn: function() { loadAndOpenDownloadsDelta(24,  _cache.modsData, hd.modsTs); } },
+                { sel: 'mods_delta_7d',     fn: function() { loadAndOpenDownloadsDelta(168, _cache.modsData, hd.modsTs); } },
+                { sel: 'youtube_delta_24h', fn: function() { loadAndOpenYoutubeDelta(24,  _cache.statsData, hd.ytTs); } },
+                { sel: 'youtube_delta_7d',  fn: function() { loadAndOpenYoutubeDelta(168, _cache.statsData, hd.ytTs); } },
+            ].forEach(function(entry) {
+                el.querySelectorAll('[data-source="' + entry.sel + '"]').forEach(function(card) {
+                    card.addEventListener('click', entry.fn);
+                    card.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entry.fn(); }
+                    });
                 });
             });
         }
@@ -893,6 +962,8 @@
                     mods7d:   modsRows ? deltaFromRows(modsRows, 1, 168) : null,
                     views24h: ytRows   ? deltaFromRows(ytRows,   2, 24)  : null,
                     views7d:  ytRows   ? deltaFromRows(ytRows,   2, 168) : null,
+                    modsTs:   modsRows ? modsRows[modsRows.length - 1][0] : null,
+                    ytTs:     ytRows   ? ytRows[ytRows.length - 1][0]     : null,
                 };
             }
 
@@ -906,6 +977,7 @@
 
             // Populate cache for hash router
             _cache.statsData       = statsData;
+            _cache.modsData        = modsData;
             _cache.modrinthStats   = modrinthStats;
             _cache.curseforgeStats = curseforgeStats;
 
