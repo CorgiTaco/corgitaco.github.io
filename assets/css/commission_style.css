@@ -148,7 +148,7 @@ body.commission-page #page-title-bar {
 }
 
 .comm-examples-label {
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-family: var(--font-mono);
     text-transform: uppercase;
     letter-spacing: 0.1em;
