@@ -969,8 +969,8 @@
 }
 
 .highlights-cards-row {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     gap: 12px;
 }
 
@@ -986,8 +986,7 @@
     border-radius: 8px;
     gap: 8px;
     transition: border-color 0.2s, background 0.2s;
-    flex: 1 1 calc((100% - 48px) / 5);
-    min-width: 100px;
+    min-width: 0;
 }
 
 .highlight-card-asof {
@@ -1032,6 +1031,12 @@ a.highlight-card-link {
     font-weight: var(--fw-title);
     color: var(--main-color) !important;
     line-height: 1;
+}
+
+.highlight-card-period {
+    font-size: 0.75rem;
+    font-weight: 400;
+    opacity: 0.55;
 }
 
 .highlight-card-label {
@@ -1171,14 +1176,14 @@ a.highlight-card-link {
 }
 
 @media (max-width: 700px) {
-    .highlight-card {
-        flex: 1 1 calc((100% - 24px) / 3);
+    .highlights-cards-row {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 440px) {
-    .highlight-card {
-        flex: 1 1 calc((100% - 12px) / 2);
+    .highlights-cards-row {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

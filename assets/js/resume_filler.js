@@ -144,7 +144,11 @@
     function buildTestimonials(testimonials) {
         const track = document.getElementById('testimonials-track');
         const wrap = track && track.closest('.testimonials-track-wrap');
-        if (!track || !testimonials || !testimonials.length) return;
+        const section = track && track.closest('.testimonials-section');
+        if (!track || !testimonials || !testimonials.length) {
+            if (section) section.style.display = 'none';
+            return;
+        }
 
         // Inject overlay gradient arrows (fa-chevron icons matching projects carousel)
         const prevBtn = document.createElement('button');
@@ -551,6 +555,27 @@
         return { views, videos: count, date: row.date || null };
     }
 
+    // ── History CSV helpers ───────────────────────────────────────────────────
+
+    function parseCSVRows(text) {
+        return text.trim().split(/\r?\n/).map(function (line) { return line.split(','); });
+    }
+
+    function deltaFromRows(rows, valueColIndex, hoursBack) {
+        if (!rows || rows.length < 2) return null;
+        var now   = new Date(rows[rows.length - 1][0]);
+        var cutoff = new Date(now.getTime() - hoursBack * 3600 * 1000);
+        var latest = Number(rows[rows.length - 1][valueColIndex]);
+        // Find the last row that is at or before the cutoff
+        var baseline = null;
+        for (var i = rows.length - 2; i >= 0; i--) {
+            var t = new Date(rows[i][0]);
+            if (t <= cutoff) { baseline = Number(rows[i][valueColIndex]); break; }
+        }
+        if (baseline === null) return null;
+        return latest - baseline;
+    }
+
     function makeAsOf(isoStr, cssClass) {
         if (!isoStr) return '';
         var d = new Date(isoStr);
@@ -584,7 +609,7 @@
 
     // ── Highlights cards section ──────────────────────────────────────────────
 
-    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData, curseforgeStats) {
+    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas) {
         const el = document.getElementById('highlights-section');
         if (!el || !cards || !cards.length) return;
 
@@ -638,11 +663,31 @@
             `;
         }).join('');
 
+        var deltaCardsHtml = '';
+        if (historyDeltas) {
+            var d = historyDeltas;
+            function deltaCard(icon, val, label, periodLabel, periodShort) {
+                if (val === null || val === undefined) return '';
+                var sign = val >= 0 ? '+' : '-';
+                return `<div class="highlight-card">
+                    <i class="fa ${icon} highlight-card-icon"></i>
+                    <span class="highlight-card-stat">${sign}${formatViews(Math.abs(val))} <span class="highlight-card-period">/ ${periodShort}</span></span>
+                    <span class="highlight-card-label">${label}</span>
+                    <span class="highlight-card-asof">${periodLabel}</span>
+                </div>`;
+            }
+            deltaCardsHtml =
+                deltaCard('fa-download', d.mods24h,  'Mod Downloads',  'Last 24 Hours', '24h') +
+                deltaCard('fa-download', d.mods7d,   'Mod Downloads',  'Last 7 Days',   '7d')  +
+                deltaCard('fa-eye',      d.views24h, 'YouTube Views',  'Last 24 Hours', '24h') +
+                deltaCard('fa-eye',      d.views7d,  'YouTube Views',  'Last 7 Days',   '7d');
+        }
+
         el.innerHTML = `
             <div class="highlights-cards-header resume-header">
                 <i class="fa fa-star"></i> Highlights
             </div>
-            <div class="highlights-cards-row">${cardsHtml}</div>
+            <div class="highlights-cards-row">${cardsHtml}${deltaCardsHtml}</div>
         `;
 
         el.querySelectorAll('[data-source="modrinth_stats"]').forEach(card => {
@@ -811,12 +856,16 @@
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
             fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../data/mods.json').then(r => r.ok ? r.json() : null).catch(() => null),
-            fetch('../assets/hire/skills.json').then(r => r.ok ? r.json() : null).catch(() => null)
+            fetch('../assets/hire/skills.json').then(r => r.ok ? r.json() : null).catch(() => null),
+            fetch('../data/history/mods/totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
+            fetch('../data/history/youtube/totals.csv').then(r => r.ok ? r.text() : null).catch(() => null)
         ]).then(function(results) {
             var data        = results[0];
             var statsData   = results[1];
             var modsData    = results[2];
             var skillsData  = results[3];
+            var modsCsv     = results[4];
+            var ytCsv       = results[5];
 
             var youtubeStats = statsData && statsData.totals ? {
                 views:  statsData.totals.views,
@@ -835,9 +884,21 @@
                 curseforgeStats = { downloads: dlCF, date: modsData.fetchedAt || null };
                 modrinthStats   = { downloads: dlMR, date: modsData.fetchedAt || null };
             }
+            var historyDeltas = null;
+            if (modsCsv || ytCsv) {
+                var modsRows = modsCsv ? parseCSVRows(modsCsv) : null;
+                var ytRows   = ytCsv   ? parseCSVRows(ytCsv)   : null;
+                historyDeltas = {
+                    mods24h:  modsRows ? deltaFromRows(modsRows, 1, 24)  : null,
+                    mods7d:   modsRows ? deltaFromRows(modsRows, 1, 168) : null,
+                    views24h: ytRows   ? deltaFromRows(ytRows,   2, 24)  : null,
+                    views7d:  ytRows   ? deltaFromRows(ytRows,   2, 168) : null,
+                };
+            }
+
             buildContactCard(data.contact);
             buildLookingForCard(data.looking_for);
-            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats);
+            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas);
             buildSkillsSection(skillsData);
             populateTimeline('experience-timeline', data.experience, 'Experience');
             populateTimeline('education-timeline', data.education, 'Education');

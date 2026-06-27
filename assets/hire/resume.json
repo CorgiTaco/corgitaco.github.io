@@ -50,73 +50,22 @@
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   ],
   "highlight_cards": [
-    { "icon": "fa-code", "dynamic": "years_since", "since": "2019-12", "since_label": "Dec 2019", "label": "Years of Software Development" },
-    { "icon": "fa-youtube-play", "source": "youtube_stats" },
-    { "icon": "fa-download", "source": "modrinth_stats" }
+    {
+      "icon": "fa-code",
+      "dynamic": "years_since",
+      "since": "2019-12",
+      "since_label": "Dec 2019",
+      "label": "Years of Software Development"
+    },
+    {
+      "icon": "fa-youtube-play",
+      "source": "youtube_stats"
+    },
+    {
+      "icon": "fa-download",
+      "source": "modrinth_stats"
+    }
   ],
   "testimonials": [
-    {
-      "name": "Jane Krakowski",
-      "role": "Actress",
-      "company": "Hollywood",
-      "date": "March 2024",
-      "quote": "Rawr I am a placeholder rawr",
-      "avatar": "https://upload.wikimedia.org/wikipedia/commons/5/56/JaneKrakowski-byPhilipRomano2.jpg",
-      "url": "https://en.wikipedia.org/wiki/Jane_Krakowski"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    },
-    {
-      "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "name": "Placeholder Name",
-      "role": "Placeholder Role",
-      "company": "Placeholder Company"
-    }
   ]
 }
