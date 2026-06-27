@@ -169,6 +169,7 @@ body.commission-page #page-title-bar {
     flex-direction: row;
     gap: 12px;
     overflow-x: auto;
+    padding-top: 4px;
     padding-bottom: 28px; /* room for scrollbar */
     scroll-behavior: smooth;
 }
