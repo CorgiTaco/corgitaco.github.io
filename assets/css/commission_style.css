@@ -304,7 +304,7 @@ a.comm-card-title:hover { color: var(--main-color); }
     .comm-carousel-card { flex: 0 0 300px; width: 300px; }
     .comm-carousel-track .proj-card { flex: 0 0 260px; width: 260px; }
 
-    .comm-modal-btn {
+    .comm-modal-btn:not(.comm-body-modal-btn) {
         display: none;
     }
 }
