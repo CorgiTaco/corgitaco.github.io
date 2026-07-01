@@ -795,7 +795,7 @@
         const leftBtn  = wrap.querySelector('.carousel-arrow.left');
         const rightBtn = wrap.querySelector('.carousel-arrow.right');
 
-        function doUpdate() { window._updateCarouselArrows(track, leftBtn, rightBtn); }
+        function doUpdate() { if (window._updateCarouselArrows) window._updateCarouselArrows(track, leftBtn, rightBtn); }
 
         track.addEventListener('scroll', doUpdate);
         window.addEventListener('resize', doUpdate);
@@ -811,7 +811,7 @@
             const leftBtn  = wrap.querySelector('.carousel-arrow.left');
             const rightBtn = wrap.querySelector('.carousel-arrow.right');
 
-            function updateArrows() { window._updateCarouselArrows(track, leftBtn, rightBtn); }
+            function updateArrows() { if (window._updateCarouselArrows) window._updateCarouselArrows(track, leftBtn, rightBtn); }
 
             track.addEventListener('scroll', updateArrows);
             window.addEventListener('resize', updateArrows);
@@ -1678,10 +1678,30 @@
             .catch(err => console.error('Could not load project data:', err));
     }
 
+    // carousel-utils.js and yt-utils.js normally come from this page's <head>, but
+    // SPA navigation (pagechange.js) only re-executes scripts inside #main — so when
+    // arriving from a page whose <head> doesn't include them, load them here first
+    // (same pattern stats_filler.js uses for Chart.js).
+    function ensureHeadUtils(cb) {
+        const base = window._navBasePath || '';
+        const missing = [];
+        if (!window._updateCarouselArrows) missing.push(base + '/assets/js/carousel-utils.js');
+        if (!window._loadYTApi)            missing.push(base + '/assets/js/yt-utils.js');
+        if (!missing.length) { cb(); return; }
+
+        let pending = missing.length;
+        missing.forEach(src => {
+            const s = document.createElement('script');
+            s.src = src;
+            s.onload = s.onerror = () => { if (--pending === 0) cb(); };
+            document.head.appendChild(s);
+        });
+    }
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', bootstrap);
+        document.addEventListener('DOMContentLoaded', () => ensureHeadUtils(bootstrap));
     } else {
-        bootstrap();
+        ensureHeadUtils(bootstrap);
     }
 
 })();
