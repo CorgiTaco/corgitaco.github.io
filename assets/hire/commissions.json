@@ -1,4 +1,46 @@
 {
+  "status": {
+    "open": true,
+    "note": "Currently accepting new commission requests"
+  },
+  "tos": {
+    "label": "Terms of Service",
+    "icon": "fa-gavel",
+    "intro": "These terms apply to all commissions. By submitting a commission request, you agree to the terms below.",
+    "sections": [
+      {
+        "heading": "Quotes & Payment",
+        "items": [
+          "WIP"
+        ]
+      },
+      {
+        "heading": "Scope & Revisions",
+        "items": [
+          "WIP"
+        ]
+      },
+      {
+        "heading": "Timelines",
+        "items": [
+          "WIP"
+        ]
+      },
+      {
+        "heading": "Cancellations & Refunds",
+        "items": [
+          "WIP"
+        ]
+      },
+      {
+        "heading": "Rights & Portfolio",
+        "items": [
+          "WIP"
+        ]
+      }
+    ],
+    "footnote": ""
+  },
   "commonFields": [
     {
       "id": "name",

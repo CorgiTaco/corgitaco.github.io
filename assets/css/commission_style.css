@@ -309,3 +309,151 @@ a.comm-card-title:hover { color: var(--main-color); }
     }
 }
 
+/* ── Terms of Service (static panel) ── */
+
+.comm-tos-panel {
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(70, 162, 88, 0.3);
+    border-radius: 6px;
+    padding: 18px 20px 20px;
+}
+
+.comm-tos-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.comm-tos-header .stat-acc-icon-wrap {
+    width: 40px;
+    height: 40px;
+    font-size: 1.15rem;
+}
+
+.comm-tos-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.comm-tos-intro {
+    font-size: var(--fs-body);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.65;
+    margin: 0 0 14px;
+}
+
+.comm-tos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.comm-tos-section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(70, 162, 88, 0.3);
+    border-radius: 6px;
+    padding: 14px 16px 16px;
+}
+
+/* Odd section count: the final section spans the full row instead of leaving
+   an empty cell beside it. */
+.comm-tos-section:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .comm-tos-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.comm-tos-heading {
+    font-size: 1.025rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--main-color);
+    margin: 0 0 8px;
+    font-weight: 600;
+}
+
+.comm-tos-list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comm-tos-list li {
+    font-size: var(--fs-body);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+}
+
+.comm-tos-list li::marker {
+    color: var(--main-color);
+}
+
+.comm-tos-footnote {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+    margin: 12px 0 0;
+}
+
+/* ── Commission status pill (in page title bar) ── */
+
+.comm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: 2px solid;
+    flex-shrink: 0;
+}
+
+.comm-status-pill.is-open {
+    color: #7dd88f;
+    border-color: rgba(70, 162, 88, 0.6);
+    background: rgba(70, 162, 88, 0.12);
+}
+
+.comm-status-pill.is-closed {
+    color: #ff7b72;
+    border-color: rgba(220, 80, 70, 0.55);
+    background: rgba(220, 80, 70, 0.12);
+}
+
+.comm-status-dot {
+    --dot-color: var(--main-color);
+    --dot-ring: rgba(70, 162, 88, 0.55);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--dot-color);
+    animation: comm-status-pulse 2s ease-out infinite;
+}
+
+.comm-status-pill.is-closed .comm-status-dot {
+    --dot-color: #e5534b;
+    --dot-ring: rgba(229, 83, 75, 0.5);
+}
+
+/* The dot keeps its full color; only the expanding ring fades. */
+@keyframes comm-status-pulse {
+    0%   { box-shadow: 0 0 0 0 var(--dot-ring); }
+    75%  { box-shadow: 0 0 0 9px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+}
+

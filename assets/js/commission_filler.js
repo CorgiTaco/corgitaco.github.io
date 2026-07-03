@@ -705,6 +705,78 @@
         acc.querySelector('.comm-acc-caret-btn').addEventListener('click', toggle);
     }
 
+    // ── Terms of Service ──────────────────────────────────────────────────────
+
+    function buildTosSection(tos) {
+        var panel = document.createElement('div');
+        panel.className = 'comm-tos-panel';
+
+        var header = document.createElement('div');
+        header.className = 'comm-tos-header';
+        header.innerHTML =
+            '<span class="stat-acc-icon-wrap"><i class="fa ' + (tos.icon || 'fa-gavel') + '"></i></span>' +
+            '<h2 class="comm-tos-title"></h2>';
+        header.querySelector('.comm-tos-title').textContent = tos.label || 'Terms of Service';
+        panel.appendChild(header);
+
+        if (tos.intro) {
+            var intro = document.createElement('p');
+            intro.className = 'comm-tos-intro';
+            intro.textContent = tos.intro;
+            panel.appendChild(intro);
+        }
+
+        var grid = document.createElement('div');
+        grid.className = 'comm-tos-grid';
+        (tos.sections || []).forEach(function (section) {
+            var sec = document.createElement('div');
+            sec.className = 'comm-tos-section';
+
+            var h = document.createElement('h4');
+            h.className = 'comm-tos-heading';
+            h.textContent = section.heading || '';
+            sec.appendChild(h);
+
+            var ul = document.createElement('ul');
+            ul.className = 'comm-tos-list';
+            (section.items || []).forEach(function (item) {
+                var li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+            sec.appendChild(ul);
+            grid.appendChild(sec);
+        });
+        panel.appendChild(grid);
+
+        if (tos.footnote) {
+            var foot = document.createElement('p');
+            foot.className = 'comm-tos-footnote';
+            foot.textContent = tos.footnote;
+            panel.appendChild(foot);
+        }
+
+        return panel;
+    }
+
+    // ── Commission status pill (rendered into the sticky page title bar) ─────
+
+    function renderStatusPill(status) {
+        var bar = document.getElementById('page-title-bar');
+        if (!bar) return;
+
+        var existing = bar.querySelector('.comm-status-pill');
+        if (existing) existing.remove();
+
+        var open = !!status.open;
+        var pill = document.createElement('span');
+        pill.className = 'comm-status-pill ' + (open ? 'is-open' : 'is-closed');
+        pill.innerHTML = '<span class="comm-status-dot"></span>';
+        pill.appendChild(document.createTextNode(open ? 'OPEN' : 'CLOSED'));
+        if (status.note) pill.title = status.note;
+        bar.appendChild(pill);
+    }
+
     // ── Bootstrap ─────────────────────────────────────────────────────────────
 
     function init() {
@@ -725,6 +797,8 @@
         fetch(JSON_URL)
             .then(function (r) { return r.json(); })
             .then(function (data) {
+                if (data.status) renderStatusPill(data.status);
+                if (data.tos) container.appendChild(buildTosSection(data.tos));
                 (data.types || []).forEach(function (type) {
                     container.appendChild(buildAccordion(type));
                     wireAccordion(type);
