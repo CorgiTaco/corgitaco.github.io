@@ -360,6 +360,10 @@ nav > ul > li.more.open ul {
 }
 
 /* ── Mobile nav ── */
+#mobile-nav {
+    display: none;
+}
+
 @media (max-width: 600px) {
     #vanta-bg {
         align-items: flex-start;
@@ -381,6 +385,7 @@ nav > ul > li.more.open ul {
     }
 
     #mobile-nav {
+        display: block;
         position: fixed;
         bottom: 0;
         left: 0;
