@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-06T11:21:24Z",
+  "fetchedAt": "2026-07-07T10:17:38Z",
   "mods": [
     {
       "id": "oh-the-trees-youll-grow",
@@ -36,9 +36,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 36173496,
-        "downloads_mr": 6201816,
-        "downloads_total": 42375312
+        "downloads_cf": 36234794,
+        "downloads_mr": 6213558,
+        "downloads_total": 42448352
       }
     },
     {
@@ -65,9 +65,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 13732269,
-        "downloads_mr": 1408039,
-        "downloads_total": 15140308
+        "downloads_cf": 13766888,
+        "downloads_mr": 1413059,
+        "downloads_total": 15179947
       }
     },
     {
@@ -100,9 +100,9 @@
         "1.19.2"
       ],
       "stats": {
-        "downloads_cf": 84084210,
-        "downloads_mr": 12745871,
-        "downloads_total": 96830081
+        "downloads_cf": 84185223,
+        "downloads_mr": 12768220,
+        "downloads_total": 96953443
       }
     },
     {
@@ -126,9 +126,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 410,
+        "downloads_cf": 413,
         "downloads_mr": 0,
-        "downloads_total": 410
+        "downloads_total": 413
       }
     },
     {
@@ -165,9 +165,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 42426689,
+        "downloads_cf": 42451802,
         "downloads_mr": 0,
-        "downloads_total": 42426689
+        "downloads_total": 42451802
       }
     },
     {
@@ -190,9 +190,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 4073,
-        "downloads_mr": 4792,
-        "downloads_total": 8865
+        "downloads_cf": 4095,
+        "downloads_mr": 4812,
+        "downloads_total": 8907
       }
     },
     {
@@ -217,25 +217,24 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 12251119,
-        "downloads_mr": 522195,
-        "downloads_total": 12773314
+        "downloads_cf": 12267601,
+        "downloads_mr": 524927,
+        "downloads_total": 12792528
       }
     },
     {
       "id": "block-swap",
-      "title": "Block Swap",
+      "title": "Block Swap Lite",
       "description": "A simple mod to replace a given block with another.",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/367/611/256/256/637534686697588271.png",
       "curseforge_id": 468893,
-      "modrinth_id": "f9kXyjJX",
+      "modrinth_id": null,
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
-      "modrinth_url": "https://modrinth.com/mod/block-swap",
+      "modrinth_url": "",
       "github_url": "https://github.com/CorgiTaco/Block-Swap",
       "date": "2023-06-20",
       "loaders": [
-        "Forge",
-        "Fabric"
+        "Forge"
       ],
       "game_versions": [
         "1.20.1",
@@ -249,9 +248,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 8437627,
-        "downloads_mr": 1393083,
-        "downloads_total": 9830710
+        "downloads_cf": 8447133,
+        "downloads_mr": 0,
+        "downloads_total": 8447133
       }
     },
     {
@@ -284,9 +283,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 6779584,
+        "downloads_cf": 6780000,
         "downloads_mr": 0,
-        "downloads_total": 6779584
+        "downloads_total": 6780000
       }
     },
     {
@@ -314,9 +313,9 @@
         "1.18"
       ],
       "stats": {
-        "downloads_cf": 6592201,
+        "downloads_cf": 6596617,
         "downloads_mr": 0,
-        "downloads_total": 6592201
+        "downloads_total": 6596617
       }
     },
     {
@@ -338,9 +337,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 723897,
+        "downloads_cf": 723988,
         "downloads_mr": 0,
-        "downloads_total": 723897
+        "downloads_total": 723988
       }
     },
     {
@@ -374,9 +373,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 60647053,
+        "downloads_cf": 60665922,
         "downloads_mr": 0,
-        "downloads_total": 60647053
+        "downloads_total": 60665922
       }
     },
     {
@@ -406,9 +405,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 2762578,
+        "downloads_cf": 2764282,
         "downloads_mr": 0,
-        "downloads_total": 2762578
+        "downloads_total": 2764282
       }
     },
     {
@@ -434,9 +433,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 33161962,
-        "downloads_mr": 1256329,
-        "downloads_total": 34418291
+        "downloads_cf": 33172498,
+        "downloads_mr": 1257319,
+        "downloads_total": 34429817
       }
     },
     {
@@ -460,9 +459,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1954308,
+        "downloads_cf": 1954533,
         "downloads_mr": 0,
-        "downloads_total": 1954308
+        "downloads_total": 1954533
       }
     },
     {
@@ -507,9 +506,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 179392,
+        "downloads_cf": 179394,
         "downloads_mr": 0,
-        "downloads_total": 179392
+        "downloads_total": 179394
       }
     },
     {
@@ -532,9 +531,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 999432,
+        "downloads_cf": 999908,
         "downloads_mr": 0,
-        "downloads_total": 999432
+        "downloads_total": 999908
       }
     },
     {
@@ -579,9 +578,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 20110,
+        "downloads_cf": 20120,
         "downloads_mr": 0,
-        "downloads_total": 20110
+        "downloads_total": 20120
       }
     },
     {
@@ -611,9 +610,9 @@
         "1.16.2"
       ],
       "stats": {
-        "downloads_cf": 50729354,
+        "downloads_cf": 50746916,
         "downloads_mr": 0,
-        "downloads_total": 50729354
+        "downloads_total": 50746916
       }
     },
     {
@@ -660,9 +659,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 5016,
+        "downloads_cf": 5017,
         "downloads_mr": 0,
-        "downloads_total": 5016
+        "downloads_total": 5017
       }
     },
     {
@@ -685,9 +684,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 35297,
+        "downloads_cf": 35298,
         "downloads_mr": 0,
-        "downloads_total": 35297
+        "downloads_total": 35298
       }
     },
     {
@@ -708,9 +707,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 34079,
+        "downloads_cf": 34081,
         "downloads_mr": 0,
-        "downloads_total": 34079
+        "downloads_total": 34081
       }
     },
     {
@@ -729,9 +728,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 33071,
+        "downloads_cf": 33079,
         "downloads_mr": 0,
-        "downloads_total": 33071
+        "downloads_total": 33079
       }
     },
     {
@@ -756,9 +755,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 2893544,
+        "downloads_cf": 2894043,
         "downloads_mr": 0,
-        "downloads_total": 2893544
+        "downloads_total": 2894043
       }
     },
     {
@@ -779,9 +778,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9895,
+        "downloads_cf": 9897,
         "downloads_mr": 0,
-        "downloads_total": 9895
+        "downloads_total": 9897
       }
     },
     {
@@ -802,9 +801,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 2837,
+        "downloads_cf": 2838,
         "downloads_mr": 0,
-        "downloads_total": 2837
+        "downloads_total": 2838
       }
     },
     {
@@ -825,9 +824,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 146,
+        "downloads_cf": 148,
         "downloads_mr": 0,
-        "downloads_total": 146
+        "downloads_total": 148
       }
     },
     {
@@ -848,9 +847,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 4283,
+        "downloads_cf": 4284,
         "downloads_mr": 0,
-        "downloads_total": 4283
+        "downloads_total": 4284
       }
     },
     {
@@ -872,9 +871,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 2538411,
+        "downloads_cf": 2538608,
         "downloads_mr": 0,
-        "downloads_total": 2538411
+        "downloads_total": 2538608
       }
     },
     {
@@ -899,9 +898,9 @@
         "1.15.2"
       ],
       "stats": {
-        "downloads_cf": 154250,
+        "downloads_cf": 154252,
         "downloads_mr": 0,
-        "downloads_total": 154250
+        "downloads_total": 154252
       }
     },
     {
@@ -937,9 +936,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 60961624,
-        "downloads_mr": 1699281,
-        "downloads_total": 62660905
+        "downloads_cf": 60971149,
+        "downloads_mr": 1700961,
+        "downloads_total": 62672110
       }
     },
     {
@@ -968,9 +967,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 35152939,
-        "downloads_mr": 9213341,
-        "downloads_total": 44366280
+        "downloads_cf": 35212244,
+        "downloads_mr": 9234177,
+        "downloads_total": 44446421
       }
     },
     {
@@ -999,8 +998,37 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 2115984,
-        "downloads_total": 2115984
+        "downloads_mr": 2119647,
+        "downloads_total": 2119647
+      }
+    },
+    {
+      "id": "block-swap",
+      "title": "Block Swap",
+      "description": "A simple mod to replace a given block with another.",
+      "icon": "https://cdn.modrinth.com/data/f9kXyjJX/f1ddeadae951a373a5523c7b7501bd7ea0db85fa_96.webp",
+      "curseforge_id": null,
+      "modrinth_id": "f9kXyjJX",
+      "curseforge_url": "",
+      "modrinth_url": "https://modrinth.com/mod/block-swap",
+      "github_url": "https://github.com/CorgiTaco/Block-Swap",
+      "date": "2022-06-06",
+      "loaders": [
+        "Fabric",
+        "Forge"
+      ],
+      "game_versions": [
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19",
+        "1.18.2"
+      ],
+      "stats": {
+        "downloads_cf": 0,
+        "downloads_mr": 1395460,
+        "downloads_total": 1395460
       }
     }
   ]
