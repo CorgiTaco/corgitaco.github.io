@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-22T09:20:59Z",
+  "fetchedAt": "2026-07-23T09:17:24Z",
   "mods": [
     {
       "id": "oh-the-trees-youll-grow",
@@ -36,9 +36,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 37153279,
-        "downloads_mr": 6452334,
-        "downloads_total": 43605613
+        "downloads_cf": 37214547,
+        "downloads_mr": 6470900,
+        "downloads_total": 43685447
       }
     },
     {
@@ -65,44 +65,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 14288195,
-        "downloads_mr": 1490578,
-        "downloads_total": 15778773
-      }
-    },
-    {
-      "id": "corgilib",
-      "title": "CorgiLib",
-      "description": "A library mod containing code used across Corgi Taco's mods.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/1693/756/256/256/639075035147145509.png",
-      "curseforge_id": 693313,
-      "modrinth_id": "ziOp6EO8",
-      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/corgilib",
-      "modrinth_url": "https://modrinth.com/mod/corgilib",
-      "github_url": "https://github.com/CorgiTaco/CorgiLib",
-      "date": "2026-03-17",
-      "loaders": [
-        "Fabric",
-        "Forge",
-        "NeoForge",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.21.11",
-        "1.21.10",
-        "1.21.9",
-        "1.21.8",
-        "1.21.4",
-        "1.21.1",
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2"
-      ],
-      "stats": {
-        "downloads_cf": 85814980,
-        "downloads_mr": 13145384,
-        "downloads_total": 98960364
+        "downloads_cf": 14321992,
+        "downloads_mr": 1495799,
+        "downloads_total": 15817791
       }
     },
     {
@@ -126,9 +91,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 447,
+        "downloads_cf": 448,
         "downloads_mr": 0,
-        "downloads_total": 447
+        "downloads_total": 448
       }
     },
     {
@@ -165,9 +130,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 42839182,
+        "downloads_cf": 42863841,
         "downloads_mr": 0,
-        "downloads_total": 42839182
+        "downloads_total": 42863841
       }
     },
     {
@@ -190,9 +155,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 4380,
-        "downloads_mr": 5157,
-        "downloads_total": 9537
+        "downloads_cf": 4384,
+        "downloads_mr": 5172,
+        "downloads_total": 9556
       }
     },
     {
@@ -217,9 +182,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 12493994,
-        "downloads_mr": 561199,
-        "downloads_total": 13055193
+        "downloads_cf": 12507698,
+        "downloads_mr": 563732,
+        "downloads_total": 13071430
       }
     },
     {
@@ -248,9 +213,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 8617126,
+        "downloads_cf": 8624918,
         "downloads_mr": 0,
-        "downloads_total": 8617126
+        "downloads_total": 8624918
       }
     },
     {
@@ -283,9 +248,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 6786348,
+        "downloads_cf": 6786705,
         "downloads_mr": 0,
-        "downloads_total": 6786348
+        "downloads_total": 6786705
       }
     },
     {
@@ -313,9 +278,9 @@
         "1.18"
       ],
       "stats": {
-        "downloads_cf": 6670607,
+        "downloads_cf": 6675352,
         "downloads_mr": 0,
-        "downloads_total": 6670607
+        "downloads_total": 6675352
       }
     },
     {
@@ -337,9 +302,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 725424,
+        "downloads_cf": 725516,
         "downloads_mr": 0,
-        "downloads_total": 725424
+        "downloads_total": 725516
       }
     },
     {
@@ -373,9 +338,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 60972130,
+        "downloads_cf": 60991999,
         "downloads_mr": 0,
-        "downloads_total": 60972130
+        "downloads_total": 60991999
       }
     },
     {
@@ -405,63 +370,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 2791371,
+        "downloads_cf": 2793252,
         "downloads_mr": 0,
-        "downloads_total": 2791371
-      }
-    },
-    {
-      "id": "entity-collision-fps-fix",
-      "title": "Entity Collision FPS Fix",
-      "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/552/981/256/256/637892935998892983.png",
-      "curseforge_id": 628345,
-      "modrinth_id": "GiriLmaY",
-      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix",
-      "modrinth_url": "https://modrinth.com/mod/entity-collision-fps-fix",
-      "github_url": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
-      "date": "2022-06-13",
-      "loaders": [
-        "Forge",
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.16.5"
-      ],
-      "stats": {
-        "downloads_cf": 33346141,
-        "downloads_mr": 1272857,
-        "downloads_total": 34618998
-      }
-    },
-    {
-      "id": "entity-collision-fps-fix-fabric",
-      "title": "Entity Collision FPS Fix Refabricated",
-      "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/553/452/256/256/637894101323351271.png",
-      "curseforge_id": 628761,
-      "modrinth_id": null,
-      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/entity-collision-fps-fix-fabric",
-      "modrinth_url": "",
-      "github_url": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
-      "date": "2022-06-13",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2"
-      ],
-      "stats": {
-        "downloads_cf": 1958173,
-        "downloads_mr": 0,
-        "downloads_total": 1958173
+        "downloads_total": 2793252
       }
     },
     {
@@ -506,34 +417,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 179503,
+        "downloads_cf": 179517,
         "downloads_mr": 0,
-        "downloads_total": 179503
-      }
-    },
-    {
-      "id": "mobifier",
-      "title": "Mobifier",
-      "description": "A mod allowing you to modify the attributes of any mob. Change Health, Damage, and more!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/385/965/256/256/637574147775846044.png",
-      "curseforge_id": 485705,
-      "modrinth_id": null,
-      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/mobifier",
-      "modrinth_url": "",
-      "github_url": "https://github.com/CorgiTaco/Mobifier",
-      "date": "2022-06-10",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.19",
-        "1.18.2",
-        "1.16.5"
-      ],
-      "stats": {
-        "downloads_cf": 1007260,
-        "downloads_mr": 0,
-        "downloads_total": 1007260
+        "downloads_total": 179517
       }
     },
     {
@@ -578,9 +464,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 20184,
+        "downloads_cf": 20187,
         "downloads_mr": 0,
-        "downloads_total": 20184
+        "downloads_total": 20187
       }
     },
     {
@@ -610,9 +496,9 @@
         "1.16.2"
       ],
       "stats": {
-        "downloads_cf": 51018760,
+        "downloads_cf": 51036845,
         "downloads_mr": 0,
-        "downloads_total": 51018760
+        "downloads_total": 51036845
       }
     },
     {
@@ -659,9 +545,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 5035,
+        "downloads_cf": 5039,
         "downloads_mr": 0,
-        "downloads_total": 5035
+        "downloads_total": 5039
       }
     },
     {
@@ -728,9 +614,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 33164,
+        "downloads_cf": 33171,
         "downloads_mr": 0,
-        "downloads_total": 33164
+        "downloads_total": 33171
       }
     },
     {
@@ -755,9 +641,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 2903214,
+        "downloads_cf": 2903829,
         "downloads_mr": 0,
-        "downloads_total": 2903214
+        "downloads_total": 2903829
       }
     },
     {
@@ -778,9 +664,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9902,
+        "downloads_cf": 9903,
         "downloads_mr": 0,
-        "downloads_total": 9902
+        "downloads_total": 9903
       }
     },
     {
@@ -830,29 +716,6 @@
       }
     },
     {
-      "id": "upstream-fabric",
-      "title": "Upstream(Fabric)",
-      "description": "A mod that adds endless, wider rivers, and configurable rivers!",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/357/951/256/256/637517952804399488.png",
-      "curseforge_id": 428737,
-      "modrinth_id": null,
-      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/upstream-fabric",
-      "modrinth_url": "",
-      "github_url": "https://github.com/CorgiTaco/Upstream",
-      "date": "2020-12-17",
-      "loaders": [
-        "Fabric"
-      ],
-      "game_versions": [
-        "1.16.4"
-      ],
-      "stats": {
-        "downloads_cf": 4286,
-        "downloads_mr": 0,
-        "downloads_total": 4286
-      }
-    },
-    {
       "id": "upstream",
       "title": "Upstream",
       "description": "A mod that adds endless, wider rivers, and configurable rivers!",
@@ -871,9 +734,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 2542140,
+        "downloads_cf": 2542370,
         "downloads_mr": 0,
-        "downloads_total": 2542140
+        "downloads_total": 2542370
       }
     },
     {
@@ -898,9 +761,9 @@
         "1.15.2"
       ],
       "stats": {
-        "downloads_cf": 154305,
+        "downloads_cf": 154310,
         "downloads_mr": 0,
-        "downloads_total": 154305
+        "downloads_total": 154310
       }
     },
     {
@@ -936,9 +799,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 61123717,
-        "downloads_mr": 1726123,
-        "downloads_total": 62849840
+        "downloads_cf": 61133320,
+        "downloads_mr": 1727716,
+        "downloads_total": 62861036
       }
     },
     {
@@ -967,9 +830,42 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 36092538,
-        "downloads_mr": 9667605,
-        "downloads_total": 45760143
+        "downloads_cf": 36150751,
+        "downloads_mr": 9702333,
+        "downloads_total": 45853084
+      }
+    },
+    {
+      "id": "corgilib",
+      "title": "CorgiLib",
+      "description": "A library mod containing code used across Corgi Taco's mods.",
+      "icon": "https://cdn.modrinth.com/data/ziOp6EO8/46be0599bd15d6eff8c6da814b28700dc53a3eb7_96.webp",
+      "curseforge_id": null,
+      "modrinth_id": "ziOp6EO8",
+      "curseforge_url": "",
+      "modrinth_url": "https://modrinth.com/mod/corgilib",
+      "github_url": "https://github.com/CorgiTaco/CorgiLib",
+      "date": "2022-10-24",
+      "loaders": [
+        "Fabric",
+        "Forge",
+        "NeoForge",
+        "Quilt"
+      ],
+      "game_versions": [
+        "1.21.11",
+        "1.21.8",
+        "1.21.4",
+        "1.21.1",
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2"
+      ],
+      "stats": {
+        "downloads_cf": 0,
+        "downloads_mr": 13172160,
+        "downloads_total": 13172160
       }
     },
     {
@@ -998,8 +894,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 2179863,
-        "downloads_total": 2179863
+        "downloads_mr": 2183856,
+        "downloads_total": 2183856
       }
     },
     {
@@ -1027,8 +923,34 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 1435325,
-        "downloads_total": 1435325
+        "downloads_mr": 1438414,
+        "downloads_total": 1438414
+      }
+    },
+    {
+      "id": "entity-collision-fps-fix",
+      "title": "Entity Collision FPS Fix",
+      "description": " Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976 ",
+      "icon": "https://cdn.modrinth.com/data/GiriLmaY/50a864e7fad37027b088d64392a81bdee378d20d_96.webp",
+      "curseforge_id": null,
+      "modrinth_id": "GiriLmaY",
+      "curseforge_url": "",
+      "modrinth_url": "https://modrinth.com/mod/entity-collision-fps-fix",
+      "github_url": "https://github.com/CorgiTaco/No-Client-Side-Entity-Collision-Checks",
+      "date": "2022-06-13",
+      "loaders": [
+        "Fabric",
+        "Forge"
+      ],
+      "game_versions": [
+        "1.19.2",
+        "1.19.1",
+        "1.19"
+      ],
+      "stats": {
+        "downloads_cf": 0,
+        "downloads_mr": 1273871,
+        "downloads_total": 1273871
       }
     }
   ]
