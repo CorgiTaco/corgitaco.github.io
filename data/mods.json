@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-04T09:32:33Z",
+  "fetchedAt": "2026-08-05T09:29:25Z",
   "mods": [
     {
       "id": "oh-the-trees-youll-grow",
@@ -36,9 +36,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 37975408,
-        "downloads_mr": 6699399,
-        "downloads_total": 44674807
+        "downloads_cf": 38034396,
+        "downloads_mr": 6717390,
+        "downloads_total": 44751786
       }
     },
     {
@@ -65,9 +65,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 14735122,
-        "downloads_mr": 1566207,
-        "downloads_total": 16301329
+        "downloads_cf": 14767044,
+        "downloads_mr": 1571696,
+        "downloads_total": 16338740
       }
     },
     {
@@ -100,9 +100,9 @@
         "1.19.2"
       ],
       "stats": {
-        "downloads_cf": 87306888,
-        "downloads_mr": 13506388,
-        "downloads_total": 100813276
+        "downloads_cf": 87412327,
+        "downloads_mr": 13533348,
+        "downloads_total": 100945675
       }
     },
     {
@@ -126,9 +126,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 463,
+        "downloads_cf": 1181,
         "downloads_mr": 0,
-        "downloads_total": 463
+        "downloads_total": 1181
       }
     },
     {
@@ -141,7 +141,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials",
       "modrinth_url": "",
       "github_url": "https://github.com/CorgiTaco/Enhanced-Celestials",
-      "date": "2026-03-05",
+      "date": "2026-08-04",
       "loaders": [
         "Fabric",
         "Forge",
@@ -165,9 +165,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 43164913,
+        "downloads_cf": 43189448,
         "downloads_mr": 0,
-        "downloads_total": 43164913
+        "downloads_total": 43189448
       }
     },
     {
@@ -190,9 +190,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 4527,
-        "downloads_mr": 5565,
-        "downloads_total": 10092
+        "downloads_cf": 4539,
+        "downloads_mr": 5598,
+        "downloads_total": 10137
       }
     },
     {
@@ -217,9 +217,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 12756683,
-        "downloads_mr": 592301,
-        "downloads_total": 13348984
+        "downloads_cf": 12776978,
+        "downloads_mr": 594621,
+        "downloads_total": 13371599
       }
     },
     {
@@ -248,9 +248,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 8731057,
+        "downloads_cf": 8739208,
         "downloads_mr": 0,
-        "downloads_total": 8731057
+        "downloads_total": 8739208
       }
     },
     {
@@ -283,9 +283,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 6791850,
+        "downloads_cf": 6792246,
         "downloads_mr": 0,
-        "downloads_total": 6791850
+        "downloads_total": 6792246
       }
     },
     {
@@ -313,9 +313,9 @@
         "1.18"
       ],
       "stats": {
-        "downloads_cf": 6742760,
+        "downloads_cf": 6748132,
         "downloads_mr": 0,
-        "downloads_total": 6742760
+        "downloads_total": 6748132
       }
     },
     {
@@ -337,9 +337,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 726516,
+        "downloads_cf": 726595,
         "downloads_mr": 0,
-        "downloads_total": 726516
+        "downloads_total": 726595
       }
     },
     {
@@ -373,9 +373,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 61256606,
+        "downloads_cf": 61276615,
         "downloads_mr": 0,
-        "downloads_total": 61256606
+        "downloads_total": 61276615
       }
     },
     {
@@ -405,9 +405,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 2815563,
+        "downloads_cf": 2817142,
         "downloads_mr": 0,
-        "downloads_total": 2815563
+        "downloads_total": 2817142
       }
     },
     {
@@ -433,9 +433,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 33506164,
-        "downloads_mr": 1286053,
-        "downloads_total": 34792217
+        "downloads_cf": 33517461,
+        "downloads_mr": 1286970,
+        "downloads_total": 34804431
       }
     },
     {
@@ -459,9 +459,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1961411,
+        "downloads_cf": 1961630,
         "downloads_mr": 0,
-        "downloads_total": 1961411
+        "downloads_total": 1961630
       }
     },
     {
@@ -482,9 +482,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 936,
+        "downloads_cf": 937,
         "downloads_mr": 0,
-        "downloads_total": 936
+        "downloads_total": 937
       }
     },
     {
@@ -506,9 +506,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 179656,
+        "downloads_cf": 179668,
         "downloads_mr": 0,
-        "downloads_total": 179656
+        "downloads_total": 179668
       }
     },
     {
@@ -531,9 +531,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 1013183,
+        "downloads_cf": 1013591,
         "downloads_mr": 0,
-        "downloads_total": 1013183
+        "downloads_total": 1013591
       }
     },
     {
@@ -554,9 +554,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1648,
+        "downloads_cf": 1649,
         "downloads_mr": 0,
-        "downloads_total": 1648
+        "downloads_total": 1649
       }
     },
     {
@@ -578,9 +578,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 20238,
+        "downloads_cf": 20244,
         "downloads_mr": 0,
-        "downloads_total": 20238
+        "downloads_total": 20244
       }
     },
     {
@@ -610,9 +610,9 @@
         "1.16.2"
       ],
       "stats": {
-        "downloads_cf": 51261244,
+        "downloads_cf": 51277948,
         "downloads_mr": 0,
-        "downloads_total": 51261244
+        "downloads_total": 51277948
       }
     },
     {
@@ -659,9 +659,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 5064,
+        "downloads_cf": 5068,
         "downloads_mr": 0,
-        "downloads_total": 5064
+        "downloads_total": 5068
       }
     },
     {
@@ -728,9 +728,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 33241,
+        "downloads_cf": 33247,
         "downloads_mr": 0,
-        "downloads_total": 33241
+        "downloads_total": 33247
       }
     },
     {
@@ -755,9 +755,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 2911204,
+        "downloads_cf": 2911720,
         "downloads_mr": 0,
-        "downloads_total": 2911204
+        "downloads_total": 2911720
       }
     },
     {
@@ -801,9 +801,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 2847,
+        "downloads_cf": 2860,
         "downloads_mr": 0,
-        "downloads_total": 2847
+        "downloads_total": 2860
       }
     },
     {
@@ -871,9 +871,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 2545065,
+        "downloads_cf": 2545275,
         "downloads_mr": 0,
-        "downloads_total": 2545065
+        "downloads_total": 2545275
       }
     },
     {
@@ -898,9 +898,9 @@
         "1.15.2"
       ],
       "stats": {
-        "downloads_cf": 154360,
+        "downloads_cf": 154362,
         "downloads_mr": 0,
-        "downloads_total": 154360
+        "downloads_total": 154362
       }
     },
     {
@@ -936,9 +936,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 61256556,
-        "downloads_mr": 1747725,
-        "downloads_total": 63004281
+        "downloads_cf": 61266208,
+        "downloads_mr": 1749314,
+        "downloads_total": 63015522
       }
     },
     {
@@ -967,9 +967,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 36881833,
-        "downloads_mr": 10108176,
-        "downloads_total": 46990009
+        "downloads_cf": 36938399,
+        "downloads_mr": 10139972,
+        "downloads_total": 47078371
       }
     },
     {
@@ -998,8 +998,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 2237759,
-        "downloads_total": 2237759
+        "downloads_mr": 2242667,
+        "downloads_total": 2242667
       }
     },
     {
@@ -1027,8 +1027,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 1477198,
-        "downloads_total": 1477198
+        "downloads_mr": 1480350,
+        "downloads_total": 1480350
       }
     }
   ]
