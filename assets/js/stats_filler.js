@@ -282,7 +282,38 @@
             }
         });
 
+        observeResize(chart);
+
         return chart;
+    }
+
+    // Chart.js recomputes the scales when its canvas resizes but leaves the already
+    // positioned point elements alone, so the line keeps the old chart-area geometry
+    // (drawn short) while the axis and hit-testing use the new one. Charts get built
+    // before their container has settled — the accordion is still opening, a chart wrap
+    // may not be in the DOM yet, the side legend and its lazy-loaded icons have not
+    // reflowed — so re-run a full update whenever the canvas changes size. Watching the
+    // canvas rather than the wrap is deliberate: it is what Chart.js itself resizes, so
+    // this fires after that resize instead of racing it. resize() does not repair the
+    // element geometry; update() does.
+    function observeResize(chart) {
+        if (typeof ResizeObserver === 'undefined') return;
+        let w = 0, h = 0, queued = false;
+
+        function sync() {
+            queued = false;
+            if (!Chart.getChart(chart.canvas)) { ro.disconnect(); return; }   // destroyed
+            if (chart.width === w && chart.height === h) return;
+            w = chart.width; h = chart.height;
+            chart.update('none');
+        }
+
+        const ro = new ResizeObserver(() => {
+            if (queued) return;
+            queued = true;
+            setTimeout(sync, 0);   // after the whole notification batch, Chart.js's included
+        });
+        ro.observe(chart.canvas);
     }
 
     // ── Date-aligned multi-series builder ─────────────────────────────────────
@@ -666,13 +697,19 @@
         body.appendChild(chartWrap);
         body.appendChild(legendSide);
 
+        // The chart has to be in the document before it exists: makeRangeEl fires its
+        // default range synchronously, which calls render() and builds the chart. On a
+        // detached canvas Chart.js falls back to a placeholder size and the point
+        // geometry never recovers, so attach body first and slot the range control in
+        // above it (same order buildModChart uses).
+        section.appendChild(body);
+
         // Date range control (between head and chart)
         const allDates = Object.values(initDm).flatMap(d => d.map(r => r.date)).sort();
         const lastDate = allDates[allDates.length - 1] || '';
         const firstDate = allDates[0] || '';
         const rangeEl  = makeRangeEl(firstDate, lastDate, (from, to) => { fromStr = from; toStr = to; render(); });
-        section.appendChild(rangeEl);
-        section.appendChild(body);
+        section.insertBefore(rangeEl, body);
 
         function render() {
             const deltaMap = getDeltaMap();

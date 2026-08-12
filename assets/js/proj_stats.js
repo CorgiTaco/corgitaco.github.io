@@ -234,7 +234,36 @@
             }
         });
 
+        observeResize(chart);
+
         return chart;
+    }
+
+    // Chart.js recomputes the scales when its canvas resizes but leaves the already
+    // positioned point elements alone, so the line keeps the old chart-area geometry
+    // (drawn short) while the axis and hit-testing use the new one. Charts get built
+    // while the modal is still animating open, so re-run a full update whenever the
+    // canvas changes size. Watching the canvas rather than the wrap is deliberate: it is
+    // what Chart.js itself resizes, so this fires after that resize instead of racing it.
+    // resize() does not repair the element geometry; update() does.
+    function observeResize(chart) {
+        if (typeof ResizeObserver === 'undefined') return;
+        let w = 0, h = 0, queued = false;
+
+        function sync() {
+            queued = false;
+            if (!Chart.getChart(chart.canvas)) { ro.disconnect(); return; }   // destroyed
+            if (chart.width === w && chart.height === h) return;
+            w = chart.width; h = chart.height;
+            chart.update('none');
+        }
+
+        const ro = new ResizeObserver(() => {
+            if (queued) return;
+            queued = true;
+            setTimeout(sync, 0);   // after the whole notification batch, Chart.js's included
+        });
+        ro.observe(chart.canvas);
     }
 
     // ── Date range control ───────────────────────────────────────────────────────
