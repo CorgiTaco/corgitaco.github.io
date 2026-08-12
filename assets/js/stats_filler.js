@@ -95,6 +95,10 @@
             tension:          0,
             fill,
             spanGaps:         false,
+            // The first and last points sit exactly on the chart-area edge, so default
+            // clipping cuts them in half. A mod with a single day of history is nothing
+            // but that marker, so let it overflow far enough to draw whole.
+            clip:             6,
         };
     }
 
@@ -140,6 +144,26 @@
                 y: { beginAtZero: true, ticks: { color: 'rgba(255,255,255,0.35)', callback: v => fmtAbbr(v) }, grid: { color: 'rgba(255,255,255,0.05)' } },
             },
         };
+    }
+
+    // Downloads span four orders of magnitude across these mods, so a zero-based
+    // linear axis pins every mod under ~1M onto the axis rule. Default to log so all
+    // of them are legible; switch to 'linear' for the old look.
+    const DEFAULT_Y_SCALE = 'logarithmic';
+
+    // Cumulative series legitimately hold 0 (a Modrinth-only mod has no CurseForge
+    // downloads). A log axis cannot place 0, so Chart.js clamps those points to the
+    // bottom of the scale — they stay drawn, they just sit on the axis.
+    function applyYScale(chart, type) {
+        const y = chart.options.scales.y;
+        y.type = type;
+        if (type === 'logarithmic') {
+            delete y.beginAtZero;
+            delete y.min;
+        } else {
+            y.beginAtZero = true;
+        }
+        chart.update('none');
     }
 
     function deltaOptions() {
@@ -907,6 +931,24 @@
             sourceBar.appendChild(btn);
         });
         head.appendChild(sourceBar);
+
+        // Scale toggle. Downloads span five orders of magnitude across these mods —
+        // on a zero-based linear axis every mod under ~1M rounds onto the axis rule
+        // and is invisible. Log gives the small ones room without hiding the big ones.
+        const scaleBar = el('div', 'stat-range-bar');
+        let activeScaleBtn = null;
+        [['Linear', 'linear'], ['Log', 'logarithmic']].forEach(([label, type]) => {
+            const btn = el('button', 'stat-ctrl-btn', label);
+            if (type === DEFAULT_Y_SCALE) { btn.classList.add('is-active'); activeScaleBtn = btn; }
+            btn.addEventListener('click', () => {
+                if (activeScaleBtn === btn) return;
+                if (activeScaleBtn) activeScaleBtn.classList.remove('is-active');
+                (activeScaleBtn = btn).classList.add('is-active');
+                if (chart) applyYScale(chart, type);
+            });
+            scaleBar.appendChild(btn);
+        });
+        head.appendChild(scaleBar);
 
         let chart = null;
         let chips = null;
