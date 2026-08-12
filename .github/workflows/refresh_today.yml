@@ -1,0 +1,110 @@
+name: Force Refresh Today's Row
+
+# Manual repair tool. The daily crons write one history row per run; this re-runs
+# the same fetchers on demand and overwrites today's row in place (upsert_row in
+# both scripts matches on the YYYY-MM-DD prefix, so nothing is appended twice).
+#
+# Use it to pick up newly tracked projects without waiting for the cron, or to
+# repair a row written from a partial fetch.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Which history to refresh
+        type: choice
+        options:
+          - mods
+          - youtube
+          - both
+        default: mods
+      dry_run:
+        description: Fetch and print the diff, but do not commit
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Serialise against other runs of this workflow so two forced refreshes cannot
+# race each other onto the same history files.
+concurrency:
+  group: refresh-today
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Show today's row before
+        run: |
+          today="$(date -u +%F)"
+          echo "UTC date: $today"
+          for f in data/history/mods/totals.csv data/history/youtube/totals.csv; do
+            if [ -f "$f" ]; then
+              echo "--- $f"
+              grep "^$today" "$f" || echo "    (no row for today yet)"
+            fi
+          done
+
+      - name: Refresh mod metadata and history
+        if: inputs.source == 'mods' || inputs.source == 'both'
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          PROJECTS_JSON: data/tracked_projects.json
+          CURSEFORGE_PROJECTS: ${{ vars.CURSEFORGE_PROJECTS }}
+          MODRINTH_PROJECTS: ${{ vars.MODRINTH_PROJECTS }}
+          OUTPUT_JSON: data/mods.json
+          HISTORY_DIR: data/history/mods
+        run: python .github/scripts/fetch_mod_metadata.py
+
+      - name: Refresh playlist statistics and history
+        if: inputs.source == 'youtube' || inputs.source == 'both'
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_PLAYLIST_ID: ${{ vars.YOUTUBE_PLAYLIST_ID }}
+          OUTPUT_JSON: data/statistics.json
+          HISTORY_DIR: data/history/youtube
+        run: python .github/scripts/fetch_playlist_stats.py
+
+      - name: Show what changed
+        run: |
+          today="$(date -u +%F)"
+          for f in data/history/mods/totals.csv data/history/youtube/totals.csv; do
+            if [ -f "$f" ]; then
+              echo "--- $f"
+              grep "^$today" "$f" || echo "    (no row for today)"
+            fi
+          done
+          echo "--- files touched"
+          git --no-pager diff --stat
+
+      - name: Commit and push if changed
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/mods.json data/statistics.json data/history/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Force refresh today's row (${{ inputs.source }}) [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi
+
+      - name: Dry run notice
+        if: ${{ inputs.dry_run }}
+        run: echo "dry_run was set - fetched data was discarded, nothing committed."
