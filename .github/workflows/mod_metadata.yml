@@ -41,10 +41,13 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
+      # The tracked project list lives in data/tracked_projects.json. The repo
+      # variables are only a fallback for when that file is missing.
       - name: Fetch mod metadata and history
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          PROJECTS_JSON: data/tracked_projects.json
           CURSEFORGE_PROJECTS: ${{ vars.CURSEFORGE_PROJECTS }}
           MODRINTH_PROJECTS: ${{ vars.MODRINTH_PROJECTS }}
           OUTPUT_JSON: data/mods.json

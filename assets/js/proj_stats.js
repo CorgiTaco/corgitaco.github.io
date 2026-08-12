@@ -267,6 +267,8 @@
     }
 
     // ── Date range control ───────────────────────────────────────────────────────
+    const DEFAULT_RANGE_DAYS = 7;   // preset the charts open on
+
     const PRESETS = [
         { label: '1W',  days: 7   },
         { label: '1M',  days: 30  },
@@ -295,7 +297,7 @@
 
         PRESETS.forEach(({ label, days }) => {
             const btn = el('button', 'stat-ctrl-btn', label);
-            if (days === 30) { btn.classList.add('is-active'); activePreset = btn; }
+            if (days === DEFAULT_RANGE_DAYS) { btn.classList.add('is-active'); activePreset = btn; }
             btn.addEventListener('click', () => {
                 activatePreset(btn);
                 if (!days) {
@@ -438,11 +440,11 @@
             _activeCharts.push(chart1);
             const rangeEl1 = makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => sliceChart(chart1, labels, [data], from, to));
             sec1.insertBefore(rangeEl1, chartDiv1);
-            // Apply default 1M slice
+            // Apply default slice
             if (labels.length) {
                 const last = new Date(labels[labels.length - 1] + 'T00:00:00Z');
                 const from = new Date(last);
-                from.setUTCDate(from.getUTCDate() - 29);
+                from.setUTCDate(from.getUTCDate() - DEFAULT_RANGE_DAYS + 1);
                 sliceChart(chart1, labels, [data], from.toISOString().slice(0, 10), null);
             }
         } else {
@@ -509,11 +511,11 @@
             }
         }
 
-        // Apply default 1M range for delta chart
+        // Apply default range for delta chart
         if (lastDelta) {
             const last = new Date(lastDelta + 'T00:00:00Z');
             const from = new Date(last);
-            from.setUTCDate(from.getUTCDate() - 29);
+            from.setUTCDate(from.getUTCDate() - DEFAULT_RANGE_DAYS + 1);
             fromStr2 = from.toISOString().slice(0, 10);
         }
 

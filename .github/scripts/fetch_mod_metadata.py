@@ -10,11 +10,19 @@ Outputs:
 History is capped at 5 years; rows older than that are dropped on each run.
 If a CSV does not exist it is created fresh on the next run.
 
+The tracked project list comes from PROJECTS_JSON, a committed lookup file:
+
+    {"mods": [{"name": "...", "curseforge": 123456, "modrinth": "some-slug"}, ...]}
+
+Either platform key may be omitted. The CURSEFORGE_PROJECTS / MODRINTH_PROJECTS
+environment variables are only consulted when that file is missing.
+
 Environment variables:
   CURSEFORGE_API_KEY   - CurseForge API key
   MODRINTH_TOKEN       - Modrinth token (optional; public projects work without it)
-  CURSEFORGE_PROJECTS  - Comma-separated numeric CF mod IDs
-  MODRINTH_PROJECTS    - Comma-separated MR project IDs or slugs
+  PROJECTS_JSON        - Tracked project list  (default: data/tracked_projects.json)
+  CURSEFORGE_PROJECTS  - Fallback: comma-separated numeric CF mod IDs
+  MODRINTH_PROJECTS    - Fallback: comma-separated MR project IDs or slugs
   OUTPUT_JSON          - Metadata output path    (default: data/mods.json)
   HISTORY_DIR          - History output dir      (default: data/history/mods)
 """
@@ -289,6 +297,48 @@ def write_totals_history(mods: list[dict], now: str, history_dir: str, cutoff: s
     write_csv(path, rows, TOTALS_HISTORY_FIELDS)
 
 
+# ── Tracked project list ──────────────────────────────────────────────────────
+
+def dedupe(items: list) -> list:
+    """Preserve order, drop repeats — a project listed twice would be counted twice."""
+    seen: set = set()
+    out: list = []
+    for item in items:
+        if item not in seen:
+            seen.add(item)
+            out.append(item)
+        else:
+            print(f"[lookup] ignoring duplicate entry: {item}", file=sys.stderr)
+    return out
+
+
+def load_tracked_projects(path: str) -> tuple[list[int], list[str]] | None:
+    """Read the committed lookup file. Returns None when it does not exist."""
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+
+    cf_ids: list[int] = []
+    mr_ids: list[str] = []
+    for entry in data.get("mods", []):
+        name = entry.get("name", "<unnamed>")
+        cf = entry.get("curseforge")
+        mr = entry.get("modrinth")
+        if cf is not None:
+            try:
+                cf_ids.append(int(cf))
+            except (TypeError, ValueError):
+                print(f"[lookup] bad curseforge id for {name}: {cf!r}", file=sys.stderr)
+        if mr:
+            mr_ids.append(str(mr).strip())
+        if cf is None and not mr:
+            print(f"[lookup] {name} has no platform id, skipping", file=sys.stderr)
+
+    print(f"[lookup] {path}: {len(cf_ids)} CurseForge, {len(mr_ids)} Modrinth")
+    return dedupe(cf_ids), dedupe(mr_ids)
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -297,11 +347,19 @@ def main() -> None:
     output_json = os.environ.get("OUTPUT_JSON", "data/mods.json")
     history_dir = os.environ.get("HISTORY_DIR", "data/history/mods")
 
-    cf_ids = [int(s.strip()) for s in os.environ.get("CURSEFORGE_PROJECTS", "").split(",") if s.strip()]
-    mr_ids = [s.strip()      for s in os.environ.get("MODRINTH_PROJECTS",   "").split(",") if s.strip()]
+    projects_json = os.environ.get("PROJECTS_JSON", "data/tracked_projects.json")
+
+    tracked = load_tracked_projects(projects_json)
+    if tracked is not None:
+        cf_ids, mr_ids = tracked
+    else:
+        print(f"[lookup] {projects_json} not found, falling back to env vars", file=sys.stderr)
+        cf_ids = dedupe([int(s.strip()) for s in os.environ.get("CURSEFORGE_PROJECTS", "").split(",") if s.strip()])
+        mr_ids = dedupe([s.strip()      for s in os.environ.get("MODRINTH_PROJECTS",   "").split(",") if s.strip()])
 
     if not cf_ids and not mr_ids:
-        print("Error: CURSEFORGE_PROJECTS and/or MODRINTH_PROJECTS must be set.", file=sys.stderr)
+        print(f"Error: no projects to fetch. {projects_json} is empty or missing and "
+              "CURSEFORGE_PROJECTS / MODRINTH_PROJECTS are unset.", file=sys.stderr)
         sys.exit(1)
 
     now    = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")

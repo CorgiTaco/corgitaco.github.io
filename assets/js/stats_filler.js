@@ -341,6 +341,8 @@
     // Returns a .stat-range-wrap element.
     // onChange(fromStr | null, toStr | null) fires on every preset or Apply click.
 
+    const DEFAULT_RANGE_DAYS = 7;   // preset the charts open on
+
     const PRESETS = [
         { label: '1W',  days: 7   },
         { label: '1M',  days: 30  },
@@ -369,7 +371,7 @@
 
         PRESETS.forEach(({ label, days }) => {
             const btn = el('button', 'stat-ctrl-btn', label);
-            if (days === 30) { btn.classList.add('is-active'); activePreset = btn; }
+            if (days === DEFAULT_RANGE_DAYS) { btn.classList.add('is-active'); activePreset = btn; }
             btn.addEventListener('click', () => {
                 activatePreset(btn);
                 if (!days) {
@@ -431,11 +433,11 @@
         wrap.appendChild(bar);
         wrap.appendChild(customRow);
 
-        // fire the default 1M range immediately
+        // fire the default range immediately
         if (lastDate) {
             const last = new Date(lastDate + 'T00:00:00Z');
             const from = new Date(last);
-            from.setUTCDate(from.getUTCDate() - 30 + 1);
+            from.setUTCDate(from.getUTCDate() - DEFAULT_RANGE_DAYS + 1);
             const fromStr = from.toISOString().slice(0, 10);
             fromIn.value = fromStr;
             toIn.value   = lastDate;

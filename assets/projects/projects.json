@@ -570,5 +570,38 @@
     "curseforge": "https://www.curseforge.com/minecraft/mc-mods/better-weather-fabric",
     "modrinth": "",
     "github": ""
+  },
+  {
+    "type": "minecraft_mod",
+    "title": "Enhanced Celestials 2: Core",
+    "excerpt": "Enhanced Celestials 2: Core is a rewritten version of the first Enhanced Celestial's lunar event scheduling system and datapack loader. This mod has no content and functions solely as a library to hook up and create Lunar Events.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1937/658/256/256/639203881779064080.png",
+    "photo_fit": "contain",
+    "date": "2026-07-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-core",
+    "modrinth": "https://modrinth.com/mod/enhanced-celestials-2-core",
+    "github": ""
+  },
+  {
+    "type": "minecraft_mod",
+    "title": "Enhanced Celestials 2: Default Lunar Events",
+    "excerpt": "All Lunar Events from the first mod rewritten entirely to work better! A mod adding new Lunar Events like blood moons and harvest moons!",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1937/671/256/256/639203891285059367.png",
+    "photo_fit": "contain",
+    "date": "2026-07-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-default-lunar-events",
+    "modrinth": "https://modrinth.com/mod/enhanced-celestials-2-default-lunar-events",
+    "github": ""
+  },
+  {
+    "type": "minecraft_mod",
+    "title": "Enhanced Celestials 2: Shader Support",
+    "excerpt": "Bridge mod adding support for sodium / iris shaders in order for moon colors to work correctly.",
+    "photo": "https://media.forgecdn.net/avatars/thumbnails/1937/717/256/256/639203914678753183.png",
+    "photo_fit": "contain",
+    "date": "2026-07-23",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-shader-support",
+    "modrinth": "https://modrinth.com/mod/enhanced-celestials-2-shader-support",
+    "github": ""
   }
 ]

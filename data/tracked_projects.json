@@ -1,0 +1,176 @@
+{
+  "_comment": "Projects tracked by .github/workflows/mod_metadata.yml. 'curseforge' is the numeric CurseForge mod id; 'modrinth' is the project slug or id. Either key may be omitted if the mod is not on that platform. CurseForge and Modrinth entries are paired by matching title, so a mod present on both platforms under the same title produces one combined row.",
+  "mods": [
+    {
+      "name": "Better Weather (Discontinued)",
+      "curseforge": 400714
+    },
+    {
+      "name": "Better Weather (Fabric) (Discontinued)",
+      "curseforge": 405925
+    },
+    {
+      "name": "Block Swap",
+      "modrinth": "block-swap"
+    },
+    {
+      "name": "Block Swap (Fabric)",
+      "curseforge": 552471
+    },
+    {
+      "name": "Block Swap Lite",
+      "curseforge": 468893
+    },
+    {
+      "name": "CameraOverhaul (Forge)",
+      "curseforge": 443034
+    },
+    {
+      "name": "Compact Status Effects Forge",
+      "curseforge": 559500
+    },
+    {
+      "name": "CorgiLib",
+      "curseforge": 693313,
+      "modrinth": "corgilib"
+    },
+    {
+      "name": "Data Anchor",
+      "curseforge": 1203668,
+      "modrinth": "data-anchor"
+    },
+    {
+      "name": "Default Amplified Biomes 2",
+      "curseforge": 632520
+    },
+    {
+      "name": "Enhanced Celestials",
+      "modrinth": "enhanced-celestials"
+    },
+    {
+      "name": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
+      "curseforge": 438447
+    },
+    {
+      "name": "Enhanced Celestials Mobifier Integration",
+      "curseforge": 620658
+    },
+    {
+      "name": "Enhanced Celestials Mobifier Integration (Fabric)",
+      "curseforge": 620710
+    },
+    {
+      "name": "Enhanced Celestials(Fabric) - Blood Moons & Harvest Moons",
+      "curseforge": 443694
+    },
+    {
+      "name": "Entity Collision FPS Fix",
+      "curseforge": 628345,
+      "modrinth": "entity-collision-fps-fix"
+    },
+    {
+      "name": "Entity Collision FPS Fix Refabricated",
+      "curseforge": 628761
+    },
+    {
+      "name": "Feature Recycler",
+      "curseforge": 1077985,
+      "modrinth": "feature-recycler"
+    },
+    {
+      "name": "Improved Floating Islands",
+      "curseforge": 511128
+    },
+    {
+      "name": "Lazy DataFixerUpper(LazyDFU) [FORGE]",
+      "curseforge": 460819
+    },
+    {
+      "name": "Mobifier",
+      "curseforge": 485705
+    },
+    {
+      "name": "Mobifier(Fabric)",
+      "curseforge": 619550
+    },
+    {
+      "name": "Oh The Biomes We've Gone",
+      "curseforge": 1070751,
+      "modrinth": "oh-the-biomes-weve-gone"
+    },
+    {
+      "name": "Oh The Biomes You'll Go",
+      "curseforge": 247560,
+      "modrinth": "biomesyougo"
+    },
+    {
+      "name": "Oh The Biomes You'll Go Fixes",
+      "curseforge": 518623
+    },
+    {
+      "name": "Oh The Trees You'll Grow",
+      "curseforge": 962544,
+      "modrinth": "oh-the-trees-youll-grow"
+    },
+    {
+      "name": "Overworld Two (Forge)",
+      "curseforge": 431157
+    },
+    {
+      "name": "Perfect Accuracy Forge",
+      "curseforge": 559494
+    },
+    {
+      "name": "Phantom Spawn Tweaks",
+      "curseforge": 560358
+    },
+    {
+      "name": "Rider Denier",
+      "curseforge": 502209
+    },
+    {
+      "name": "Shutup Experimental Settings!",
+      "curseforge": 407174
+    },
+    {
+      "name": "Structure Warden",
+      "curseforge": 513768
+    },
+    {
+      "name": "Thread Control",
+      "curseforge": 531070
+    },
+    {
+      "name": "TimeCore - Calendar",
+      "curseforge": 1478195
+    },
+    {
+      "name": "Upstream",
+      "curseforge": 428483
+    },
+    {
+      "name": "Upstream(Fabric)",
+      "curseforge": 428737
+    },
+    {
+      "name": "World Guard",
+      "curseforge": 1222898,
+      "modrinth": "world-guard"
+    },
+    {
+      "name": "Enhanced Celestials 2: Core",
+      "curseforge": 1621796,
+      "modrinth": "enhanced-celestials-2-core"
+    },
+    {
+      "name": "Enhanced Celestials 2: Default Lunar Events",
+      "curseforge": 1621820,
+      "modrinth": "enhanced-celestials-2-default-lunar-events"
+    },
+    {
+      "name": "Enhanced Celestials 2: Shader Support",
+      "curseforge": 1621851,
+      "modrinth": "enhanced-celestials-2-shader-support"
+    }
+  ]
+}
