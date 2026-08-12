@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-12T11:57:20Z",
+  "fetchedAt": "2026-08-12T12:16:43Z",
   "mods": [
     {
       "id": "better-weather",
@@ -235,8 +235,8 @@
       ],
       "stats": {
         "downloads_cf": 15020096,
-        "downloads_mr": 1616520,
-        "downloads_total": 16636616
+        "downloads_mr": 1616637,
+        "downloads_total": 16636733
       }
     },
     {
@@ -407,8 +407,8 @@
       ],
       "stats": {
         "downloads_cf": 33599131,
-        "downloads_mr": 1293738,
-        "downloads_total": 34892869
+        "downloads_mr": 1293765,
+        "downloads_total": 34892896
       }
     },
     {
@@ -599,8 +599,8 @@
       ],
       "stats": {
         "downloads_cf": 37375436,
-        "downloads_mr": 10364153,
-        "downloads_total": 47739589
+        "downloads_mr": 10364858,
+        "downloads_total": 47740294
       }
     },
     {
@@ -698,8 +698,8 @@
       ],
       "stats": {
         "downloads_cf": 38477923,
-        "downloads_mr": 6846159,
-        "downloads_total": 45324082
+        "downloads_mr": 6846499,
+        "downloads_total": 45324422
       }
     },
     {
@@ -970,8 +970,8 @@
       ],
       "stats": {
         "downloads_cf": 4618,
-        "downloads_mr": 5846,
-        "downloads_total": 10464
+        "downloads_mr": 5848,
+        "downloads_total": 10466
       }
     },
     {
@@ -1086,8 +1086,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 1518440,
-        "downloads_total": 1518440
+        "downloads_mr": 1518533,
+        "downloads_total": 1518533
       }
     },
     {
@@ -1116,8 +1116,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 2277196,
-        "downloads_total": 2277196
+        "downloads_mr": 2277312,
+        "downloads_total": 2277312
       }
     }
   ]
