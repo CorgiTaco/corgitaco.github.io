@@ -1,71 +1,83 @@
-fetch('../assets/hire/support.json')
-    .then(r => r.json())
-    .then(data => {
-        const container = document.getElementById('support-container');
+// Resolve the container and its filter synchronously, before the fetch. pagechange.js
+// re-runs this script on every SPA navigation, and the previous page's fetch can still
+// be in flight when the new page's content is injected. Looking the container up inside
+// the .then() would make that stale run render into the *new* page's container — which
+// is how /support's sections used to leak onto /donate and /socials. Captured up front,
+// a stale run writes into its own detached node and is discarded with it.
+(function () {
+    const container = document.getElementById('support-container');
+    if (!container) return;
 
-        // Pages may render a subset of support.json — /socials and /donate each show
-        // one section. Omit data-sections to render everything (the /support page).
-        const only = (container.dataset.sections || '')
-            .split(',')
-            .map(k => k.trim())
-            .filter(Boolean);
+    // Pages may render a subset of support.json — /socials and /donate each show
+    // one section. Omit data-sections to render everything (the /support page).
+    const only = (container.dataset.sections || '')
+        .split(',')
+        .map(k => k.trim())
+        .filter(Boolean);
 
-        const sections = only.length
-            ? data.sections.filter(s => only.includes(s.key))
-            : data.sections;
+    fetch('../assets/hire/support.json')
+        .then(r => r.json())
+        .then(data => {
+            const sections = only.length
+                ? data.sections.filter(s => only.includes(s.key))
+                : data.sections;
 
-        sections.forEach(section => {
-            const sec = document.createElement('section');
-            sec.className = 'support-section';
+            // Render is a replace, not an append, so a double-run can't stack duplicates.
+            container.innerHTML = '';
 
-            const title = document.createElement('h2');
-            title.className = 'support-section-title';
-            title.innerHTML = `<i class="fa ${section.icon}"></i> ${section.title}`;
-            sec.appendChild(title);
+            sections.forEach(section => {
+                const sec = document.createElement('section');
+                sec.className = 'support-section';
 
-            const grid = document.createElement('div');
-            grid.className = 'support-grid';
+                const title = document.createElement('h2');
+                title.className = 'support-section-title';
+                title.innerHTML = `<i class="fa ${section.icon}"></i> ${section.title}`;
+                sec.appendChild(title);
 
-            section.cards.forEach(card => {
-                const a = document.createElement('a');
-                a.className = 'support-card';
-                a.href = card.url;
-                a.target = '_blank';
-                a.rel = 'noopener';
+                const grid = document.createElement('div');
+                grid.className = 'support-grid';
 
-                let iconEl;
-                if (card.svgPath) {
-                    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    svg.setAttribute('class', 'support-card-icon');
-                    svg.setAttribute('viewBox', card.svgViewBox);
-                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    path.setAttribute('fill', card.color || 'currentColor');
-                    path.setAttribute('d', card.svgPath);
-                    svg.appendChild(path);
-                    iconEl = svg;
-                } else if (card.fa) {
-                    const i = document.createElement('i');
-                    i.className = `fa ${card.fa} support-card-icon`;
-                    if (card.color) i.style.color = card.color;
-                    iconEl = i;
-                } else if (card.favicon) {
-                    const img = document.createElement('img');
-                    img.className = 'support-card-icon';
-                    img.src = card.favicon;
-                    img.alt = card.name;
-                    iconEl = img;
-                }
+                section.cards.forEach(card => {
+                    const a = document.createElement('a');
+                    a.className = 'support-card';
+                    a.href = card.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener';
 
-                const name = document.createElement('span');
-                name.className = 'support-card-name';
-                name.textContent = card.name;
+                    let iconEl;
+                    if (card.svgPath) {
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('class', 'support-card-icon');
+                        svg.setAttribute('viewBox', card.svgViewBox);
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('fill', card.color || 'currentColor');
+                        path.setAttribute('d', card.svgPath);
+                        svg.appendChild(path);
+                        iconEl = svg;
+                    } else if (card.fa) {
+                        const i = document.createElement('i');
+                        i.className = `fa ${card.fa} support-card-icon`;
+                        if (card.color) i.style.color = card.color;
+                        iconEl = i;
+                    } else if (card.favicon) {
+                        const img = document.createElement('img');
+                        img.className = 'support-card-icon';
+                        img.src = card.favicon;
+                        img.alt = card.name;
+                        iconEl = img;
+                    }
 
-                a.appendChild(iconEl);
-                a.appendChild(name);
-                grid.appendChild(a);
+                    const name = document.createElement('span');
+                    name.className = 'support-card-name';
+                    name.textContent = card.name;
+
+                    a.appendChild(iconEl);
+                    a.appendChild(name);
+                    grid.appendChild(a);
+                });
+
+                sec.appendChild(grid);
+                container.appendChild(sec);
             });
-
-            sec.appendChild(grid);
-            container.appendChild(sec);
         });
-    });
+}());
