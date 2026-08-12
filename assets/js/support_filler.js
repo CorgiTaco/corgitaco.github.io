@@ -3,7 +3,18 @@ fetch('../assets/hire/support.json')
     .then(data => {
         const container = document.getElementById('support-container');
 
-        data.sections.forEach(section => {
+        // Pages may render a subset of support.json — /socials and /donate each show
+        // one section. Omit data-sections to render everything (the /support page).
+        const only = (container.dataset.sections || '')
+            .split(',')
+            .map(k => k.trim())
+            .filter(Boolean);
+
+        const sections = only.length
+            ? data.sections.filter(s => only.includes(s.key))
+            : data.sections;
+
+        sections.forEach(section => {
             const sec = document.createElement('section');
             sec.className = 'support-section';
 
