@@ -1,10 +1,10 @@
 {
   "playlistId": "PLv9ftxjIVZhOWmPEH9VbX282EZzBGV7TB",
-  "fetchedAt": "2026-08-25T06:52:44Z",
+  "fetchedAt": "2026-08-26T06:54:17Z",
   "totals": {
     "video_count": 120,
-    "views": 78660702,
-    "likes": 1008696,
+    "views": 78685189,
+    "likes": 1008921,
     "comments": 48802
   },
   "videos": [
@@ -14,8 +14,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/GkZKlyWxFYw/mqdefault.jpg",
       "stats": {
-        "views": 11647,
-        "likes": 619,
+        "views": 11672,
+        "likes": 621,
         "comments": 40
       }
     },
@@ -25,8 +25,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/sjutyXNz6No/mqdefault.jpg",
       "stats": {
-        "views": 15605,
-        "likes": 876,
+        "views": 15625,
+        "likes": 877,
         "comments": 41
       }
     },
@@ -36,8 +36,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/7kKGmnUv5Zg/mqdefault.jpg",
       "stats": {
-        "views": 12314,
-        "likes": 719,
+        "views": 12325,
+        "likes": 721,
         "comments": 52
       }
     },
@@ -47,8 +47,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/He8b9EoMix4/mqdefault.jpg",
       "stats": {
-        "views": 11292,
-        "likes": 684,
+        "views": 11305,
+        "likes": 685,
         "comments": 58
       }
     },
@@ -58,8 +58,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/ipHwijc2NbE/mqdefault.jpg",
       "stats": {
-        "views": 18157,
-        "likes": 899,
+        "views": 18175,
+        "likes": 902,
         "comments": 96
       }
     },
@@ -69,8 +69,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/_LPHDhe23Yw/mqdefault.jpg",
       "stats": {
-        "views": 13538,
-        "likes": 739,
+        "views": 13545,
+        "likes": 740,
         "comments": 102
       }
     },
@@ -80,8 +80,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/PsF7Rx_-Mbg/mqdefault.jpg",
       "stats": {
-        "views": 11664,
-        "likes": 682,
+        "views": 11675,
+        "likes": 683,
         "comments": 103
       }
     },
@@ -91,7 +91,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/bpaOkOgGWYI/mqdefault.jpg",
       "stats": {
-        "views": 12596,
+        "views": 12606,
         "likes": 704,
         "comments": 57
       }
@@ -102,7 +102,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/pDY9lN12i4Y/mqdefault.jpg",
       "stats": {
-        "views": 17419,
+        "views": 17437,
         "likes": 934,
         "comments": 60
       }
@@ -113,7 +113,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/xhodksmXs_k/mqdefault.jpg",
       "stats": {
-        "views": 15260,
+        "views": 15270,
         "likes": 961,
         "comments": 94
       }
@@ -124,7 +124,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/KXmG03pdHrA/mqdefault.jpg",
       "stats": {
-        "views": 19611,
+        "views": 19629,
         "likes": 1102,
         "comments": 121
       }
@@ -135,7 +135,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/eAJxSsYaoyo/mqdefault.jpg",
       "stats": {
-        "views": 14794,
+        "views": 14805,
         "likes": 863,
         "comments": 76
       }
@@ -146,8 +146,8 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/p3bxgQSH-9A/mqdefault.jpg",
       "stats": {
-        "views": 17991,
-        "likes": 1046,
+        "views": 18014,
+        "likes": 1047,
         "comments": 78
       }
     },
@@ -157,7 +157,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/FwMJxu1qkJM/mqdefault.jpg",
       "stats": {
-        "views": 11371,
+        "views": 11383,
         "likes": 721,
         "comments": 44
       }
@@ -168,7 +168,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/M6ENm-kobJE/mqdefault.jpg",
       "stats": {
-        "views": 11453,
+        "views": 11468,
         "likes": 721,
         "comments": 56
       }
@@ -179,7 +179,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/vQs5R7F99zI/mqdefault.jpg",
       "stats": {
-        "views": 12394,
+        "views": 12408,
         "likes": 788,
         "comments": 73
       }
@@ -190,7 +190,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/NeOmujYw9Eg/mqdefault.jpg",
       "stats": {
-        "views": 14880,
+        "views": 14888,
         "likes": 949,
         "comments": 64
       }
@@ -201,7 +201,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/_9Xx3y2Nc5E/mqdefault.jpg",
       "stats": {
-        "views": 9426,
+        "views": 9436,
         "likes": 706,
         "comments": 40
       }
@@ -212,7 +212,7 @@
       "channel": "Mitzefy",
       "thumbnail": "https://i.ytimg.com/vi/e9Qp0Bb6UcQ/mqdefault.jpg",
       "stats": {
-        "views": 12992,
+        "views": 13007,
         "likes": 817,
         "comments": 61
       }
@@ -267,7 +267,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/YTETxTON4hg/mqdefault.jpg",
       "stats": {
-        "views": 6427,
+        "views": 6429,
         "likes": 440,
         "comments": 33
       }
@@ -289,7 +289,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/tw13l_i5Ylw/mqdefault.jpg",
       "stats": {
-        "views": 9568,
+        "views": 9570,
         "likes": 590,
         "comments": 42
       }
@@ -344,7 +344,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/85D0Y_QNH8U/mqdefault.jpg",
       "stats": {
-        "views": 8674,
+        "views": 8675,
         "likes": 601,
         "comments": 63
       }
@@ -388,7 +388,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/jtutou00DT8/mqdefault.jpg",
       "stats": {
-        "views": 8692,
+        "views": 8691,
         "likes": 585,
         "comments": 49
       }
@@ -410,7 +410,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/JK-e1Bxcy5Q/mqdefault.jpg",
       "stats": {
-        "views": 8739,
+        "views": 8738,
         "likes": 566,
         "comments": 53
       }
@@ -432,7 +432,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/YSbb5mEpxes/mqdefault.jpg",
       "stats": {
-        "views": 17002,
+        "views": 17003,
         "likes": 1145,
         "comments": 106
       }
@@ -443,7 +443,7 @@
       "channel": "helloiamkate",
       "thumbnail": "https://i.ytimg.com/vi/E70tHTpyNqk/mqdefault.jpg",
       "stats": {
-        "views": 10907,
+        "views": 10909,
         "likes": 779,
         "comments": 76
       }
@@ -454,7 +454,7 @@
       "channel": "JeromeASF",
       "thumbnail": "https://i.ytimg.com/vi/0dol0E_T8rw/mqdefault.jpg",
       "stats": {
-        "views": 87452,
+        "views": 87455,
         "likes": 3326,
         "comments": 163
       }
@@ -465,7 +465,7 @@
       "channel": "JeromeASF",
       "thumbnail": "https://i.ytimg.com/vi/haOgVWuJD1I/mqdefault.jpg",
       "stats": {
-        "views": 50805,
+        "views": 50806,
         "likes": 2428,
         "comments": 84
       }
@@ -476,7 +476,7 @@
       "channel": "JeromeASF",
       "thumbnail": "https://i.ytimg.com/vi/o1vrifaGL3I/mqdefault.jpg",
       "stats": {
-        "views": 46282,
+        "views": 46283,
         "likes": 2539,
         "comments": 95
       }
@@ -487,7 +487,7 @@
       "channel": "JeromeASF",
       "thumbnail": "https://i.ytimg.com/vi/dmJZm0-z47c/mqdefault.jpg",
       "stats": {
-        "views": 38853,
+        "views": 38855,
         "likes": 1804,
         "comments": 45
       }
@@ -498,7 +498,7 @@
       "channel": "JeromeASF",
       "thumbnail": "https://i.ytimg.com/vi/NpKK1roBKHc/mqdefault.jpg",
       "stats": {
-        "views": 35831,
+        "views": 35842,
         "likes": 1659,
         "comments": 65
       }
@@ -509,7 +509,7 @@
       "channel": "Biffle",
       "thumbnail": "https://i.ytimg.com/vi/4xoHhDG1bA8/mqdefault.jpg",
       "stats": {
-        "views": 17444,
+        "views": 17448,
         "likes": 988,
         "comments": 22
       }
@@ -531,8 +531,8 @@
       "channel": "Biffle",
       "thumbnail": "https://i.ytimg.com/vi/RIvCo_QvKtU/mqdefault.jpg",
       "stats": {
-        "views": 20768,
-        "likes": 1253,
+        "views": 20769,
+        "likes": 1254,
         "comments": 62
       }
     },
@@ -542,8 +542,8 @@
       "channel": "Biffle",
       "thumbnail": "https://i.ytimg.com/vi/mLcPaGZFqQw/mqdefault.jpg",
       "stats": {
-        "views": 20920,
-        "likes": 1169,
+        "views": 20921,
+        "likes": 1170,
         "comments": 42
       }
     },
@@ -553,7 +553,7 @@
       "channel": "Biffle",
       "thumbnail": "https://i.ytimg.com/vi/H3wjw2Fxjyk/mqdefault.jpg",
       "stats": {
-        "views": 20592,
+        "views": 20593,
         "likes": 1236,
         "comments": 59
       }
@@ -619,7 +619,7 @@
       "channel": "Biffle",
       "thumbnail": "https://i.ytimg.com/vi/eGldhPST-wI/mqdefault.jpg",
       "stats": {
-        "views": 27081,
+        "views": 27083,
         "likes": 1724,
         "comments": 58
       }
@@ -630,7 +630,7 @@
       "channel": "Biffle",
       "thumbnail": "https://i.ytimg.com/vi/K9yIY08Tl78/mqdefault.jpg",
       "stats": {
-        "views": 38152,
+        "views": 38153,
         "likes": 2218,
         "comments": 87
       }
@@ -652,7 +652,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/7KC8WNN36JA/mqdefault.jpg",
       "stats": {
-        "views": 78527,
+        "views": 78532,
         "likes": 4683,
         "comments": 277
       }
@@ -663,7 +663,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/FRdF1sW8Wek/mqdefault.jpg",
       "stats": {
-        "views": 71799,
+        "views": 71804,
         "likes": 4932,
         "comments": 262
       }
@@ -674,7 +674,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/jZYWzaa0COA/mqdefault.jpg",
       "stats": {
-        "views": 52970,
+        "views": 52994,
         "likes": 2826,
         "comments": 526
       }
@@ -685,7 +685,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/ZZC1Y4WGMmc/mqdefault.jpg",
       "stats": {
-        "views": 40237,
+        "views": 40245,
         "likes": 2896,
         "comments": 233
       }
@@ -696,7 +696,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/VaXjhBeLDbo/mqdefault.jpg",
       "stats": {
-        "views": 56263,
+        "views": 56271,
         "likes": 3249,
         "comments": 181
       }
@@ -707,8 +707,8 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/d_rA2vUcTaA/mqdefault.jpg",
       "stats": {
-        "views": 40768,
-        "likes": 2795,
+        "views": 40774,
+        "likes": 2796,
         "comments": 166
       }
     },
@@ -718,8 +718,8 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/RUsTLr5jhhQ/mqdefault.jpg",
       "stats": {
-        "views": 47029,
-        "likes": 3117,
+        "views": 47031,
+        "likes": 3118,
         "comments": 159
       }
     },
@@ -729,7 +729,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/lVP800KJ8Cw/mqdefault.jpg",
       "stats": {
-        "views": 51594,
+        "views": 51599,
         "likes": 3555,
         "comments": 193
       }
@@ -740,7 +740,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/n_zqR6u41j4/mqdefault.jpg",
       "stats": {
-        "views": 53542,
+        "views": 53545,
         "likes": 3486,
         "comments": 173
       }
@@ -751,7 +751,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/_cpKF3IUdxY/mqdefault.jpg",
       "stats": {
-        "views": 54961,
+        "views": 54966,
         "likes": 3533,
         "comments": 199
       }
@@ -762,7 +762,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/SDxTFOxxHN4/mqdefault.jpg",
       "stats": {
-        "views": 48811,
+        "views": 48813,
         "likes": 3382,
         "comments": 186
       }
@@ -784,7 +784,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/wZQVKDJoqOQ/mqdefault.jpg",
       "stats": {
-        "views": 54621,
+        "views": 54623,
         "likes": 3466,
         "comments": 250
       }
@@ -806,7 +806,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/sNiQ_eTEOU4/mqdefault.jpg",
       "stats": {
-        "views": 60707,
+        "views": 60710,
         "likes": 3507,
         "comments": 342
       }
@@ -817,7 +817,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/TO2qNRFBlnk/mqdefault.jpg",
       "stats": {
-        "views": 63192,
+        "views": 63194,
         "likes": 3878,
         "comments": 231
       }
@@ -828,7 +828,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/VuvNDr8EZLc/mqdefault.jpg",
       "stats": {
-        "views": 60928,
+        "views": 60942,
         "likes": 3584,
         "comments": 238
       }
@@ -839,7 +839,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/Mo0_7W_BD2M/mqdefault.jpg",
       "stats": {
-        "views": 58893,
+        "views": 58897,
         "likes": 3559,
         "comments": 244
       }
@@ -850,7 +850,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/9Dp83WSdq0g/mqdefault.jpg",
       "stats": {
-        "views": 64259,
+        "views": 64260,
         "likes": 3987,
         "comments": 314
       }
@@ -861,7 +861,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/kDAIXrWFkuA/mqdefault.jpg",
       "stats": {
-        "views": 61058,
+        "views": 61059,
         "likes": 3826,
         "comments": 390
       }
@@ -872,7 +872,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/fZcI250imNo/mqdefault.jpg",
       "stats": {
-        "views": 65907,
+        "views": 65911,
         "likes": 3899,
         "comments": 321
       }
@@ -883,7 +883,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/0eraj5wj2YA/mqdefault.jpg",
       "stats": {
-        "views": 65339,
+        "views": 65341,
         "likes": 4140,
         "comments": 329
       }
@@ -894,7 +894,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/vmuMIr9AngU/mqdefault.jpg",
       "stats": {
-        "views": 67648,
+        "views": 67653,
         "likes": 4540,
         "comments": 228
       }
@@ -905,7 +905,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/Jt33hTD8f2E/mqdefault.jpg",
       "stats": {
-        "views": 67294,
+        "views": 67299,
         "likes": 4495,
         "comments": 263
       }
@@ -916,7 +916,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/WopCNeHz0Go/mqdefault.jpg",
       "stats": {
-        "views": 72311,
+        "views": 72319,
         "likes": 4648,
         "comments": 258
       }
@@ -927,7 +927,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/VH72naAd6WY/mqdefault.jpg",
       "stats": {
-        "views": 72288,
+        "views": 72292,
         "likes": 4574,
         "comments": 315
       }
@@ -938,7 +938,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/Jw2PFblj0pY/mqdefault.jpg",
       "stats": {
-        "views": 76120,
+        "views": 76122,
         "likes": 4621,
         "comments": 192
       }
@@ -949,7 +949,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/f46IS4jJIX8/mqdefault.jpg",
       "stats": {
-        "views": 75537,
+        "views": 75539,
         "likes": 4816,
         "comments": 377
       }
@@ -960,7 +960,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/-FwR5ZT_p-4/mqdefault.jpg",
       "stats": {
-        "views": 72010,
+        "views": 72012,
         "likes": 4528,
         "comments": 350
       }
@@ -971,7 +971,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/ybYTaAXfLQM/mqdefault.jpg",
       "stats": {
-        "views": 80110,
+        "views": 80113,
         "likes": 4994,
         "comments": 261
       }
@@ -982,7 +982,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/ShSwSiYbpuI/mqdefault.jpg",
       "stats": {
-        "views": 75352,
+        "views": 75354,
         "likes": 4698,
         "comments": 263
       }
@@ -993,7 +993,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/8abXzxQAfq4/mqdefault.jpg",
       "stats": {
-        "views": 77946,
+        "views": 77951,
         "likes": 5548,
         "comments": 362
       }
@@ -1004,7 +1004,7 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/O2GMbpdBpdQ/mqdefault.jpg",
       "stats": {
-        "views": 80553,
+        "views": 80562,
         "likes": 5094,
         "comments": 297
       }
@@ -1015,8 +1015,8 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/QHujL38s1UU/mqdefault.jpg",
       "stats": {
-        "views": 95178,
-        "likes": 6029,
+        "views": 95204,
+        "likes": 6030,
         "comments": 265
       }
     },
@@ -1026,8 +1026,8 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/4RfR_lI9nhc/mqdefault.jpg",
       "stats": {
-        "views": 102769,
-        "likes": 5663,
+        "views": 102790,
+        "likes": 5664,
         "comments": 512
       }
     },
@@ -1037,8 +1037,8 @@
       "channel": "Sigils",
       "thumbnail": "https://i.ytimg.com/vi/-qgliw5ZMyc/mqdefault.jpg",
       "stats": {
-        "views": 128582,
-        "likes": 7349,
+        "views": 128617,
+        "likes": 7350,
         "comments": 676
       }
     },
@@ -1048,9 +1048,9 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/JmJuZYkRkCY/mqdefault.jpg",
       "stats": {
-        "views": 1306180,
-        "likes": 9181,
-        "comments": 186
+        "views": 1306633,
+        "likes": 9185,
+        "comments": 185
       }
     },
     {
@@ -1059,9 +1059,9 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/22o5RfKRlXw/mqdefault.jpg",
       "stats": {
-        "views": 6136769,
-        "likes": 28891,
-        "comments": 431
+        "views": 6137073,
+        "likes": 28894,
+        "comments": 430
       }
     },
     {
@@ -1070,8 +1070,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/w1JgtGCbtl8/mqdefault.jpg",
       "stats": {
-        "views": 561264,
-        "likes": 5564,
+        "views": 561647,
+        "likes": 5565,
         "comments": 144
       }
     },
@@ -1081,8 +1081,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/MDb1iaFdoTU/mqdefault.jpg",
       "stats": {
-        "views": 1591839,
-        "likes": 12906,
+        "views": 1592255,
+        "likes": 12914,
         "comments": 187
       }
     },
@@ -1092,9 +1092,9 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/lYaXatFUcuk/mqdefault.jpg",
       "stats": {
-        "views": 1570686,
-        "likes": 11037,
-        "comments": 330
+        "views": 1570913,
+        "likes": 11035,
+        "comments": 331
       }
     },
     {
@@ -1103,8 +1103,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/Nbs-H07Qsww/mqdefault.jpg",
       "stats": {
-        "views": 735284,
-        "likes": 6136,
+        "views": 735759,
+        "likes": 6138,
         "comments": 124
       }
     },
@@ -1114,8 +1114,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/K-PGP7pPLPs/mqdefault.jpg",
       "stats": {
-        "views": 1744068,
-        "likes": 10906,
+        "views": 1744732,
+        "likes": 10914,
         "comments": 188
       }
     },
@@ -1125,9 +1125,9 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/QzL6g5-uKt0/mqdefault.jpg",
       "stats": {
-        "views": 1065950,
-        "likes": 8818,
-        "comments": 430
+        "views": 1067817,
+        "likes": 8833,
+        "comments": 428
       }
     },
     {
@@ -1136,8 +1136,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/OjBo5n6WUVo/mqdefault.jpg",
       "stats": {
-        "views": 2446411,
-        "likes": 16492,
+        "views": 2447867,
+        "likes": 16502,
         "comments": 256
       }
     },
@@ -1147,8 +1147,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/nh0AM1sG7dw/mqdefault.jpg",
       "stats": {
-        "views": 1440481,
-        "likes": 13242,
+        "views": 1440855,
+        "likes": 13245,
         "comments": 221
       }
     },
@@ -1158,8 +1158,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/gIkswnZzVbg/mqdefault.jpg",
       "stats": {
-        "views": 1063352,
-        "likes": 10924,
+        "views": 1063739,
+        "likes": 10928,
         "comments": 450
       }
     },
@@ -1169,8 +1169,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/RyzwLu2VN-4/mqdefault.jpg",
       "stats": {
-        "views": 910581,
-        "likes": 7289,
+        "views": 910686,
+        "likes": 7290,
         "comments": 133
       }
     },
@@ -1180,7 +1180,7 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/S_sERG-aylc/mqdefault.jpg",
       "stats": {
-        "views": 2195845,
+        "views": 2195988,
         "likes": 14910,
         "comments": 287
       }
@@ -1191,8 +1191,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/qpWydUdH_Cc/mqdefault.jpg",
       "stats": {
-        "views": 971569,
-        "likes": 8622,
+        "views": 972140,
+        "likes": 8625,
         "comments": 395
       }
     },
@@ -1202,8 +1202,8 @@
       "channel": "Checkpoint",
       "thumbnail": "https://i.ytimg.com/vi/q3uM23RN5RI/mqdefault.jpg",
       "stats": {
-        "views": 1239906,
-        "likes": 8032,
+        "views": 1240599,
+        "likes": 8036,
         "comments": 170
       }
     },
@@ -1213,7 +1213,7 @@
       "channel": "TommyInnit",
       "thumbnail": "https://i.ytimg.com/vi/R2SOKyNJ1jQ/mqdefault.jpg",
       "stats": {
-        "views": 865470,
+        "views": 865474,
         "likes": 56757,
         "comments": 3176
       }
@@ -1224,9 +1224,9 @@
       "channel": "Fundy",
       "thumbnail": "https://i.ytimg.com/vi/TbrO5ONPp3s/mqdefault.jpg",
       "stats": {
-        "views": 3108479,
-        "likes": 99761,
-        "comments": 7406
+        "views": 3110508,
+        "likes": 99789,
+        "comments": 7409
       }
     },
     {
@@ -1235,8 +1235,8 @@
       "channel": "Karan",
       "thumbnail": "https://i.ytimg.com/vi/xEXWdQbmvwA/mqdefault.jpg",
       "stats": {
-        "views": 411020,
-        "likes": 9952,
+        "views": 411024,
+        "likes": 9953,
         "comments": 383
       }
     },
@@ -1246,8 +1246,8 @@
       "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/aN7ACGpMHA0/mqdefault.jpg",
       "stats": {
-        "views": 632019,
-        "likes": 9297,
+        "views": 632084,
+        "likes": 9298,
         "comments": 966
       }
     },
@@ -1257,8 +1257,8 @@
       "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/Bwgdr3E5Zcg/mqdefault.jpg",
       "stats": {
-        "views": 1915639,
-        "likes": 20987,
+        "views": 1916955,
+        "likes": 20995,
         "comments": 1224
       }
     },
@@ -1268,8 +1268,8 @@
       "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/Bp6EsmNjEsM/mqdefault.jpg",
       "stats": {
-        "views": 4010092,
-        "likes": 40963,
+        "views": 4012340,
+        "likes": 40979,
         "comments": 3938
       }
     },
@@ -1279,9 +1279,9 @@
       "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/S9GMWlzdWhM/mqdefault.jpg",
       "stats": {
-        "views": 2208290,
-        "likes": 23959,
-        "comments": 2085
+        "views": 2209017,
+        "likes": 23964,
+        "comments": 2086
       }
     },
     {
@@ -1290,8 +1290,8 @@
       "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/eNOIe68q-AQ/mqdefault.jpg",
       "stats": {
-        "views": 4387051,
-        "likes": 57545,
+        "views": 4389933,
+        "likes": 57580,
         "comments": 0
       }
     },
@@ -1301,8 +1301,8 @@
       "channel": "Ryguyrocky",
       "thumbnail": "https://i.ytimg.com/vi/RsyIs_21Axg/mqdefault.jpg",
       "stats": {
-        "views": 3440675,
-        "likes": 33879,
+        "views": 3442827,
+        "likes": 33893,
         "comments": 1852
       }
     },
@@ -1312,9 +1312,9 @@
       "channel": "Socksfor1",
       "thumbnail": "https://i.ytimg.com/vi/Cj_ncLnnyXk/mqdefault.jpg",
       "stats": {
-        "views": 7414221,
-        "likes": 137703,
-        "comments": 7444
+        "views": 7415617,
+        "likes": 137720,
+        "comments": 7443
       }
     },
     {
@@ -1323,8 +1323,8 @@
       "channel": "Karl",
       "thumbnail": "https://i.ytimg.com/vi/_NhIOEQ64q8/mqdefault.jpg",
       "stats": {
-        "views": 21824324,
-        "likes": 132934,
+        "views": 21826932,
+        "likes": 132951,
         "comments": 2168
       }
     }
