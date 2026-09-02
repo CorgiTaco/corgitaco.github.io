@@ -303,105 +303,112 @@
         dropdown.style.visibility = '';
     }
 
-    function wireCarouselControls(controlsEl, track, type) {
+    function commSortComparator(val) {
+        return function(a, b) {
+            if (val === 'views-desc')     return Number(b.dataset.views || 0) - Number(a.dataset.views || 0);
+            if (val === 'views-asc')      return Number(a.dataset.views || 0) - Number(b.dataset.views || 0);
+            if (val === 'downloads-desc') return Number(b.dataset.downloads || 0) - Number(a.dataset.downloads || 0);
+            if (val === 'downloads-asc')  return Number(a.dataset.downloads || 0) - Number(b.dataset.downloads || 0);
+            if (val === 'name-asc')       return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+            if (val === 'name-desc')      return (b.dataset.name || '').localeCompare(a.dataset.name || '');
+            return 0;
+        };
+    }
+
+    function sortCommCards(track, val) {
+        var cards = Array.from(track.querySelectorAll('.proj-card'));
+        cards.sort(commSortComparator(val));
+        cards.forEach(function(c) { track.appendChild(c); });
+    }
+
+    function applyCommCarouselFilter(track, filterBar) {
+        var checkedTags = filterBar
+            ? Array.from(filterBar.querySelectorAll('.comm-carousel-tag-cb:checked')).map(function(cb) { return cb.value; })
+            : null;
+        var selectAll = filterBar ? filterBar.querySelector('.comm-carousel-select-all') : null;
+        var allChecked = !selectAll || selectAll.checked;
+        track.querySelectorAll('.proj-card').forEach(function(card) {
+            if (allChecked) { card.style.display = ''; return; }
+            var cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+            card.style.display = cardTags.some(function(t) { return checkedTags.indexOf(t) !== -1; }) ? '' : 'none';
+        });
+    }
+
+    function closeCommDropdowns(controlsEl, except) {
+        controlsEl.querySelectorAll('.carousel-sort-dropdown.open, .carousel-filter-dropdown.open').forEach(function(dd) {
+            if (dd === except) return;
+            dd.classList.remove('open');
+            var chev = dd.previousElementSibling && dd.previousElementSibling.querySelector('.carousel-sort-chevron, .carousel-filter-chevron');
+            if (chev) chev.style.transform = '';
+        });
+    }
+
+    function wireCommSortBar(sortBar, controlsEl, track) {
+        if (!sortBar) return;
+        var sortToggle   = sortBar.querySelector('.carousel-sort-toggle');
+        var sortDropdown = sortBar.querySelector('.carousel-sort-dropdown');
+        var sortChev     = sortBar.querySelector('.carousel-sort-chevron');
+
+        sortToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeCommDropdowns(controlsEl, sortDropdown);
+            positionCommDropdown(sortToggle, sortDropdown);
+            var open = sortDropdown.classList.toggle('open');
+            sortChev.style.transform = open ? 'rotate(180deg)' : '';
+        });
+        sortDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+        sortDropdown.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') sortCommCards(track, e.target.value);
+        });
+
+        // Apply default sort immediately
+        var defaultRadio = sortDropdown.querySelector('input[type="radio"][checked]');
+        if (defaultRadio) sortCommCards(track, defaultRadio.value);
+    }
+
+    function wireCommFilterBar(filterBar, controlsEl, track) {
+        if (!filterBar) return;
+        var filterToggle   = filterBar.querySelector('.carousel-filter-toggle');
+        var filterDropdown = filterBar.querySelector('.carousel-filter-dropdown');
+        var filterChev     = filterBar.querySelector('.carousel-filter-chevron');
+        var selectAll      = filterDropdown.querySelector('.comm-carousel-select-all');
+
+        filterToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeCommDropdowns(controlsEl, filterDropdown);
+            positionCommDropdown(filterToggle, filterDropdown);
+            var open = filterDropdown.classList.toggle('open');
+            filterChev.style.transform = open ? 'rotate(180deg)' : '';
+        });
+        filterDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                filterDropdown.querySelectorAll('.comm-carousel-tag-cb').forEach(function(cb) {
+                    cb.checked = selectAll.checked;
+                });
+                applyCommCarouselFilter(track, filterDropdown);
+            });
+        }
+
+        filterDropdown.querySelectorAll('.comm-carousel-tag-cb').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                var all = Array.from(filterDropdown.querySelectorAll('.comm-carousel-tag-cb')).every(function(c) { return c.checked; });
+                if (selectAll) selectAll.checked = all;
+                applyCommCarouselFilter(track, filterDropdown);
+            });
+        });
+    }
+
+    function wireCarouselControls(controlsEl, track) {
         var sortBar    = controlsEl.querySelector('.carousel-sort-bar');
         var filterBar  = controlsEl.querySelector('.carousel-filter-bar');
 
-        function closeAll(except) {
-            controlsEl.querySelectorAll('.carousel-sort-dropdown.open, .carousel-filter-dropdown.open').forEach(function(dd) {
-                if (dd === except) return;
-                dd.classList.remove('open');
-                var chev = dd.previousElementSibling && dd.previousElementSibling.querySelector('.carousel-sort-chevron, .carousel-filter-chevron');
-                if (chev) chev.style.transform = '';
-            });
-        }
-
-        function sortCards(val) {
-            var cards = Array.from(track.querySelectorAll('.proj-card'));
-            cards.sort(function(a, b) {
-                if (val === 'views-desc')     return Number(b.dataset.views || 0) - Number(a.dataset.views || 0);
-                if (val === 'views-asc')      return Number(a.dataset.views || 0) - Number(b.dataset.views || 0);
-                if (val === 'downloads-desc') return Number(b.dataset.downloads || 0) - Number(a.dataset.downloads || 0);
-                if (val === 'downloads-asc')  return Number(a.dataset.downloads || 0) - Number(b.dataset.downloads || 0);
-                if (val === 'name-asc')       return (a.dataset.name || '').localeCompare(b.dataset.name || '');
-                if (val === 'name-desc')      return (b.dataset.name || '').localeCompare(a.dataset.name || '');
-                return 0;
-            });
-            cards.forEach(function(c) { track.appendChild(c); });
-        }
-
-        function applyFilter(filterBar) {
-            var checkedTags = filterBar
-                ? Array.from(filterBar.querySelectorAll('.comm-carousel-tag-cb:checked')).map(function(cb) { return cb.value; })
-                : null;
-            var selectAll = filterBar ? filterBar.querySelector('.comm-carousel-select-all') : null;
-            var allChecked = !selectAll || selectAll.checked;
-            track.querySelectorAll('.proj-card').forEach(function(card) {
-                if (allChecked) { card.style.display = ''; return; }
-                var cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
-                card.style.display = cardTags.some(function(t) { return checkedTags.indexOf(t) !== -1; }) ? '' : 'none';
-            });
-        }
-
-        // Wire sort
-        if (sortBar) {
-            var sortToggle   = sortBar.querySelector('.carousel-sort-toggle');
-            var sortDropdown = sortBar.querySelector('.carousel-sort-dropdown');
-            var sortChev     = sortBar.querySelector('.carousel-sort-chevron');
-
-            sortToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                closeAll(sortDropdown);
-                positionCommDropdown(sortToggle, sortDropdown);
-                var open = sortDropdown.classList.toggle('open');
-                sortChev.style.transform = open ? 'rotate(180deg)' : '';
-            });
-            sortDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
-            sortDropdown.addEventListener('change', function(e) {
-                if (e.target.type === 'radio') sortCards(e.target.value);
-            });
-
-            // Apply default sort immediately
-            var defaultRadio = sortDropdown.querySelector('input[type="radio"][checked]');
-            if (defaultRadio) sortCards(defaultRadio.value);
-        }
-
-        // Wire filter
-        if (filterBar) {
-            var filterToggle   = filterBar.querySelector('.carousel-filter-toggle');
-            var filterDropdown = filterBar.querySelector('.carousel-filter-dropdown');
-            var filterChev     = filterBar.querySelector('.carousel-filter-chevron');
-            var selectAll      = filterDropdown.querySelector('.comm-carousel-select-all');
-
-            filterToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                closeAll(filterDropdown);
-                positionCommDropdown(filterToggle, filterDropdown);
-                var open = filterDropdown.classList.toggle('open');
-                filterChev.style.transform = open ? 'rotate(180deg)' : '';
-            });
-            filterDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
-
-            if (selectAll) {
-                selectAll.addEventListener('change', function() {
-                    filterDropdown.querySelectorAll('.comm-carousel-tag-cb').forEach(function(cb) {
-                        cb.checked = selectAll.checked;
-                    });
-                    applyFilter(filterDropdown);
-                });
-            }
-
-            filterDropdown.querySelectorAll('.comm-carousel-tag-cb').forEach(function(cb) {
-                cb.addEventListener('change', function() {
-                    var all = Array.from(filterDropdown.querySelectorAll('.comm-carousel-tag-cb')).every(function(c) { return c.checked; });
-                    if (selectAll) selectAll.checked = all;
-                    applyFilter(filterDropdown);
-                });
-            });
-        }
+        wireCommSortBar(sortBar, controlsEl, track);
+        wireCommFilterBar(filterBar, controlsEl, track);
 
         // Close on outside click
-        document.addEventListener('click', function() { closeAll(null); });
+        document.addEventListener('click', function() { closeCommDropdowns(controlsEl, null); });
     }
 
     function buildProjectsCarousel(cards) {
@@ -462,74 +469,79 @@
         return _projectsData;
     }
 
+    function buildYoutubeExampleCards(data) {
+        var videos = (data.statsData && Array.isArray(data.statsData.videos))
+            ? data.statsData.videos
+            : data.projectsJson.filter(function (p) { return p.type === 'youtube'; });
+
+        var cards = [];
+        videos.forEach(function (v) {
+            var proj = v.url
+                ? v  // already a project object from projects.json
+                : { type: 'youtube', url: 'https://youtu.be/' + v.id, title: v.title, views: (v.stats && v.stats.views) || 0 };
+            if (youtubeId(proj.url)) cards.push(buildYoutubeProjectCard(proj));
+        });
+        return cards;
+    }
+
+    function modDataToExampleProject(m) {
+        var stats    = m.stats || {};
+        var loaders  = Array.isArray(m.loaders)       ? m.loaders       : [];
+        var versions = Array.isArray(m.game_versions) ? m.game_versions : [];
+        return {
+            type:         'minecraft_mod',
+            mod_id:       m.id || null,
+            title:        m.title,
+            excerpt:      m.description,
+            photo:        m.icon,
+            curseforge:   m.curseforge_url || '',
+            modrinth:     m.modrinth_url   || '',
+            github:       m.github_url     || '',
+            downloads_cf: stats.downloads_cf || 0,
+            downloads_mr: stats.downloads_mr || 0,
+            tags:         [...loaders, ...versions]
+        };
+    }
+
+    function buildModExampleCards(data) {
+        var mods = (data.modsData && Array.isArray(data.modsData.mods))
+            ? data.modsData.mods.map(modDataToExampleProject)
+            : data.projectsJson.filter(function (p) { return p.type === 'minecraft_mod'; });
+
+        return mods.map(buildModProjectCard);
+    }
+
+    function insertProjectsCarouselIntoAccordion(inner, type, cards) {
+        var exLabel = document.createElement('h4');
+        exLabel.className = 'comm-examples-label';
+        exLabel.textContent = 'Examples';
+
+        var bodyBtn = inner.querySelector('.comm-body-modal-btn');
+        inner.insertBefore(exLabel, bodyBtn);
+
+        var controlsHtml = buildCarouselControls(type, cards);
+        var controlsEl = document.createElement('div');
+        controlsEl.innerHTML = controlsHtml;
+        controlsEl = controlsEl.firstElementChild;
+        inner.insertBefore(controlsEl, bodyBtn);
+
+        var carousel = buildProjectsCarousel(cards);
+        inner.insertBefore(carousel, bodyBtn);
+        requestAnimationFrame(carousel._refreshArrows);
+
+        wireCarouselControls(controlsEl, carousel.querySelector('.comm-carousel-track'));
+    }
+
     function injectProjectsCarousel(acc, type) {
         if (type !== 'youtube' && type !== 'mod') return;
         loadProjectsData().then(function (data) {
             var inner = acc.querySelector('.comm-acc-inner');
             if (!inner) return;
 
-            var exLabel = document.createElement('h4');
-            exLabel.className = 'comm-examples-label';
-            exLabel.textContent = 'Examples';
-
-            var cards = [];
-
-            if (type === 'youtube') {
-                var videos = (data.statsData && Array.isArray(data.statsData.videos))
-                    ? data.statsData.videos
-                    : data.projectsJson.filter(function (p) { return p.type === 'youtube'; });
-
-                videos.forEach(function (v) {
-                    var proj = v.url
-                        ? v  // already a project object from projects.json
-                        : { type: 'youtube', url: 'https://youtu.be/' + v.id, title: v.title, views: (v.stats && v.stats.views) || 0 };
-                    if (youtubeId(proj.url)) cards.push(buildYoutubeProjectCard(proj));
-                });
-            } else if (type === 'mod') {
-                var mods = (data.modsData && Array.isArray(data.modsData.mods))
-                    ? data.modsData.mods.map(function (m) {
-                        var stats    = m.stats || {};
-                        var loaders  = Array.isArray(m.loaders)       ? m.loaders       : [];
-                        var versions = Array.isArray(m.game_versions) ? m.game_versions : [];
-                        return {
-                            type:         'minecraft_mod',
-                            mod_id:       m.id || null,
-                            title:        m.title,
-                            excerpt:      m.description,
-                            photo:        m.icon,
-                            curseforge:   m.curseforge_url || '',
-                            modrinth:     m.modrinth_url   || '',
-                            github:       m.github_url     || '',
-                            downloads_cf: stats.downloads_cf || 0,
-                            downloads_mr: stats.downloads_mr || 0,
-                            tags:         [...loaders, ...versions]
-                        };
-                    })
-                    : data.projectsJson.filter(function (p) { return p.type === 'minecraft_mod'; });
-
-                mods.forEach(function (m) {
-                    cards.push(buildModProjectCard(m));
-                });
-            }
-
+            var cards = type === 'youtube' ? buildYoutubeExampleCards(data) : buildModExampleCards(data);
             if (!cards.length) return;
 
-            // Insert before the action button at the bottom
-            var bodyBtn = inner.querySelector('.comm-body-modal-btn');
-            inner.insertBefore(exLabel, bodyBtn);
-
-            // Controls (sort + filter)
-            var controlsHtml = buildCarouselControls(type, cards);
-            var controlsEl = document.createElement('div');
-            controlsEl.innerHTML = controlsHtml;
-            controlsEl = controlsEl.firstElementChild;
-            inner.insertBefore(controlsEl, bodyBtn);
-
-            var carousel = buildProjectsCarousel(cards);
-            inner.insertBefore(carousel, bodyBtn);
-            requestAnimationFrame(carousel._refreshArrows);
-
-            wireCarouselControls(controlsEl, carousel.querySelector('.comm-carousel-track'), type);
+            insertProjectsCarouselIntoAccordion(inner, type, cards);
         });
     }
 
@@ -547,67 +559,34 @@
         requestAnimationFrame(step);
     }
 
-    function buildCarousel(examples) {
-        var wrap = document.createElement('div');
-        wrap.className = 'comm-carousel-wrap';
+    function buildExampleCard(ex) {
+        var card = document.createElement('div');
+        card.className = 'comm-carousel-card';
 
-        var track = document.createElement('div');
-        track.className = 'comm-carousel-track';
-
-        examples.forEach(function (ex) {
-            var card = document.createElement('div');
-            card.className = 'comm-carousel-card';
-
-            var inner = '';
-            if (ex.image) {
-                inner += '<div class="comm-card-img-wrap"><img class="comm-card-img" src="' + ex.image + '" alt="' + ex.title + '"></div>';
-            } else {
-                inner += '<div class="comm-card-img-placeholder"><i class="fa fa-image"></i></div>';
-            }
-            inner += '<div class="comm-card-body">';
-            if (ex.link) {
-                inner += '<a class="comm-card-title" href="' + ex.link + '" target="_blank" rel="noopener">' + ex.title + ' <i class="fa fa-external-link" style="font-size:0.7em;opacity:0.6"></i></a>';
-            } else {
-                inner += '<span class="comm-card-title">' + ex.title + '</span>';
-            }
-            if (ex.description) {
-                inner += '<p class="comm-card-desc">' + ex.description + '</p>';
-            }
-            inner += '</div>';
-            card.innerHTML = inner;
-            track.appendChild(card);
-        });
-
-        var prevBtn = document.createElement('button');
-        prevBtn.className = 'comm-carousel-arrow left';
-        prevBtn.type = 'button';
-        prevBtn.setAttribute('aria-label', 'Previous');
-        prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i>';
-
-        var nextBtn = document.createElement('button');
-        nextBtn.className = 'comm-carousel-arrow right';
-        nextBtn.type = 'button';
-        nextBtn.setAttribute('aria-label', 'Next');
-        nextBtn.innerHTML = '<i class="fa fa-chevron-right"></i>';
-
-        function updateArrows() {
-            var atStart = track.scrollLeft <= 4;
-            var atEnd   = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-            prevBtn.style.opacity       = atStart ? '0' : '1';
-            prevBtn.style.pointerEvents = atStart ? 'none' : 'auto';
-            nextBtn.style.opacity       = atEnd   ? '0' : '1';
-            nextBtn.style.pointerEvents = atEnd   ? 'none' : 'auto';
+        var inner = '';
+        if (ex.image) {
+            inner += '<div class="comm-card-img-wrap"><img class="comm-card-img" src="' + ex.image + '" alt="' + ex.title + '"></div>';
+        } else {
+            inner += '<div class="comm-card-img-placeholder"><i class="fa fa-image"></i></div>';
         }
+        inner += '<div class="comm-card-body">';
+        if (ex.link) {
+            inner += '<a class="comm-card-title" href="' + ex.link + '" target="_blank" rel="noopener">' + ex.title + ' <i class="fa fa-external-link" style="font-size:0.7em;opacity:0.6"></i></a>';
+        } else {
+            inner += '<span class="comm-card-title">' + ex.title + '</span>';
+        }
+        if (ex.description) {
+            inner += '<p class="comm-card-desc">' + ex.description + '</p>';
+        }
+        inner += '</div>';
+        card.innerHTML = inner;
+        return card;
+    }
 
-        prevBtn.addEventListener('click', function () { smoothScroll(track, -track.clientWidth * 0.75, 400); });
-        nextBtn.addEventListener('click', function () { smoothScroll(track,  track.clientWidth * 0.75, 400); });
-        track.addEventListener('scroll', updateArrows);
-
-        wrap.appendChild(prevBtn);
-        wrap.appendChild(track);
-        wrap.appendChild(nextBtn);
-
-        requestAnimationFrame(updateArrows);
+    // Shares its carousel shell (arrows/track/scroll wiring) with buildProjectsCarousel.
+    function buildCarousel(examples) {
+        var wrap = buildProjectsCarousel(examples.map(buildExampleCard));
+        requestAnimationFrame(wrap._refreshArrows);
         return wrap;
     }
 
@@ -707,6 +686,12 @@
 
     // ── Terms of Service ──────────────────────────────────────────────────────
 
+    function tosHasItems(tos) {
+        return (tos.sections || []).some(function (section) {
+            return (section.items || []).length > 0;
+        });
+    }
+
     function buildTosSection(tos) {
         var panel = document.createElement('div');
         panel.className = 'comm-tos-panel';
@@ -798,7 +783,7 @@
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (data.status) renderStatusPill(data.status);
-                if (data.tos) container.appendChild(buildTosSection(data.tos));
+                if (data.tos && tosHasItems(data.tos)) container.appendChild(buildTosSection(data.tos));
                 (data.types || []).forEach(function (type) {
                     container.appendChild(buildAccordion(type));
                     wireAccordion(type);

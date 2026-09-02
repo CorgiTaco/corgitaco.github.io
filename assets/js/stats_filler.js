@@ -656,6 +656,31 @@
     // entityMeta:  [{id, label, col, imgSrc?}]
     // headExtra:   optional element inserted in head before the mode bar
 
+    function buildDeltaNoDataMessage() {
+        const msg = el('p', 'stat-no-data');
+        msg.style.cssText = 'position:static;padding:40px 0;opacity:0.45;text-align:center';
+        msg.textContent = 'Not enough history yet — check back after the next data update.';
+        return msg;
+    }
+
+    function buildDeltaModeBar(onModeChange) {
+        const modeBar = el('div', 'stat-range-bar');
+        modeBar.style.marginLeft = 'auto';
+        let activeModeBtn = null;
+        ['Day', 'Week', 'Month'].forEach(label => {
+            const m   = label.toLowerCase();
+            const btn = el('button', 'stat-ctrl-btn', label);
+            btn.addEventListener('click', () => {
+                if (activeModeBtn) activeModeBtn.classList.remove('is-active');
+                (activeModeBtn = btn).classList.add('is-active');
+                onModeChange(m);
+            });
+            if (m === 'day') { btn.classList.add('is-active'); activeModeBtn = btn; }
+            modeBar.appendChild(btn);
+        });
+        return modeBar;
+    }
+
     function buildEntityDeltaChart(container, title, icon, getDeltaMap, entityMeta, headExtra) {
         if (!entityMeta.length) return;
 
@@ -683,31 +708,14 @@
         const initDm = getDeltaMap();
         const totalDeltas = Object.values(initDm).reduce((s, arr) => s + arr.length, 0);
         if (!totalDeltas) {
-            const msg = el('p', 'stat-no-data');
-            msg.style.cssText = 'position:static;padding:40px 0;opacity:0.45;text-align:center';
-            msg.textContent = 'Not enough history yet — check back after the next data update.';
-            section.appendChild(msg);
+            section.appendChild(buildDeltaNoDataMessage());
             return;
         }
 
         if (headExtra) head.appendChild(headExtra);
 
         // Day / Week / Month mode bar (right-aligned in head)
-        const modeBar = el('div', 'stat-range-bar');
-        modeBar.style.marginLeft = 'auto';
-        let activeModeBtn = null;
-        ['Day', 'Week', 'Month'].forEach(label => {
-            const m   = label.toLowerCase();
-            const btn = el('button', 'stat-ctrl-btn', label);
-            btn.addEventListener('click', () => {
-                if (activeModeBtn) activeModeBtn.classList.remove('is-active');
-                (activeModeBtn = btn).classList.add('is-active');
-                mode = m; render();
-            });
-            if (m === 'day') { btn.classList.add('is-active'); activeModeBtn = btn; }
-            modeBar.appendChild(btn);
-        });
-        head.appendChild(modeBar);
+        head.appendChild(buildDeltaModeBar(m => { mode = m; render(); }));
 
         // Chart + legend layout
         const chartWrap  = el('div', 'stat-chart-wrap stat-chart-overlay');
@@ -876,6 +884,24 @@
 
     // ── Section: merged mod chart (cumulative per mod) ────────────────────────
 
+    function buildScaleToggleBar(getChart) {
+        const scaleBar = el('div', 'stat-range-bar');
+        let activeScaleBtn = null;
+        [['Linear', 'linear'], ['Log', 'logarithmic']].forEach(([label, type]) => {
+            const btn = el('button', 'stat-ctrl-btn', label);
+            if (type === DEFAULT_Y_SCALE) { btn.classList.add('is-active'); activeScaleBtn = btn; }
+            btn.addEventListener('click', () => {
+                if (activeScaleBtn === btn) return;
+                if (activeScaleBtn) activeScaleBtn.classList.remove('is-active');
+                (activeScaleBtn = btn).classList.add('is-active');
+                const chart = getChart();
+                if (chart) applyYScale(chart, type);
+            });
+            scaleBar.appendChild(btn);
+        });
+        return scaleBar;
+    }
+
     function buildModChart(container, mods, modRows) {
         // Sort by latest cumulative download count (highest first)
         mods = [...mods].sort((a, b) => {
@@ -935,23 +961,9 @@
         // Scale toggle. Downloads span five orders of magnitude across these mods —
         // on a zero-based linear axis every mod under ~1M rounds onto the axis rule
         // and is invisible. Log gives the small ones room without hiding the big ones.
-        const scaleBar = el('div', 'stat-range-bar');
-        let activeScaleBtn = null;
-        [['Linear', 'linear'], ['Log', 'logarithmic']].forEach(([label, type]) => {
-            const btn = el('button', 'stat-ctrl-btn', label);
-            if (type === DEFAULT_Y_SCALE) { btn.classList.add('is-active'); activeScaleBtn = btn; }
-            btn.addEventListener('click', () => {
-                if (activeScaleBtn === btn) return;
-                if (activeScaleBtn) activeScaleBtn.classList.remove('is-active');
-                (activeScaleBtn = btn).classList.add('is-active');
-                if (chart) applyYScale(chart, type);
-            });
-            scaleBar.appendChild(btn);
-        });
-        head.appendChild(scaleBar);
-
         let chart = null;
         let chips = null;
+        head.appendChild(buildScaleToggleBar(() => chart));
 
         function toggleMod(idx, active) {
             visible[idx] = active;

@@ -508,14 +508,14 @@
 
     // ── Action Bars (Filter & Sort) ──────────────────────────────────────────
 
-    function buildActionBars(categories, tagsByCategory) {
+    function buildCategoryFilterSection(categories) {
         const catChecks = categories.map(cat => `
             <label class="filter-tag">
                 <input type="checkbox" class="cat-checkbox" value="${slugify(cat)}" checked>
                 <span>${cat}</span>
             </label>`).join('');
 
-        const catSection = `
+        return `
             <div class="filter-section-wrap" id="filter-wrap-category">
                 <div class="filter-section-label">Category</div>
                 <label class="filter-tag filter-select-all-tag">
@@ -524,7 +524,9 @@
                 </label>
                 <div class="filter-section" data-section="category">${catChecks}</div>
             </div>`;
+    }
 
+    function buildTagFilterSection(categories, tagsByCategory) {
         const allTagsFlat = [];
         const tagCatMap   = {};
         categories.forEach(cat => {
@@ -539,18 +541,18 @@
             });
         });
 
-        let tagSection = '';
-        if (allTagsFlat.length) {
-            const tagChecks = allTagsFlat.map(({ tag, tagSlug }) => {
-                const cats = [...tagCatMap[tagSlug]].join(' ');
-                return `
+        if (!allTagsFlat.length) return '';
+
+        const tagChecks = allTagsFlat.map(({ tag, tagSlug }) => {
+            const cats = [...tagCatMap[tagSlug]].join(' ');
+            return `
                 <label class="filter-tag" data-tag-cats="${cats}">
                     <input type="checkbox" class="tag-checkbox" value="${tagSlug}" checked>
                     <span>${tag}</span>
                 </label>`;
-            }).join('');
+        }).join('');
 
-            tagSection = `
+        return `
             <div class="filter-section-wrap" id="filter-wrap-tags">
                 <div class="filter-section-label">Tags</div>
                 <label class="filter-tag filter-select-all-tag" id="tag-select-all-row">
@@ -559,9 +561,10 @@
                 </label>
                 <div class="filter-section" data-section="tags">${tagChecks}</div>
             </div>`;
-        }
+    }
 
-        const statusSection = `
+    function buildStatusFilterSection() {
+        return `
             <div class="filter-section-wrap" id="filter-wrap-status">
                 <div class="filter-section-label">Status</div>
                 <div class="filter-section" data-section="status">
@@ -571,20 +574,10 @@
                     </label>
                 </div>
             </div>`;
+    }
 
-        const filterHtml = `
-        <div id="filter-bar">
-            <button id="filter-toggle" class="btn-theme">
-                <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down" id="filter-chevron"></i>
-            </button>
-            <div id="filter-dropdown">
-                ${catSection}
-                ${tagSection}
-                ${statusSection}
-            </div>
-        </div>`;
-
-        const sortHtml = `
+    function buildSortBarHtml() {
+        return `
         <div id="sort-bar">
             <button id="sort-toggle" class="btn-theme">
                 <i class="fa fa-sort"></i><span> Sort </span><i class="fa fa-chevron-down" id="sort-chevron"></i>
@@ -600,8 +593,10 @@
                 <label class="filter-tag"><input type="radio" name="sort-by" value="cat-default"><span>Category (Default)</span></label>
             </div>
         </div>`;
+    }
 
-        const rowOrderHtml = `
+    function buildRowOrderBarHtml() {
+        return `
         <div id="row-order-bar">
             <button id="row-order-toggle" class="btn-theme">
                 <i class="fa fa-th-list"></i><span> Rows </span><i class="fa fa-chevron-down" id="row-order-chevron"></i>
@@ -613,16 +608,27 @@
                 <label class="filter-tag"><input type="radio" name="row-order" value="cat-default" checked><span>Category (Default)</span></label>
             </div>
         </div>`;
+    }
 
-        return filterHtml + sortHtml + rowOrderHtml;
+    function buildActionBars(categories, tagsByCategory) {
+        const filterHtml = `
+        <div id="filter-bar">
+            <button id="filter-toggle" class="btn-theme">
+                <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down" id="filter-chevron"></i>
+            </button>
+            <div id="filter-dropdown">
+                ${buildCategoryFilterSection(categories)}
+                ${buildTagFilterSection(categories, tagsByCategory)}
+                ${buildStatusFilterSection()}
+            </div>
+        </div>`;
+
+        return filterHtml + buildSortBarHtml() + buildRowOrderBarHtml();
     }
 
     // ── Carousel layout builder ──────────────────────────────────────────────
 
-    function buildCarouselLayout(projects, presentCats, tagsByCategory) {
-        const catSlugMap = {};
-        presentCats.forEach(cat => { catSlugMap[slugify(cat)] = cat; });
-
+    function groupProjectsByCategory(projects, presentCats) {
         const byCategory = {};
         presentCats.forEach(cat => { byCategory[cat] = []; });
         projects.forEach((proj, i) => {
@@ -631,18 +637,17 @@
                 byCategory[cat].push({ proj, i });
             }
         });
+        return byCategory;
+    }
 
-        const rows = presentCats.map(cat => {
-            const catSlug = slugify(cat);
-            const tags    = tagsByCategory[cat] || [];
-
-            const tagChecks = tags.map(t => `
+    function buildCarouselRowDropdown(catSlug, tags) {
+        const tagChecks = tags.map(t => `
                 <label class="filter-tag">
                     <input type="checkbox" class="carousel-tag-cb" value="${slugify(t)}" checked>
                     <span>${t}</span>
                 </label>`).join('');
 
-            const rowStatusSection = `
+        const rowStatusSection = `
                 <div class="filter-section-wrap" style="padding-left:0; border-top: 1px solid rgba(70, 162, 88, 0.3); margin-top: 6px; padding-top: 6px;">
                     <label class="filter-tag">
                         <input type="checkbox" class="carousel-hide-viewed" value="hide-viewed">
@@ -650,7 +655,7 @@
                     </label>
                 </div>`;
 
-            const rowDropdown = `
+        return `
                 <div class="carousel-filter-bar">
                     <button class="btn-theme carousel-filter-toggle">
                         <i class="fa fa-filter"></i><span> Filter </span><i class="fa fa-chevron-down carousel-filter-chevron"></i>
@@ -667,20 +672,31 @@
                         ${rowStatusSection}
                     </div>
                 </div>`;
+    }
 
-            const defaultSort = catSlug === 'minecraft-mod' ? 'downloads-desc'
-                              : catSlug === 'youtube'       ? 'views-desc'
-                              : 'date-desc';
+    function carouselRowDefaultSort(catSlug) {
+        if (catSlug === 'minecraft-mod') return 'downloads-desc';
+        if (catSlug === 'youtube')       return 'views-desc';
+        return 'date-desc';
+    }
 
-            const extraSortOptions = catSlug === 'minecraft-mod'
-                ? `<label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="downloads-desc"><span>Downloads (High→Low)</span></label>
-                   <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="downloads-asc"><span>Downloads (Low→High)</span></label>`
-                : catSlug === 'youtube'
-                ? `<label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="views-desc"><span>Views (High→Low)</span></label>
-                   <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="views-asc"><span>Views (Low→High)</span></label>`
-                : '';
+    function carouselRowExtraSortOptions(catSlug) {
+        if (catSlug === 'minecraft-mod') {
+            return `<label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="downloads-desc"><span>Downloads (High→Low)</span></label>
+                   <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="downloads-asc"><span>Downloads (Low→High)</span></label>`;
+        }
+        if (catSlug === 'youtube') {
+            return `<label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="views-desc"><span>Views (High→Low)</span></label>
+                   <label class="filter-tag"><input type="radio" name="sort-${catSlug}" value="views-asc"><span>Views (Low→High)</span></label>`;
+        }
+        return '';
+    }
 
-            const rowSort = `
+    function buildCarouselRowSort(catSlug) {
+        const defaultSort = carouselRowDefaultSort(catSlug);
+        const extraSortOptions = carouselRowExtraSortOptions(catSlug);
+
+        return `
                 <div class="carousel-sort-bar" data-default-sort="${defaultSort}">
                     <button class="btn-theme carousel-sort-toggle">
                         <i class="fa fa-sort"></i><span> Sort </span><i class="fa fa-chevron-down carousel-sort-chevron"></i>
@@ -694,15 +710,23 @@
                         ${extraSortOptions}
                     </div>
                 </div>`;
+    }
 
-            const cards = byCategory[cat].map(({ proj, i }) => {
-                const id       = projectId(proj, i);
-                const category = getCategory(proj);
-                const tags     = getCustomTags(proj);
-                return buildCard(proj, id, category, tags);
-            }).join('');
+    function buildCarouselRow(cat, byCategory, tagsByCategory) {
+        const catSlug = slugify(cat);
+        const tags    = tagsByCategory[cat] || [];
 
-            return `
+        const rowDropdown = buildCarouselRowDropdown(catSlug, tags);
+        const rowSort = buildCarouselRowSort(catSlug);
+
+        const cards = byCategory[cat].map(({ proj, i }) => {
+            const id       = projectId(proj, i);
+            const category = getCategory(proj);
+            const tags     = getCustomTags(proj);
+            return buildCard(proj, id, category, tags);
+        }).join('');
+
+        return `
             <div class="cat-row" data-cat="${catSlug}">
                 <div class="cat-row-header">
                     <h2 class="cat-row-title">${cat}</h2>
@@ -717,8 +741,11 @@
                     <button class="carousel-arrow right"><i class="fa fa-chevron-right"></i></button>
                 </div>
             </div>`;
-        }).join('');
+    }
 
+    function buildCarouselLayout(projects, presentCats, tagsByCategory) {
+        const byCategory = groupProjectsByCategory(projects, presentCats);
+        const rows = presentCats.map(cat => buildCarouselRow(cat, byCategory, tagsByCategory)).join('');
         return `<div id="carousel-layout">${rows}</div>`;
     }
 
@@ -822,88 +849,97 @@
         });
     }
 
-    function wireCarouselFilters() {
-        const params = new URLSearchParams(window.location.search);
+    function wireCarouselFilterToggle(toggleBtn, dropdown, chevron) {
+        toggleBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            closeAllDropdowns(dropdown);
+            positionDropdown(toggleBtn, dropdown);
+            const open = dropdown.classList.toggle('open');
+            chevron.style.transform = open ? 'rotate(180deg)' : '';
+        });
 
-        document.querySelectorAll('.cat-row').forEach(row => {
-            const catSlug = row.dataset.cat;
-            const filterBar = row.querySelector('.carousel-filter-bar');
-            if (!filterBar) return;
+        dropdown.addEventListener('click', e => e.stopPropagation());
+    }
 
-            const toggleBtn = filterBar.querySelector('.carousel-filter-toggle');
-            const dropdown  = filterBar.querySelector('.carousel-filter-dropdown');
-            const chevron   = filterBar.querySelector('.carousel-filter-chevron');
-            const selectAll = filterBar.querySelector('.carousel-select-all');
-            const hideViewedCb = filterBar.querySelector('.carousel-hide-viewed');
+    function applyCarouselFilterFromUrlParams(params, catSlug, dropdown, selectAll, hideViewedCb) {
+        const tagParam = params.get(`tags-${catSlug}`);
+        if (tagParam && selectAll) {
+            const activeTags = tagParam !== 'none' ? new Set(tagParam.split(',')) : new Set();
 
-            toggleBtn.addEventListener('click', e => {
-                e.stopPropagation();
-                closeAllDropdowns(dropdown);
-                positionDropdown(toggleBtn, dropdown);
-                const open = dropdown.classList.toggle('open');
-                chevron.style.transform = open ? 'rotate(180deg)' : '';
+            dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                cb.checked = activeTags.has(cb.value);
             });
 
-            dropdown.addEventListener('click', e => e.stopPropagation());
+            const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
+            selectAll.checked = all;
+        }
 
-            function syncUrlAndFilter() {
-                let allChecked = true;
-                let checkedTags = [];
-                if (selectAll) {
-                    checkedTags = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
-                    allChecked = checkedTags.length === dropdown.querySelectorAll('.carousel-tag-cb').length;
-                }
+        const hideParam = params.get(`hideViewed-${catSlug}`);
+        if (hideParam === 'true' && hideViewedCb) {
+            hideViewedCb.checked = true;
+        }
+    }
 
-                const isHidingViewed = hideViewedCb ? hideViewedCb.checked : false;
+    function wireCarouselFilterRow(row, params) {
+        const catSlug = row.dataset.cat;
+        const filterBar = row.querySelector('.carousel-filter-bar');
+        if (!filterBar) return;
 
-                updateUrlParams({
-                    [`tags-${catSlug}`]: allChecked ? null : checkedTags,
-                    [`hideViewed-${catSlug}`]: isHidingViewed ? 'true' : null
-                });
+        const toggleBtn = filterBar.querySelector('.carousel-filter-toggle');
+        const dropdown  = filterBar.querySelector('.carousel-filter-dropdown');
+        const chevron   = filterBar.querySelector('.carousel-filter-chevron');
+        const selectAll = filterBar.querySelector('.carousel-select-all');
+        const hideViewedCb = filterBar.querySelector('.carousel-hide-viewed');
 
-                applyCarouselFilter(row, dropdown);
-            }
+        wireCarouselFilterToggle(toggleBtn, dropdown, chevron);
 
+        function syncUrlAndFilter() {
+            let allChecked = true;
+            let checkedTags = [];
             if (selectAll) {
-                selectAll.addEventListener('change', () => {
-                    dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
-                        cb.checked = selectAll.checked;
-                    });
-                    syncUrlAndFilter();
-                });
-
-                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
-                    cb.addEventListener('change', () => {
-                        const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
-                        selectAll.checked = all;
-                        syncUrlAndFilter();
-                    });
-                });
+                checkedTags = [...dropdown.querySelectorAll('.carousel-tag-cb:checked')].map(cb => cb.value);
+                allChecked = checkedTags.length === dropdown.querySelectorAll('.carousel-tag-cb').length;
             }
 
-            if (hideViewedCb) {
-                hideViewedCb.addEventListener('change', syncUrlAndFilter);
-            }
+            const isHidingViewed = hideViewedCb ? hideViewedCb.checked : false;
 
-            const tagParam = params.get(`tags-${catSlug}`);
-            if (tagParam && selectAll) {
-                const activeTags = tagParam !== 'none' ? new Set(tagParam.split(',')) : new Set();
-
-                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
-                    cb.checked = activeTags.has(cb.value);
-                });
-
-                const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
-                selectAll.checked = all;
-            }
-
-            const hideParam = params.get(`hideViewed-${catSlug}`);
-            if (hideParam === 'true' && hideViewedCb) {
-                hideViewedCb.checked = true;
-            }
+            updateUrlParams({
+                [`tags-${catSlug}`]: allChecked ? null : checkedTags,
+                [`hideViewed-${catSlug}`]: isHidingViewed ? 'true' : null
+            });
 
             applyCarouselFilter(row, dropdown);
-        });
+        }
+
+        if (selectAll) {
+            selectAll.addEventListener('change', () => {
+                dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                    cb.checked = selectAll.checked;
+                });
+                syncUrlAndFilter();
+            });
+
+            dropdown.querySelectorAll('.carousel-tag-cb').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const all = [...dropdown.querySelectorAll('.carousel-tag-cb')].every(c => c.checked);
+                    selectAll.checked = all;
+                    syncUrlAndFilter();
+                });
+            });
+        }
+
+        if (hideViewedCb) {
+            hideViewedCb.addEventListener('change', syncUrlAndFilter);
+        }
+
+        applyCarouselFilterFromUrlParams(params, catSlug, dropdown, selectAll, hideViewedCb);
+
+        applyCarouselFilter(row, dropdown);
+    }
+
+    function wireCarouselFilters() {
+        const params = new URLSearchParams(window.location.search);
+        document.querySelectorAll('.cat-row').forEach(row => wireCarouselFilterRow(row, params));
     }
 
     function applyCarouselFilter(row, dropdown) {
@@ -982,6 +1018,139 @@
         if (track._updateArrows) track._updateArrows();
     }
 
+    function getCheckedCats(dropdown) {
+        return [...dropdown.querySelectorAll('.cat-checkbox:checked')].map(cb => cb.value);
+    }
+
+    function getCheckedTags(dropdown) {
+        return [...dropdown.querySelectorAll('.tag-checkbox:checked')]
+            .filter(cb => !cb.closest('.filter-tag').classList.contains('tag-disabled'))
+            .map(cb => cb.value);
+    }
+
+    function syncTagVisibility(dropdown) {
+        const activeCats = new Set(getCheckedCats(dropdown));
+        const tagSection = dropdown.querySelector('.filter-section[data-section="tags"]');
+        if (!tagSection) return;
+
+        tagSection.querySelectorAll('.filter-tag').forEach(row => {
+            const rowCats = (row.dataset.tagCats || '').split(' ').filter(Boolean);
+            const active  = rowCats.some(c => activeCats.has(c));
+            row.classList.toggle('tag-disabled', !active);
+            row.querySelector('.tag-checkbox').disabled = !active;
+        });
+
+        const enabledCbs = [...tagSection.querySelectorAll('.tag-checkbox')]
+            .filter(cb => !cb.disabled);
+        const allChecked = enabledCbs.length > 0 && enabledCbs.every(cb => cb.checked);
+        const sa = dropdown.querySelector('.section-select-all[data-section="tags"]');
+        if (sa) sa.checked = allChecked;
+    }
+
+    function isAnyTagEnabledForCat(dropdown, cardCat) {
+        return [...dropdown.querySelectorAll('.filter-tag[data-tag-cats]')]
+            .some(row => {
+                const rowCats = (row.dataset.tagCats || '').split(' ');
+                return rowCats.includes(cardCat) && !row.classList.contains('tag-disabled');
+            });
+    }
+
+    function applyGridCardVisibility(card, dropdown, activeCats, activeTags, hideViewed) {
+        const cardCat  = card.dataset.category || '';
+        const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
+        const isViewed = card.dataset.viewed === 'true';
+
+        if (hideViewed && isViewed) { card.style.display = 'none'; return; }
+        if (!activeCats.has(cardCat)) { card.style.display = 'none'; return; }
+        if (cardTags.length === 0)    { card.style.display = '';     return; }
+
+        const relevantTagsChecked = cardTags.some(t => activeTags.has(t));
+        const anyTagsEnabledForCat = isAnyTagEnabledForCat(dropdown, cardCat);
+
+        card.style.display = (!anyTagsEnabledForCat || relevantTagsChecked) ? '' : 'none';
+    }
+
+    function applyFilter(dropdown, hideViewedCb) {
+        const activeCats = new Set(getCheckedCats(dropdown));
+        const activeTags = new Set(getCheckedTags(dropdown));
+        const hideViewed = hideViewedCb ? hideViewedCb.checked : false;
+
+        document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
+            applyGridCardVisibility(card, dropdown, activeCats, activeTags, hideViewed);
+        });
+
+        const totalCats = dropdown.querySelectorAll('.cat-checkbox').length;
+        const validTags = [...dropdown.querySelectorAll('.tag-checkbox')].filter(cb => !cb.disabled).length;
+
+        updateUrlParams({
+            cats: getCheckedCats(dropdown).length === totalCats ? null : getCheckedCats(dropdown),
+            tags: getCheckedTags(dropdown).length === validTags ? null : getCheckedTags(dropdown),
+            hideViewed: hideViewed ? 'true' : null
+        });
+    }
+
+    function loadFilterFromParams(dropdown, hideViewedCb) {
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get('cats');
+        const tagParam = params.get('tags');
+        const hideParam = params.get('hideViewed');
+
+        if (!catParam && !tagParam && !hideParam) return;
+
+        const activeCats = (catParam && catParam !== 'none') ? new Set(catParam.split(',')) : new Set();
+        const activeTags = (tagParam && tagParam !== 'none') ? new Set(tagParam.split(',')) : new Set();
+
+        dropdown.querySelectorAll('.cat-checkbox').forEach(cb => {
+            cb.checked = catParam ? activeCats.has(cb.value) : true;
+        });
+        dropdown.querySelectorAll('.tag-checkbox').forEach(cb => {
+            cb.checked = tagParam ? activeTags.has(cb.value) : true;
+        });
+        if (hideViewedCb) {
+            hideViewedCb.checked = (hideParam === 'true');
+        }
+
+        ['category', 'tags'].forEach(sec => {
+            const section = dropdown.querySelector(`.filter-section[data-section="${sec}"]`);
+            if (!section) return;
+            const all = [...section.querySelectorAll('input[type=checkbox]')].every(i => i.checked);
+            const sa  = dropdown.querySelector(`.section-select-all[data-section="${sec}"]`);
+            if (sa) sa.checked = all;
+        });
+
+        syncTagVisibility(dropdown);
+        applyFilter(dropdown, hideViewedCb);
+    }
+
+    function syncSectionSelectAll(dropdown, section) {
+        const visibleCbs = [...section.querySelectorAll('input[type=checkbox]')]
+            .filter(i => !i.closest('.filter-tag').classList.contains('tag-disabled'));
+        const allChecked = visibleCbs.every(i => i.checked);
+        const sa = dropdown.querySelector(`.section-select-all[data-section="${section.dataset.section}"]`);
+        if (sa) sa.checked = allChecked;
+    }
+
+    function handleFilterDropdownChange(e, dropdown) {
+        const cb = e.target;
+
+        if (cb.classList.contains('section-select-all')) {
+            const secName = cb.dataset.section;
+            const section = dropdown.querySelector(`.filter-section[data-section="${secName}"]`);
+            section.querySelectorAll('input[type=checkbox]').forEach(item => {
+                if (secName === 'tags' && item.closest('.filter-tag').classList.contains('tag-disabled')) return;
+                item.checked = cb.checked;
+            });
+        } else if (cb.id !== 'hide-viewed-global') {
+            const section = cb.closest('.filter-section');
+            if (section) syncSectionSelectAll(dropdown, section);
+        }
+
+        if (cb.classList.contains('cat-checkbox') ||
+            (cb.classList.contains('section-select-all') && cb.dataset.section === 'category')) {
+            syncTagVisibility(dropdown);
+        }
+    }
+
     function wireFilter() {
         const bar = document.getElementById('filter-bar');
         if (!bar) return;
@@ -1001,132 +1170,12 @@
 
         dropdown.addEventListener('click', (e) => e.stopPropagation());
 
-        function checkedCats() {
-            return [...dropdown.querySelectorAll('.cat-checkbox:checked')].map(cb => cb.value);
-        }
-
-        function checkedTags() {
-            return [...dropdown.querySelectorAll('.tag-checkbox:checked')]
-                .filter(cb => !cb.closest('.filter-tag').classList.contains('tag-disabled'))
-                .map(cb => cb.value);
-        }
-
-        function syncTagVisibility() {
-            const activeCats = new Set(checkedCats());
-            const tagSection = dropdown.querySelector('.filter-section[data-section="tags"]');
-            if (!tagSection) return;
-
-            tagSection.querySelectorAll('.filter-tag').forEach(row => {
-                const rowCats = (row.dataset.tagCats || '').split(' ').filter(Boolean);
-                const active  = rowCats.some(c => activeCats.has(c));
-                row.classList.toggle('tag-disabled', !active);
-                row.querySelector('.tag-checkbox').disabled = !active;
-            });
-
-            const enabledCbs = [...tagSection.querySelectorAll('.tag-checkbox')]
-                .filter(cb => !cb.disabled);
-            const allChecked = enabledCbs.length > 0 && enabledCbs.every(cb => cb.checked);
-            const sa = dropdown.querySelector('.section-select-all[data-section="tags"]');
-            if (sa) sa.checked = allChecked;
-        }
-
-        function applyFilter() {
-            const activeCats = new Set(checkedCats());
-            const activeTags = new Set(checkedTags());
-            const hideViewed = hideViewedCb ? hideViewedCb.checked : false;
-
-            document.querySelectorAll('#projects-grid .proj-card').forEach(card => {
-                const cardCat  = card.dataset.category || '';
-                const cardTags = (card.dataset.tags || '').split(' ').filter(Boolean);
-                const isViewed = card.dataset.viewed === 'true';
-
-                if (hideViewed && isViewed) { card.style.display = 'none'; return; }
-                if (!activeCats.has(cardCat)) { card.style.display = 'none'; return; }
-                if (cardTags.length === 0)    { card.style.display = '';     return; }
-
-                const relevantTagsChecked = cardTags.some(t => activeTags.has(t));
-                const anyTagsEnabledForCat = [...dropdown.querySelectorAll('.filter-tag[data-tag-cats]')]
-                    .some(row => {
-                        const rowCats = (row.dataset.tagCats || '').split(' ');
-                        return rowCats.includes(cardCat) && !row.classList.contains('tag-disabled');
-                    });
-
-                card.style.display = (!anyTagsEnabledForCat || relevantTagsChecked) ? '' : 'none';
-            });
-
-            const totalCats = dropdown.querySelectorAll('.cat-checkbox').length;
-            const validTags = [...dropdown.querySelectorAll('.tag-checkbox')].filter(cb => !cb.disabled).length;
-
-            updateUrlParams({
-                cats: checkedCats().length === totalCats ? null : checkedCats(),
-                tags: checkedTags().length === validTags ? null : checkedTags(),
-                hideViewed: hideViewed ? 'true' : null
-            });
-        }
-
-        function loadFromParams() {
-            const params = new URLSearchParams(window.location.search);
-            const catParam = params.get('cats');
-            const tagParam = params.get('tags');
-            const hideParam = params.get('hideViewed');
-
-            if (!catParam && !tagParam && !hideParam) return;
-
-            const activeCats = (catParam && catParam !== 'none') ? new Set(catParam.split(',')) : new Set();
-            const activeTags = (tagParam && tagParam !== 'none') ? new Set(tagParam.split(',')) : new Set();
-
-            dropdown.querySelectorAll('.cat-checkbox').forEach(cb => {
-                cb.checked = catParam ? activeCats.has(cb.value) : true;
-            });
-            dropdown.querySelectorAll('.tag-checkbox').forEach(cb => {
-                cb.checked = tagParam ? activeTags.has(cb.value) : true;
-            });
-            if (hideViewedCb) {
-                hideViewedCb.checked = (hideParam === 'true');
-            }
-
-            ['category', 'tags'].forEach(sec => {
-                const section = dropdown.querySelector(`.filter-section[data-section="${sec}"]`);
-                if (!section) return;
-                const all = [...section.querySelectorAll('input[type=checkbox]')].every(i => i.checked);
-                const sa  = dropdown.querySelector(`.section-select-all[data-section="${sec}"]`);
-                if (sa) sa.checked = all;
-            });
-
-            syncTagVisibility();
-            applyFilter();
-        }
-
         dropdown.addEventListener('change', (e) => {
-            const cb = e.target;
-
-            if (cb.classList.contains('section-select-all')) {
-                const secName = cb.dataset.section;
-                const section = dropdown.querySelector(`.filter-section[data-section="${secName}"]`);
-                section.querySelectorAll('input[type=checkbox]').forEach(item => {
-                    if (secName === 'tags' && item.closest('.filter-tag').classList.contains('tag-disabled')) return;
-                    item.checked = cb.checked;
-                });
-            } else if (cb.id !== 'hide-viewed-global') {
-                const section = cb.closest('.filter-section');
-                if (section) {
-                    const visibleCbs = [...section.querySelectorAll('input[type=checkbox]')]
-                        .filter(i => !i.closest('.filter-tag').classList.contains('tag-disabled'));
-                    const allChecked = visibleCbs.every(i => i.checked);
-                    const sa = dropdown.querySelector(`.section-select-all[data-section="${section.dataset.section}"]`);
-                    if (sa) sa.checked = allChecked;
-                }
-            }
-
-            if (cb.classList.contains('cat-checkbox') ||
-                (cb.classList.contains('section-select-all') && cb.dataset.section === 'category')) {
-                syncTagVisibility();
-            }
-
-            applyFilter();
+            handleFilterDropdownChange(e, dropdown);
+            applyFilter(dropdown, hideViewedCb);
         });
 
-        loadFromParams();
+        loadFilterFromParams(dropdown, hideViewedCb);
     }
 
     function wireSort() {
@@ -1203,45 +1252,34 @@
         return idx === -1 ? 9999 : idx;
     }
 
+    function safeDate(d) {
+        const time = new Date(d).getTime();
+        return isNaN(time) ? 0 : time;
+    }
+
+    function catDefaultCompare(a, b) {
+        const aCat = (a.dataset.category || '').replace(/-/g, ' ');
+        const bCat = (b.dataset.category || '').replace(/-/g, ' ');
+        return catOrderIndex(aCat) - catOrderIndex(bCat);
+    }
+
+    const SORT_COMPARATORS = {
+        'date-desc':      (a, b) => safeDate(b.dataset.date) - safeDate(a.dataset.date),
+        'date-asc':       (a, b) => safeDate(a.dataset.date) - safeDate(b.dataset.date),
+        'name-asc':       (a, b) => a.dataset.name.localeCompare(b.dataset.name),
+        'name-desc':      (a, b) => b.dataset.name.localeCompare(a.dataset.name),
+        'tags-asc':       (a, b) => a.dataset.tags.localeCompare(b.dataset.tags) || a.dataset.name.localeCompare(b.dataset.name),
+        'cat-asc':        (a, b) => (a.dataset.category || '').localeCompare(b.dataset.category || '') || a.dataset.name.localeCompare(b.dataset.name),
+        'cat-desc':       (a, b) => (b.dataset.category || '').localeCompare(a.dataset.category || '') || a.dataset.name.localeCompare(b.dataset.name),
+        'cat-default':    (a, b) => catDefaultCompare(a, b) || a.dataset.name.localeCompare(b.dataset.name),
+        'downloads-desc': (a, b) => Number(b.dataset.downloads || 0) - Number(a.dataset.downloads || 0),
+        'downloads-asc':  (a, b) => Number(a.dataset.downloads || 0) - Number(b.dataset.downloads || 0),
+        'views-desc':     (a, b) => Number(b.dataset.views || 0) - Number(a.dataset.views || 0),
+        'views-asc':      (a, b) => Number(a.dataset.views || 0) - Number(b.dataset.views || 0),
+    };
+
     function makeSortFn(sortVal) {
-        const safeDate = (d) => {
-            const time = new Date(d).getTime();
-            return isNaN(time) ? 0 : time;
-        };
-        return (a, b) => {
-            if (sortVal === 'date-desc') {
-                return safeDate(b.dataset.date) - safeDate(a.dataset.date);
-            } else if (sortVal === 'date-asc') {
-                return safeDate(a.dataset.date) - safeDate(b.dataset.date);
-            } else if (sortVal === 'name-asc') {
-                return a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'name-desc') {
-                return b.dataset.name.localeCompare(a.dataset.name);
-            } else if (sortVal === 'tags-asc') {
-                const tagCmp = a.dataset.tags.localeCompare(b.dataset.tags);
-                return tagCmp !== 0 ? tagCmp : a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'cat-asc') {
-                const catCmp = (a.dataset.category || '').localeCompare(b.dataset.category || '');
-                return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'cat-desc') {
-                const catCmp = (b.dataset.category || '').localeCompare(a.dataset.category || '');
-                return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'cat-default') {
-                const aCat = (a.dataset.category || '').replace(/-/g, ' ');
-                const bCat = (b.dataset.category || '').replace(/-/g, ' ');
-                const catCmp = catOrderIndex(aCat) - catOrderIndex(bCat);
-                return catCmp !== 0 ? catCmp : a.dataset.name.localeCompare(b.dataset.name);
-            } else if (sortVal === 'downloads-desc') {
-                return Number(b.dataset.downloads || 0) - Number(a.dataset.downloads || 0);
-            } else if (sortVal === 'downloads-asc') {
-                return Number(a.dataset.downloads || 0) - Number(b.dataset.downloads || 0);
-            } else if (sortVal === 'views-desc') {
-                return Number(b.dataset.views || 0) - Number(a.dataset.views || 0);
-            } else if (sortVal === 'views-asc') {
-                return Number(a.dataset.views || 0) - Number(b.dataset.views || 0);
-            }
-            return 0;
-        };
+        return SORT_COMPARATORS[sortVal] || (() => 0);
     }
 
     function applyCarouselRowOrder(orderVal) {
@@ -1370,30 +1408,32 @@
 
     // ── Main init ────────────────────────────────────────────────────────────
 
-    function init(projects) {
-        loadViewedHistory();
-        loadFavorites();
-
+    function sortProjectsByDateDesc(projects) {
         projects.sort((a, b) => {
             const da = (a.config && a.config.date) ? new Date(a.config.date) : new Date(0);
             const db = (b.config && b.config.date) ? new Date(b.config.date) : new Date(0);
             return db - da;
         });
+    }
 
+    function collectPresentCategories(projects) {
         const presentCats = [];
-        const _seenCats   = new Set();
+        const seenCats = new Set();
         projects.forEach(proj => {
             const cat = getCategory(proj);
-            if (!_seenCats.has(cat)) { _seenCats.add(cat); presentCats.push(cat); }
+            if (!seenCats.has(cat)) { seenCats.add(cat); presentCats.push(cat); }
         });
 
-        // Sort presentCats by custom order initially
         presentCats.sort((a, b) => {
             const ai = categoryOrder.findIndex(c => c.toLowerCase() === a.toLowerCase());
             const bi = categoryOrder.findIndex(c => c.toLowerCase() === b.toLowerCase());
             return (ai === -1 ? 9999 : ai) - (bi === -1 ? 9999 : bi);
         });
 
+        return presentCats;
+    }
+
+    function collectTagsByCategory(projects, presentCats) {
         const tagsByCategory = {};
         presentCats.forEach(cat => { tagsByCategory[cat] = new Set(); });
         projects.forEach(proj => {
@@ -1405,12 +1445,10 @@
         presentCats.forEach(cat => {
             tagsByCategory[cat] = [...tagsByCategory[cat]].sort((a, b) => a.localeCompare(b));
         });
+        return tagsByCategory;
+    }
 
-        const scroll = document.getElementById('projects-scroll');
-
-        scroll.insertAdjacentHTML('beforebegin', buildActionBars(presentCats, tagsByCategory));
-        scroll.insertAdjacentHTML('afterend', buildCarouselLayout(projects, presentCats, tagsByCategory));
-
+    function buildHeaderControls() {
         const titleBar = document.getElementById('page-title-bar');
         const filterBar = document.getElementById('filter-bar');
         const sortBar = document.getElementById('sort-bar');
@@ -1455,12 +1493,9 @@
             cleanUrlForView(next);
             applyLayout(next);
         });
+    }
 
-        // ── Build grid cards
-        const grid   = document.getElementById('projects-grid');
-        const modals = document.getElementById('projects-modals');
-        if (!grid) return;
-
+    function buildGridCardsAndModals(projects, grid, modals) {
         grid.innerHTML = '';
 
         projects.forEach((proj, i) => {
@@ -1471,30 +1506,35 @@
             modals.insertAdjacentHTML('beforeend', buildModal(proj, id));
         });
 
-        // ── Sort favorites to top in grid
         sortGridFavoritesFirst();
-
-        // ── Show favorites carousel row if any exist
         refreshFavoritesRow();
+    }
 
-        // ── Wire everything
-        wireFilter();
-        wireSort();
-        wireCarouselFilters();
-        wireCarouselSort();
-        wireCarouselArrows();
+    function wireProjCardClick(e) {
+        const eyeIcon  = e.target.closest('.viewed-overlay .fa-eye');
+        const starIcon = e.target.closest('.fav-overlay .fav-star');
+        const card     = e.target.closest('.proj-card');
 
-        // ── Apply saved layout
-        applyLayout(getLayout());
-
-        // Reveal cards and carousel rows as they come into view
-        if (window._revealAll) {
-            window._revealAll(grid.querySelectorAll('.proj-card'));
-            var catRows = document.querySelectorAll('.cat-row');
-            if (catRows.length) window._revealAll(catRows);
+        if (eyeIcon && card) {
+            e.preventDefault();
+            e.stopPropagation();
+            unmarkAsViewed(card.dataset.id);
+            return;
         }
 
-        // ── Global Document Click Listener
+        if (starIcon && card) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleFavorite(card.dataset.id);
+            return;
+        }
+
+        if (card) {
+            openModal(card.dataset.id);
+        }
+    }
+
+    function wireGlobalModalListeners() {
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#filter-bar, #sort-bar, #row-order-bar, .carousel-filter-bar, .carousel-sort-bar')) {
                 closeAllDropdowns();
@@ -1503,30 +1543,7 @@
 
         const main = document.getElementById('main');
 
-        // Intercept overlay icon clicks before opening the modal
-        main.addEventListener('click', (e) => {
-            const eyeIcon  = e.target.closest('.viewed-overlay .fa-eye');
-            const starIcon = e.target.closest('.fav-overlay .fav-star');
-            const card     = e.target.closest('.proj-card');
-
-            if (eyeIcon && card) {
-                e.preventDefault();
-                e.stopPropagation();
-                unmarkAsViewed(card.dataset.id);
-                return;
-            }
-
-            if (starIcon && card) {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleFavorite(card.dataset.id);
-                return;
-            }
-
-            if (card) {
-                openModal(card.dataset.id);
-            }
-        });
+        main.addEventListener('click', wireProjCardClick);
 
         main.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -1555,6 +1572,45 @@
 
         window.addEventListener('hashchange', handleHash);
         handleHash();
+    }
+
+    function init(projects) {
+        loadViewedHistory();
+        loadFavorites();
+
+        sortProjectsByDateDesc(projects);
+
+        const presentCats = collectPresentCategories(projects);
+        const tagsByCategory = collectTagsByCategory(projects, presentCats);
+
+        const scroll = document.getElementById('projects-scroll');
+
+        scroll.insertAdjacentHTML('beforebegin', buildActionBars(presentCats, tagsByCategory));
+        scroll.insertAdjacentHTML('afterend', buildCarouselLayout(projects, presentCats, tagsByCategory));
+
+        buildHeaderControls();
+
+        const grid   = document.getElementById('projects-grid');
+        const modals = document.getElementById('projects-modals');
+        if (!grid) return;
+
+        buildGridCardsAndModals(projects, grid, modals);
+
+        wireFilter();
+        wireSort();
+        wireCarouselFilters();
+        wireCarouselSort();
+        wireCarouselArrows();
+
+        applyLayout(getLayout());
+
+        if (window._revealAll) {
+            window._revealAll(grid.querySelectorAll('.proj-card'));
+            var catRows = document.querySelectorAll('.cat-row');
+            if (catRows.length) window._revealAll(catRows);
+        }
+
+        wireGlobalModalListeners();
     }
 
     function openModal(id) {

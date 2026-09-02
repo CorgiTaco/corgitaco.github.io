@@ -665,99 +665,94 @@
 
     // ── Highlights cards section ──────────────────────────────────────────────
 
-    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas) {
-        const el = document.getElementById('highlights-section');
-        if (!el || !cards || !cards.length) return;
+    function buildDeltaCard(icon, val, label, asOfIso, source) {
+        if (val === null || val === undefined) return '';
+        var asOf  = asOfIso ? makeAsOf(asOfIso, 'highlight-card-asof') : '';
+        var extra = source ? ` data-source="${source}"` : '';
+        return `<div class="highlight-card highlight-card-link" role="button" tabindex="0"${extra}>
+            <i class="fa ${icon} highlight-card-icon"></i>
+            <span class="highlight-card-stat">${formatViews(Math.abs(val))}</span>
+            <span class="highlight-card-label">${label}</span>
+            ${asOf}
+        </div>`;
+    }
 
-        var d = historyDeltas || {};
-
-        function deltaCard(icon, val, label, asOfIso, source) {
-            if (val === null || val === undefined) return '';
-            var asOf  = asOfIso ? makeAsOf(asOfIso, 'highlight-card-asof') : '';
-            var extra = source ? ` data-source="${source}"` : '';
-            return `<div class="highlight-card highlight-card-link" role="button" tabindex="0"${extra}>
-                <i class="fa ${icon} highlight-card-icon"></i>
-                <span class="highlight-card-stat">${formatViews(Math.abs(val))}</span>
-                <span class="highlight-card-label">${label}</span>
-                ${asOf}
-            </div>`;
-        }
-
-        const cardsHtml = cards.map(c => {
-            var tag     = c.url ? 'a' : 'div';
-            var attrs   = c.url ? ` href="${escapeAttr(c.url)}" target="_blank" rel="noopener noreferrer"` : '';
-            var classes = 'highlight-card' + (c.url ? ' highlight-card-link' : '');
-
-            if (c.dynamic === 'years_since' && c.since) {
-                const sinceLabel = 'Since ' + (c.since_label || c.since);
-                return `
-                    <${tag} class="${classes}"${attrs}>
-                        <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
-                        <span class="highlight-card-stat">${calcYearsSince(c.since)}</span>
-                        <span class="highlight-card-label">${escapeHTML(c.label)}</span>
-                        <span class="highlight-card-asof">${escapeHTML(sinceLabel)}</span>
-                    </${tag}>
-                `;
-            }
-            if (c.source === 'modrinth_stats' && (modrinthStats || curseforgeStats)) {
-                const totalDl = (modrinthStats ? modrinthStats.downloads : 0) + (curseforgeStats ? curseforgeStats.downloads : 0);
-                const dates = [modrinthStats && modrinthStats.date, curseforgeStats && curseforgeStats.date].filter(Boolean);
-                const latestDate = dates.sort().pop();
-                const asOf = latestDate ? makeAsOf(latestDate, 'highlight-card-asof') : '';
-                return `
-                    <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="modrinth_stats" aria-label="View download breakdown">
-                        <i class="fa fa-download highlight-card-icon"></i>
-                        <span class="highlight-card-stat">${formatViews(totalDl)}</span>
-                        <span class="highlight-card-label">Minecraft Mod Downloads</span>
-                        ${asOf}
-                    </div>
-                ` + deltaCard('fa-download', d.mods24h, 'Last 24h Mod Downloads', d.modsTs, 'mods_delta_24h')
-                  + deltaCard('fa-download', d.mods7d,  'Last 7d Mod Downloads',  d.modsTs, 'mods_delta_7d');
-            }
-            if (c.source === 'youtube_stats' && youtubeStats) {
-                const asOf = youtubeStats.date ? makeAsOf(youtubeStats.date, 'highlight-card-asof') : '';
-                return `
-                    <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="youtube_stats" aria-label="View YouTube video stats">
-                        <i class="fa fa-youtube-play highlight-card-icon"></i>
-                        <span class="highlight-card-stat">${formatViews(youtubeStats.views)}</span>
-                        <span class="highlight-card-label">Views across ${youtubeStats.videos} Videos</span>
-                        ${asOf}
-                    </div>
-                ` + deltaCard('fa-eye', d.views24h, 'Last 24h YouTube Views', d.ytTs, 'youtube_delta_24h')
-                  + deltaCard('fa-eye', d.views7d,  'Last 7d YouTube Views',  d.ytTs, 'youtube_delta_7d');
-            }
-            return `
-                <${tag} class="${classes}"${attrs}>
-                    <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
-                    <span class="highlight-card-stat">${escapeHTML(c.stat)}</span>
-                    <span class="highlight-card-label">${escapeHTML(c.label)}</span>
-                </${tag}>
-            `;
-        }).join('');
-
-        el.innerHTML = `
-            <div class="highlights-cards-header resume-header">
-                <i class="fa fa-star"></i> Highlights
-            </div>
-            <div class="highlights-cards-row">${cardsHtml}</div>
+    function buildYearsSinceCard(c, tag, attrs, classes) {
+        const sinceLabel = 'Since ' + (c.since_label || c.since);
+        return `
+            <${tag} class="${classes}"${attrs}>
+                <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
+                <span class="highlight-card-stat">${calcYearsSince(c.since)}</span>
+                <span class="highlight-card-label">${escapeHTML(c.label)}</span>
+                <span class="highlight-card-asof">${escapeHTML(sinceLabel)}</span>
+            </${tag}>
         `;
+    }
 
-        el.querySelectorAll('[data-source="modrinth_stats"]').forEach(card => {
-            const activate = () => { pushHash('downloads'); openDownloadsModal(_cache.modrinthStats, _cache.curseforgeStats); };
+    function buildModrinthStatsCard(modrinthStats, curseforgeStats, d) {
+        const totalDl = (modrinthStats ? modrinthStats.downloads : 0) + (curseforgeStats ? curseforgeStats.downloads : 0);
+        const dates = [modrinthStats && modrinthStats.date, curseforgeStats && curseforgeStats.date].filter(Boolean);
+        const latestDate = dates.sort().pop();
+        const asOf = latestDate ? makeAsOf(latestDate, 'highlight-card-asof') : '';
+        return `
+            <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="modrinth_stats" aria-label="View download breakdown">
+                <i class="fa fa-download highlight-card-icon"></i>
+                <span class="highlight-card-stat">${formatViews(totalDl)}</span>
+                <span class="highlight-card-label">Minecraft Mod Downloads</span>
+                ${asOf}
+            </div>
+        ` + buildDeltaCard('fa-download', d.mods24h, 'Last 24h Mod Downloads', d.modsTs, 'mods_delta_24h')
+          + buildDeltaCard('fa-download', d.mods7d,  'Last 7d Mod Downloads',  d.modsTs, 'mods_delta_7d');
+    }
+
+    function buildYoutubeStatsCard(youtubeStats, d) {
+        const asOf = youtubeStats.date ? makeAsOf(youtubeStats.date, 'highlight-card-asof') : '';
+        return `
+            <div class="highlight-card highlight-card-link" role="button" tabindex="0" data-source="youtube_stats" aria-label="View YouTube video stats">
+                <i class="fa fa-youtube-play highlight-card-icon"></i>
+                <span class="highlight-card-stat">${formatViews(youtubeStats.views)}</span>
+                <span class="highlight-card-label">Views across ${youtubeStats.videos} Videos</span>
+                ${asOf}
+            </div>
+        ` + buildDeltaCard('fa-eye', d.views24h, 'Last 24h YouTube Views', d.ytTs, 'youtube_delta_24h')
+          + buildDeltaCard('fa-eye', d.views7d,  'Last 7d YouTube Views',  d.ytTs, 'youtube_delta_7d');
+    }
+
+    function buildDefaultHighlightCard(c, tag, attrs, classes) {
+        return `
+            <${tag} class="${classes}"${attrs}>
+                <i class="fa ${escapeAttr(c.icon)} highlight-card-icon"></i>
+                <span class="highlight-card-stat">${escapeHTML(c.stat)}</span>
+                <span class="highlight-card-label">${escapeHTML(c.label)}</span>
+            </${tag}>
+        `;
+    }
+
+    function buildHighlightCard(c, modrinthStats, curseforgeStats, youtubeStats, d) {
+        var tag     = c.url ? 'a' : 'div';
+        var attrs   = c.url ? ` href="${escapeAttr(c.url)}" target="_blank" rel="noopener noreferrer"` : '';
+        var classes = 'highlight-card' + (c.url ? ' highlight-card-link' : '');
+
+        if (c.dynamic === 'years_since' && c.since) return buildYearsSinceCard(c, tag, attrs, classes);
+        if (c.source === 'modrinth_stats' && (modrinthStats || curseforgeStats)) return buildModrinthStatsCard(modrinthStats, curseforgeStats, d);
+        if (c.source === 'youtube_stats' && youtubeStats) return buildYoutubeStatsCard(youtubeStats, d);
+        return buildDefaultHighlightCard(c, tag, attrs, classes);
+    }
+
+    function wireActivatable(el, selector, activate) {
+        el.querySelectorAll(selector).forEach(card => {
             card.addEventListener('click', activate);
             card.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
             });
         });
+    }
+
+    function wireHighlightCardLinks(el, statsData, historyDeltas) {
+        wireActivatable(el, '[data-source="modrinth_stats"]', () => { pushHash('downloads'); openDownloadsModal(_cache.modrinthStats, _cache.curseforgeStats); });
 
         if (statsData) {
-            el.querySelectorAll('[data-source="youtube_stats"]').forEach(card => {
-                const activate = () => { pushHash('youtube'); openYoutubeModal(_cache.statsData); };
-                card.addEventListener('click', activate);
-                card.addEventListener('keydown', e => {
-                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
-                });
-            });
+            wireActivatable(el, '[data-source="youtube_stats"]', () => { pushHash('youtube'); openYoutubeModal(_cache.statsData); });
         }
 
         if (historyDeltas) {
@@ -768,14 +763,27 @@
                 { sel: 'youtube_delta_24h', fn: function() { loadAndOpenYoutubeDelta(24,  _cache.statsData, hd.ytTs); } },
                 { sel: 'youtube_delta_7d',  fn: function() { loadAndOpenYoutubeDelta(168, _cache.statsData, hd.ytTs); } },
             ].forEach(function(entry) {
-                el.querySelectorAll('[data-source="' + entry.sel + '"]').forEach(function(card) {
-                    card.addEventListener('click', entry.fn);
-                    card.addEventListener('keydown', function(e) {
-                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); entry.fn(); }
-                    });
-                });
+                wireActivatable(el, '[data-source="' + entry.sel + '"]', entry.fn);
             });
         }
+    }
+
+    function buildHighlightsSection(cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas) {
+        const el = document.getElementById('highlights-section');
+        if (!el || !cards || !cards.length) return;
+
+        var d = historyDeltas || {};
+
+        const cardsHtml = cards.map(c => buildHighlightCard(c, modrinthStats, curseforgeStats, youtubeStats, d)).join('');
+
+        el.innerHTML = `
+            <div class="highlights-cards-header resume-header">
+                <i class="fa fa-star"></i> Highlights
+            </div>
+            <div class="highlights-cards-row">${cardsHtml}</div>
+        `;
+
+        wireHighlightCardLinks(el, statsData, historyDeltas);
 
         if (window._revealAll) window._revealAll(el.querySelectorAll('.highlight-card'));
     }
@@ -901,7 +909,7 @@
 
     // ── Bootstrap ─────────────────────────────────────────────────────────────
 
-    function bootstrap() {
+    function wireBootstrapUI() {
         bindModalClose();
         bindPdfModal();
         bindYoutubeVideoModal();
@@ -920,88 +928,111 @@
             var panels = document.querySelectorAll('.work-with-me-section .wwm-panel');
             if (panels.length) window._revealAll(panels);
         }
+    }
 
-        Promise.all([
+    function fetchResumeData() {
+        return Promise.all([
             fetch('../assets/hire/resume.json').then(r => { if (!r.ok) throw new Error('resume.json load failed'); return r.json(); }),
             fetch('../data/statistics.json').then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../data/mods.json').then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../assets/hire/skills.json').then(r => r.ok ? r.json() : null).catch(() => null),
             fetch('../data/history/mods/totals.csv').then(r => r.ok ? r.text() : null).catch(() => null),
             fetch('../data/history/youtube/totals.csv').then(r => r.ok ? r.text() : null).catch(() => null)
-        ]).then(function(results) {
-            var data        = results[0];
-            var statsData   = results[1];
-            var modsData    = results[2];
-            var skillsData  = results[3];
-            var modsCsv     = results[4];
-            var ytCsv       = results[5];
+        ]);
+    }
 
-            var youtubeStats = statsData && statsData.totals ? {
-                views:  statsData.totals.views,
-                videos: statsData.totals.video_count,
-                date:   statsData.fetchedAt || null,
-            } : null;
+    function computeYoutubeStats(statsData) {
+        return statsData && statsData.totals ? {
+            views:  statsData.totals.views,
+            videos: statsData.totals.video_count,
+            date:   statsData.fetchedAt || null,
+        } : null;
+    }
 
-            var modrinthStats   = null;
-            var curseforgeStats = null;
-            if (modsData && modsData.mods) {
-                var dlCF = 0, dlMR = 0;
-                modsData.mods.forEach(function(m) {
-                    dlCF += (m.stats && m.stats.downloads_cf) || 0;
-                    dlMR += (m.stats && m.stats.downloads_mr) || 0;
-                });
-                curseforgeStats = { downloads: dlCF, date: modsData.fetchedAt || null };
-                modrinthStats   = { downloads: dlMR, date: modsData.fetchedAt || null };
-            }
-            var historyDeltas = null;
-            if (modsCsv || ytCsv) {
-                var modsRows = modsCsv ? parseCSVRows(modsCsv) : null;
-                var ytRows   = ytCsv   ? parseCSVRows(ytCsv)   : null;
-                historyDeltas = {
-                    mods24h:  modsRows ? deltaFromRows(modsRows, 1, 24)  : null,
-                    mods7d:   modsRows ? deltaFromRows(modsRows, 1, 168) : null,
-                    views24h: ytRows   ? deltaFromRows(ytRows,   2, 24)  : null,
-                    views7d:  ytRows   ? deltaFromRows(ytRows,   2, 168) : null,
-                    modsTs:   modsRows ? modsRows[modsRows.length - 1][0] : null,
-                    ytTs:     ytRows   ? ytRows[ytRows.length - 1][0]     : null,
-                };
-            }
-
-            buildContactCard(data.contact);
-            buildLookingForCard(data.looking_for);
-            buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas);
-            buildSkillsSection(skillsData);
-            populateTimeline('experience-timeline', data.experience, 'Experience');
-            populateTimeline('education-timeline', data.education, 'Education');
-            buildTestimonials(data.testimonials);
-
-            // Populate cache for hash router
-            _cache.statsData       = statsData;
-            _cache.modsData        = modsData;
-            _cache.modrinthStats   = modrinthStats;
-            _cache.curseforgeStats = curseforgeStats;
-
-            // Register hashchange listener (replace any previous from SPA re-run)
-            if (window._resumeHashHandler) window.removeEventListener('hashchange', window._resumeHashHandler);
-            window._resumeHashHandler = function () {
-                var hash = location.hash.slice(1);
-                if (!hash) {
-                    // Back-button closed a modal — close whichever overlay is open
-                    var overlay = document.getElementById('timeline-modal-overlay');
-                    if (overlay && overlay.classList.contains('active')) closeModalUI();
-                    var pdfOverlay = document.getElementById('pdf-modal-overlay');
-                    if (pdfOverlay && pdfOverlay.classList.contains('active') && _cache._closePdfUI) _cache._closePdfUI();
-                } else {
-                    routeHash(hash);
-                }
-            };
-            window.addEventListener('hashchange', window._resumeHashHandler);
-
-            // Handle hash already present on page load
-            if (location.hash) routeHash(location.hash.slice(1));
-        }).catch(function(error) {
-            console.error('Error loading resume data:', error);
+    function computeModStats(modsData) {
+        if (!modsData || !modsData.mods) return { modrinthStats: null, curseforgeStats: null };
+        var dlCF = 0, dlMR = 0;
+        modsData.mods.forEach(function(m) {
+            dlCF += (m.stats && m.stats.downloads_cf) || 0;
+            dlMR += (m.stats && m.stats.downloads_mr) || 0;
         });
+        return {
+            curseforgeStats: { downloads: dlCF, date: modsData.fetchedAt || null },
+            modrinthStats:   { downloads: dlMR, date: modsData.fetchedAt || null },
+        };
+    }
+
+    function computeHistoryDeltas(modsCsv, ytCsv) {
+        if (!modsCsv && !ytCsv) return null;
+        var modsRows = modsCsv ? parseCSVRows(modsCsv) : null;
+        var ytRows   = ytCsv   ? parseCSVRows(ytCsv)   : null;
+        return {
+            mods24h:  modsRows ? deltaFromRows(modsRows, 1, 24)  : null,
+            mods7d:   modsRows ? deltaFromRows(modsRows, 1, 168) : null,
+            views24h: ytRows   ? deltaFromRows(ytRows,   2, 24)  : null,
+            views7d:  ytRows   ? deltaFromRows(ytRows,   2, 168) : null,
+            modsTs:   modsRows ? modsRows[modsRows.length - 1][0] : null,
+            ytTs:     ytRows   ? ytRows[ytRows.length - 1][0]     : null,
+        };
+    }
+
+    function registerHashRouter() {
+        if (window._resumeHashHandler) window.removeEventListener('hashchange', window._resumeHashHandler);
+        window._resumeHashHandler = function () {
+            var hash = location.hash.slice(1);
+            if (!hash) {
+                // Back-button closed a modal — close whichever overlay is open
+                var overlay = document.getElementById('timeline-modal-overlay');
+                if (overlay && overlay.classList.contains('active')) closeModalUI();
+                var pdfOverlay = document.getElementById('pdf-modal-overlay');
+                if (pdfOverlay && pdfOverlay.classList.contains('active') && _cache._closePdfUI) _cache._closePdfUI();
+            } else {
+                routeHash(hash);
+            }
+        };
+        window.addEventListener('hashchange', window._resumeHashHandler);
+
+        if (location.hash) routeHash(location.hash.slice(1));
+    }
+
+    function handleResumeDataLoaded(results) {
+        var data        = results[0];
+        var statsData   = results[1];
+        var modsData    = results[2];
+        var skillsData  = results[3];
+        var modsCsv     = results[4];
+        var ytCsv       = results[5];
+
+        var youtubeStats = computeYoutubeStats(statsData);
+        var modStats = computeModStats(modsData);
+        var modrinthStats   = modStats.modrinthStats;
+        var curseforgeStats = modStats.curseforgeStats;
+        var historyDeltas = computeHistoryDeltas(modsCsv, ytCsv);
+
+        buildContactCard(data.contact);
+        buildLookingForCard(data.looking_for);
+        buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas);
+        buildSkillsSection(skillsData);
+        populateTimeline('experience-timeline', data.experience, 'Experience');
+        populateTimeline('education-timeline', data.education, 'Education');
+        buildTestimonials(data.testimonials);
+
+        _cache.statsData       = statsData;
+        _cache.modsData        = modsData;
+        _cache.modrinthStats   = modrinthStats;
+        _cache.curseforgeStats = curseforgeStats;
+
+        registerHashRouter();
+    }
+
+    function bootstrap() {
+        wireBootstrapUI();
+
+        fetchResumeData()
+            .then(handleResumeDataLoaded)
+            .catch(function(error) {
+                console.error('Error loading resume data:', error);
+            });
     }
 
     // carousel-utils.js and yt-utils.js normally come from this page's <head>, but

@@ -410,20 +410,26 @@
     }
 
     // ── Build stats content: 2 charts ────────────────────────────────────────────
-    function buildStatsContent(container, rows, valueKey, label, color, isYoutube) {
-        if (!rows.length) {
-            container.innerHTML = '<p style="padding:40px;text-align:center;opacity:0.5;font-family:var(--font-mono)">No history data available.</p>';
-            return;
-        }
+    function buildProjStatsModeBar(onModeChange) {
+        const modeBar = el('div', 'stat-range-bar');
+        modeBar.style.marginLeft = 'auto';
+        let activeModeBtn = null;
+        ['Day', 'Week', 'Month'].forEach(lbl => {
+            const m   = lbl.toLowerCase();
+            const btn = el('button', 'stat-ctrl-btn', lbl);
+            btn.addEventListener('click', () => {
+                if (activeModeBtn) activeModeBtn.classList.remove('is-active');
+                (activeModeBtn = btn).classList.add('is-active');
+                onModeChange(m);
+            });
+            if (m === 'day') { btn.classList.add('is-active'); activeModeBtn = btn; }
+            modeBar.appendChild(btn);
+        });
+        return modeBar;
+    }
 
-        const sorted  = [...rows].sort((a, b) => fmtDate(a.date).localeCompare(fmtDate(b.date)));
-        const labels  = sorted.map(r => fmtDate(r.date));
-        const data    = sorted.map(r => Number(r[valueKey]) || 0);
-        const current = data.length ? data[data.length - 1] : 0;
-        const icon       = isYoutube ? 'fa-eye' : 'fa-download';
-        const deltaLabel = isYoutube ? 'New Views' : 'New Downloads';
-
-        // ── Chart 1: Cumulative ──────────────────────────────────────────────────
+    // ── Chart 1: Cumulative ──────────────────────────────────────────────────
+    function buildCumulativeStatsSection(container, labels, data, label, color, icon, current) {
         const sec1 = el('section', 'stat-section');
         sec1.innerHTML = `
             <div class="stat-section-head">
@@ -434,24 +440,26 @@
         container.appendChild(sec1);
 
         const chartDiv1 = sec1.querySelector('.stat-chart-wrap');
-        if (labels.length) {
-            // Create chart FIRST so makeRangeEl's initial 1M fire slices it correctly
-            const chart1 = renderChart(chartDiv1.querySelector('canvas'), labels.slice(), [mkDataset(label, data.slice(), color, { fill: true })]);
-            _activeCharts.push(chart1);
-            const rangeEl1 = makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => sliceChart(chart1, labels, [data], from, to));
-            sec1.insertBefore(rangeEl1, chartDiv1);
-            // Apply default slice
-            if (labels.length) {
-                const last = new Date(labels[labels.length - 1] + 'T00:00:00Z');
-                const from = new Date(last);
-                from.setUTCDate(from.getUTCDate() - DEFAULT_RANGE_DAYS + 1);
-                sliceChart(chart1, labels, [data], from.toISOString().slice(0, 10), null);
-            }
-        } else {
+        if (!labels.length) {
             chartDiv1.innerHTML = '<p class="stat-no-data">No history yet.</p>';
+            return;
         }
 
-        // ── Chart 2: Daily delta ─────────────────────────────────────────────────
+        // Create chart FIRST so makeRangeEl's initial 1M fire slices it correctly
+        const chart1 = renderChart(chartDiv1.querySelector('canvas'), labels.slice(), [mkDataset(label, data.slice(), color, { fill: true })]);
+        _activeCharts.push(chart1);
+        const rangeEl1 = makeRangeEl(labels[0], labels[labels.length - 1], (from, to) => sliceChart(chart1, labels, [data], from, to));
+        sec1.insertBefore(rangeEl1, chartDiv1);
+
+        // Apply default slice
+        const last = new Date(labels[labels.length - 1] + 'T00:00:00Z');
+        const from = new Date(last);
+        from.setUTCDate(from.getUTCDate() - DEFAULT_RANGE_DAYS + 1);
+        sliceChart(chart1, labels, [data], from.toISOString().slice(0, 10), null);
+    }
+
+    // ── Chart 2: Daily delta ─────────────────────────────────────────────────
+    function buildDeltaStatsSection(container, sorted, valueKey, deltaLabel, color) {
         const deltas = computeEntityDeltas(sorted, valueKey);
 
         const sec2 = el('section', 'stat-section');
@@ -473,22 +481,9 @@
         const firstDelta    = allDeltaDates[0] || '';
         const lastDelta     = allDeltaDates[allDeltaDates.length - 1] || '';
 
-        const modeBar = el('div', 'stat-range-bar');
-        modeBar.style.marginLeft = 'auto';
-        let mode = 'day', chart2 = null, fromStr2 = null, toStr2 = null, activeModeBtn = null;
+        let mode = 'day', chart2 = null, fromStr2 = null, toStr2 = null;
 
-        ['Day', 'Week', 'Month'].forEach(lbl => {
-            const m   = lbl.toLowerCase();
-            const btn = el('button', 'stat-ctrl-btn', lbl);
-            btn.addEventListener('click', () => {
-                if (activeModeBtn) activeModeBtn.classList.remove('is-active');
-                (activeModeBtn = btn).classList.add('is-active');
-                mode = m; renderDelta();
-            });
-            if (m === 'day') { btn.classList.add('is-active'); activeModeBtn = btn; }
-            modeBar.appendChild(btn);
-        });
-        head2.appendChild(modeBar);
+        head2.appendChild(buildProjStatsModeBar(m => { mode = m; renderDelta(); }));
 
         const chartWrap2 = el('div', 'stat-chart-wrap stat-chart-tall');
         chartWrap2.innerHTML = '<canvas></canvas>';
@@ -524,6 +519,23 @@
         sec2.appendChild(chartWrap2);
 
         renderDelta();
+    }
+
+    function buildStatsContent(container, rows, valueKey, label, color, isYoutube) {
+        if (!rows.length) {
+            container.innerHTML = '<p style="padding:40px;text-align:center;opacity:0.5;font-family:var(--font-mono)">No history data available.</p>';
+            return;
+        }
+
+        const sorted  = [...rows].sort((a, b) => fmtDate(a.date).localeCompare(fmtDate(b.date)));
+        const labels  = sorted.map(r => fmtDate(r.date));
+        const data    = sorted.map(r => Number(r[valueKey]) || 0);
+        const current = data.length ? data[data.length - 1] : 0;
+        const icon       = isYoutube ? 'fa-eye' : 'fa-download';
+        const deltaLabel = isYoutube ? 'New Views' : 'New Downloads';
+
+        buildCumulativeStatsSection(container, labels, data, label, color, icon, current);
+        buildDeltaStatsSection(container, sorted, valueKey, deltaLabel, color);
     }
 
     // ── Dynamic Chart.js loader ──────────────────────────────────────────────────

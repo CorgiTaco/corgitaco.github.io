@@ -401,12 +401,18 @@
 
     // ── Wire everything ───────────────────────────────────────────────────────
 
-    function wireAll(posts) {
-        const grid = document.getElementById('blog-grid');
+    function handleBlogTagChipClick(chip) {
+        const slug = chip.dataset.tag;
+        document.querySelectorAll('.blog-tag-cb').forEach(cb => {
+            cb.checked = cb.value === slug;
+        });
+        const sa = document.getElementById('blog-tag-select-all');
+        if (sa) sa.checked = false;
+        applyFilter();
+    }
 
-        // ── Card area clicks ──
+    function wireGridCardClicks(grid, posts) {
         grid.addEventListener('click', (e) => {
-            // Eye icon → unmark viewed
             const eye = e.target.closest('.blog-eye-icon');
             if (eye) {
                 e.stopPropagation();
@@ -414,7 +420,6 @@
                 if (card) unmarkAsViewed(card.dataset.slug);
                 return;
             }
-            // Fav star → toggle favorite
             const star = e.target.closest('.blog-fav-star');
             if (star) {
                 e.stopPropagation();
@@ -422,21 +427,12 @@
                 if (card) toggleFavorite(card.dataset.slug);
                 return;
             }
-            // Tag chip → filter
             const chip = e.target.closest('.blog-tag-btn');
             if (chip) {
                 e.stopPropagation();
-                const slug = chip.dataset.tag;
-                // Uncheck all, check just this tag
-                document.querySelectorAll('.blog-tag-cb').forEach(cb => {
-                    cb.checked = cb.value === slug;
-                });
-                const sa = document.getElementById('blog-tag-select-all');
-                if (sa) sa.checked = false;
-                applyFilter();
+                handleBlogTagChipClick(chip);
                 return;
             }
-            // Card → open post page
             const card = e.target.closest('.blog-card');
             if (card) {
                 const post = posts.find(p => p.slug === card.dataset.slug);
@@ -451,8 +447,9 @@
             const post = posts.find(p => p.slug === card.dataset.slug);
             if (post) openPost(post);
         });
+    }
 
-        // ── Layout pill ──
+    function wireLayoutPill() {
         document.getElementById('layout-btn-grid')?.addEventListener('click', () => {
             setLayout('grid');
             updateUrlParams({ view: 'grid' });
@@ -461,47 +458,54 @@
             setLayout('list');
             updateUrlParams({ view: null }); // list is default, no param needed
         });
+    }
 
-        // ── Clear viewed ──
-        document.getElementById('blog-clear-viewed-btn')?.addEventListener('click', clearViewedHistory);
-
-        // ── Filter dropdown ──
+    function wireBlogFilterDropdown() {
         const filterToggle = document.getElementById('blog-filter-toggle');
         const filterDd     = document.getElementById('blog-filter-dropdown');
         const filterChev   = document.getElementById('blog-filter-chevron');
 
-        if (filterToggle && filterDd) {
-            filterToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                closeAllDropdowns(filterDd);
-                positionDropdown(filterToggle, filterDd);
-                const open = filterDd.classList.toggle('open');
-                if (filterChev) filterChev.style.transform = open ? 'rotate(180deg)' : '';
-            });
+        if (!filterToggle || !filterDd) return;
 
-            filterDd.addEventListener('click', (e) => e.stopPropagation());
+        filterToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAllDropdowns(filterDd);
+            positionDropdown(filterToggle, filterDd);
+            const open = filterDd.classList.toggle('open');
+            if (filterChev) filterChev.style.transform = open ? 'rotate(180deg)' : '';
+        });
 
-            filterDd.addEventListener('change', (e) => {
-                const cb = e.target;
-                // Select-all for tags
-                if (cb.id === 'blog-tag-select-all') {
-                    filterDd.querySelectorAll('.blog-tag-cb').forEach(c => { c.checked = cb.checked; });
-                } else if (cb.classList.contains('blog-tag-cb')) {
-                    const all = [...filterDd.querySelectorAll('.blog-tag-cb')];
-                    const sa  = document.getElementById('blog-tag-select-all');
-                    if (sa) sa.checked = all.every(c => c.checked);
-                }
-                applyFilter();
-            });
+        filterDd.addEventListener('click', (e) => e.stopPropagation());
 
-            document.addEventListener('click', () => {
-                if (filterDd.classList.contains('open')) {
-                    filterDd.classList.remove('open');
-                    if (filterChev) filterChev.style.transform = '';
-                }
-            });
-        }
+        filterDd.addEventListener('change', (e) => {
+            const cb = e.target;
+            if (cb.id === 'blog-tag-select-all') {
+                filterDd.querySelectorAll('.blog-tag-cb').forEach(c => { c.checked = cb.checked; });
+            } else if (cb.classList.contains('blog-tag-cb')) {
+                const all = [...filterDd.querySelectorAll('.blog-tag-cb')];
+                const sa  = document.getElementById('blog-tag-select-all');
+                if (sa) sa.checked = all.every(c => c.checked);
+            }
+            applyFilter();
+        });
 
+        document.addEventListener('click', () => {
+            if (filterDd.classList.contains('open')) {
+                filterDd.classList.remove('open');
+                if (filterChev) filterChev.style.transform = '';
+            }
+        });
+    }
+
+    function wireAll(posts) {
+        const grid = document.getElementById('blog-grid');
+
+        wireGridCardClicks(grid, posts);
+        wireLayoutPill();
+
+        document.getElementById('blog-clear-viewed-btn')?.addEventListener('click', clearViewedHistory);
+
+        wireBlogFilterDropdown();
     }
 
     // ── Discover & fetch posts ────────────────────────────────────────────────
@@ -557,51 +561,17 @@
 
     // ── Bootstrap ─────────────────────────────────────────────────────────────
 
-    async function bootstrap() {
-        const main = document.getElementById('main');
-
-        // Check if blog is already here OR if our sync lock exists
-        if (!main || document.getElementById('blog-grid') || document.getElementById('blog-sync-lock')) return;
-
-        // IMMEDIATELY inject a hidden lock element so any duplicate async calls see it instantly and abort
-        main.insertAdjacentHTML('beforeend', '<div id="blog-sync-lock" style="display:none;"></div>');
-
-        // Spinner while posts are fetched
-        if (window._sectionSpinner) {
-            var blogLoadWrap = document.createElement('div');
-            blogLoadWrap.id = 'blog-load-spinner';
-            if (window._sectionSpinner) window._sectionSpinner(blogLoadWrap);
-            main.appendChild(blogLoadWrap);
-        }
-
-        loadViewedHistory();
-        loadFavorites();
-
-        // Discover + fetch
-        let entries = [];
-        try { entries = await discoverPosts(); } catch (err) { console.warn(err); }
-
-        const results = entries.length ? await Promise.all(entries.map(fetchPost)) : [];
-        const posts   = results.filter(Boolean);
-        posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-        window._blogPosts = posts;
-
-        // Remove loading spinner
-        var bls = document.getElementById('blog-load-spinner');
-        if (bls) bls.remove();
-
-        // Inject title bar
-        main.insertAdjacentHTML('beforeend', buildTitleBar(posts));
-
-        // Inject scroll container into #main
+    function injectBlogScrollContainer(main) {
         main.insertAdjacentHTML('beforeend', `
             <div id="blog-scroll">
                 <div id="blog-grid"></div>
                 <div id="blog-empty"><i class="fa fa-pencil"></i><span>No posts yet.</span></div>
             </div>
         `);
+    }
 
-        // Inject subscribe modal on <body> (outside #main) so position:fixed works correctly.
+    // Injected on <body> (outside #main) so position:fixed works correctly.
+    function injectSubscribeModalMarkup() {
         // Remove any stale modal from a previous navigation first.
         document.getElementById('subscribe-modal-overlay')?.remove();
         document.body.style.overflow = ''; // clean up any stuck overflow from prior run
@@ -634,15 +604,59 @@
                 </div>
             </div>
         `);
+    }
 
+    function renderBlogGridOrEmpty(posts) {
         if (!posts.length) {
             document.getElementById('blog-empty').style.display = 'flex';
-        } else {
-            const grid = document.getElementById('blog-grid');
-            posts.forEach(post => grid.insertAdjacentHTML('beforeend', buildCard(post)));
-            sortFavoritesFirst();
-            if (window._revealAll) window._revealAll(grid.querySelectorAll('.blog-card'));
+            return;
         }
+        const grid = document.getElementById('blog-grid');
+        posts.forEach(post => grid.insertAdjacentHTML('beforeend', buildCard(post)));
+        sortFavoritesFirst();
+        if (window._revealAll) window._revealAll(grid.querySelectorAll('.blog-card'));
+    }
+
+    async function fetchAndSortPosts() {
+        let entries = [];
+        try { entries = await discoverPosts(); } catch (err) { console.warn(err); }
+
+        const results = entries.length ? await Promise.all(entries.map(fetchPost)) : [];
+        const posts   = results.filter(Boolean);
+        posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        return posts;
+    }
+
+    async function bootstrap() {
+        const main = document.getElementById('main');
+
+        // Check if blog is already here OR if our sync lock exists
+        if (!main || document.getElementById('blog-grid') || document.getElementById('blog-sync-lock')) return;
+
+        // IMMEDIATELY inject a hidden lock element so any duplicate async calls see it instantly and abort
+        main.insertAdjacentHTML('beforeend', '<div id="blog-sync-lock" style="display:none;"></div>');
+
+        // Spinner while posts are fetched
+        if (window._sectionSpinner) {
+            var blogLoadWrap = document.createElement('div');
+            blogLoadWrap.id = 'blog-load-spinner';
+            if (window._sectionSpinner) window._sectionSpinner(blogLoadWrap);
+            main.appendChild(blogLoadWrap);
+        }
+
+        loadViewedHistory();
+        loadFavorites();
+
+        const posts = await fetchAndSortPosts();
+        window._blogPosts = posts;
+
+        var bls = document.getElementById('blog-load-spinner');
+        if (bls) bls.remove();
+
+        main.insertAdjacentHTML('beforeend', buildTitleBar(posts));
+        injectBlogScrollContainer(main);
+        injectSubscribeModalMarkup();
+        renderBlogGridOrEmpty(posts);
 
         wireAll(posts);
         wireSubscribe();
@@ -654,17 +668,65 @@
 
     // ── Subscribe modal ───────────────────────────────────────────────────────
 
-    function wireSubscribe() {
-        const WEB_APP_URL = 'https://corgitaco.dev/subscribe';
+    const SUBSCRIBE_WEB_APP_URL = 'https://corgitaco.dev/subscribe';
 
-        const overlay   = document.getElementById('subscribe-modal-overlay');
-        const openBtn   = document.getElementById('blog-subscribe-btn');
-        const closeX    = document.getElementById('subscribe-close-x');
-        const backBtn   = document.getElementById('subscribe-back-btn');
-        const form      = document.getElementById('subscribe-form');
-        const submitBtn = document.getElementById('subscribe-submit-btn');
-        const resultDiv = document.getElementById('subscribe-result');
+    function stripTags(str) {
+        return str.replace(/<[^>]*>/g, '').trim();
+    }
 
+    function extractSubscribeMessage(html) {
+        const match = html.match(/<h2>(.*?)<\/h2>\s*(<p[^>]*>(.*?)<\/p>)?/is);
+        if (!match) return null;
+        const heading = stripTags(match[1]);
+        const body    = match[3] ? stripTags(match[3]) : '';
+        return body ? heading + ' ' + body : heading;
+    }
+
+    function handleSubscribeResult(result, form, resultDiv) {
+        const isError =
+            result.text.includes('failed to send') ||
+            result.text.includes('Invalid email') ||
+            result.text.includes('Something went wrong') ||
+            result.text.includes('Forbidden');
+
+        if (!result.ok || isError) {
+            resultDiv.style.color = '#ff5f57';
+            resultDiv.textContent = extractSubscribeMessage(result.text) || 'Something went wrong. Please try again.';
+        } else {
+            resultDiv.style.color = 'var(--main-color)';
+            resultDiv.textContent = extractSubscribeMessage(result.text) || 'Check your inbox to confirm your subscription!';
+            form.reset();
+        }
+    }
+
+    function submitSubscribeForm(email, form, submitBtn, resultDiv) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+        resultDiv.textContent = '';
+        resultDiv.style.color = '';
+
+        fetch(SUBSCRIBE_WEB_APP_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'email=' + encodeURIComponent(email)
+        })
+        .then(function (response) {
+            return response.text().then(function (text) {
+                return { ok: response.ok, text: text };
+            });
+        })
+        .then(function (result) { handleSubscribeResult(result, form, resultDiv); })
+        .catch(function () {
+            resultDiv.style.color = '#ff5f57';
+            resultDiv.textContent = 'Network error — please check your connection and try again.';
+        })
+        .finally(function () {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Subscribe';
+        });
+    }
+
+    function wireSubscribeModalToggle(overlay, openBtn, closeX, backBtn, form, resultDiv) {
         function openSubscribe() {
             resultDiv.textContent = '';
             resultDiv.style.color = '';
@@ -685,6 +747,18 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) closeSubscribe();
         });
+    }
+
+    function wireSubscribe() {
+        const overlay   = document.getElementById('subscribe-modal-overlay');
+        const openBtn   = document.getElementById('blog-subscribe-btn');
+        const closeX    = document.getElementById('subscribe-close-x');
+        const backBtn   = document.getElementById('subscribe-back-btn');
+        const form      = document.getElementById('subscribe-form');
+        const submitBtn = document.getElementById('subscribe-submit-btn');
+        const resultDiv = document.getElementById('subscribe-result');
+
+        wireSubscribeModalToggle(overlay, openBtn, closeX, backBtn, form, resultDiv);
 
         if (!form) return;
 
@@ -692,59 +766,8 @@
             e.preventDefault();
             const email = document.getElementById('subscribe-email').value.trim();
             if (!email) return;
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending…';
-            resultDiv.textContent = '';
-            resultDiv.style.color = '';
-
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'email=' + encodeURIComponent(email)
-            })
-            .then(function (response) {
-                return response.text().then(function (text) {
-                    return { ok: response.ok, text: text };
-                });
-            })
-            .then(function (result) {
-                const isError =
-                    result.text.includes('failed to send') ||
-                    result.text.includes('Invalid email') ||
-                    result.text.includes('Something went wrong') ||
-                    result.text.includes('Forbidden');
-
-                if (!result.ok || isError) {
-                    resultDiv.style.color = '#ff5f57';
-                    resultDiv.textContent = extractMessage(result.text) || 'Something went wrong. Please try again.';
-                } else {
-                    resultDiv.style.color = 'var(--main-color)';
-                    resultDiv.textContent = extractMessage(result.text) || 'Check your inbox to confirm your subscription!';
-                    form.reset();
-                }
-            })
-            .catch(function () {
-                resultDiv.style.color = '#ff5f57';
-                resultDiv.textContent = 'Network error — please check your connection and try again.';
-            })
-            .finally(function () {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Subscribe';
-            });
+            submitSubscribeForm(email, form, submitBtn, resultDiv);
         });
-
-        function extractMessage(html) {
-            const match = html.match(/<h2>(.*?)<\/h2>\s*(<p[^>]*>(.*?)<\/p>)?/is);
-            if (!match) return null;
-            const heading = stripTags(match[1]);
-            const body    = match[3] ? stripTags(match[3]) : '';
-            return body ? heading + ' ' + body : heading;
-        }
-
-        function stripTags(str) {
-            return str.replace(/<[^>]*>/g, '').trim();
-        }
     }
 
     if (document.readyState === 'loading') {
