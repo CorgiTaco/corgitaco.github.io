@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-19T11:41:31Z",
+  "fetchedAt": "2026-09-20T11:54:45Z",
   "mods": [
     {
       "id": "better-weather",
@@ -23,9 +23,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 2934059,
+        "downloads_cf": 2934698,
         "downloads_mr": 0,
-        "downloads_total": 2934059
+        "downloads_total": 2934698
       }
     },
     {
@@ -50,9 +50,9 @@
         "1.15.2"
       ],
       "stats": {
-        "downloads_cf": 154499,
+        "downloads_cf": 154501,
         "downloads_mr": 0,
-        "downloads_total": 154499
+        "downloads_total": 154501
       }
     },
     {
@@ -80,9 +80,9 @@
         "1.18"
       ],
       "stats": {
-        "downloads_cf": 7179259,
+        "downloads_cf": 7187733,
         "downloads_mr": 0,
-        "downloads_total": 7179259
+        "downloads_total": 7187733
       }
     },
     {
@@ -111,9 +111,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9127162,
+        "downloads_cf": 9136407,
         "downloads_mr": 0,
-        "downloads_total": 9127162
+        "downloads_total": 9136407
       }
     },
     {
@@ -143,9 +143,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 2876400,
+        "downloads_cf": 2878003,
         "downloads_mr": 0,
-        "downloads_total": 2876400
+        "downloads_total": 2878003
       }
     },
     {
@@ -168,9 +168,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 5127,
+        "downloads_cf": 5128,
         "downloads_mr": 0,
-        "downloads_total": 5127
+        "downloads_total": 5128
       }
     },
     {
@@ -203,9 +203,9 @@
         "1.19.2"
       ],
       "stats": {
-        "downloads_cf": 92350358,
-        "downloads_mr": 14647793,
-        "downloads_total": 106998151
+        "downloads_cf": 92474777,
+        "downloads_mr": 14669828,
+        "downloads_total": 107144605
       }
     },
     {
@@ -218,7 +218,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/data-anchor",
       "modrinth_url": "https://modrinth.com/mod/data-anchor",
       "github_url": "https://github.com/CorgiTaco-MC/Data-Anchor",
-      "date": "2026-08-12",
+      "date": "2026-09-19",
       "loaders": [
         "Fabric",
         "Forge",
@@ -226,6 +226,7 @@
         "Quilt"
       ],
       "game_versions": [
+        "26.3",
         "26.2",
         "26.1.2",
         "26.1",
@@ -234,9 +235,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 16593062,
-        "downloads_mr": 1820912,
-        "downloads_total": 18413974
+        "downloads_cf": 16659796,
+        "downloads_mr": 1826625,
+        "downloads_total": 18486421
       }
     },
     {
@@ -296,9 +297,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 44145302,
+        "downloads_cf": 44165797,
         "downloads_mr": 0,
-        "downloads_total": 44145302
+        "downloads_total": 44165797
       }
     },
     {
@@ -320,9 +321,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 20449,
+        "downloads_cf": 20456,
         "downloads_mr": 0,
-        "downloads_total": 20449
+        "downloads_total": 20456
       }
     },
     {
@@ -378,9 +379,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 6809618,
+        "downloads_cf": 6810022,
         "downloads_mr": 0,
-        "downloads_total": 6809618
+        "downloads_total": 6810022
       }
     },
     {
@@ -406,9 +407,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 33984385,
-        "downloads_mr": 1322610,
-        "downloads_total": 35306995
+        "downloads_cf": 33995559,
+        "downloads_mr": 1323509,
+        "downloads_total": 35319068
       }
     },
     {
@@ -432,9 +433,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1972228,
+        "downloads_cf": 1972468,
         "downloads_mr": 0,
-        "downloads_total": 1972228
+        "downloads_total": 1972468
       }
     },
     {
@@ -459,9 +460,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 13616581,
-        "downloads_mr": 700880,
-        "downloads_total": 14317461
+        "downloads_cf": 13634632,
+        "downloads_mr": 703119,
+        "downloads_total": 14337751
       }
     },
     {
@@ -518,9 +519,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 62105653,
+        "downloads_cf": 62124559,
         "downloads_mr": 0,
-        "downloads_total": 62105653
+        "downloads_total": 62124559
       }
     },
     {
@@ -543,9 +544,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 1028972,
+        "downloads_cf": 1029322,
         "downloads_mr": 0,
-        "downloads_total": 1028972
+        "downloads_total": 1029322
       }
     },
     {
@@ -567,9 +568,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 180059,
+        "downloads_cf": 180064,
         "downloads_mr": 0,
-        "downloads_total": 180059
+        "downloads_total": 180064
       }
     },
     {
@@ -598,9 +599,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 39761051,
-        "downloads_mr": 11318164,
-        "downloads_total": 51079215
+        "downloads_cf": 39828508,
+        "downloads_mr": 11340934,
+        "downloads_total": 51169442
       }
     },
     {
@@ -636,9 +637,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 61701703,
-        "downloads_mr": 1815226,
-        "downloads_total": 63516929
+        "downloads_cf": 61711834,
+        "downloads_mr": 1817022,
+        "downloads_total": 63528856
       }
     },
     {
@@ -657,9 +658,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 33504,
+        "downloads_cf": 33509,
         "downloads_mr": 0,
-        "downloads_total": 33504
+        "downloads_total": 33509
       }
     },
     {
@@ -672,7 +673,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
       "modrinth_url": "https://modrinth.com/mod/oh-the-trees-youll-grow",
       "github_url": "https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow",
-      "date": "2026-08-12",
+      "date": "2026-09-20",
       "loaders": [
         "Fabric",
         "Forge",
@@ -680,6 +681,7 @@
         "Quilt"
       ],
       "game_versions": [
+        "26.3",
         "26.2",
         "26.1.2",
         "26.1",
@@ -697,9 +699,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 40780946,
-        "downloads_mr": 7432102,
-        "downloads_total": 48213048
+        "downloads_cf": 40851202,
+        "downloads_mr": 7446981,
+        "downloads_total": 48298183
       }
     },
     {
@@ -721,9 +723,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 732295,
+        "downloads_cf": 732529,
         "downloads_mr": 0,
-        "downloads_total": 732295
+        "downloads_total": 732529
       }
     },
     {
@@ -770,9 +772,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 17114,
+        "downloads_cf": 17118,
         "downloads_mr": 0,
-        "downloads_total": 17114
+        "downloads_total": 17118
       }
     },
     {
@@ -825,9 +827,9 @@
         "1.16.2"
       ],
       "stats": {
-        "downloads_cf": 51989295,
+        "downloads_cf": 52008015,
         "downloads_mr": 0,
-        "downloads_total": 51989295
+        "downloads_total": 52008015
       }
     },
     {
@@ -848,9 +850,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9937,
+        "downloads_cf": 9939,
         "downloads_mr": 0,
-        "downloads_total": 9937
+        "downloads_total": 9939
       }
     },
     {
@@ -871,9 +873,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 34098,
+        "downloads_cf": 34099,
         "downloads_mr": 0,
-        "downloads_total": 34098
+        "downloads_total": 34099
       }
     },
     {
@@ -897,9 +899,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 58294,
+        "downloads_cf": 63365,
         "downloads_mr": 0,
-        "downloads_total": 58294
+        "downloads_total": 63365
       }
     },
     {
@@ -921,9 +923,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 2555176,
+        "downloads_cf": 2555434,
         "downloads_mr": 0,
-        "downloads_total": 2555176
+        "downloads_total": 2555434
       }
     },
     {
@@ -969,9 +971,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 5032,
-        "downloads_mr": 7469,
-        "downloads_total": 12501
+        "downloads_cf": 5041,
+        "downloads_mr": 7520,
+        "downloads_total": 12561
       }
     },
     {
@@ -984,7 +986,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-core",
       "modrinth_url": "https://modrinth.com/mod/enhanced-celestials-2-core",
       "github_url": "",
-      "date": "2026-09-07",
+      "date": "2026-09-20",
       "loaders": [
         "Fabric",
         "Forge",
@@ -992,15 +994,16 @@
         "Quilt"
       ],
       "game_versions": [
+        "26.3",
         "26.2",
         "26.1.2",
         "1.21.1",
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 399974,
-        "downloads_mr": 29128,
-        "downloads_total": 429102
+        "downloads_cf": 417742,
+        "downloads_mr": 30195,
+        "downloads_total": 447937
       }
     },
     {
@@ -1013,7 +1016,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-default-lunar-events",
       "modrinth_url": "https://modrinth.com/mod/enhanced-celestials-2-default-lunar-events",
       "github_url": "",
-      "date": "2026-09-03",
+      "date": "2026-09-20",
       "loaders": [
         "Fabric",
         "Forge",
@@ -1021,15 +1024,16 @@
         "Quilt"
       ],
       "game_versions": [
+        "26.3",
         "26.2",
         "26.1.2",
         "1.21.1",
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 392734,
-        "downloads_mr": 26889,
-        "downloads_total": 419623
+        "downloads_cf": 410435,
+        "downloads_mr": 27897,
+        "downloads_total": 438332
       }
     },
     {
@@ -1042,7 +1046,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-shader-support",
       "modrinth_url": "https://modrinth.com/mod/enhanced-celestials-2-shader-support",
       "github_url": "",
-      "date": "2026-09-03",
+      "date": "2026-09-20",
       "loaders": [
         "Fabric",
         "Forge",
@@ -1050,15 +1054,16 @@
         "Quilt"
       ],
       "game_versions": [
+        "26.3",
         "26.2",
         "26.1.2",
         "1.21.1",
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 373968,
-        "downloads_mr": 21038,
-        "downloads_total": 395006
+        "downloads_cf": 391041,
+        "downloads_mr": 21933,
+        "downloads_total": 412974
       }
     },
     {
@@ -1086,8 +1091,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 1669929,
-        "downloads_total": 1669929
+        "downloads_mr": 1673578,
+        "downloads_total": 1673578
       }
     },
     {
@@ -1116,8 +1121,8 @@
       ],
       "stats": {
         "downloads_cf": 0,
-        "downloads_mr": 2405869,
-        "downloads_total": 2405869
+        "downloads_mr": 2408685,
+        "downloads_total": 2408685
       }
     }
   ]
