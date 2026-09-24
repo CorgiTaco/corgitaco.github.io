@@ -1288,6 +1288,13 @@ a.highlight-card-link {
     transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
+.view-projects-btn {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 16px;
+}
+
 .wwm-btn:hover {
     background: rgba(70, 162, 88, 0.18);
     border-color: var(--main-color);

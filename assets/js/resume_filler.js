@@ -919,6 +919,9 @@
         var commLink = document.querySelector('#open-commission-link');
         if (commLink) commLink.setAttribute('href', (window._navBasePath || '') + '/commission');
 
+        var projectsLink = document.querySelector('#view-projects-btn');
+        if (projectsLink) projectsLink.setAttribute('href', (window._navBasePath || '') + '/projects');
+
         // Spinners for data-filled sections; reveal static sections on scroll
         if (window._sectionSpinner) {
             ['resume-contact-card', 'resume-highlights-card', 'highlights-section',
