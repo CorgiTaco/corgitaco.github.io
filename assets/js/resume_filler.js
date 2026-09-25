@@ -45,7 +45,7 @@
             ${item.date     ? `<p class="tm-date">${item.date}</p>` : ''}
             ${item.location ? `<p class="tm-location">${escapeHTML(item.location)}</p>` : ''}
             <hr class="tm-divider">
-            <p class="tm-desc">${item.longDescription || item.description}</p>
+            <p class="tm-desc">${formatBulletText(item.longDescription || item.description)}</p>
             ${skills.length ? `
                 <hr class="tm-divider">
                 <div class="tm-skills">
@@ -89,6 +89,37 @@
 
     // ── Timeline builder ──────────────────────────────────────────────────────
 
+    function formatBulletText(text) {
+        if (!text) return text;
+        let seen = false;
+        return text.replace(/\*/g, function() {
+            if (!seen) { seen = true; return '•'; }
+            return '\n•';
+        });
+    }
+
+    function setupScrollHints() {
+        document.querySelectorAll('.timeline-scroll-wrap').forEach(function(wrap) {
+            var track = wrap.querySelector('.timeline-scroll');
+            var hint  = wrap.querySelector('.timeline-scroll-hint');
+            if (!track || !hint) return;
+
+            function update() {
+                var hasOverflow = track.scrollHeight > track.clientHeight + 2;
+                var atBottom = track.scrollTop >= track.scrollHeight - track.clientHeight - 2;
+                hint.classList.toggle('visible', hasOverflow && !atBottom);
+            }
+
+            hint.addEventListener('click', function() {
+                track.scrollBy({ top: track.clientHeight * 0.75, behavior: 'smooth' });
+            });
+
+            track.addEventListener('scroll', update);
+            window.addEventListener('resize', update);
+            setTimeout(update, 100);
+        });
+    }
+
     function populateTimeline(containerId, items, sectionLabel) {
         const container = document.getElementById(containerId);
         if (!container || !items) return;
@@ -117,7 +148,7 @@
                     <h3 class="timeline-title">${item.title}</h3>
                     ${metaHtml}
                     ${dateHtml}
-                    <p class="timeline-desc">${item.description}</p>
+                    <p class="timeline-desc">${formatBulletText(item.description)}</p>
                 </div>
             `;
         }).join('');
@@ -922,10 +953,13 @@
         var projectsLink = document.querySelector('#view-projects-btn');
         if (projectsLink) projectsLink.setAttribute('href', (window._navBasePath || '') + '/projects');
 
+        var headerProjectsLink = document.querySelector('#resume-projects-btn');
+        if (headerProjectsLink) headerProjectsLink.setAttribute('href', (window._navBasePath || '') + '/projects');
+
         // Spinners for data-filled sections; reveal static sections on scroll
         if (window._sectionSpinner) {
             ['resume-contact-card', 'resume-highlights-card', 'highlights-section',
-             'experience-timeline', 'education-timeline', 'skills-section'].forEach(window._sectionSpinner);
+             'showcase-section', 'experience-timeline', 'education-timeline', 'skills-section'].forEach(window._sectionSpinner);
         }
         if (window._revealAll) {
             var panels = document.querySelectorAll('.work-with-me-section .wwm-panel');
@@ -1015,9 +1049,11 @@
         buildContactCard(data.contact);
         buildLookingForCard(data.looking_for);
         buildHighlightsSection(data.highlight_cards, youtubeStats, modrinthStats, statsData, curseforgeStats, historyDeltas);
+        if (window._renderShowcaseSection) window._renderShowcaseSection('showcase-section', data.showcase_videos);
         buildSkillsSection(skillsData);
         populateTimeline('experience-timeline', data.experience, 'Experience');
         populateTimeline('education-timeline', data.education, 'Education');
+        setupScrollHints();
         buildTestimonials(data.testimonials);
 
         _cache.statsData       = statsData;
@@ -1045,8 +1081,9 @@
     function ensureHeadUtils(cb) {
         const base = window._navBasePath || '';
         const missing = [];
-        if (!window._updateCarouselArrows) missing.push(base + '/assets/js/carousel-utils.js');
-        if (!window._loadYTApi)            missing.push(base + '/assets/js/yt-utils.js');
+        if (!window._updateCarouselArrows)   missing.push(base + '/assets/js/carousel-utils.js');
+        if (!window._loadYTApi)              missing.push(base + '/assets/js/yt-utils.js');
+        if (!window._renderShowcaseSection)  missing.push(base + '/assets/js/showcase.js');
         if (!missing.length) { cb(); return; }
 
         let pending = missing.length;

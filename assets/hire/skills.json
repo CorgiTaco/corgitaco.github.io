@@ -85,6 +85,14 @@
       "category": "framework"
     },
     {
+      "name": "Mixins",
+      "category": "framework"
+    },
+    {
+      "name": "Mixin Extras",
+      "category": "framework"
+    },
+    {
       "name": "IntelliJ",
       "category": "tool"
     },
@@ -117,6 +125,10 @@
       "category": "tool"
     },
     {
+      "name": "Claude",
+      "category": "tool"
+    },
+    {
       "name": "YouTube Video Creation",
       "category": "general"
     },
@@ -142,6 +154,18 @@
     },
     {
       "name": "Tech Support",
+      "category": "general"
+    },
+    {
+      "name": "Minecraft Chunk Management",
+      "category": "general"
+    },
+    {
+      "name": "Minecraft 1.14.4 - 26.3",
+      "category": "general"
+    },
+    {
+      "name": "Procedural Voxel Generation",
       "category": "general"
     }
   ]

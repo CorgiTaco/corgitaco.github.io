@@ -182,6 +182,84 @@
         cards.forEach(card => grid.appendChild(card));
     }
 
+    // ── Featured rows (curated, fixed order) ────────────────────────────────────
+
+    const FEATURED_MOD_TITLES = [
+        "Enhanced Celestials 2: Default Lunar Events",
+        "Enhanced Celestials 2: Shader Support",
+        "Oh The Biomes We've Gone",
+        "Oh The Trees You'll Grow",
+        "Data Anchor"
+    ];
+
+    const FEATURED_VIDEO_IDS = [
+        '_NhIOEQ64q8', // 100 Players Survive Natural Disasters in Minecraft! (Karl)
+        'Cj_ncLnnyXk', // 100 Players Simulate Attack on Titan (Socksfor1)
+        'R2SOKyNJ1jQ'  // Minecraft's NEW Natural Disaster Mod Is Mad (TommyInnit)
+    ];
+
+    function buildFeaturedRow(rowId, title, iconClass, orderKeys, matchFn) {
+        const allCards = Array.from(document.querySelectorAll('.proj-card[data-id]'));
+        const ordered = orderKeys
+            .map(key => allCards.find(card => matchFn(card, key)))
+            .filter(Boolean);
+        if (!ordered.length) return '';
+
+        const cardClones = ordered.map(card => card.cloneNode(true).outerHTML).join('');
+
+        return `
+            <div class="cat-row" id="${rowId}" data-cat="${rowId}">
+                <div class="cat-row-header">
+                    <h2 class="cat-row-title"><i class="fa ${iconClass}"></i> ${title}</h2>
+                </div>
+                <div class="cat-carousel-wrap">
+                    <button class="carousel-arrow left"><i class="fa fa-chevron-left"></i></button>
+                    <div class="cat-carousel">${cardClones}</div>
+                    <button class="carousel-arrow right"><i class="fa fa-chevron-right"></i></button>
+                </div>
+            </div>`;
+    }
+
+    function insertShowcaseSection(videos) {
+        const carouselLayout = document.getElementById('carousel-layout');
+        if (!carouselLayout || document.getElementById('showcase-section')) return;
+        if (!videos || !videos.length) return;
+
+        carouselLayout.insertAdjacentHTML('afterbegin', '<div class="showcase-section" id="showcase-section"></div>');
+        if (window._renderShowcaseSection) window._renderShowcaseSection('showcase-section', videos);
+    }
+
+    function insertFeaturedRows() {
+        const carouselLayout = document.getElementById('carousel-layout');
+        if (!carouselLayout) return;
+
+        const modRow = carouselLayout.querySelector('[data-cat="minecraft-mod"]');
+        if (modRow && !document.getElementById('cat-row-featured-mods')) {
+            const html = buildFeaturedRow(
+                'cat-row-featured-mods', 'Featured Minecraft Mods', 'fa-puzzle-piece',
+                FEATURED_MOD_TITLES,
+                (card, title) => (card.dataset.name || '').toLowerCase() === title.toLowerCase()
+            );
+            if (html) {
+                modRow.insertAdjacentHTML('beforebegin', html);
+                wireSingleCarouselArrows(document.getElementById('cat-row-featured-mods'));
+            }
+        }
+
+        const ytRow = carouselLayout.querySelector('[data-cat="youtube"]');
+        if (ytRow && !document.getElementById('cat-row-featured-videos')) {
+            const html = buildFeaturedRow(
+                'cat-row-featured-videos', 'Featured Videos', 'fa-youtube-play',
+                FEATURED_VIDEO_IDS,
+                (card, vid) => card.dataset.id === 'yt-' + vid
+            );
+            if (html) {
+                ytRow.insertAdjacentHTML('beforebegin', html);
+                wireSingleCarouselArrows(document.getElementById('cat-row-featured-videos'));
+            }
+        }
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     function slugify(str) {
@@ -1574,7 +1652,7 @@
         handleHash();
     }
 
-    function init(projects) {
+    function init(projects, showcaseVideos) {
         loadViewedHistory();
         loadFavorites();
 
@@ -1595,6 +1673,8 @@
         if (!grid) return;
 
         buildGridCardsAndModals(projects, grid, modals);
+        insertFeaturedRows();
+        insertShowcaseSection(showcaseVideos);
 
         wireFilter();
         wireSort();
@@ -1716,9 +1796,12 @@
                 .catch(() => null),
             fetch('../data/mods.json')
                 .then(r => r.ok ? r.json() : null)
+                .catch(() => null),
+            fetch('../assets/hire/resume.json')
+                .then(r => r.ok ? r.json() : null)
                 .catch(() => null)
         ])
-            .then(([projects, orderData, statsData, modsData]) => {
+            .then(([projects, orderData, statsData, modsData, resumeData]) => {
                 categoryOrder = Array.isArray(orderData.order) ? orderData.order : [];
                 const extraTagsMap = {};
                 projects.forEach(function(p) {
@@ -1729,7 +1812,7 @@
                 const ytProjects    = statsData ? statsToProjects(statsData, extraTagsMap) : projects.filter(p => p.type === 'youtube');
                 const modProjects   = modsData  ? modsToProjects(modsData)                 : projects.filter(p => p.type === 'minecraft_mod');
                 const otherProjects = projects.filter(p => p.type !== 'youtube' && p.type !== 'minecraft_mod');
-                init([...ytProjects, ...modProjects, ...otherProjects]);
+                init([...ytProjects, ...modProjects, ...otherProjects], resumeData ? resumeData.showcase_videos : null);
             })
             .catch(err => console.error('Could not load project data:', err));
     }
@@ -1741,8 +1824,9 @@
     function ensureHeadUtils(cb) {
         const base = window._navBasePath || '';
         const missing = [];
-        if (!window._updateCarouselArrows) missing.push(base + '/assets/js/carousel-utils.js');
-        if (!window._loadYTApi)            missing.push(base + '/assets/js/yt-utils.js');
+        if (!window._updateCarouselArrows)   missing.push(base + '/assets/js/carousel-utils.js');
+        if (!window._loadYTApi)              missing.push(base + '/assets/js/yt-utils.js');
+        if (!window._renderShowcaseSection)  missing.push(base + '/assets/js/showcase.js');
         if (!missing.length) { cb(); return; }
 
         let pending = missing.length;

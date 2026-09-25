@@ -9,6 +9,13 @@
   ],
   "experience": [
     {
+      "title": "Minecraft Studio Mod Developer",
+      "employer": "Block Factory",
+      "date": "July 2026 - Present",
+      "location": "Remote",
+      "description": "* Bring game design documentation to life by working closely with a team of developers, artists, and musicians to fulfill the vision of the mod documentation. \n* Create various QA tools for analyzing and debugging the implementation of mod assets in game including Textures, Block Models, Animations, Sounds, and more. \n* Work with bedrock developers to ensure the mod is correctly ported from the Java edition to the bedrock edition to ensure feature parity."
+    },
+    {
       "title": "Minecraft Mod Developer",
       "date": "Dec 2019 - Present",
       "location": "Remote",
@@ -19,7 +26,7 @@
       "employer": "USPS",
       "date": "Dec 2025 - June 2026",
       "location": "Kern County, California",
-      "description": "Delivering mail and packages to customers in a timely and efficient manner. Responsible for sorting, organizing, and delivering mail."
+      "description": "* Delivering mail and packages to customers in a timely and efficient manner. Responsible for sorting, organizing, and delivering mail."
     },
     {
       "title": "Java Developer",
@@ -67,5 +74,9 @@
     }
   ],
   "testimonials": [
+  ],
+  "showcase_videos": [
+    "https://youtu.be/Jy_E9NsBKIw",
+    "https://youtu.be/ZRAhZuhFzLM"
   ]
 }
