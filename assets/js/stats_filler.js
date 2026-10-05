@@ -20,6 +20,33 @@
         catch { return []; }
     }
 
+    // Mod history is stored per platform, keyed by project id:
+    // curseforge/{curseforge_id}-curseforge.csv and modrinth/{modrinth_id}-modrinth.csv
+    async function fetchModHistory(mod) {
+        const [cf, mr] = await Promise.all([
+            mod.curseforge_id ? fetchCSV(`../data/history/mods/curseforge/${mod.curseforge_id}-curseforge.csv`) : [],
+            mod.modrinth_id   ? fetchCSV(`../data/history/mods/modrinth/${mod.modrinth_id}-modrinth.csv`)       : [],
+        ]);
+        return mergePlatformRows(cf, mr);
+    }
+
+    // Joins the platform series by day. Before a platform's first row it counts as 0 (not listed
+    // yet); a day missing inside its range is dropped so a failed fetch never reads as 0 downloads.
+    function mergePlatformRows(cfRows, mrRows) {
+        const index = rows => new Map(rows.filter(r => r.downloads !== '').map(r => [fmtDate(r.date), r]));
+        const cf = index(cfRows), mr = index(mrRows);
+        const cfStart = [...cf.keys()].sort()[0], mrStart = [...mr.keys()].sort()[0];
+        const valueOn = (m, start, day) => m.has(day) ? Number(m.get(day).downloads) || 0
+                                         : (start === undefined || day < start) ? 0 : null;
+        const out = [];
+        [...new Set([...cf.keys(), ...mr.keys()])].sort().forEach(day => {
+            const c = valueOn(cf, cfStart, day), m = valueOn(mr, mrStart, day);
+            if (c === null || m === null) return;
+            out.push({ date: (cf.get(day) || mr.get(day)).date, downloads_cf: c, downloads_mr: m, downloads_total: c + m });
+        });
+        return out;
+    }
+
     async function fetchJSON(url) {
         try { const r = await fetch(url); return r.ok ? r.json() : null; }
         catch { return null; }
@@ -579,19 +606,18 @@
 
     function setChipsState(chips, visible) { chips.forEach((c, i) => c.classList.toggle('active', visible[i])); }
 
-    // ── Mod aggregate (CF + MR + Total summed across all mods) ───────────────
+    // ── Mod aggregate (CF + MR + Total across all mods, from totals.csv) ─────
 
-    function computeModAggregate(mods, modRows) {
-        const allDates = [...new Set(mods.flatMap(m => (modRows[m.id] || []).map(r => fmtDate(r.date))))].sort();
-        const cf = {}, mr = {}, tot = {};
-        allDates.forEach(d => { cf[d] = 0; mr[d] = 0; tot[d] = 0; });
-        mods.forEach(m => {
-            (modRows[m.id] || []).forEach(r => {
-                const d = fmtDate(r.date);
-                if (d in cf) { cf[d] += Number(r.downloads_cf) || 0; mr[d] += Number(r.downloads_mr) || 0; tot[d] += Number(r.downloads_total) || 0; }
-            });
-        });
-        return allDates.map(d => ({ date: d, downloads_cf: cf[d], downloads_mr: mr[d], downloads_total: tot[d] }));
+    function computeModAggregate(modTotals) {
+        return modTotals
+            .filter(r => r.downloads_cf !== '' && r.downloads_mr !== '')
+            .map(r => ({
+                date:            fmtDate(r.date),
+                downloads_cf:    Number(r.downloads_cf)    || 0,
+                downloads_mr:    Number(r.downloads_mr)    || 0,
+                downloads_total: Number(r.downloads_total) || 0,
+            }))
+            .sort((a, b) => a.date.localeCompare(b.date));
     }
 
     // ── Section: overview totals chart ────────────────────────────────────────
@@ -620,8 +646,8 @@
 
     // ── Section: mod totals overview (CF + MR + Total) ────────────────────────
 
-    function buildModOverviewChart(container, mods, modRows) {
-        const agg = computeModAggregate(mods, modRows);
+    function buildModOverviewChart(container, mods, modTotals) {
+        const agg = computeModAggregate(modTotals);
         if (!agg.length) return;
 
         const labels  = agg.map(r => r.date);
@@ -1009,10 +1035,11 @@
 
         container.innerHTML = '<div class="stat-loading"><i class="fa fa-spinner fa-spin"></i> Loading statistics…</div>';
 
-        const [statsData, modsData, ytTotals] = await Promise.all([
+        const [statsData, modsData, ytTotals, modTotals] = await Promise.all([
             fetchJSON('../data/statistics.json'),
             fetchJSON('../data/mods.json'),
             fetchCSV('../data/history/youtube/totals.csv'),
+            fetchCSV('../data/history/mods/totals.csv'),
         ]);
 
         const videos = statsData?.videos ?? [];
@@ -1020,7 +1047,7 @@
 
         const [videoRowsArr, modRowsArr] = await Promise.all([
             Promise.all(videos.map(v => fetchCSV(`../data/history/youtube/videos/${v.id}.csv`))),
-            Promise.all(mods.map(m => m.id ? fetchCSV(`../data/history/mods/${m.id}.csv`) : Promise.resolve([]))),
+            Promise.all(mods.map(m => fetchModHistory(m))),
         ]);
 
         const videoRows = Object.fromEntries(videos.map((v, i) => [v.id, videoRowsArr[i]]));
@@ -1090,7 +1117,7 @@
                 inner => { if (videos.length) buildViewsDeltaChart(inner, videos, videoRows); },
             ]),
             makeAccordion('Minecraft Mods', 'fa-puzzle-piece', [
-                inner => { if (mods.length) buildModOverviewChart(inner, mods, modRows); },
+                inner => { if (mods.length) buildModOverviewChart(inner, mods, modTotals); },
                 inner => { if (mods.length) buildModChart(inner, mods, modRows); },
                 inner => { if (mods.length) buildDownloadsDeltaChart(inner, mods, modRows); },
             ]),

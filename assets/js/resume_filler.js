@@ -454,29 +454,14 @@
         document.body.style.overflow = 'hidden';
     }
 
-    function loadAndOpenDownloadsDelta(hoursBack, modsData, timestamp) {
-        showModalLoading('downloads — zsh');
-        var mods = (modsData && modsData.mods) || [];
-        var fetches = mods.map(function(m) {
-            return fetch('../data/history/mods/' + m.id + '.csv')
-                .then(function(r) { return r.ok ? r.text() : null; }).catch(function() { return null; })
-                .then(function(text) {
-                    if (!text) return { cf: 0, mr: 0 };
-                    var rows = parseCSVRows(text).filter(function(r) { return !isNaN(Number(r[1])); });
-                    return {
-                        cf: deltaFromRows(rows, 1, hoursBack) || 0,
-                        mr: deltaFromRows(rows, 2, hoursBack) || 0,
-                    };
-                });
-        });
-        Promise.all(fetches).then(function(results) {
-            var cfDelta = 0, mrDelta = 0;
-            results.forEach(function(r) { cfDelta += r.cf; mrDelta += r.mr; });
-            openDownloadsModal(
-                mrDelta !== 0 ? { downloads: mrDelta, date: timestamp } : null,
-                cfDelta !== 0 ? { downloads: cfDelta, date: timestamp } : null
-            );
-        });
+    // Uses the same totals.csv rows as the highlight cards so the breakdown always sums to the card
+    function openDownloadsDelta(hoursBack, modsRows, timestamp) {
+        var cfDelta = modsRows ? deltaFromRows(modsRows, 2, hoursBack) || 0 : 0;
+        var mrDelta = modsRows ? deltaFromRows(modsRows, 3, hoursBack) || 0 : 0;
+        openDownloadsModal(
+            mrDelta !== 0 ? { downloads: mrDelta, date: timestamp } : null,
+            cfDelta !== 0 ? { downloads: cfDelta, date: timestamp } : null
+        );
     }
 
     function loadAndOpenYoutubeDelta(hoursBack, statsData, timestamp) {
@@ -649,7 +634,7 @@
 
     function deltaFromRows(rows, valueColIndex, hoursBack) {
         // Skip header row (first row has non-numeric values)
-        var data = rows.filter(function(r) { return !isNaN(Number(r[valueColIndex])); });
+        var data = rows.filter(function(r) { return r[valueColIndex] !== undefined && r[valueColIndex].trim() !== '' && !isNaN(Number(r[valueColIndex])); });
         if (!data || data.length < 2) return null;
         var now    = new Date(data[data.length - 1][0]);
         var cutoff = new Date(now.getTime() - hoursBack * 3600 * 1000);
@@ -795,8 +780,8 @@
         if (historyDeltas) {
             var hd = historyDeltas;
             [
-                { sel: 'mods_delta_24h',    fn: function() { loadAndOpenDownloadsDelta(24,  _cache.modsData, hd.modsTs); } },
-                { sel: 'mods_delta_7d',     fn: function() { loadAndOpenDownloadsDelta(168, _cache.modsData, hd.modsTs); } },
+                { sel: 'mods_delta_24h',    fn: function() { openDownloadsDelta(24,  _cache.modsRows, hd.modsTs); } },
+                { sel: 'mods_delta_7d',     fn: function() { openDownloadsDelta(168, _cache.modsRows, hd.modsTs); } },
                 { sel: 'youtube_delta_24h', fn: function() { loadAndOpenYoutubeDelta(24,  _cache.statsData, hd.ytTs); } },
                 { sel: 'youtube_delta_7d',  fn: function() { loadAndOpenYoutubeDelta(168, _cache.statsData, hd.ytTs); } },
             ].forEach(function(entry) {
@@ -1010,6 +995,7 @@
         var modsRows = modsCsv ? parseCSVRows(modsCsv) : null;
         var ytRows   = ytCsv   ? parseCSVRows(ytCsv)   : null;
         return {
+            modsRows: modsRows,
             mods24h:  modsRows ? deltaFromRows(modsRows, 1, 24)  : null,
             mods7d:   modsRows ? deltaFromRows(modsRows, 1, 168) : null,
             views24h: ytRows   ? deltaFromRows(ytRows,   2, 24)  : null,
@@ -1064,6 +1050,7 @@
 
         _cache.statsData       = statsData;
         _cache.modsData        = modsData;
+        _cache.modsRows        = historyDeltas ? historyDeltas.modsRows : null;
         _cache.modrinthStats   = modrinthStats;
         _cache.curseforgeStats = curseforgeStats;
 

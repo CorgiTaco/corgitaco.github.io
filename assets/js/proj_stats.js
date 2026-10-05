@@ -19,6 +19,41 @@
         catch { return []; }
     }
 
+    // Mod history is stored per platform, keyed by project id:
+    // curseforge/{curseforge_id}-curseforge.csv and modrinth/{modrinth_id}-modrinth.csv
+    async function fetchModHistory(mod) {
+        const [cf, mr] = await Promise.all([
+            mod.curseforge_id ? fetchCSV(`../data/history/mods/curseforge/${mod.curseforge_id}-curseforge.csv`) : [],
+            mod.modrinth_id   ? fetchCSV(`../data/history/mods/modrinth/${mod.modrinth_id}-modrinth.csv`)       : [],
+        ]);
+        return mergePlatformRows(cf, mr);
+    }
+
+    async function fetchModById(id) {
+        try {
+            const r = await fetch('../data/mods.json');
+            const data = r.ok ? await r.json() : null;
+            return ((data && data.mods) || []).find(m => m.id === id) || null;
+        } catch { return null; }
+    }
+
+    // Joins the platform series by day. Before a platform's first row it counts as 0 (not listed
+    // yet); a day missing inside its range is dropped so a failed fetch never reads as 0 downloads.
+    function mergePlatformRows(cfRows, mrRows) {
+        const index = rows => new Map(rows.filter(r => r.downloads !== '').map(r => [fmtDate(r.date), r]));
+        const cf = index(cfRows), mr = index(mrRows);
+        const cfStart = [...cf.keys()].sort()[0], mrStart = [...mr.keys()].sort()[0];
+        const valueOn = (m, start, day) => m.has(day) ? Number(m.get(day).downloads) || 0
+                                         : (start === undefined || day < start) ? 0 : null;
+        const out = [];
+        [...new Set([...cf.keys(), ...mr.keys()])].sort().forEach(day => {
+            const c = valueOn(cf, cfStart, day), m = valueOn(mr, mrStart, day);
+            if (c === null || m === null) return;
+            out.push({ date: (cf.get(day) || mr.get(day)).date, downloads_cf: c, downloads_mr: m, downloads_total: c + m });
+        });
+        return out;
+    }
+
     // ── Formatters ───────────────────────────────────────────────────────────────
     function fmtNum(n)  { return (Number(n) || 0).toLocaleString(); }
     function fmtDate(s) { return (s || '').slice(0, 10); }
@@ -564,9 +599,6 @@
         overlay.classList.add('active');
 
         const isYoutube = type === 'youtube';
-        const csvPath   = isYoutube
-            ? `../data/history/youtube/videos/${entityId}.csv`
-            : `../data/history/mods/${entityId}.csv`;
         const valueKey  = isYoutube ? 'views' : 'downloads_total';
         const label     = isYoutube ? 'Views' : 'Downloads';
         const color     = isYoutube ? YT_COLOR : MOD_COLOR;
@@ -574,7 +606,9 @@
         let rows = [];
         await new Promise(resolve => {
             ensureChartJS(async () => {
-                rows = await fetchCSV(csvPath);
+                rows = isYoutube
+                    ? await fetchCSV(`../data/history/youtube/videos/${entityId}.csv`)
+                    : await fetchModById(entityId).then(mod => mod ? fetchModHistory(mod) : []);
                 resolve();
             });
         });

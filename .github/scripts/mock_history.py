@@ -88,33 +88,25 @@ def find_endpoint(existing: list[dict], key: str) -> int:
     return int((row or {}).get(key, 0) or 0)
 
 
-# ── Mod per-mod CSVs ──────────────────────────────────────────────────────────
+# ── Mod per-platform CSVs ─────────────────────────────────────────────────────
 
 MODS_DIR = "data/history/mods"
 print("Mods:")
-for fname in sorted(os.listdir(MODS_DIR)):
-    if not fname.endswith(".csv") or fname == "totals.csv":
+for platform in ("curseforge", "modrinth"):
+    platform_dir = os.path.join(MODS_DIR, platform)
+    if not os.path.isdir(platform_dir):
         continue
-    path     = os.path.join(MODS_DIR, fname)
-    existing = read_csv(path)
-    if not existing:
-        continue
+    for fname in sorted(os.listdir(platform_dir)):
+        if not fname.endswith(".csv"):
+            continue
+        path     = os.path.join(platform_dir, fname)
+        existing = read_csv(path)
+        if not existing:
+            continue
 
-    cf_end  = find_endpoint(existing, "downloads_cf")
-    mr_end  = find_endpoint(existing, "downloads_mr")
-
-    cf_s    = mock_series(cf_end)
-    mr_s    = mock_series(mr_end)
-    tot_s   = [cf_s[i] + mr_s[i] for i in range(DAYS)]
-
-    mock_rows = [
-        {"date":            MOCK_DATES[i].isoformat(),
-         "downloads_cf":    cf_s[i],
-         "downloads_mr":    mr_s[i],
-         "downloads_total": tot_s[i]}
-        for i in range(DAYS)
-    ]
-    rebuild(path, existing, mock_rows, ["date", "downloads_cf", "downloads_mr", "downloads_total"])
+        dl_s      = mock_series(find_endpoint(existing, "downloads"))
+        mock_rows = [{"date": MOCK_DATES[i].isoformat(), "downloads": dl_s[i]} for i in range(DAYS)]
+        rebuild(path, existing, mock_rows, ["date", "downloads"])
 
 # ── Mod totals ────────────────────────────────────────────────────────────────
 
@@ -122,13 +114,16 @@ print("Mod totals:")
 path     = os.path.join(MODS_DIR, "totals.csv")
 existing = read_csv(path)
 if existing:
-    tot_end   = find_endpoint(existing, "downloads_total")
-    tot_s     = mock_series(tot_end)
+    cf_s      = mock_series(find_endpoint(existing, "downloads_cf"))
+    mr_s      = mock_series(find_endpoint(existing, "downloads_mr"))
     mock_rows = [
-        {"date": MOCK_DATES[i].isoformat(), "downloads_total": tot_s[i]}
+        {"date":            MOCK_DATES[i].isoformat(),
+         "downloads_total": cf_s[i] + mr_s[i],
+         "downloads_cf":    cf_s[i],
+         "downloads_mr":    mr_s[i]}
         for i in range(DAYS)
     ]
-    rebuild(path, existing, mock_rows, ["date", "downloads_total"])
+    rebuild(path, existing, mock_rows, ["date", "downloads_total", "downloads_cf", "downloads_mr"])
 
 # ── YouTube per-video CSVs ────────────────────────────────────────────────────
 

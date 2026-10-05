@@ -2,7 +2,7 @@
   "fetchedAt": "2026-10-05T15:22:36Z",
   "mods": [
     {
-      "id": "better-weather",
+      "id": "better-weather-discontinued",
       "title": "Better Weather (Discontinued)",
       "description": "A mod adding new weather events and seasons!",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/292/154/256/256/637324627328004118.png",
@@ -29,7 +29,7 @@
       }
     },
     {
-      "id": "better-weather-fabric",
+      "id": "better-weather-fabric-discontinued",
       "title": "Better Weather (Fabric) (Discontinued)",
       "description": "A mod adding new weather events!",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/297/775/256/256/637346012122671995.png",
@@ -53,6 +53,38 @@
         "downloads_cf": 154552,
         "downloads_mr": 0,
         "downloads_total": 154552
+      }
+    },
+    {
+      "id": "block-swap",
+      "title": "Block Swap",
+      "description": "A simple mod to replace a given block with another.",
+      "icon": "https://media.forgecdn.net/avatars/thumbnails/367/611/256/256/637534686697588271.png",
+      "curseforge_id": 468893,
+      "modrinth_id": "f9kXyjJX",
+      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
+      "modrinth_url": "https://modrinth.com/mod/block-swap",
+      "github_url": "https://github.com/CorgiTaco/Block-Swap",
+      "date": "2023-06-20",
+      "loaders": [
+        "Forge",
+        "Fabric"
+      ],
+      "game_versions": [
+        "1.20.1",
+        "1.19.4",
+        "1.19.3",
+        "1.19.2",
+        "1.19.1",
+        "1.19",
+        "1.18.2",
+        "1.18",
+        "1.16.5"
+      ],
+      "stats": {
+        "downloads_cf": 9244065,
+        "downloads_mr": 1718296,
+        "downloads_total": 10962361
       }
     },
     {
@@ -86,38 +118,7 @@
       }
     },
     {
-      "id": "block-swap",
-      "title": "Block Swap Lite",
-      "description": "A simple mod to replace a given block with another.",
-      "icon": "https://media.forgecdn.net/avatars/thumbnails/367/611/256/256/637534686697588271.png",
-      "curseforge_id": 468893,
-      "modrinth_id": null,
-      "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/block-swap",
-      "modrinth_url": "",
-      "github_url": "https://github.com/CorgiTaco/Block-Swap",
-      "date": "2023-06-20",
-      "loaders": [
-        "Forge"
-      ],
-      "game_versions": [
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19.1",
-        "1.19",
-        "1.18.2",
-        "1.18",
-        "1.16.5"
-      ],
-      "stats": {
-        "downloads_cf": 9244065,
-        "downloads_mr": 0,
-        "downloads_total": 9244065
-      }
-    },
-    {
-      "id": "camera-overhaul-forge",
+      "id": "cameraoverhaul-forge",
       "title": "CameraOverhaul (Forge)",
       "description": "A forge port of Camera Overhaul. Makes gameplay more satisfying through the use of various camera tilting.",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/339/503/256/256/637479868245164532.png",
@@ -265,13 +266,13 @@
     },
     {
       "id": "enhanced-celestials",
-      "title": "Enhanced Celestials - Blood, Blue, & Harvest (Super) Moons",
+      "title": "Enhanced Celestials",
       "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/1190/101/256/256/638764927492625008.png",
       "curseforge_id": 438447,
-      "modrinth_id": null,
+      "modrinth_id": "2rL16t1O",
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials",
-      "modrinth_url": "",
+      "modrinth_url": "https://modrinth.com/mod/enhanced-celestials",
       "github_url": "https://github.com/CorgiTaco/Enhanced-Celestials",
       "date": "2026-08-07",
       "loaders": [
@@ -298,8 +299,8 @@
       ],
       "stats": {
         "downloads_cf": 44439513,
-        "downloads_mr": 0,
-        "downloads_total": 44439513
+        "downloads_mr": 2452003,
+        "downloads_total": 46891516
       }
     },
     {
@@ -350,7 +351,7 @@
       }
     },
     {
-      "id": "enhanced-celestials-fabric",
+      "id": "enhanced-celestials-fabric-blood-moons-harvest-moons",
       "title": "Enhanced Celestials(Fabric) - Blood Moons & Harvest Moons",
       "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/340/264/256/256/637481721235377013.png",
@@ -413,7 +414,7 @@
       }
     },
     {
-      "id": "entity-collision-fps-fix-fabric",
+      "id": "entity-collision-fps-fix-refabricated",
       "title": "Entity Collision FPS Fix Refabricated",
       "description": "Client Side mod that optimizes entity's on the render thread. Fixes https://bugs.mojang.com/browse/MC-228976",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/553/452/256/256/637894101323351271.png",
@@ -489,7 +490,7 @@
       }
     },
     {
-      "id": "lazy-dfu-forge",
+      "id": "lazy-datafixerupper-lazydfu-forge",
       "title": "Lazy DataFixerUpper(LazyDFU) [FORGE]",
       "description": " Makes the initialization of DataFixerUpper \"lazy\" ",
       "icon": "https://media.forgecdn.net/avatars/thumbnails/359/41/256/256/637520662016454676.png",
@@ -1064,65 +1065,6 @@
         "downloads_cf": 560396,
         "downloads_mr": 32254,
         "downloads_total": 592650
-      }
-    },
-    {
-      "id": "block-swap",
-      "title": "Block Swap",
-      "description": "A simple mod to replace a given block with another.",
-      "icon": "https://cdn.modrinth.com/data/f9kXyjJX/f1ddeadae951a373a5523c7b7501bd7ea0db85fa_96.webp",
-      "curseforge_id": null,
-      "modrinth_id": "f9kXyjJX",
-      "curseforge_url": "",
-      "modrinth_url": "https://modrinth.com/mod/block-swap",
-      "github_url": "https://github.com/CorgiTaco/Block-Swap",
-      "date": "2022-06-06",
-      "loaders": [
-        "Fabric",
-        "Forge"
-      ],
-      "game_versions": [
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2",
-        "1.19",
-        "1.18.2"
-      ],
-      "stats": {
-        "downloads_cf": 0,
-        "downloads_mr": 1718296,
-        "downloads_total": 1718296
-      }
-    },
-    {
-      "id": "enhanced-celestials",
-      "title": "Enhanced Celestials",
-      "description": "A mod adding new Lunar Events like blood moons and harvest moons!",
-      "icon": "https://cdn.modrinth.com/data/2rL16t1O/e2d4d70baba696b30bafc484b87afcddc8ecd554_96.webp",
-      "curseforge_id": null,
-      "modrinth_id": "2rL16t1O",
-      "curseforge_url": "",
-      "modrinth_url": "https://modrinth.com/mod/enhanced-celestials",
-      "github_url": "https://github.com/CorgiTaco/Enhanced-Celestials",
-      "date": "2022-10-26",
-      "loaders": [
-        "Fabric",
-        "Forge",
-        "NeoForge",
-        "Quilt"
-      ],
-      "game_versions": [
-        "1.21.1",
-        "1.20.1",
-        "1.19.4",
-        "1.19.3",
-        "1.19.2"
-      ],
-      "stats": {
-        "downloads_cf": 0,
-        "downloads_mr": 2452003,
-        "downloads_total": 2452003
       }
     }
   ]

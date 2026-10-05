@@ -3,26 +3,30 @@
 Fetch mod metadata + download history from CurseForge and Modrinth.
 
 Outputs:
-  {OUTPUT_JSON}              — current mod snapshot (metadata + stats)
-  {HISTORY_DIR}/{id}.csv    — daily download history per mod
-  {HISTORY_DIR}/totals.csv  — daily cross-mod download totals
+  {OUTPUT_JSON}                                   — current mod snapshot (metadata + stats)
+  {HISTORY_DIR}/curseforge/{cf_id}-curseforge.csv  — daily CurseForge download history per project
+  {HISTORY_DIR}/modrinth/{mr_id}-modrinth.csv       — daily Modrinth download history per project
+  {HISTORY_DIR}/totals.csv                        — daily cross-mod totals (overall + per platform)
 
+History files are keyed by each platform's permanent project id (the numeric
+CurseForge id, the Modrinth project id), so renaming a mod in the table or
+changing its Modrinth slug never orphans its history. The mod's site id is its
+table name, lowercased with non-alphanumerics collapsed to "-".
 History is capped at 5 years; rows older than that are dropped on each run.
 If a CSV does not exist it is created fresh on the next run.
 
-The tracked project list comes from PROJECTS_JSON, a committed lookup file:
+The tracked project table comes from PROJECTS_JSON. Each row ties a CurseForge
+and/or Modrinth project together under one name:
 
-    {"mods": [{"name": "...", "curseforge": 123456, "modrinth": "some-slug"}, ...]}
+    [{"name": "Block Swap", "modrinth_id": "f9kXyjJX", "curseforge_id": "468893"}, ...]
 
-Either platform key may be omitted. The CURSEFORGE_PROJECTS / MODRINTH_PROJECTS
-environment variables are only consulted when that file is missing.
+Either id may be left empty if the mod is not on that platform. A project id
+listed on two rows, or two names that map to the same site id, stops the run.
 
 Environment variables:
   CURSEFORGE_API_KEY   - CurseForge API key
   MODRINTH_TOKEN       - Modrinth token (optional; public projects work without it)
-  PROJECTS_JSON        - Tracked project list  (default: data/tracked_projects.json)
-  CURSEFORGE_PROJECTS  - Fallback: comma-separated numeric CF mod IDs
-  MODRINTH_PROJECTS    - Fallback: comma-separated MR project IDs or slugs
+  PROJECTS_JSON        - Tracked project table   (default: data/mod_projects.json)
   OUTPUT_JSON          - Metadata output path    (default: data/mods.json)
   HISTORY_DIR          - History output dir      (default: data/history/mods)
 """
@@ -54,8 +58,8 @@ MR_LOADER_DISPLAY: dict[str, str] = {
 
 _MC_RELEASE_RE = re.compile(r"^\d+\.\d+(\.\d+)?$")
 
-MOD_HISTORY_FIELDS    = ["date", "downloads_cf", "downloads_mr", "downloads_total"]
-TOTALS_HISTORY_FIELDS = ["date", "downloads_total"]
+PLATFORM_HISTORY_FIELDS = ["date", "downloads"]
+TOTALS_HISTORY_FIELDS   = ["date", "downloads_total", "downloads_cf", "downloads_mr"]
 
 MAX_HISTORY_DAYS = 5 * 365
 
@@ -110,7 +114,6 @@ def cf_to_entry(mod: dict) -> dict:
     loaders, game_versions = _cf_loaders_and_versions(mod)
     dl = int(mod.get("downloadCount") or 0)
     return {
-        "id":             mod.get("slug", ""),
         "title":          mod.get("name", ""),
         "description":    mod.get("summary", ""),
         "icon":           logo.get("thumbnailUrl", ""),
@@ -169,7 +172,6 @@ def mr_to_entry(proj: dict) -> dict:
     loaders, game_versions = _mr_loaders_and_versions(proj)
     dl = int(proj.get("downloads") or 0)
     return {
-        "id":             slug,
         "title":          proj.get("title", ""),
         "description":    proj.get("description", ""),
         "icon":           proj.get("icon_url") or "",
@@ -215,31 +217,6 @@ def merge(base: dict, extra: dict) -> dict:
     return merged
 
 
-def combine_by_title(cf_entries: list[dict], mr_entries: list[dict]) -> list[dict]:
-    mr_by_title = {e["title"].lower(): e for e in mr_entries}
-    matched: set[str] = set()
-    result: list[dict] = []
-
-    for cf in cf_entries:
-        key = cf["title"].lower()
-        mr  = mr_by_title.get(key)
-        if mr:
-            matched.add(key)
-            combined = merge(cf, mr)
-            combined["modrinth_id"]  = mr["modrinth_id"]
-            combined["modrinth_url"] = mr["modrinth_url"] or combined.get("modrinth_url", "")
-            print(f"[merge] {cf['title']}")
-            result.append(combined)
-        else:
-            result.append(cf)
-
-    for mr in mr_entries:
-        if mr["title"].lower() not in matched:
-            result.append(mr)
-
-    return result
-
-
 # ── CSV helpers ───────────────────────────────────────────────────────────────
 
 def read_csv_rows(path: str) -> list[dict]:
@@ -273,131 +250,142 @@ def upsert_row(rows: list[dict], now: str, new_row: dict) -> list[dict]:
 
 # ── History writers ───────────────────────────────────────────────────────────
 
-def write_mod_history(mod: dict, now: str, history_dir: str, cutoff: str) -> None:
-    mod_id = mod.get("id", "")
-    if not mod_id:
-        return
-    path = os.path.join(history_dir, f"{mod_id}.csv")
+def platform_history_path(history_dir: str, platform: str, project_id: str) -> str:
+    return os.path.join(history_dir, platform, f"{project_id}-{platform}.csv")
+
+
+def write_platform_history(path: str, downloads: int, now: str, cutoff: str) -> None:
     rows = trim_old_rows(read_csv_rows(path), cutoff)
-    s = mod["stats"]
-    rows = upsert_row(rows, now, {
-        "date":            now,
-        "downloads_cf":    s["downloads_cf"],
-        "downloads_mr":    s["downloads_mr"],
-        "downloads_total": s["downloads_total"],
-    })
-    write_csv(path, rows, MOD_HISTORY_FIELDS)
+    rows = upsert_row(rows, now, {"date": now, "downloads": downloads})
+    write_csv(path, rows, PLATFORM_HISTORY_FIELDS)
 
 
 def write_totals_history(mods: list[dict], now: str, history_dir: str, cutoff: str) -> None:
     path = os.path.join(history_dir, "totals.csv")
     rows = trim_old_rows(read_csv_rows(path), cutoff)
-    total = sum(m["stats"]["downloads_total"] for m in mods)
-    rows = upsert_row(rows, now, {"date": now, "downloads_total": total})
+    rows = upsert_row(rows, now, {
+        "date":            now,
+        "downloads_total": sum(m["stats"]["downloads_total"] for m in mods),
+        "downloads_cf":    sum(m["stats"]["downloads_cf"] for m in mods),
+        "downloads_mr":    sum(m["stats"]["downloads_mr"] for m in mods),
+    })
     write_csv(path, rows, TOTALS_HISTORY_FIELDS)
 
 
-# ── Tracked project list ──────────────────────────────────────────────────────
+# ── Tracked project table ─────────────────────────────────────────────────────
 
-def dedupe(items: list) -> list:
-    """Preserve order, drop repeats — a project listed twice would be counted twice."""
-    seen: set = set()
-    out: list = []
-    for item in items:
-        if item not in seen:
-            seen.add(item)
-            out.append(item)
-        else:
-            print(f"[lookup] ignoring duplicate entry: {item}", file=sys.stderr)
-    return out
+def slugify(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", name.lower().replace("'", "")).strip("-")
 
 
-def load_tracked_projects(path: str) -> tuple[list[int], list[str]] | None:
-    """Read the committed lookup file. Returns None when it does not exist."""
+def load_project_table(path: str) -> list[dict]:
+    """Read the committed project table. Exits if it is missing, a project id is listed
+    twice (its downloads would be counted twice), or two names map to the same site id."""
     if not os.path.exists(path):
-        return None
+        print(f"Error: project table {path} not found.", file=sys.stderr)
+        sys.exit(1)
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
-    cf_ids: list[int] = []
-    mr_ids: list[str] = []
-    for entry in data.get("mods", []):
-        name = entry.get("name", "<unnamed>")
-        cf = entry.get("curseforge")
-        mr = entry.get("modrinth")
-        if cf is not None:
-            try:
-                cf_ids.append(int(cf))
-            except (TypeError, ValueError):
-                print(f"[lookup] bad curseforge id for {name}: {cf!r}", file=sys.stderr)
-        if mr:
-            mr_ids.append(str(mr).strip())
-        if cf is None and not mr:
-            print(f"[lookup] {name} has no platform id, skipping", file=sys.stderr)
+    projects: list[dict] = []
+    seen_slugs: dict[str, str] = {}
+    seen_ids:   dict[tuple[str, str], str] = {}
+    for entry in data:
+        name = (entry.get("name") or "").strip()
+        cf   = str(entry.get("curseforge_id") or "").strip()
+        mr   = str(entry.get("modrinth_id") or "").strip()
+        if not name:
+            print(f"[table] entry without a name, skipping: {entry}", file=sys.stderr)
+            continue
+        if cf and not cf.isdigit():
+            print(f"[table] bad curseforge_id for {name}: {cf!r}", file=sys.stderr)
+            cf = ""
+        if not cf and not mr:
+            print(f"[table] {name} has no platform id, skipping", file=sys.stderr)
+            continue
+        for key in (("curseforge", cf), ("modrinth", mr)):
+            if not key[1]:
+                continue
+            if key in seen_ids:
+                print(f"Error: {key[0]} project {key[1]} is listed under both "
+                      f"'{seen_ids[key]}' and '{name}'.", file=sys.stderr)
+                sys.exit(1)
+            seen_ids[key] = name
+        slug = slugify(name)
+        if slug in seen_slugs:
+            print(f"Error: '{name}' and '{seen_slugs[slug]}' share site id '{slug}'.",
+                  file=sys.stderr)
+            sys.exit(1)
+        seen_slugs[slug] = name
+        projects.append({"name": name, "slug": slug, "curseforge_id": cf, "modrinth_id": mr})
 
-    print(f"[lookup] {path}: {len(cf_ids)} CurseForge, {len(mr_ids)} Modrinth")
-    return dedupe(cf_ids), dedupe(mr_ids)
+    print(f"[table] {path}: {len(projects)} projects")
+    return projects
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
+
+def fetch_project(project: dict, cf_api_key: str, mr_token: str | None) -> tuple[dict | None, dict | None]:
+    cf_entry = mr_entry = None
+    cf_id, mr_id = project["curseforge_id"], project["modrinth_id"]
+    if cf_id:
+        if not cf_api_key:
+            print(f"[CF] skipping {cf_id} (no CURSEFORGE_API_KEY)", file=sys.stderr)
+        else:
+            try:
+                data = fetch_cf_mod(cf_api_key, int(cf_id))
+                if data:
+                    print(f"[CF] {data.get('name')}")
+                    cf_entry = cf_to_entry(data)
+                else:
+                    print(f"[CF] not found: {cf_id}", file=sys.stderr)
+            except Exception as exc:
+                print(f"[CF] error for {cf_id}: {exc}", file=sys.stderr)
+    if mr_id:
+        try:
+            data = fetch_mr_project(mr_token, mr_id)
+            if data:
+                print(f"[MR] {data.get('title')}")
+                mr_entry = mr_to_entry(data)
+            else:
+                print(f"[MR] not found: {mr_id}", file=sys.stderr)
+        except Exception as exc:
+            print(f"[MR] error for {mr_id}: {exc}", file=sys.stderr)
+    return cf_entry, mr_entry
+
 
 def main() -> None:
     cf_api_key  = os.environ.get("CURSEFORGE_API_KEY", "")
     mr_token    = os.environ.get("MODRINTH_TOKEN")
     output_json = os.environ.get("OUTPUT_JSON", "data/mods.json")
     history_dir = os.environ.get("HISTORY_DIR", "data/history/mods")
-
-    projects_json = os.environ.get("PROJECTS_JSON", "data/tracked_projects.json")
-
-    tracked = load_tracked_projects(projects_json)
-    if tracked is not None:
-        cf_ids, mr_ids = tracked
-    else:
-        print(f"[lookup] {projects_json} not found, falling back to env vars", file=sys.stderr)
-        cf_ids = dedupe([int(s.strip()) for s in os.environ.get("CURSEFORGE_PROJECTS", "").split(",") if s.strip()])
-        mr_ids = dedupe([s.strip()      for s in os.environ.get("MODRINTH_PROJECTS",   "").split(",") if s.strip()])
-
-    if not cf_ids and not mr_ids:
-        print(f"Error: no projects to fetch. {projects_json} is empty or missing and "
-              "CURSEFORGE_PROJECTS / MODRINTH_PROJECTS are unset.", file=sys.stderr)
-        sys.exit(1)
+    projects    = load_project_table(os.environ.get("PROJECTS_JSON", "data/mod_projects.json"))
 
     now    = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     cutoff = (datetime.now(timezone.utc) - timedelta(days=MAX_HISTORY_DAYS)).strftime("%Y-%m-%d")
 
-    cf_entries: list[dict] = []
-    mr_entries: list[dict] = []
-
-    for mod_id in cf_ids:
-        if not cf_api_key:
-            print(f"[CF] skipping {mod_id} (no CURSEFORGE_API_KEY)", file=sys.stderr)
+    mods: list[dict] = []
+    for project in projects:
+        cf_entry, mr_entry = fetch_project(project, cf_api_key, mr_token)
+        if not cf_entry and not mr_entry:
             continue
-        try:
-            data = fetch_cf_mod(cf_api_key, mod_id)
-            if data:
-                print(f"[CF] {data.get('name')}")
-                cf_entries.append(cf_to_entry(data))
-            else:
-                print(f"[CF] not found: {mod_id}", file=sys.stderr)
-        except Exception as exc:
-            print(f"[CF] error for {mod_id}: {exc}", file=sys.stderr)
+        if cf_entry and mr_entry:
+            mod = merge(cf_entry, mr_entry)
+            mod["modrinth_id"]  = mr_entry["modrinth_id"]
+            mod["modrinth_url"] = mr_entry["modrinth_url"]
+        else:
+            mod = cf_entry or mr_entry
+        mods.append({"id": project["slug"], **mod, "title": project["name"]})
 
-    for mr_id in mr_ids:
-        try:
-            data = fetch_mr_project(mr_token, mr_id)
-            if data:
-                print(f"[MR] {data.get('title')}")
-                mr_entries.append(mr_to_entry(data))
-            else:
-                print(f"[MR] not found: {mr_id}", file=sys.stderr)
-        except Exception as exc:
-            print(f"[MR] error for {mr_id}: {exc}", file=sys.stderr)
+        # Only platforms that answered get a row, so a failed fetch leaves a gap instead of a fake 0
+        # Modrinth uses the API's project id, not the table value, which could be a renameable slug
+        if cf_entry:
+            write_platform_history(platform_history_path(history_dir, "curseforge", str(cf_entry["curseforge_id"])),
+                                   cf_entry["stats"]["downloads_cf"], now, cutoff)
+        if mr_entry:
+            write_platform_history(platform_history_path(history_dir, "modrinth", mr_entry["modrinth_id"]),
+                                   mr_entry["stats"]["downloads_mr"], now, cutoff)
 
-    mods = combine_by_title(cf_entries, mr_entries)
-
-    os.makedirs(history_dir, exist_ok=True)
-    for mod in mods:
-        write_mod_history(mod, now, history_dir, cutoff)
     write_totals_history(mods, now, history_dir, cutoff)
     print(f"Wrote history -> {history_dir}/  (cutoff: {cutoff})")
 
