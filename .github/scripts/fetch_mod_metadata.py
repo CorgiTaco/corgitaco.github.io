@@ -13,6 +13,9 @@ CurseForge id, the Modrinth project id), so renaming a mod in the table or
 changing its Modrinth slug never orphans its history. The mod's site id is its
 table name, lowercased with non-alphanumerics collapsed to "-".
 History is capped at 5 years; rows older than that are dropped on each run.
+When a platform request fails, that project gets no history row for the day, but
+its last known download count (and the mod's metadata from the previous
+OUTPUT_JSON) is carried into totals.csv and OUTPUT_JSON so totals never dip.
 If a CSV does not exist it is created fresh on the next run.
 
 The tracked project table comes from PROJECTS_JSON. Each row ties a CurseForge
@@ -260,6 +263,14 @@ def write_platform_history(path: str, downloads: int, now: str, cutoff: str) -> 
     write_csv(path, rows, PLATFORM_HISTORY_FIELDS)
 
 
+def last_known_downloads(path: str) -> int | None:
+    for row in reversed(read_csv_rows(path)):
+        value = (row.get("downloads") or "").strip()
+        if value.isdigit():
+            return int(value)
+    return None
+
+
 def write_totals_history(mods: list[dict], now: str, history_dir: str, cutoff: str) -> None:
     path = os.path.join(history_dir, "totals.csv")
     rows = trim_old_rows(read_csv_rows(path), cutoff)
@@ -325,6 +336,34 @@ def load_project_table(path: str) -> list[dict]:
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+def load_previous_mods(path: str) -> list[dict]:
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f).get("mods") or []
+    except (OSError, ValueError):
+        return []
+
+
+def find_previous(previous: list[dict], project: dict) -> dict | None:
+    cf, mr = project["curseforge_id"], project["modrinth_id"]
+    for m in previous:
+        if (cf and str(m.get("curseforge_id") or "") == cf) or (mr and m.get("modrinth_id") == mr):
+            return m
+    return None
+
+
+def platform_downloads(fresh: dict | None, stat_key: str, history_path: str,
+                       prev: dict | None, label: str, name: str) -> int:
+    """Fresh count if the platform answered, else the last known one (history, then old snapshot)."""
+    if fresh:
+        return fresh["stats"][stat_key]
+    value = last_known_downloads(history_path)
+    if value is None:
+        value = ((prev or {}).get("stats") or {}).get(stat_key) or 0
+    print(f"[stale] {name}: {label} fetch failed, reusing last known count {value}", file=sys.stderr)
+    return value
+
+
 def fetch_project(project: dict, cf_api_key: str, mr_token: str | None) -> tuple[dict | None, dict | None]:
     cf_entry = mr_entry = None
     cf_id, mr_id = project["curseforge_id"], project["modrinth_id"]
@@ -364,30 +403,50 @@ def main() -> None:
     now    = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     cutoff = (datetime.now(timezone.utc) - timedelta(days=MAX_HISTORY_DAYS)).strftime("%Y-%m-%d")
 
+    previous = load_previous_mods(output_json)
+    stale_count = 0
+
     mods: list[dict] = []
     for project in projects:
         cf_entry, mr_entry = fetch_project(project, cf_api_key, mr_token)
-        if not cf_entry and not mr_entry:
+        prev = find_previous(previous, project)
+        if not cf_entry and not mr_entry and not prev:
+            print(f"[skip] {project['name']}: no platform answered and no earlier data", file=sys.stderr)
             continue
+
+        # Modrinth files use the API's project id, not the table value, which could be a renameable slug
+        cf_hist = platform_history_path(history_dir, "curseforge", project["curseforge_id"]) if project["curseforge_id"] else None
+        mr_id   = (mr_entry or prev or {}).get("modrinth_id") or project["modrinth_id"]
+        mr_hist = platform_history_path(history_dir, "modrinth", mr_id) if project["modrinth_id"] else None
+
+        cf_dl = platform_downloads(cf_entry, "downloads_cf", cf_hist, prev, "CurseForge", project["name"]) if cf_hist else 0
+        mr_dl = platform_downloads(mr_entry, "downloads_mr", mr_hist, prev, "Modrinth",   project["name"]) if mr_hist else 0
+        stale = (cf_hist and not cf_entry) or (mr_hist and not mr_entry)
+        stale_count += bool(stale)
+
         if cf_entry and mr_entry:
             mod = merge(cf_entry, mr_entry)
             mod["modrinth_id"]  = mr_entry["modrinth_id"]
             mod["modrinth_url"] = mr_entry["modrinth_url"]
+        elif stale and prev:
+            mod = dict(prev)  # keep last good metadata rather than dropping the missing platform's links
         else:
             mod = cf_entry or mr_entry
-        mods.append({"id": project["slug"], **mod, "title": project["name"]})
+        mod = {"id": project["slug"], **mod, "title": project["name"]}
+        mod["stats"] = {"downloads_cf": cf_dl, "downloads_mr": mr_dl, "downloads_total": cf_dl + mr_dl}
+        mods.append(mod)
 
-        # Only platforms that answered get a row, so a failed fetch leaves a gap instead of a fake 0
-        # Modrinth uses the API's project id, not the table value, which could be a renameable slug
+        # Only platforms that answered get a row, so a failed fetch leaves a gap instead of a fake value
         if cf_entry:
-            write_platform_history(platform_history_path(history_dir, "curseforge", str(cf_entry["curseforge_id"])),
-                                   cf_entry["stats"]["downloads_cf"], now, cutoff)
+            write_platform_history(cf_hist, cf_dl, now, cutoff)
         if mr_entry:
             write_platform_history(platform_history_path(history_dir, "modrinth", mr_entry["modrinth_id"]),
-                                   mr_entry["stats"]["downloads_mr"], now, cutoff)
+                                   mr_dl, now, cutoff)
 
     write_totals_history(mods, now, history_dir, cutoff)
     print(f"Wrote history -> {history_dir}/  (cutoff: {cutoff})")
+    if stale_count:
+        print(f"[stale] {stale_count} mod(s) used last known counts for a failed platform", file=sys.stderr)
 
     os.makedirs(os.path.dirname(output_json) or ".", exist_ok=True)
     with open(output_json, "w", encoding="utf-8") as f:
