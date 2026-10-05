@@ -676,8 +676,9 @@
         var parts = yyyyMm.split('-');
         var start = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, 1);
         var years = (Date.now() - start.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-        var rounded = Math.round(years * 2) / 2;
-        return (rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1)) + '+';
+        // Floor (not round) so the "+" never overstates the elapsed time
+        var floored = Math.floor(years * 2) / 2;
+        return (floored % 1 === 0 ? floored.toString() : floored.toFixed(1)) + '+';
     }
 
     function formatNumber(n) {
@@ -687,11 +688,16 @@
     function formatViews(n) {
         n = Number(n);
         if (!isFinite(n) || n < 0) return '—';
-        if (n >= 1e12) return (n / 1e12).toFixed(1).replace(/\.0$/, '') + 'T+';
-        if (n >= 1e9)  return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B+';
-        if (n >= 1e6)  return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M+';
-        if (n >= 1e3)  return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K+';
+        if (n >= 1e12) return floorTenths(n, 1e12) + 'T+';
+        if (n >= 1e9)  return floorTenths(n, 1e9)  + 'B+';
+        if (n >= 1e6)  return floorTenths(n, 1e6)  + 'M+';
+        if (n >= 1e3)  return floorTenths(n, 1e3)  + 'K+';
         return n + '+';
+    }
+
+    // Truncate (not round) to one decimal so the "+" never overstates the value
+    function floorTenths(n, unit) {
+        return (Math.floor(n / (unit / 10)) / 10).toFixed(1).replace(/\.0$/, '');
     }
 
     // ── Highlights cards section ──────────────────────────────────────────────
