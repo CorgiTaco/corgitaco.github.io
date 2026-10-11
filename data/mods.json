@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-10T13:08:03Z",
+  "fetchedAt": "2026-10-11T13:37:08Z",
   "mods": [
     {
       "id": "better-weather-discontinued",
@@ -23,9 +23,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 2943272,
+        "downloads_cf": 2943899,
         "downloads_mr": 0,
-        "downloads_total": 2943272
+        "downloads_total": 2943899
       }
     },
     {
@@ -50,9 +50,9 @@
         "1.15.2"
       ],
       "stats": {
-        "downloads_cf": 154567,
+        "downloads_cf": 154573,
         "downloads_mr": 0,
-        "downloads_total": 154567
+        "downloads_total": 154573
       }
     },
     {
@@ -82,9 +82,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9277886,
-        "downloads_mr": 1741904,
-        "downloads_total": 11019790
+        "downloads_cf": 9286998,
+        "downloads_mr": 1749900,
+        "downloads_total": 11036898
       }
     },
     {
@@ -112,9 +112,9 @@
         "1.18"
       ],
       "stats": {
-        "downloads_cf": 7319609,
+        "downloads_cf": 7328364,
         "downloads_mr": 0,
-        "downloads_total": 7319609
+        "downloads_total": 7328364
       }
     },
     {
@@ -144,9 +144,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 2901062,
+        "downloads_cf": 2902838,
         "downloads_mr": 0,
-        "downloads_total": 2901062
+        "downloads_total": 2902838
       }
     },
     {
@@ -169,9 +169,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 5148,
+        "downloads_cf": 5150,
         "downloads_mr": 0,
-        "downloads_total": 5148
+        "downloads_total": 5150
       }
     },
     {
@@ -204,9 +204,9 @@
         "1.19.2"
       ],
       "stats": {
-        "downloads_cf": 94487561,
-        "downloads_mr": 15135661,
-        "downloads_total": 109623222
+        "downloads_cf": 94635145,
+        "downloads_mr": 15191605,
+        "downloads_total": 109826750
       }
     },
     {
@@ -236,9 +236,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 17450978,
-        "downloads_mr": 1931205,
-        "downloads_total": 19382183
+        "downloads_cf": 17502142,
+        "downloads_mr": 1942928,
+        "downloads_total": 19445070
       }
     },
     {
@@ -259,9 +259,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 956,
+        "downloads_cf": 958,
         "downloads_mr": 0,
-        "downloads_total": 956
+        "downloads_total": 958
       }
     },
     {
@@ -298,9 +298,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 44512179,
-        "downloads_mr": 2470999,
-        "downloads_total": 46983178
+        "downloads_cf": 44533060,
+        "downloads_mr": 2477698,
+        "downloads_total": 47010758
       }
     },
     {
@@ -322,9 +322,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 20518,
+        "downloads_cf": 20526,
         "downloads_mr": 0,
-        "downloads_total": 20518
+        "downloads_total": 20526
       }
     },
     {
@@ -345,9 +345,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1663,
+        "downloads_cf": 1665,
         "downloads_mr": 0,
-        "downloads_total": 1663
+        "downloads_total": 1665
       }
     },
     {
@@ -380,9 +380,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 6816055,
+        "downloads_cf": 6816417,
         "downloads_mr": 0,
-        "downloads_total": 6816055
+        "downloads_total": 6816417
       }
     },
     {
@@ -408,9 +408,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 34225688,
-        "downloads_mr": 1340809,
-        "downloads_total": 35566497
+        "downloads_cf": 34238138,
+        "downloads_mr": 1343028,
+        "downloads_total": 35581166
       }
     },
     {
@@ -434,9 +434,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1977136,
+        "downloads_cf": 1977396,
         "downloads_mr": 0,
-        "downloads_total": 1977136
+        "downloads_total": 1977396
       }
     },
     {
@@ -461,9 +461,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 13951022,
-        "downloads_mr": 749403,
-        "downloads_total": 14700425
+        "downloads_cf": 13974129,
+        "downloads_mr": 754598,
+        "downloads_total": 14728727
       }
     },
     {
@@ -484,9 +484,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 2895,
+        "downloads_cf": 2896,
         "downloads_mr": 0,
-        "downloads_total": 2895
+        "downloads_total": 2896
       }
     },
     {
@@ -520,9 +520,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 62476403,
+        "downloads_cf": 62496405,
         "downloads_mr": 0,
-        "downloads_total": 62476403
+        "downloads_total": 62496405
       }
     },
     {
@@ -545,9 +545,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 1034801,
+        "downloads_cf": 1035161,
         "downloads_mr": 0,
-        "downloads_total": 1034801
+        "downloads_total": 1035161
       }
     },
     {
@@ -569,9 +569,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 180271,
+        "downloads_cf": 180279,
         "downloads_mr": 0,
-        "downloads_total": 180271
+        "downloads_total": 180279
       }
     },
     {
@@ -600,9 +600,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 40946239,
-        "downloads_mr": 11757403,
-        "downloads_total": 52703642
+        "downloads_cf": 41029977,
+        "downloads_mr": 11792348,
+        "downloads_total": 52822325
       }
     },
     {
@@ -638,9 +638,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 61923756,
-        "downloads_mr": 1851189,
-        "downloads_total": 63774945
+        "downloads_cf": 61935104,
+        "downloads_mr": 1853772,
+        "downloads_total": 63788876
       }
     },
     {
@@ -659,9 +659,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 33627,
+        "downloads_cf": 33634,
         "downloads_mr": 0,
-        "downloads_total": 33627
+        "downloads_total": 33634
       }
     },
     {
@@ -700,9 +700,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 42047099,
-        "downloads_mr": 7751973,
-        "downloads_total": 49799072
+        "downloads_cf": 42135246,
+        "downloads_mr": 7789976,
+        "downloads_total": 49925222
       }
     },
     {
@@ -724,9 +724,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 735628,
+        "downloads_cf": 735757,
         "downloads_mr": 0,
-        "downloads_total": 735628
+        "downloads_total": 735757
       }
     },
     {
@@ -773,9 +773,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 17139,
+        "downloads_cf": 17141,
         "downloads_mr": 0,
-        "downloads_total": 17139
+        "downloads_total": 17141
       }
     },
     {
@@ -796,9 +796,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 154,
+        "downloads_cf": 156,
         "downloads_mr": 0,
-        "downloads_total": 154
+        "downloads_total": 156
       }
     },
     {
@@ -828,9 +828,9 @@
         "1.16.2"
       ],
       "stats": {
-        "downloads_cf": 52282803,
+        "downloads_cf": 52300432,
         "downloads_mr": 0,
-        "downloads_total": 52282803
+        "downloads_total": 52300432
       }
     },
     {
@@ -851,9 +851,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9956,
+        "downloads_cf": 9957,
         "downloads_mr": 0,
-        "downloads_total": 9956
+        "downloads_total": 9957
       }
     },
     {
@@ -874,9 +874,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 34105,
+        "downloads_cf": 34106,
         "downloads_mr": 0,
-        "downloads_total": 34105
+        "downloads_total": 34106
       }
     },
     {
@@ -900,9 +900,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 95614,
+        "downloads_cf": 97166,
         "downloads_mr": 0,
-        "downloads_total": 95614
+        "downloads_total": 97166
       }
     },
     {
@@ -924,9 +924,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 2559794,
+        "downloads_cf": 2560054,
         "downloads_mr": 0,
-        "downloads_total": 2559794
+        "downloads_total": 2560054
       }
     },
     {
@@ -947,9 +947,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 4310,
+        "downloads_cf": 4313,
         "downloads_mr": 0,
-        "downloads_total": 4310
+        "downloads_total": 4313
       }
     },
     {
@@ -972,9 +972,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 5160,
-        "downloads_mr": 8117,
-        "downloads_total": 13277
+        "downloads_cf": 5165,
+        "downloads_mr": 8193,
+        "downloads_total": 13358
       }
     },
     {
@@ -1002,9 +1002,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 641462,
-        "downloads_mr": 50643,
-        "downloads_total": 692105
+        "downloads_cf": 656317,
+        "downloads_mr": 52837,
+        "downloads_total": 709154
       }
     },
     {
@@ -1032,9 +1032,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 631195,
-        "downloads_mr": 49133,
-        "downloads_total": 680328
+        "downloads_cf": 645795,
+        "downloads_mr": 51113,
+        "downloads_total": 696908
       }
     },
     {
@@ -1062,9 +1062,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 604712,
-        "downloads_mr": 38368,
-        "downloads_total": 643080
+        "downloads_cf": 618928,
+        "downloads_mr": 40131,
+        "downloads_total": 659059
       }
     }
   ]
