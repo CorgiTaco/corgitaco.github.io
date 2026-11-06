@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-05T15:00:34Z",
+  "fetchedAt": "2026-11-06T14:40:41Z",
   "mods": [
     {
       "id": "better-weather-discontinued",
@@ -23,9 +23,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 2953986,
+        "downloads_cf": 2954306,
         "downloads_mr": 0,
-        "downloads_total": 2953986
+        "downloads_total": 2954306
       }
     },
     {
@@ -50,9 +50,9 @@
         "1.15.2"
       ],
       "stats": {
-        "downloads_cf": 154685,
+        "downloads_cf": 154698,
         "downloads_mr": 0,
-        "downloads_total": 154685
+        "downloads_total": 154698
       }
     },
     {
@@ -82,9 +82,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9452292,
-        "downloads_mr": 1797505,
-        "downloads_total": 11249797
+        "downloads_cf": 9456853,
+        "downloads_mr": 1799346,
+        "downloads_total": 11256199
       }
     },
     {
@@ -112,9 +112,9 @@
         "1.18"
       ],
       "stats": {
-        "downloads_cf": 7479745,
+        "downloads_cf": 7483693,
         "downloads_mr": 0,
-        "downloads_total": 7479745
+        "downloads_total": 7483693
       }
     },
     {
@@ -144,9 +144,9 @@
         "1.16"
       ],
       "stats": {
-        "downloads_cf": 2934625,
+        "downloads_cf": 2935520,
         "downloads_mr": 0,
-        "downloads_total": 2934625
+        "downloads_total": 2935520
       }
     },
     {
@@ -204,9 +204,9 @@
         "1.19.2"
       ],
       "stats": {
-        "downloads_cf": 97388715,
-        "downloads_mr": 15594802,
-        "downloads_total": 112983517
+        "downloads_cf": 97469446,
+        "downloads_mr": 15610139,
+        "downloads_total": 113079585
       }
     },
     {
@@ -236,9 +236,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 18593330,
-        "downloads_mr": 2052618,
-        "downloads_total": 20645948
+        "downloads_cf": 18621854,
+        "downloads_mr": 2056841,
+        "downloads_total": 20678695
       }
     },
     {
@@ -298,9 +298,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 44953773,
-        "downloads_mr": 2521729,
-        "downloads_total": 47475502
+        "downloads_cf": 44964797,
+        "downloads_mr": 2523676,
+        "downloads_total": 47488473
       }
     },
     {
@@ -322,9 +322,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 20627,
+        "downloads_cf": 20629,
         "downloads_mr": 0,
-        "downloads_total": 20627
+        "downloads_total": 20629
       }
     },
     {
@@ -380,9 +380,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 6829361,
+        "downloads_cf": 6829586,
         "downloads_mr": 0,
-        "downloads_total": 6829361
+        "downloads_total": 6829586
       }
     },
     {
@@ -408,9 +408,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 34459072,
-        "downloads_mr": 1356872,
-        "downloads_total": 35815944
+        "downloads_cf": 34465667,
+        "downloads_mr": 1357454,
+        "downloads_total": 35823121
       }
     },
     {
@@ -434,9 +434,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 1983208,
+        "downloads_cf": 1983354,
         "downloads_mr": 0,
-        "downloads_total": 1983208
+        "downloads_total": 1983354
       }
     },
     {
@@ -461,9 +461,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 14423791,
-        "downloads_mr": 788573,
-        "downloads_total": 15212364
+        "downloads_cf": 14442310,
+        "downloads_mr": 789938,
+        "downloads_total": 15232248
       }
     },
     {
@@ -520,9 +520,9 @@
         "1.16.1"
       ],
       "stats": {
-        "downloads_cf": 62855855,
+        "downloads_cf": 62867038,
         "downloads_mr": 0,
-        "downloads_total": 62855855
+        "downloads_total": 62867038
       }
     },
     {
@@ -545,9 +545,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 1041762,
+        "downloads_cf": 1041945,
         "downloads_mr": 0,
-        "downloads_total": 1041762
+        "downloads_total": 1041945
       }
     },
     {
@@ -569,9 +569,9 @@
         "1.18.2"
       ],
       "stats": {
-        "downloads_cf": 180575,
+        "downloads_cf": 180579,
         "downloads_mr": 0,
-        "downloads_total": 180575
+        "downloads_total": 180579
       }
     },
     {
@@ -600,9 +600,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 42533744,
-        "downloads_mr": 11982212,
-        "downloads_total": 54515956
+        "downloads_cf": 42579009,
+        "downloads_mr": 11991288,
+        "downloads_total": 54570297
       }
     },
     {
@@ -638,9 +638,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 62147545,
-        "downloads_mr": 1865394,
-        "downloads_total": 64012939
+        "downloads_cf": 62154664,
+        "downloads_mr": 1865991,
+        "downloads_total": 64020655
       }
     },
     {
@@ -659,9 +659,9 @@
         "1.12.2"
       ],
       "stats": {
-        "downloads_cf": 33795,
+        "downloads_cf": 33798,
         "downloads_mr": 0,
-        "downloads_total": 33795
+        "downloads_total": 33798
       }
     },
     {
@@ -674,7 +674,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
       "modrinth_url": "https://modrinth.com/mod/oh-the-trees-youll-grow",
       "github_url": "https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow",
-      "date": "2026-10-10",
+      "date": "2026-11-06",
       "loaders": [
         "Fabric",
         "Forge",
@@ -700,9 +700,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 43731286,
-        "downloads_mr": 8045423,
-        "downloads_total": 51776709
+        "downloads_cf": 43788619,
+        "downloads_mr": 8056479,
+        "downloads_total": 51845098
       }
     },
     {
@@ -724,9 +724,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 737667,
+        "downloads_cf": 737729,
         "downloads_mr": 0,
-        "downloads_total": 737667
+        "downloads_total": 737729
       }
     },
     {
@@ -828,9 +828,9 @@
         "1.16.2"
       ],
       "stats": {
-        "downloads_cf": 52632926,
+        "downloads_cf": 52643564,
         "downloads_mr": 0,
-        "downloads_total": 52632926
+        "downloads_total": 52643564
       }
     },
     {
@@ -851,9 +851,9 @@
         "1.16.5"
       ],
       "stats": {
-        "downloads_cf": 9988,
+        "downloads_cf": 9994,
         "downloads_mr": 0,
-        "downloads_total": 9988
+        "downloads_total": 9994
       }
     },
     {
@@ -900,9 +900,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 114257,
+        "downloads_cf": 114559,
         "downloads_mr": 0,
-        "downloads_total": 114257
+        "downloads_total": 114559
       }
     },
     {
@@ -924,9 +924,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 2564991,
+        "downloads_cf": 2565154,
         "downloads_mr": 0,
-        "downloads_total": 2564991
+        "downloads_total": 2565154
       }
     },
     {
@@ -947,9 +947,9 @@
         "1.16.4"
       ],
       "stats": {
-        "downloads_cf": 4330,
+        "downloads_cf": 4334,
         "downloads_mr": 0,
-        "downloads_total": 4330
+        "downloads_total": 4334
       }
     },
     {
@@ -972,9 +972,9 @@
         "1.21.1"
       ],
       "stats": {
-        "downloads_cf": 5327,
-        "downloads_mr": 8604,
-        "downloads_total": 13931
+        "downloads_cf": 5352,
+        "downloads_mr": 8619,
+        "downloads_total": 13971
       }
     },
     {
@@ -987,7 +987,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-core",
       "modrinth_url": "https://modrinth.com/mod/enhanced-celestials-2-core",
       "github_url": "",
-      "date": "2026-09-20",
+      "date": "2026-11-05",
       "loaders": [
         "Fabric",
         "Forge",
@@ -1002,9 +1002,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 897618,
-        "downloads_mr": 71705,
-        "downloads_total": 969323
+        "downloads_cf": 903175,
+        "downloads_mr": 72883,
+        "downloads_total": 976058
       }
     },
     {
@@ -1017,7 +1017,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-default-lunar-events",
       "modrinth_url": "https://modrinth.com/mod/enhanced-celestials-2-default-lunar-events",
       "github_url": "",
-      "date": "2026-09-20",
+      "date": "2026-11-05",
       "loaders": [
         "Fabric",
         "Forge",
@@ -1032,9 +1032,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 874118,
-        "downloads_mr": 65476,
-        "downloads_total": 939594
+        "downloads_cf": 879005,
+        "downloads_mr": 66484,
+        "downloads_total": 945489
       }
     },
     {
@@ -1047,7 +1047,7 @@
       "curseforge_url": "https://www.curseforge.com/minecraft/mc-mods/enhanced-celestials-2-shader-support",
       "modrinth_url": "https://modrinth.com/mod/enhanced-celestials-2-shader-support",
       "github_url": "",
-      "date": "2026-10-04",
+      "date": "2026-11-05",
       "loaders": [
         "Fabric",
         "Forge",
@@ -1062,9 +1062,9 @@
         "1.20.1"
       ],
       "stats": {
-        "downloads_cf": 837784,
-        "downloads_mr": 54166,
-        "downloads_total": 891950
+        "downloads_cf": 842471,
+        "downloads_mr": 55324,
+        "downloads_total": 897795
       }
     }
   ]
